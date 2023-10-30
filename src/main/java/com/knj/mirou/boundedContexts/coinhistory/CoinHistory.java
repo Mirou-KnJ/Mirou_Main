@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContexts.point;
+package com.knj.mirou.boundedContexts.coinhistory;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,13 +10,11 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Point {
+public class CoinHistory {
     @Id
 
     private long id;
-    private int currentPoint; //현재 포인트
-    private int totalGetPoint; //누적 획득 포인트
-    private int totalUserPoint; //누적 사용 포인트
+    private int changeCoin; //바뀐 포인트
+    private String changeCoinContents; //바뀐 내역
     private Date createdAt; //생성된 시간
-    private Date modifiedAt; //수정된 시간
 }

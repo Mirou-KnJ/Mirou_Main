@@ -15,8 +15,7 @@ public class PointHistory {
     @Id
 
     private long id;
-    private int changePoint;
-    private boolean changeType;
-    private boolean historyType;
-    private Date createdAt;
+    private int changePoint; //바뀐 포인트
+    private String changePointContents; //바뀐 내역
+    private Date createdAt; //생성된 시간
 }
