@@ -3,7 +3,9 @@ package com.knj.mirou.boundedContext.challengefeed.entity;
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.entity.Challenge;
 import com.knj.mirou.boundedContext.member.entity.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
