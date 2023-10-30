@@ -1,17 +1,15 @@
 package com.knj.mirou.boundedContext.challenge.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
-import com.knj.mirou.boundedContext.reward.Reward;
+import com.knj.mirou.boundedContext.reward.entity.Reward;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
