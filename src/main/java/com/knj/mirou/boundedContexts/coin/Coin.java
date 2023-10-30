@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContexts.coin;
 
+import com.knj.mirou.boundedContexts.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ public class Coin {
     @Id
 
     private long id;
+    private long linkedMemberId;
     private int currentCoin; //현재 코인
     private int totalGetCoin; //누적 획득 코인
     private int totalUserCoin; //누적 사용 코인
