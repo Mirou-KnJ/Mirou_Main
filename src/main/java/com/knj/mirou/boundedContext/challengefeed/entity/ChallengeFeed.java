@@ -27,8 +27,6 @@ public class ChallengeFeed extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge linkedChallenge;
 
-    private LocalDateTime createdDate;
-
     private String feedContents;
 
     private int likeCount;
