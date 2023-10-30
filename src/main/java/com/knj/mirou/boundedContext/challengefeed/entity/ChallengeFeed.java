@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengefeed.entity;
 
+import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.entity.Challenge;
 import com.knj.mirou.boundedContext.member.Member;
 import jakarta.persistence.*;
@@ -18,11 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class ChallengeFeed {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class ChallengeFeed extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member writer;

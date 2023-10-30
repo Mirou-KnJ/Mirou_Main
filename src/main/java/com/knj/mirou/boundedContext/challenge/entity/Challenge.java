@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challenge.entity;
 
+import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.reward.Reward;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,11 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Challenge {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class Challenge extends BaseEntity {
 
     private String name;
 
@@ -37,9 +34,6 @@ public class Challenge {
     private ChallengePeriod period;
 
     private ChallengeStatus status;
-
-    @CreatedDate
-    private LocalDateTime createdDate;
 
     private int level;
 
