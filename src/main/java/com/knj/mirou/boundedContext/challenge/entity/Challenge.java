@@ -1,9 +1,7 @@
 package com.knj.mirou.boundedContext.challenge.entity;
 
 import com.knj.mirou.boundedContext.reward.Reward;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +22,7 @@ import java.util.List;
 public class Challenge {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
