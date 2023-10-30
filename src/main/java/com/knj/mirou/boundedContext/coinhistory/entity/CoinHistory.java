@@ -1,8 +1,11 @@
-package com.knj.mirou.boundedContext.coin.entity;
+package com.knj.mirou.boundedContext.coinhistory.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.member.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,14 +20,12 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Coin extends BaseEntity {
+public class CoinHistory extends BaseEntity {
 
-    @OneToOne
-    private Member owner;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member linkedMember;
 
-    private int currentCoin;
+    private int changeCoin;
 
-    private int totalGetCoin;
-
-    private int totalUserCoin;
+    private String contents;
 }
