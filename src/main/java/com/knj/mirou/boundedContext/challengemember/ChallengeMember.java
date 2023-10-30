@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContexts.challengemember;
+package com.knj.mirou.boundedContext.challengemember;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

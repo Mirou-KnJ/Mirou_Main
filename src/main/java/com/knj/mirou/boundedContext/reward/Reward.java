@@ -1,7 +1,9 @@
-package com.knj.mirou.boundedContexts.reward;
+package com.knj.mirou.boundedContext.reward;
 
+import com.knj.mirou.boundedContext.challenge.entity.Challenge;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Reward {
     @Id
-
     private long id;
-    private long linkedChallengeId; //챌린지 아이디 연결
+
+    @ManyToOne
+    private Challenge linkedChallenge;
+
     private int round; //라운드
     private int rewardCoin; //보상 코인
 }

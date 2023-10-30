@@ -1,11 +1,10 @@
-package com.knj.mirou.boundedContexts.member;
+package com.knj.mirou.boundedContext.member;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.awt.*;
 import java.util.Date;
 
 @Entity

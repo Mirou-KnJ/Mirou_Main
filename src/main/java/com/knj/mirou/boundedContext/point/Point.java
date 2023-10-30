@@ -1,6 +1,5 @@
-package com.knj.mirou.boundedContexts.point;
+package com.knj.mirou.boundedContext.point;
 
-import com.knj.mirou.boundedContexts.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
