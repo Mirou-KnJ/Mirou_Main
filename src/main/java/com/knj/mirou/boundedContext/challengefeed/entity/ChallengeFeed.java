@@ -2,13 +2,10 @@ package com.knj.mirou.boundedContext.challengefeed.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.entity.Challenge;
-import com.knj.mirou.boundedContext.member.Member;
+import com.knj.mirou.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Entity

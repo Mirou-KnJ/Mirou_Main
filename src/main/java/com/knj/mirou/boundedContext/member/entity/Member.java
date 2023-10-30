@@ -1,18 +1,14 @@
-package com.knj.mirou.boundedContext.member;
+package com.knj.mirou.boundedContext.member.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
-import com.knj.mirou.boundedContext.point.Point;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import java.util.Date;
 
 @Getter
 @Entity

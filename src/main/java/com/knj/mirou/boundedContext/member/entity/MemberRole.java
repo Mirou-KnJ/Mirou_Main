@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.member;
+package com.knj.mirou.boundedContext.member.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
