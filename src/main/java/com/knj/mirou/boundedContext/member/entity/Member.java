@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.member.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
+import com.knj.mirou.boundedContext.point.entity.Point;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,8 @@ public class Member extends BaseEntity {
 
     @OneToOne(mappedBy = "owner")
     private Coin coin;
+
+    @OneToOne(mappedBy = "owner")
+    private Point point;
 
 }
