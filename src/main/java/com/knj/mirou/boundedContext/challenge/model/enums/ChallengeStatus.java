@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.challenge.entity;
+package com.knj.mirou.boundedContext.challenge.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

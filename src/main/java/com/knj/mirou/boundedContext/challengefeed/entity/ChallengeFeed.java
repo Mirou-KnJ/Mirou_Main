@@ -1,8 +1,8 @@
 package com.knj.mirou.boundedContext.challengefeed.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
-import com.knj.mirou.boundedContext.challenge.entity.Challenge;
-import com.knj.mirou.boundedContext.member.entity.Member;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;

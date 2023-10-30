@@ -1,8 +1,12 @@
-package com.knj.mirou.boundedContext.challenge.entity;
+package com.knj.mirou.boundedContext.challenge.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.reward.entity.Reward;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +34,10 @@ public class Challenge extends BaseEntity {
 
     private LocalDate joinDeadLine;
 
+    @Enumerated(EnumType.STRING)
     private ChallengePeriod period;
 
+    @Enumerated(EnumType.STRING)
     private ChallengeStatus status;
 
     private int level;

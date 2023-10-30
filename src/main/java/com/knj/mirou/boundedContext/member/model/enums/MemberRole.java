@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.member.entity;
+package com.knj.mirou.boundedContext.member.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

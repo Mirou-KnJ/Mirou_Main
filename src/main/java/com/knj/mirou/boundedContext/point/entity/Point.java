@@ -1,7 +1,7 @@
 package com.knj.mirou.boundedContext.point.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
-import com.knj.mirou.boundedContext.member.entity.Member;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
