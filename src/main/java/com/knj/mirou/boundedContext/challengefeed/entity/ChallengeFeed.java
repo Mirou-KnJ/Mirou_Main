@@ -4,10 +4,7 @@ import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.entity.Challenge;
 import com.knj.mirou.boundedContext.member.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -29,7 +26,8 @@ public class ChallengeFeed extends BaseEntity {
 
     private String feedContents;
 
-    private int likeCount;
+    @Builder.Default
+    private int likeCount = 0;
 
 //    private Photo photo;
 }
