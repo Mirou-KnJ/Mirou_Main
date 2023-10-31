@@ -42,7 +42,7 @@ public class Challenge extends BaseEntity {
 
     //총 몇 번 성공해야하는 챌린지인지.
 
-    private int
+    private int requiredNum;
 
     private int level;
 
