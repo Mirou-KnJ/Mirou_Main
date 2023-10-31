@@ -1,10 +1,9 @@
-package com.knj.mirou.boundedContext.reward.entity;
+package com.knj.mirou.boundedContext.reward.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import com.knj.mirou.boundedContext.reward.model.enums.RewardType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +23,8 @@ public class Reward extends BaseEntity {
 
     private int round;
 
-    private int rewardCoin;
+    @Enumerated(EnumType.STRING)
+    private RewardType rewardType;
+
+    private String reward;
 }

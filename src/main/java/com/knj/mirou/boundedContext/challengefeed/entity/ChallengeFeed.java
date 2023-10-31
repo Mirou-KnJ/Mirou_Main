@@ -23,7 +23,7 @@ public class ChallengeFeed extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge linkedChallenge;
 
-    private String feedContents;
+    private String contents;
 
     @Builder.Default
     private int likeCount = 0;

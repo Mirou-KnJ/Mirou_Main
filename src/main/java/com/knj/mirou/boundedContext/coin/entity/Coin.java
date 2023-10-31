@@ -25,5 +25,5 @@ public class Coin extends BaseEntity {
 
     private int totalGetCoin;
 
-    private int totalUserCoin;
+    private int totalUsedCoin;
 }

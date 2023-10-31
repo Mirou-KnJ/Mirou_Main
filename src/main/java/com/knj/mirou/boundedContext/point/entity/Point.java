@@ -25,6 +25,6 @@ public class Point extends BaseEntity {
 
     private int totalGetPoint;
 
-    private int totalUserPoint;
+    private int totalUsedPoint;
 
 }

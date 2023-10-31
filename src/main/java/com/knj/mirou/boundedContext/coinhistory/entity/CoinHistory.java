@@ -1,10 +1,9 @@
 package com.knj.mirou.boundedContext.coinhistory.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
+import com.knj.mirou.base.enums.ChangeType;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,10 @@ public class CoinHistory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member linkedMember;
 
-    private int changeCoin;
+    private int changedCoin;
+
+    @Enumerated(EnumType.STRING)
+    private ChangeType changeType;
 
     private String contents;
 }

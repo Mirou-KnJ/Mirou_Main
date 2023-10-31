@@ -3,7 +3,7 @@ package com.knj.mirou.boundedContext.challenge.model.entity;
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
-import com.knj.mirou.boundedContext.reward.entity.Reward;
+import com.knj.mirou.boundedContext.reward.model.entity.Reward;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,6 +39,10 @@ public class Challenge extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ChallengeStatus status;
+
+    //총 몇 번 성공해야하는 챌린지인지.
+
+    private int
 
     private int level;
 
