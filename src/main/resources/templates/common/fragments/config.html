@@ -1,0 +1,29 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="ConfigFragment">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- 데이지 UI, Tailwind Css 불러오기 -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.7.6/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+<!--    &lt;!&ndash; csrf toekn&ndash;&gt;-->
+<!--    <meta name="_csrf" th:content="${_csrf.token}">-->
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}">-->
+
+    <!-- 제이쿼리 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- toast ui 불러오기 -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" importance="high"/>
+
+    <!-- 폰트어썸 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 아이콘 목록 : https://fontawesome.com/search?o=r&m=free -->
+
+</th:block>
+</html>

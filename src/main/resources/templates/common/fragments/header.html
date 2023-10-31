@@ -1,0 +1,38 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="HeaderFragment">
+    <header class="flex w-full fixed top-0 ">
+        <nav class="flex justify-center w-1/2 mx-auto  navbar bg-base-100 border-b-2">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <label tabindex="0" class="btn btn-ghost btn-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 6h16M4 12h16M4 18h7"/>
+                        </svg>
+                    </label>
+                    <ul tabindex="0"
+                        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a class="text-base">챌린지</a></li>
+                        <li><a class="text-base">상점</a></li>
+                        <li><a class="text-base">나의 코인</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="navbar-center">
+                <a class="btn btn-ghost normal-case text-xl">Mirou</a>
+            </div>
+            <div class="navbar-end">
+                <button class="btn btn-ghost btn-circle">
+                    <i class="fa-regular fa-user fa-lg" style="color: #000000;"></i>
+                </button>
+                <button class="btn btn-ghost btn-circle">
+                    <div class="indicator">
+                        <i class="fa-regular fa-bell fa-lg" style="color: #000000;"></i>
+                    </div>
+                </button>
+            </div>
+        </nav>
+    </header>
+</th:block>
+</html>
