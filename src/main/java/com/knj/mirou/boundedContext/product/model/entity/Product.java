@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -18,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private long id;
 
     private String name;
