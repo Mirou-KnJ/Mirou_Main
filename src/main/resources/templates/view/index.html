@@ -1,16 +1,15 @@
-<html xmlns:layout="" data-theme="corporate">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <th:block th:replace="~{common/fragments/config :: ConfigFragment}"/>
-    <title>Main</title>
+    <title>인덱스 페이지</title>
 </head>
 <body>
-<main class="flex flex-col content-center justify-center">
-    <th:block th:replace="~{common/fragments/header :: HeaderFragment}"/>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100 border-b-2">
 
-    <div>
-        <button class="btn btn-warning">카카오 로그인</button>
-    </div>
-
-</main>
+        </div>
+    </main>
+</th:block>
 </body>
 </html>
