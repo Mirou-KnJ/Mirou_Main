@@ -5,8 +5,12 @@
 </head>
 <body>
 <main class="flex flex-col content-center justify-center">
+    <th:block th:replace="~{common/fragments/header :: HeaderFragment}"/>
+
+    <div>
+        <button class="btn btn-warning">카카오 로그인</button>
+    </div>
 
 </main>
-<th:block th:replace="~{common/fragments/footer :: FooterFragment}"/>
 </body>
 </html>
