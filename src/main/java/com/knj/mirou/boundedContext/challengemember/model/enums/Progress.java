@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Progress {
 
-    IN_PROGRESS("진행중"),
-    PROGRESS_END("진행 종료");
+    IN_PROGRESS(true),
+    PROGRESS_END(false);
 
-    private final String progress;
+    private final boolean progress;
 }
