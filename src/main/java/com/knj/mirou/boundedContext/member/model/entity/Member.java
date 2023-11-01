@@ -4,6 +4,7 @@ import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.inventory.entity.Inventory;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
+import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String nickname;
 
-    private String socialCode;
+    private SocialCode socialCode;
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
