@@ -18,9 +18,6 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class Point extends BaseEntity {
 
-    @OneToOne
-    private Member owner;
-
     private int currentPoint;
 
     private int totalGetPoint;

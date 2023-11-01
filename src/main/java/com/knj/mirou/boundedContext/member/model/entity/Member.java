@@ -22,8 +22,10 @@ import java.util.List;
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
 
+    @Column(unique = true)
     private String loginId;
 
+    @Column(unique = true)
     private String nickname;
 
     private String socialCode;
@@ -33,10 +35,12 @@ public class Member extends BaseEntity {
 
     private String inviteCode;
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
     private Coin coin;
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
     private Point point;
 
     @OneToMany(mappedBy = "owner")
