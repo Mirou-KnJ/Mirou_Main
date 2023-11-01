@@ -30,18 +30,22 @@ public class MemberService {
     }
 
     @Transactional
-    public Map<String, String> join(String socialCode, String loginId) {
+    public Map<String, Object> join(String socialCode, String loginId, String nickname) {
 
-        Map<String, String> joinResultMap = new HashMap<>();
+        Map<String, Object> joinResultMap = new HashMap<>();
 
-        if(getByLoginId(loginId).isPresent()) {
+        Optional<Member> ObyLoginId = getByLoginId(loginId);
+
+        if(ObyLoginId.isPresent()) {
             joinResultMap.put("ResultCode", "F-1");
             joinResultMap.put("Msg", "이미 가입된 회원 입니다.");
+            joinResultMap.put("Data", ObyLoginId.get());
             return joinResultMap;
         } else {
 
             Member member = Member.builder()
                     .loginId(loginId)
+                    .nickname(nickname)
                     .socialCode(SocialCode.valueOf(socialCode))   //FIXME 로그인 경로에 따라 다르게 설정
                     .role(MemberRole.USER)          //FIXME 일반 회원 / 관리자 구분
                     .inviteCode("123456789")        //FIXME 난수 처리
@@ -49,13 +53,41 @@ public class MemberService {
                     .point(pointService.createPoint())
                     .build();
 
-            memberRepository.save(member);
+            Member joinMember = memberRepository.save(member);
 
             joinResultMap.put("ResultCode", "S-1");
             joinResultMap.put("Msg", "회원 가입이 완료 되었습니다.");
+            joinResultMap.put("Data", joinMember);
 
             return joinResultMap;
         }
+    }
+
+    public Map<String, Object> socialLogin(String socialCode, String loginId, String nickname) {
+
+        Map<String,Object> socialResultMap = new HashMap<>();
+
+        Optional<Member> ObyLoginId = getByLoginId(loginId);
+
+        if(ObyLoginId.isPresent()) {
+            socialResultMap.put("ResultCode", "S-1");
+            socialResultMap.put("Msg", "로그인 되었습니다(이미 가입한 회원)");
+            socialResultMap.put("Data", ObyLoginId.get());
+            return socialResultMap;
+        }
+
+        Map<String, Object> joinResultMap = join(socialCode, loginId, nickname);
+
+        if(joinResultMap.get("ResultCode").toString().startsWith("S")) {
+            socialResultMap.put("ResultCode", "S-2");
+            socialResultMap.put("Msg", "로그인 되었습니다(새로 가입한 회원)");
+            socialResultMap.put("Data", joinResultMap.get("Data"));
+        } else {
+            socialResultMap.put("ResultCode", "F-1");
+            socialResultMap.put("Msg", "가입 및 로그인에 실패하였습니다.");
+        }
+
+        return socialResultMap;
     }
 
 }

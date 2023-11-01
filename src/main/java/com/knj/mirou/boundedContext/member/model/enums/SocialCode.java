@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SocialCode {
 
-    KAKAO("카카오"),
-    GOOGLE("구글"),
-    NAVER("네이버"),
-    ETC("기타");
+    KAKAO("KAKAO"),
+    GOOGLE("GOOGLE"),
+    NAVER("NAVER"),
+    ETC("ETC");
 
     private final String socialCode;
 }
