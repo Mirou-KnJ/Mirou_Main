@@ -27,6 +27,4 @@ public class ChallengeFeed extends BaseEntity {
 
     @Builder.Default
     private int likeCount = 0;
-
-//    private Photo photo;
 }

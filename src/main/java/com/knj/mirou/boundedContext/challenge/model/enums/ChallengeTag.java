@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ChallengeStatus {
+public enum ChallengeTag {
 
-    OPEN(true),
-    CLOSE(false);
+    ENVIRONMENT("환경 챌린지"),
+    ROUTINE("습관 챌린지"),
+    ETC("기타");
 
-    private final boolean status;
+    private final String challengeTag;
 }

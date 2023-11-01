@@ -18,9 +18,6 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class Coin extends BaseEntity {
 
-    @OneToOne
-    private Member owner;
-
     private int currentCoin;
 
     private int totalGetCoin;
