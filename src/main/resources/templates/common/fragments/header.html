@@ -13,20 +13,20 @@
                     </label>
                     <ul tabindex="0"
                         class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a class="text-base">챌린지</a></li>
-                        <li><a class="text-base">상점</a></li>
-                        <li><a class="text-base">나의 코인</a></li>
+                        <li><a class="text-base" th:href="@{/}">챌린지</a></li>
+                        <li><a class="text-base" th:href="@{/}">상점</a></li>
+                        <li><a class="text-base" th:href="@{/}">나의 코인</a></li>
                     </ul>
                 </div>
             </div>
             <div class="navbar-center">
-                <a class="btn btn-ghost normal-case text-xl">Mirou</a>
+                <a class="btn btn-ghost normal-case text-xl" th:href="@{/}">Mirou</a>
             </div>
             <div class="navbar-end">
-                <button class="btn btn-ghost btn-circle">
+                <button class="btn btn-ghost btn-circle" th:onclick="'window.location.href = \'/myPage\''">
                     <i class="fa-regular fa-user fa-lg" style="color: #000000;"></i>
                 </button>
-                <button class="btn btn-ghost btn-circle">
+                <button class="btn btn-ghost btn-circle" th:onclick="'window.location.href = \'/login\''">
                     <div class="indicator">
                         <i class="fa-regular fa-bell fa-lg" style="color: #000000;"></i>
                     </div>
