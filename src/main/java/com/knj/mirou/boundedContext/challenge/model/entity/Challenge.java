@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.challenge.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
+import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
@@ -33,7 +34,7 @@ public class Challenge extends BaseEntity {
     @OneToMany(mappedBy = "linkedChallenge")
     private List<Reward> reward;
 
-    private LocalDate joinDeadLine;
+    private LocalDate joinDeadline;
 
     @Enumerated(EnumType.STRING)
     private ChallengePeriod period;
@@ -42,7 +43,10 @@ public class Challenge extends BaseEntity {
     private ChallengeStatus status;
 
     @Enumerated(EnumType.STRING)
-    private ChallengeTag challengeTag;
+    private ChallengeTag tag;
+
+    @Enumerated(EnumType.STRING)
+    private AuthenticationMethod method;
 
     private int requiredNum;    //총 몇 번 성공해야하는 챌린지인지.
 
