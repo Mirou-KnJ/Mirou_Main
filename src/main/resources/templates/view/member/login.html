@@ -1,0 +1,36 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>로그인 페이지</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100 border-b-2">
+
+            <div class="flex-grow-0 flex-shrink-0 w-[531px] h-[600px] relative overflow-hidden">
+
+                <p class="w-[259px] h-[89px] absolute left-[137px] top-[327px] text-center text-black">
+                    <span class="w-[259px] h-[89px] text-[15px] text-center text-black">나의 습관이 </span>
+                    <span class="w-[259px] h-[89px] text-xl text-center text-black">소득</span>
+                    <span class="w-[259px] h-[89px] text-[15px] text-center text-black">이되는</span><br/><br/>
+                    <span class="w-[259px] h-[89px] text-3xl text-center text-black">Miracle Routine</span>
+                </p>
+
+                <div class="w-[297px] h-[116px] absolute left-[117px] top-[416px]">
+                    <div class="w-[277px] h-[116px] absolute left-2.5 top-2.5">
+                        <div class="flex justify-center items-center w-[277px] absolute left-0 top-2.5 overflow-hidden gap-2.5 px-[19px] py-[25px] rounded-[20px] bg-[#efd911]">
+                            <img src="카카오톡로고-1.png" class="flex-grow-0 flex-shrink-0 w-[16.55px] h-4 object-cover"/>
+                            <p class="flex-grow-0 flex-shrink-0 text-[15px] text-center text-black">카카오톡으로 시작하기</p>
+                        </div>
+                        <p class="w-[179px] h-[19px] absolute left-0 top-[97px] text-[15px] text-center text-black">다른방법으로 로그인</p>
+                        <p class="w-[82px] h-3 absolute left-[169px] top-[97px] text-[15px] text-center text-black">계정찾기</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
