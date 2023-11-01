@@ -3,7 +3,8 @@ package com.knj.mirou.base.security;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Map;
 
 @Service
@@ -41,5 +43,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Member member = (Member) socialResultMap.get("Data");
 
         return new CustomOAuth2User(member.getLoginId(), "1234", member.getGrantedAuthorities());
+    }
+
+    class CustomOAuth2User extends User implements OAuth2User {
+
+        public CustomOAuth2User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+            super(username, password, authorities);
+        }
+
+        @Override
+        public Map<String, Object> getAttributes() {
+            return null;
+        }
+
+        @Override
+        public String getName() {
+            return getUsername();
+        }
     }
 }
