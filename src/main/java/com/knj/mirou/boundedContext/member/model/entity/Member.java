@@ -32,6 +32,7 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
     private SocialCode socialCode;
 
     @Enumerated(EnumType.STRING)
