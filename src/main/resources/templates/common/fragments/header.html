@@ -23,14 +23,17 @@
                 <a class="btn btn-ghost normal-case text-xl text-purple-400" th:href="@{/}">Mirou</a>
             </div>
             <div class="navbar-end">
-                <button class="btn btn-ghost btn-circle" th:onclick="'window.location.href = \'/myPage\''">
+
+                <a href="/member/myPage" class="btn btn-ghost btn-circle">
                     <i class="fa-regular fa-user fa-lg" style="color: #000000;"></i>
-                </button>
-                <button class="btn btn-ghost btn-circle" th:onclick="'window.location.href = \'/login\''">
+                </a>
+
+                <a href="/member/login" class="btn btn-ghost btn-circle">
                     <div class="indicator">
                         <i class="fa-regular fa-bell fa-lg" style="color: #000000;"></i>
                     </div>
-                </button>
+                </a>
+
             </div>
         </nav>
     </header>
