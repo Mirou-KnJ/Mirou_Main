@@ -15,14 +15,72 @@
 
                 <!-- FIXME absolute 재설정 필요 -->
                 <div class="absolute avatar" style="top:30%;">
-                    <div class="w-24 bg-white rounded-full ring ring-primary ring-offset-base-200 ring-offset-2">
+                    <div class="w-20 bg-white rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                         <img src="https://kr.object.ncloudstorage.com/devchall/store_img/boy1.png" alt="profileImg">
                     </div>
                 </div>
 
-
                 <div class="bg-gray-50 w-full h-full">
 
+                    <div class="flex flex-col mt-24">
+
+                        <div class="flex justify-center mb-3">
+                            <h1><챌린지></h1>
+                        </div>
+
+                        <div class="flex justify-center items-center">
+                            <div class="flex w-4/5 stats shadow">
+                                <div class="stat w-3/4">
+                                    <div class="stat-figure text-info mt-3">
+                                        <i class="fa-solid fa-spinner inline-block fa-lg"></i>
+                                    </div>
+                                    <div class="stat-title">진행중인 챌린지</div>
+                                    <div class="stat-value text-info">
+                                        <span>3개</span>
+                                    </div>
+                                </div>
+
+                                <div class="stat w-3/4">
+                                    <div class="stat-figure text-accent mt-3">
+                                        <i class="fa-solid fa-check inline-block fa-lg"></i>
+                                    </div>
+                                    <div class="stat-title">완료한 챌린지</div>
+                                    <div class="stat-value text-accent">7개</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col mt-10">
+
+                        <div class="flex justify-center mb-3">
+                            <h1><소득></h1>
+                        </div>
+
+                        <div class="flex justify-center items-center">
+                            <div class="flex w-4/5 stats shadow">
+                                <div class="stat w-3/4">
+                                    <div class="stat-figure text-primary mt-3">
+                                        <i class="fa-solid fa-ticket-simple fa-lg"></i>
+                                    </div>
+                                    <div class="stat-title">일상지원금</div>
+                                    <div class="stat-value text-primary">
+                                        <span th:text="${member.point.currentPoint}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="stat w-3/4">
+                                    <div class="stat-figure text-warning mt-3">
+                                        <i class="fa-solid fa-coins fa-lg"></i>
+                                    </div>
+                                    <div class="stat-title">코인</div>
+                                    <div class="stat-value text-warning">
+                                        <span th:text="${member.coin.currentCoin}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
