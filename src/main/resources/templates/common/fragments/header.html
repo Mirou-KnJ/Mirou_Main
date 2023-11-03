@@ -24,14 +24,17 @@
             </div>
             <div class="navbar-end">
 
-                <a href="/member/myPage" class="btn btn-ghost btn-circle">
+                <!-- login or myPage -->
+                <a sec:authorize="!isAuthenticated()" href="/member/login" class="btn btn-ghost btn-circle">
+                    <i class="fa-solid fa-key"></i>
+                </a>
+
+                <a sec:authorize="isAuthenticated()" href="/member/myPage" class="btn btn-ghost btn-circle">
                     <i class="fa-regular fa-user fa-lg" style="color: #000000;"></i>
                 </a>
 
-                <a href="/member/login" class="btn btn-ghost btn-circle">
-                    <div class="indicator">
-                        <i class="fa-regular fa-bell fa-lg" style="color: #000000;"></i>
-                    </div>
+                <a sec:authorize="isAuthenticated()" href="/member/logout" class="btn btn-ghost btn-circle">
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </a>
 
             </div>
