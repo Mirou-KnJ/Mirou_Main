@@ -6,15 +6,23 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center w-1/2 h-96 mx-auto py-20 navbar bg-base-100">
 
-            <div class="flex w-full h-full">
-                <div>
-                    <div>
-                        <div class="flex justify-center items-center overflow-hidden gap-2.5">
-                            <p class="text-[15px] text-center text-black">카카오톡으로 시작하기</p>
-                        </div>
-                    </div>
+            <div class="flex flex-col flex-grow justify-center items-center w-full h-108">
+                <div class="flex justify-center items-center w-full mb-10">
+                    <p class="text-center text-black">
+                        <span class="text-[15px] text-center text-black">나의 습관이 </span>
+                        <span class="text-xl text-center text-yellow-300">소득</span>
+                        <span class="text-[15px] text-center text-black">이되는</span><br/><br/>
+                        <span class="text-3xl text-center text-black">Miracle Routine</span>
+                    </p>
+                </div>
+
+                <div class="flex">
+                    <a href="/oauth2/authorization/kakao" class="btn btn-warning">
+                        <i class="fa-solid fa-comment"></i>
+                        카카오톡으로 시작하기
+                    </a>
                 </div>
             </div>
 
