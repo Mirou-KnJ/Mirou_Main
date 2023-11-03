@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember, Long> {
 
-    Optional<ChallengeMember> findByLinkedMemberAndProgress(Member member, Progress progress);
+    long countByLinkedMemberAndProgress(Member member, Progress progress);
 
 }
