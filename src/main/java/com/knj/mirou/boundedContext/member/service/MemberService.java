@@ -1,18 +1,19 @@
 package com.knj.mirou.boundedContext.member.service;
 
 import com.knj.mirou.boundedContext.coin.service.CoinService;
+import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PointService pointService;
     private final CoinService coinService;
+    private final MemberConfigProperties memberConfigProps;
 
     public Optional<Member> getByLoginId(String loginId) {
 
@@ -87,6 +89,23 @@ public class MemberService {
         }
 
         return socialResultMap;
+    }
+
+    public List<? extends GrantedAuthority> getGrantedAuthorities(String loginId) {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+
+        if (isAdmin(loginId)) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+        return grantedAuthorities;
+    }
+
+    public boolean isAdmin(String loginId) {
+
+        return memberConfigProps.isAdmin(loginId);
     }
 
 }
