@@ -3,19 +3,16 @@ package com.knj.mirou.boundedContext.member.model.entity;
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.inventory.entity.Inventory;
-import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
