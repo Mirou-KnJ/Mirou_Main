@@ -172,4 +172,4 @@ gradle-app.setting
 
 #custom
 application-secret.yml
-google-account.json
+src/main/resources/google-account.json
