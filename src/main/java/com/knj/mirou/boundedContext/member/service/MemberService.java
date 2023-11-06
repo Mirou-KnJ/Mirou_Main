@@ -44,12 +44,15 @@ public class MemberService {
             return joinResultMap;
         } else {
 
+
+            MemberRole role = isAdmin(loginId) ? MemberRole.ADMIN : MemberRole.USER;
+
             Member member = Member.builder()
                     .loginId(loginId)
                     .nickname(nickname)
                     .socialCode(SocialCode.valueOf(socialCode))   //FIXME 로그인 경로에 따라 다르게 설정
-                    .role(MemberRole.USER)          //FIXME 일반 회원 / 관리자 구분
-                    .inviteCode("123456789")        //FIXME 난수 처리
+                    .role(role)
+                    .inviteCode("123456789")                      //FIXME 난수 처리
                     .coin(coinService.createCoin())
                     .point(pointService.createPoint())
                     .build();
