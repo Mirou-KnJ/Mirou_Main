@@ -56,4 +56,11 @@ public class MemberController {
         return "/view/member/mypage";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin")
+    public String adminPage() {
+
+        return "/view/admin/adminPage";
+    }
+
 }
