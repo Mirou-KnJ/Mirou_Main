@@ -1,22 +1,29 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.image.config.S3ConfigProperties;
+import com.knj.mirou.boundedContext.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feed")
 public class ChallengeFeedRestController {
 
+    private final ChallengeFeedService challengeFeedService;
+
     @PostMapping("/write")
-    public void writeRequest(MultipartFile img) {
+    public String writeRequest(MultipartFile img) throws IOException {
 
-        System.out.println(img.getName());
-        System.out.println("img = " + img.getOriginalFilename());
+        String resultUrl = challengeFeedService.uploadImg(img);
 
+        return resultUrl;
     }
 
 
