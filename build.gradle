@@ -48,6 +48,9 @@ dependencies {
 	//Thymeleaf Layout
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
+	//AWS S3 Bucket
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.238'
+
 }
 
 tasks.named('test') {
