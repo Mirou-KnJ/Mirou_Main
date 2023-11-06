@@ -17,6 +17,10 @@
                 </p>
             </div>
 
+            <div sec:authorize="isAuthenticated()">
+                <a class="btn btn-secondary" href="/feed/writeForm">인증하러 가기</a>
+            </div>
+
         </div>
     </main>
 </th:block>
