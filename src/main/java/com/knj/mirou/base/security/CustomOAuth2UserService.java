@@ -42,7 +42,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Member member = (Member) socialResultMap.get("Data");
 
-        return new CustomOAuth2User(member.getLoginId(), "1234", member.getGrantedAuthorities());
+        return new CustomOAuth2User(member.getLoginId(), member.getNickname(),
+                memberService.getGrantedAuthorities(member.getLoginId()));
     }
 
     class CustomOAuth2User extends User implements OAuth2User {
