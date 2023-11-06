@@ -12,14 +12,4 @@ public class HomeController {
         return "view/index";
     }
 
-    @GetMapping("/login")
-    public String login(){
-        return "view/member/login";
-    }
-
-    @GetMapping("/myPage")
-    public String myPage(){
-        return "view/member/mypage";
-    }
-
 }
