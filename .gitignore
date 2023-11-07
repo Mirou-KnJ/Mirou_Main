@@ -169,5 +169,7 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
+
+#custom
 application-secret.yml
 src/main/resources/google-account.json
