@@ -61,4 +61,12 @@ public class ChallengeService {
         return null;
     }
 
+    @Transactional
+    public void updateReward(long linkedChallengeId, PublicReward reward) {
+
+        Challenge challengeById = getById(linkedChallengeId);
+
+        challengeById.updateReward(reward);
+    }
+
 }

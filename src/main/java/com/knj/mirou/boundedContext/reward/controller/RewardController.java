@@ -1,5 +1,7 @@
 package com.knj.mirou.boundedContext.reward.controller;
 
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,13 @@ import java.util.List;
 public class RewardController {
 
     private final PublicRewardService publicRewardService;
+    private final ChallengeService challengeService;
 
     @GetMapping("/setting/{challengeId}")
     public String settingForm(@PathVariable(value = "challengeId") long challengeId, Model model) {
 
-        List<PublicReward> rewardList = publicRewardService.getAllReward();
+        Challenge byId = challengeService.getById(challengeId);
+        List<PublicReward> rewardList = byId.getPublicReward();
 
         model.addAttribute("challengeId", challengeId);
         model.addAttribute("rewardList", rewardList);
@@ -29,19 +33,12 @@ public class RewardController {
     }
 
     @PostMapping("/setting")
-    public String setPublicReward(int id, int round, String rewardType, String reward) {
+    public String setPublicReward(long id, int round, String rewardType, String reward) {
 
-        StringBuilder sb = new StringBuilder();
+        PublicReward publicReward = publicRewardService.create(id, round, rewardType, reward);
 
-        sb.append("id : " + id);
-        sb.append("round : " + round);
-        sb.append("rewardType : " + rewardType);
-        sb.append("reward : " + reward);
-
-        publicRewardService.create(id, round, rewardType, reward);
+        publicRewardService.updateChallengeReward(id, publicReward);
 
         return "redirect:/reward/setting/" + id;
     }
-
-
 }

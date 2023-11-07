@@ -55,4 +55,9 @@ public class Challenge extends BaseEntity {
     private int joinCost;
 
     private String precautions;
+
+    public void updateReward(PublicReward publicReward) {
+
+        this.publicReward.add(publicReward);
+    }
 }
