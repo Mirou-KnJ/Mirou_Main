@@ -28,7 +28,6 @@ public class RewardController {
         return "/view/reward/settingForm";
     }
 
-    @ResponseBody
     @PostMapping("/setting")
     public String setPublicReward(int id, int round, String rewardType, String reward) {
 
@@ -39,7 +38,9 @@ public class RewardController {
         sb.append("rewardType : " + rewardType);
         sb.append("reward : " + reward);
 
-        return sb.toString();
+        publicRewardService.create(id, round, rewardType, reward);
+
+        return "redirect:/reward/setting/" + id;
     }
 
 

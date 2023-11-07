@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,17 @@ public class ChallengeService {
     public List<Challenge> getAllList() {
 
         return challengeRepository.findAll();
+    }
+
+    public Challenge getById(long id) {
+
+        Optional<Challenge> OById = challengeRepository.findById(id);
+
+        if(OById.isPresent()) {
+            return OById.get();
+        }
+
+        return null;
     }
 
 }
