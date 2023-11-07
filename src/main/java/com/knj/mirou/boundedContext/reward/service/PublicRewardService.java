@@ -20,7 +20,7 @@ public class PublicRewardService {
     private final ChallengeService challengeService;
 
     @Transactional
-    public PublicReward create(long challengeId, int round, String rewardType, String reward) {
+    public void create(long challengeId, int round, String rewardType, String reward) {
 
         Challenge challengeById = challengeService.getById(challengeId);
 
@@ -31,7 +31,7 @@ public class PublicRewardService {
                 .reward(reward)
                 .build();
 
-        return publicRewardRepository.save(newReward);
+        publicRewardRepository.save(newReward);
     }
 
     public List<PublicReward> getAllReward() {

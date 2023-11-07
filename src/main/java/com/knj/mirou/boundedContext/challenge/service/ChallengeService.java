@@ -6,10 +6,6 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
-import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +22,7 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
 
     @Transactional
-    public Challenge createTest() {
+    public void createTest() {
         
         Challenge newChallenge = Challenge.builder()
                 .name("임시 챌린지")
@@ -42,7 +38,7 @@ public class ChallengeService {
                 .precautions("임시 주의사항")
                 .build();
 
-        return challengeRepository.save(newChallenge);
+        challengeRepository.save(newChallenge);
     }
 
     public List<Challenge> getAllList() {

@@ -18,7 +18,7 @@ public class ChallengeController {
 
         challengeService.createTest();
 
-        return "redirect:/";
+        return "redirect:/member/admin";
     }
 
 }

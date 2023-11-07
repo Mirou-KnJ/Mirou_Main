@@ -45,7 +45,7 @@ public class Challenge extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuthenticationMethod method;
 
-    private int requiredNum;    //총 몇 번 성공해야하는 챌린지인지.
+    private int requiredNum;
 
     private int level;
 

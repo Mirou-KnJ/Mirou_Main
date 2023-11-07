@@ -35,7 +35,7 @@ public class RewardController {
     @PostMapping("/setting")
     public String setPublicReward(long id, int round, String rewardType, String reward) {
 
-        PublicReward publicReward = publicRewardService.create(id, round, rewardType, reward);
+        publicRewardService.create(id, round, rewardType, reward);
 
         return "redirect:/reward/setting/" + id;
     }
