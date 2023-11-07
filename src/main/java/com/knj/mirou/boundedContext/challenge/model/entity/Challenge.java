@@ -5,7 +5,7 @@ import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
-import com.knj.mirou.boundedContext.reward.model.entity.Reward;
+import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,7 +32,7 @@ public class Challenge extends BaseEntity {
     private String contents;
 
     @OneToMany(mappedBy = "linkedChallenge")
-    private List<Reward> reward;
+    private List<PublicReward> publicReward;
 
     private LocalDate joinDeadline;
 
