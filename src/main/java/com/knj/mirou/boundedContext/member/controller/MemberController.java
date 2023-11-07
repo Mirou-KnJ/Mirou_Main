@@ -1,5 +1,7 @@
 package com.knj.mirou.boundedContext.member.controller;
 
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +24,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final ChallengeMemberService challengeMemberService;
+    private final ChallengeService challengeService;
 
     @GetMapping("/login")
     public String showLoginPage(){
@@ -58,7 +62,11 @@ public class MemberController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin")
-    public String adminPage() {
+    public String adminPage(Model model) {
+
+        List<Challenge> challengeList = challengeService.getAllList();
+
+        model.addAttribute("challengeList", challengeList);
 
         return "/view/admin/adminPage";
     }
