@@ -1,8 +1,6 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
-import com.knj.mirou.boundedContext.image.config.S3ConfigProperties;
-import com.knj.mirou.boundedContext.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
