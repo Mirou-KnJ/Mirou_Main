@@ -26,28 +26,28 @@
                 <label class="label">
                     <span class="label-text">소득</span>
                 </label>
-                <input type="text" placeholder="완료시 얻는 소득(coin)" class="input input-bordered w-full max-w-xs" name="coin"/>
+                <input type="text" placeholder="완료시 얻는 소득(coin)" class="input input-bordered w-full max-w-xs" name="reward"/>
             </div><br>
 
             <div class="form-control w-full max-w-xs">
                 <label class="label">
                     <span class="label-text">일상지원금</span>
                 </label>
-                <input type="text" placeholder="참가시 사용 일상지원금(point)" class="input input-bordered w-full max-w-xs" name="point"/>
+                <input type="text" placeholder="참가시 사용 일상지원금(point)" class="input input-bordered w-full max-w-xs" name="joinCost"/>
             </div><br>
 
             <div>
                 <label class="label">
-                    <span class="label-text">챌린지 시작일</span>
+                    <span class="label-text">챌린지 데드라인 설정</span>
                 </label>
-                <input type="date" name=""/>
+                <input type="date" name="joinDeadLine">
             </div><br>
 
             <select class="select select-bordered w-full max-w-xs" name="period">
                 <option disabled selected>진행일수</option>
-                <option>1일</option>
-                <option>1주</option>
-                <option>1달</option>
+                <option value="1">1일</option>
+                <option value="DAY7">1주</option>
+                <option value="30">1달</option>
             </select><br>
 
             <select class="select select-bordered w-full max-w-xs" name="tag">
@@ -66,26 +66,26 @@
 
             <select class="select select-bordered w-full max-w-xs" name="requiredNum">
                 <option disabled selected>총 몇회 인증?</option>
-                <option>1회</option>
-                <option>3회</option>
-                <option>5회</option>
+                <option value="1">1회</option>
+                <option value="3">3회</option>
+                <option value="5">5회</option>
             </select><br>
 
             <div class="rating rating-lg rating-half">
                 <label class="label">
                     <span class="label-text">난이도</span>
                 </label>
-                <input type="radio" name="rating-10" class="rating-hidden" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-1" checked />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input type="radio" name="rating-10" class="bg-green-500 mask mask-star-2 mask-half-2" />
+                <input value="1" type="radio" name="level" class="rating-hidden" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" checked />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
+                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
             </div><br>
 
             <div class="form-control">
@@ -96,7 +96,7 @@
             </div><br>
 
             <div class="mt-6">
-                <button type="submit" >챌린지 생성하기</button>
+                <button type="submit">챌린지 생성하기</button>
             </div>
         </form>
         </div>

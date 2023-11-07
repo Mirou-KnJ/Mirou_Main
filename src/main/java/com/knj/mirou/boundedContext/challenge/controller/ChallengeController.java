@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Controller
@@ -29,10 +30,18 @@ public class ChallengeController {
     }
 
     @PostMapping("/createChallenge")
-    public String createChallenge(String name, String contents, String coin, String point, Date period, String tag, String method, String level, String requiredNum, String precautions) {
+    public String createChallenge(String name, String contents, LocalDate joinDeadLine, int joinCost, String period, String tag, String method, int level, int requiredNum, String precautions) {
 
-        challengeService.createChallenge(name, contents, coin, point, period, tag, method, level, requiredNum, precautions);
-        
+        challengeService.createChallenge(name, contents, period);
+
+        System.out.println("joinDeadLine = " + joinDeadLine);
+        System.out.println("tag = " + tag);
+        System.out.println("period = " + period);
+        System.out.println("method = " + method);
+        System.out.println("name = " + name);
+
+
+
         return "redirect:/";
     }
     @GetMapping("/allChallengeList")
