@@ -64,6 +64,7 @@ public class ImageService {
         String result = endPoint + "/%s/%s".formatted(bucket, key);
 
         detectLabelsGcs(result);
+        safeSearchByGcs(result);
 
         return endPoint + "/%s/%s".formatted(bucket, key);
     }
@@ -106,6 +107,51 @@ public class ImageService {
                 }
             }
         }
+    }
+
+    public void safeSearchByGcs(String imgUrl) throws IOException {
+
+        try (ImageAnnotatorClient vision = ImageAnnotatorClient.create(visionAPISettings)) {
+
+            URL url = new URL(imgUrl);
+            try (InputStream in = url.openStream()) {
+                byte[] data = IOUtils.toByteArray(in);
+
+                ByteString imgBytes = ByteString.copyFrom(data);
+                Image img = Image.newBuilder().setContent(imgBytes).build();
+                Feature feat = Feature.newBuilder().setType(Feature.Type.SAFE_SEARCH_DETECTION).build();
+                AnnotateImageRequest request =
+                        AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
+
+                BatchAnnotateImagesResponse response = vision.batchAnnotateImages(
+                        Collections.singletonList(request));
+                List<AnnotateImageResponse> responses = response.getResponsesList();
+
+                for (AnnotateImageResponse res : responses) {
+                    if (res.hasError()) {
+                        System.out.format("Error: %s%n", res.getError().getMessage());
+                        return;
+                    }
+
+                    SafeSearchAnnotation safeSearchAnnotation = res.getSafeSearchAnnotation();
+
+                    //유해성 등급 => Unknown, Very Unlikely, Unlikely, Possible, Likely, and Very Likely
+                    List<String> resultList = new ArrayList<>();
+
+                    resultList.add(safeSearchAnnotation.getAdult().toString());
+                    resultList.add(safeSearchAnnotation.getMedical().toString());
+                    resultList.add(safeSearchAnnotation.getAdult().toString());
+                    resultList.add(safeSearchAnnotation.getViolence().toString());
+                    resultList.add(safeSearchAnnotation.getRacy().toString());
+
+                    for (String result : resultList) {
+
+                        System.out.println("result = " + result);
+                    }
+                }
+            }
+        }
+        return;
     }
 
 }
