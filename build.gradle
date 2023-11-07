@@ -48,6 +48,18 @@ dependencies {
 	//Thymeleaf Layout
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
+	//AWS S3 Bucket
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'software.amazon.awssdk:s3:2.17.42'
+
+	//Google Vision API
+	implementation 'com.google.cloud:google-cloud-vision:3.17.0'
+	implementation 'com.google.code.gson:gson:2.8.9'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation 'com.google.apis:google-api-services-iam:v1-rev20220526-1.32.1'
+	implementation 'com.google.api-client:google-api-client:1.32.1'
+	implementation 'com.google.http-client:google-http-client-jackson2:1.32.1'
+
 }
 
 tasks.named('test') {
