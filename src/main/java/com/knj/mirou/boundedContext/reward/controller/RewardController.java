@@ -1,13 +1,13 @@
 package com.knj.mirou.boundedContext.reward.controller;
 
+import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -20,16 +20,26 @@ public class RewardController {
     @GetMapping("/setting/{challengeId}")
     public String settingForm(@PathVariable(value = "challengeId") long challengeId, Model model) {
 
+        List<PublicReward> rewardList = publicRewardService.getAllReward();
+
         model.addAttribute("challengeId", challengeId);
+        model.addAttribute("rewardList", rewardList);
 
         return "/view/reward/settingForm";
     }
 
-    @PostMapping("/setting/{challengeId}")
-    public String setPublicReward(@PathVariable(value = "challengeId") long challengeId) {
+    @ResponseBody
+    @PostMapping("/setting")
+    public String setPublicReward(int id, int round, String rewardType, String reward) {
 
+        StringBuilder sb = new StringBuilder();
 
-        return "";
+        sb.append("id : " + id);
+        sb.append("round : " + round);
+        sb.append("rewardType : " + rewardType);
+        sb.append("reward : " + reward);
+
+        return sb.toString();
     }
 
 
