@@ -17,14 +17,10 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "custom.img.aws")
 public class S3ConfigProperties {
 
-    private String endPoint;
-
-    private String region;
-
     private String accessKey;
-
     private String secretKey;
-
+    private String endPoint;
+    private String region;
     private String bucket;
 
     @Bean

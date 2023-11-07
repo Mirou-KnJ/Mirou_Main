@@ -7,7 +7,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
-import com.knj.mirou.base.s3.service.S3Service;
 import com.knj.mirou.boundedContext.image.config.S3ConfigProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,6 @@ public class ImageService {
 
     private final S3ConfigProperties s3ConfigProps;
     private final AmazonS3 amazonS3;
-    private final S3Service s3Service;
     private final ImageAnnotatorSettings visionAPISettings;
 
     public String uploadImg(MultipartFile img) throws IOException {
@@ -74,8 +72,7 @@ public class ImageService {
         try (ImageAnnotatorClient vision = ImageAnnotatorClient.create(visionAPISettings)) {
 
             URL url = new URL(imgUrl);
-
-            try(InputStream in = url.openStream()) {
+            try (InputStream in = url.openStream()) {
                 byte[] data = IOUtils.toByteArray(in);
 
                 ByteString imgBytes = ByteString.copyFrom(data);
@@ -87,22 +84,18 @@ public class ImageService {
 
                 BatchAnnotateImagesResponse response = vision.batchAnnotateImages(
                         Collections.singletonList(request));
-
                 List<AnnotateImageResponse> responses = response.getResponsesList();
 
                 for (AnnotateImageResponse res : responses) {
-
-                    if(res.hasError()) {
+                    if (res.hasError()) {
                         //FIXME 에러 문구 처리
                         System.out.println("!!!!에러 발생!!!!");
                         return;
                     }
-
-                    for(EntityAnnotation annotation : res.getLabelAnnotationsList()) {
+                    for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
 
                         //FIXME 로컬 프린트문 출력 x
                         System.out.println(annotation.getDescription());
-
                     }
                 }
             }
@@ -145,7 +138,6 @@ public class ImageService {
                     resultList.add(safeSearchAnnotation.getRacy().toString());
 
                     for (String result : resultList) {
-
                         System.out.println("result = " + result);
                     }
                 }
