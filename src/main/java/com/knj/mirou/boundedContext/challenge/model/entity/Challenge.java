@@ -6,10 +6,7 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +28,7 @@ public class Challenge extends BaseEntity {
 
     private String contents;
 
-    @OneToMany(mappedBy = "linkedChallenge")
+    @OneToMany(mappedBy = "linkedChallenge", cascade = CascadeType.ALL)
     private List<PublicReward> publicReward;
 
     private LocalDate joinDeadline;
@@ -55,9 +52,4 @@ public class Challenge extends BaseEntity {
     private int joinCost;
 
     private String precautions;
-
-    public void updateReward(PublicReward publicReward) {
-
-        this.publicReward.add(publicReward);
-    }
 }

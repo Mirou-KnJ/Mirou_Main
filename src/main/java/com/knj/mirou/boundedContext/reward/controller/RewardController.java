@@ -37,8 +37,6 @@ public class RewardController {
 
         PublicReward publicReward = publicRewardService.create(id, round, rewardType, reward);
 
-        publicRewardService.updateChallengeReward(id, publicReward);
-
         return "redirect:/reward/setting/" + id;
     }
 }

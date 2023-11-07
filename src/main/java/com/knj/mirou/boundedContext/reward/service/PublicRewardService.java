@@ -39,9 +39,4 @@ public class PublicRewardService {
         return publicRewardRepository.findAll();
     }
 
-    public void updateChallengeReward(long linkedChallengeId, PublicReward publicReward) {
-
-        challengeService.updateReward(linkedChallengeId, publicReward);
-    }
-
 }
