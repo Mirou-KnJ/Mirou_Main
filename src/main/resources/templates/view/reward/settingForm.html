@@ -1,0 +1,56 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>리워드 세팅</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+
+            <div>
+                <h1 th:text="${challengeId} + '번 챌린지에 대한 리워드 설정입니다.'"></h1>
+
+                <div class="flex">
+                    <form method="POST" th:action="|/reward/setting/${challengeId}|">
+                        <input type="hidden" th:value="${challengeId}" name="id">
+                        <input type="text" class="input input-text" name="round">
+                        <div class="form-control w-full max-w-xs">
+                            <label class="label">
+                                <span class="label-text">보상 회차 입력</span>
+                            </label>
+                            <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs"/>
+                        </div>
+                        <div class="form-control">
+                            <label class="label cursor-pointer">
+                                <span class="label-text">코인</span>
+                                <input type="radio" name="rewardType" class="radio checked:bg-yellow-500" checked/>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                            <label class="label cursor-pointer">
+                                <span class="label-text">상품</span>
+                                <input type="radio" name="rewardType" class="radio checked:bg-blue-500 disabled"/>
+                            </label>
+                        </div>
+                        <input type="range" min="0" max="500" class="range" step="100" name="reward"/>
+                        <div class="w-full flex justify-between text-xs px-1">
+                            <span>0</span>
+                            <span>100</span>
+                            <span>200</span>
+                            <span>300</span>
+                            <span>400</span>
+                            <span>500</span>
+                        </div>
+
+                        <button class="btn btn-accent">보상 설정 완료</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
