@@ -1,0 +1,32 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>사용할 페이지 명</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+
+            <div class="flex flex-col h-full">
+                <h1 th:text="${challenge.name}"></h1>
+
+                <p th:text="'내용 : ' + ${challenge.contents}"></p>
+                <p th:text="'참가 비용 : ' + ${challenge.joinCost}"></p>
+                <p th:text="'난이도 : ' + ${challenge.level}"></p>
+
+
+                <p class="justify-center mt-10">보상 내용</p>
+                <div class="flex flex-row mt-4" th:each="reward : ${challenge.publicReward}">
+                    <span th:text="${reward.round} + '회차 : '"></span>
+                    <span th:text="${reward.reward}"></span>
+                    <span th:text="${reward.rewardType}"></span>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>

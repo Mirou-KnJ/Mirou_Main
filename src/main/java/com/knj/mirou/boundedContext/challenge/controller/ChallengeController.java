@@ -1,10 +1,12 @@
 package com.knj.mirou.boundedContext.challenge.controller;
 
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -38,9 +40,14 @@ public class ChallengeController {
         return "view/challenge/allChallengeList";
     }
 
-    @GetMapping("/detail")
-    public String detailChallenge() {
-        return "view/challenge/detailChallenge";
+    @GetMapping("/detail/{id}")
+    public String detailChallenge(@PathVariable(value = "id") long challengeId, Model model) {
+
+        Challenge challenge = challengeService.getById(challengeId);
+
+        model.addAttribute("challenge", challenge);
+
+        return "view/challenge/detail";
     }
 
 }

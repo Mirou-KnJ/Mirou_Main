@@ -18,7 +18,7 @@
 
             <div class="flex flex-col gap-10" th:unless="${#lists.isEmpty(challengeList)}">
                 <div th:each="challenge : ${challengeList}">
-                    <p th:text="${challenge.name}"></p>
+                    <a th:href="|/challenge/detail/${challenge.id}|" th:text="${challenge.name}"></a>
                     <p th:text="${challenge.contents}"></p>
                     <a th:href="|/reward/setting/${challenge.id}|" class="btn btn-sm btn-accent">보상 설정하기</a>
                 </div>
