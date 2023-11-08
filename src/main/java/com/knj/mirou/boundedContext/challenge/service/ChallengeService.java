@@ -8,6 +8,7 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +43,7 @@ public class ChallengeService {
         return challengeRepository.save(newChallenge);
     }
 
-    public List<Challenge> getAllChallenges() {
+    public List<Challenge> allChallengeList() {
         return challengeRepository.findAll();
     }
 }

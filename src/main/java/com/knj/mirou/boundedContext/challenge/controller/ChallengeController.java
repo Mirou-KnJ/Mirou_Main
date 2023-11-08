@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,13 +41,15 @@ public class ChallengeController {
     }
     @GetMapping("/allChallengeList")
     public String allChallengeList(Model model){
-        model.addAttribute("challenges", challengeService.getAllChallenges());
+
+        List<Challenge> ChallengeList = challengeService.allChallengeList();
+        model.addAttribute("allChallengeList", challengeService.allChallengeList());
         return "view/challenge/allChallengeList";
     }
 
-    @GetMapping("/detail")
-    public String detailChallenge(){
-        return "view/challenge/detailChallenge";
-    }
+//    @GetMapping("/detail/{challengeId}")
+//    public String detailChallenge(){
+//        return "view/challenge/detailChallenge";
+//    }
 
 }
