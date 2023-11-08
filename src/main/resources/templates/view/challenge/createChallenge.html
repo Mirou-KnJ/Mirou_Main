@@ -22,19 +22,12 @@
                 <textarea class="textarea textarea-bordered textarea-lg w-full max-w-xs" placeholder="챌린지 내용 작성" name="contents"></textarea>
             </div><br>
 
-            <div class="form-control w-full max-w-xs">
-                <label class="label">
-                    <span class="label-text">소득</span>
-                </label>
-                <input type="text" placeholder="완료시 얻는 소득(coin)" class="input input-bordered w-full max-w-xs" name="reward"/>
-            </div><br>
-
-            <div class="form-control w-full max-w-xs">
-                <label class="label">
-                    <span class="label-text">일상지원금</span>
-                </label>
-                <input type="text" placeholder="참가시 사용 일상지원금(point)" class="input input-bordered w-full max-w-xs" name="joinCost"/>
-            </div><br>
+            <select class="select select-bordered w-full max-w-xs" name="joinCost">
+                <option disabled selected>일상지원금</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="2000">2000</option>
+            </select><br>
 
             <div>
                 <label class="label">
@@ -45,24 +38,25 @@
 
             <select class="select select-bordered w-full max-w-xs" name="period">
                 <option disabled selected>진행일수</option>
-                <option value="1">1일</option>
-                <option value="DAY7">1주</option>
-                <option value="30">1달</option>
+                <option value="DAY1">하루 챌린지</option>
+                <option value="DAY3">3일 챌린지</option>
+                <option value="DAY5">5일 챌린지</option>
+                <option value="DAY7">일주일 챌린지</option>
             </select><br>
 
             <select class="select select-bordered w-full max-w-xs" name="tag">
                 <option disabled selected>챌린지 종류</option>
-                <option>신규</option>
-                <option>환경</option>
-                <option>습관</option>
+                <option value="ENVIRONMENT">환경 챌린지</option>
+                <option value="ROUTINE">습관 챌린지</option>
+                <option value="ETC">기타</option>
             </select><br>
 
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">인증방법</span>
-                </label>
-                <textarea class="textarea textarea-bordered textarea-lg w-full max-w-xs" placeholder="인증방법 작성" name="method"></textarea>
-            </div><br>
+            <select class="select select-bordered w-full max-w-xs" name="method">
+                <option disabled selected>인증 방법</option>
+                <option value="TEXT">텍스트 인증</option>
+                <option value="PHOTO">인증샷 인증</option>
+                <option value="ETC">기타</option>
+            </select><br>
 
             <select class="select select-bordered w-full max-w-xs" name="requiredNum">
                 <option disabled selected>총 몇회 인증?</option>
@@ -71,22 +65,23 @@
                 <option value="5">5회</option>
             </select><br>
 
-            <div class="rating rating-lg rating-half">
+            <div class="rating rating-lg">
                 <label class="label">
                     <span class="label-text">난이도</span>
                 </label>
-                <input value="1" type="radio" name="level" class="rating-hidden" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" checked />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-1" />
-                <input value="1" type="radio" name="level" class="bg-green-500 mask mask-star-2 mask-half-2" />
+                <input value="0" type="radio" name="level" class="rating-hidden" />
+                <input value="1" type="radio" name="level" class="mask mask-star-2" />
+                <input value="2" type="radio" name="level" class="mask mask-star-2" checked />
+                <input value="3" type="radio" name="level" class="mask mask-star-2" />
+                <input value="4" type="radio" name="level" class="mask mask-star-2" />
+                <input value="5" type="radio" name="level" class="mask mask-star-2" />
             </div><br>
+
+            <select class="select select-bordered w-full max-w-xs" name="status">
+                <option disabled selected>상태</option>
+                <option value="OPEN">진행중</option>
+                <option value="CLOSE">종료</option>
+            </select><br>
 
             <div class="form-control">
                 <label class="label">
