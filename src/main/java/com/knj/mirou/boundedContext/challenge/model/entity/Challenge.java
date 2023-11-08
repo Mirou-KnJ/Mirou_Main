@@ -2,7 +2,6 @@ package com.knj.mirou.boundedContext.challenge.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
@@ -33,8 +32,7 @@ public class Challenge extends BaseEntity {
 
     private LocalDate joinDeadline;
 
-    @Enumerated(EnumType.STRING)
-    private ChallengePeriod period;
+    private int period;
 
     @Enumerated(EnumType.STRING)
     private ChallengeStatus status;
