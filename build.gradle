@@ -39,12 +39,6 @@ dependencies {
 	testImplementation 'org.springframework:spring-test:6.0.13'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	//QueryDsl
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-
 	//Thymeleaf Layout
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
