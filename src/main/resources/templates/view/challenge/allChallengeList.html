@@ -14,7 +14,7 @@
                     <h1>생성된 챌린지가 없습니다</h1>
                 </div>
 
-                <table class="table" >
+                <table class="table" th:unless="${#lists.isEmpty(challengeList)}">
                     <!-- head -->
                     <thead>
                     <tr>
