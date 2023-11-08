@@ -2,14 +2,10 @@ package com.knj.mirou.boundedContext.challenge.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengePeriod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
-import com.knj.mirou.boundedContext.reward.model.entity.Reward;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
+import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +27,12 @@ public class Challenge extends BaseEntity {
 
     private String contents;
 
-    @OneToMany(mappedBy = "linkedChallenge")
-    private List<Reward> reward;
+    @OneToMany(mappedBy = "linkedChallenge", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<PublicReward> publicReward;
 
     private LocalDate joinDeadline;
 
-    @Enumerated(EnumType.STRING)
-    private ChallengePeriod period;
+    private int period;
 
     @Enumerated(EnumType.STRING)
     private ChallengeStatus status;
@@ -47,8 +42,6 @@ public class Challenge extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private AuthenticationMethod method;
-
-    private int requiredNum;    //총 몇 번 성공해야하는 챌린지인지.
 
     private int level;
 

@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum RewardType {
 
-    Coin("코인"),
-    Product("상품");
+    COIN("코인"),
+    PRODUCT("상품");
 
     private final String rewardType;
 }

@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ChallengeStatus {
 
-    OPEN(true),
-    CLOSE(false);
+    BEFORE_SETTINGS("세팅 전"),
+    OPEN("진행중"),
+    CLOSE("종료");
 
-    private final boolean status;
+    private final String status;
 }
