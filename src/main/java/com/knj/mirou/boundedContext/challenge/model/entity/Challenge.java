@@ -45,8 +45,6 @@ public class Challenge extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuthenticationMethod method;
 
-    private int requiredNum;
-
     private int level;
 
     private int joinCost;

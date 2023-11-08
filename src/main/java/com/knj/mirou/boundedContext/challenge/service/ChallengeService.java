@@ -32,7 +32,6 @@ public class ChallengeService {
                 .status(ChallengeStatus.OPEN)
                 .tag(ChallengeTag.ROUTINE)
                 .method(AuthenticationMethod.PHOTO)
-                .requiredNum(3)
                 .level(5)
                 .joinCost(1000)
                 .precautions("임시 주의사항")
