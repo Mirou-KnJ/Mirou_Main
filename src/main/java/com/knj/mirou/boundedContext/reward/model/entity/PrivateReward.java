@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.reward.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.reward.model.enums.RewardType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,10 +17,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Reward extends BaseEntity {
+public class PrivateReward extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge linkedChallenge;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ChallengeMember linkedChallengeMember;
 
     private int round;
 
@@ -27,4 +31,5 @@ public class Reward extends BaseEntity {
     private RewardType rewardType;
 
     private String reward;
+
 }

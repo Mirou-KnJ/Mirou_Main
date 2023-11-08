@@ -7,7 +7,7 @@
 <th:block layout:fragment="Content">
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
-        <form class="flex flex-col" method="post" action="/challenge/createChallenge">
+        <form class="flex flex-col" method="post" action="/challenge/create">
             <div class="form-control w-full max-w-xs" >
                 <label class="label">
                     <span class="label-text">챌린지 제목</span>
@@ -15,7 +15,7 @@
                 <input type="text" placeholder="챌린지 제목 작성" class="input input-bordered w-full max-w-xs" name="name"/>
             </div><br>
 
-            <div class="form-control">
+            <div class="form-control">ㅎ
                 <label class="label">
                     <span class="label-text">챌린지 내용</span>
                 </label>
@@ -23,25 +23,27 @@
             </div><br>
 
             <select class="select select-bordered w-full max-w-xs" name="joinCost">
-                <option disabled selected>일상지원금</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-                <option value="2000">2000</option>
+                <option disabled selected>참여 비용</option>
+                <option value="500">500 포인트</option>
+                <option value="1000">1000 포인트</option>
+                <option value="2000">2000 포인트</option>
             </select><br>
 
             <div>
                 <label class="label">
-                    <span class="label-text">챌린지 데드라인 설정</span>
+                    <span class="label-text">챌린지 종료일 설정</span>
                 </label>
                 <input type="date" name="joinDeadLine">
             </div><br>
 
             <select class="select select-bordered w-full max-w-xs" name="period">
                 <option disabled selected>진행일수</option>
-                <option value="DAY1">하루 챌린지</option>
-                <option value="DAY3">3일 챌린지</option>
-                <option value="DAY5">5일 챌린지</option>
-                <option value="DAY7">일주일 챌린지</option>
+                <option value="1">하루 챌린지</option>
+                <option value="3">3일 챌린지</option>
+                <option value="5">5일 챌린지</option>
+                <option value="7">일주일 챌린지</option>
+                <option value="14">2주 챌린지</option>
+                <option value="30">한달 챌린지</option>
             </select><br>
 
             <select class="select select-bordered w-full max-w-xs" name="tag">
@@ -58,13 +60,6 @@
                 <option value="ETC">기타</option>
             </select><br>
 
-            <select class="select select-bordered w-full max-w-xs" name="requiredNum">
-                <option disabled selected>총 몇회 인증?</option>
-                <option value="1">1회</option>
-                <option value="3">3회</option>
-                <option value="5">5회</option>
-            </select><br>
-
             <div class="rating rating-lg">
                 <label class="label">
                     <span class="label-text">난이도</span>
@@ -76,12 +71,6 @@
                 <input value="4" type="radio" name="level" class="mask mask-star-2" />
                 <input value="5" type="radio" name="level" class="mask mask-star-2" />
             </div><br>
-
-            <select class="select select-bordered w-full max-w-xs" name="status">
-                <option disabled selected>상태</option>
-                <option value="OPEN">진행중</option>
-                <option value="CLOSE">종료</option>
-            </select><br>
 
             <div class="form-control">
                 <label class="label">
