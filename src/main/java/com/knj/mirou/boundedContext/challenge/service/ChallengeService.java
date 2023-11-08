@@ -19,11 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ChallengeService {
-    @Autowired
+
     private final ChallengeRepository challengeRepository;
 
     @Transactional
-    public Challenge createChallenge(String name, String contents, int joinCost, LocalDate joinDeadLine, String period, String tag, String method, int level, String status, String precautions) {
+    public Challenge create(String name, String contents, int joinCost, LocalDate joinDeadLine,
+                                     String period, String tag, String method, int level, String status, String precautions) {
 
         Challenge newChallenge = Challenge.builder()
                 .name(name)

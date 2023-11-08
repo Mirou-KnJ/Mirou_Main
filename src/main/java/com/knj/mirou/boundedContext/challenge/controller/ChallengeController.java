@@ -23,28 +23,18 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-    @GetMapping("/createChallenge")
+    @GetMapping("/create")
     public String createChallenge(){
 
         return "view/challenge/createChallenge";
     }
 
-    @PostMapping("/createChallenge")
-    public String createChallenge(String name, String contents, int joinCost, LocalDate joinDeadLine, String period, String tag, String method, int level, String status, String precaution) {
+    @PostMapping("/create")
+    public String createChallenge(String name, String contents, int joinCost, LocalDate joinDeadLine,
+                                  String period, String tag, String method, int level, String status, String precaution) {
 
-        challengeService.createChallenge(name, contents, joinCost, joinDeadLine, period, tag, method, level, status, precaution);
-
-        System.out.println("name = " + name);
-        System.out.println("contents = " + contents);
-        System.out.println("joinCost = " + joinCost);
-        System.out.println("joinDeadLine = " + joinDeadLine);
-        System.out.println("period = " + period);
-        System.out.println("tag = " + tag);
-        System.out.println("method = " + method);
-        System.out.println("level = " + level);
-        System.out.println("status = " + status);
-        System.out.println("precaution = " + precaution);
-
+        challengeService.create(name, contents, joinCost, joinDeadLine,
+                                period, tag, method, level, status, precaution);
 
         return "redirect:/";
     }
@@ -54,7 +44,7 @@ public class ChallengeController {
         return "view/challenge/allChallengeList";
     }
 
-    @GetMapping("/detailChallenge")
+    @GetMapping("/detail")
     public String detailChallenge(){
         return "view/challenge/detailChallenge";
     }
