@@ -34,7 +34,7 @@ public class ChallengeController {
 
     @GetMapping("/allChallengeList")
     public String allChallengeList(Model model) {
-        model.addAttribute("challenges", challengeService.getAllChallenges());
+        model.addAttribute("challenges", challengeService.getAllList());
         return "view/challenge/allChallengeList";
     }
 
