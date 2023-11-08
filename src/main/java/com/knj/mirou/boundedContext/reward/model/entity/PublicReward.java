@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class PublicReward extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Challenge linkedChallenge;
 
     private int round;
@@ -27,4 +27,5 @@ public class PublicReward extends BaseEntity {
     private RewardType rewardType;
 
     private String reward;
+
 }

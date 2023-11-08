@@ -10,11 +10,11 @@
             <h1>전체 챌린지 리스트</h1>
             <div class="overflow-x-auto">
 
-                <div th:if="${#lists.isEmpty(challengeList)}">
+                <div th:if="${#lists.isEmpty(allChallengeList)}">
                     <h1>생성된 챌린지가 없습니다</h1>
                 </div>
 
-                <table class="table">
+                <table class="table" th:unless="${#lists.isEmpty(allChallengeList)}">
                     <!-- head -->
                     <thead>
                     <tr>
@@ -25,13 +25,22 @@
                     </tr>
                     </thead>
 
+                    <
+                        <h1>현재 보상 상황</h1>
+                        <div class="flex flex-col">
+
+                            <div th:each="reward : ${rewardList}" class="flex gap-10">
+                                <p th:text="${reward.round}"></p>
+                                <p th:text="${reward.rewardType}"></p>
+                                <p th:text="${reward.reward}"></p>
+                            </div>
+                        </div>
 
 
                     <tbody th:unless="${#strings.isEmpty(dataList)}">
                         <tr>
-                            <td>[[${challenge.name}]]</td>
+                            <td th:text=""></td>
                         </tr>
-
                     </tbody>
 
                     <tbody>
