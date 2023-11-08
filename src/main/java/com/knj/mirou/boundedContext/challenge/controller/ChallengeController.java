@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
 
@@ -34,13 +36,13 @@ public class ChallengeController {
 
     @GetMapping("/allChallengeList")
     public String allChallengeList(Model model) {
-        model.addAttribute("challenges", challengeService.getAllList());
+        model.addAttribute("challengeList", challengeService.getAllList());
         return "view/challenge/allChallengeList";
     }
 
-    @GetMapping("/detail")
-    public String detailChallenge() {
-        return "view/challenge/detailChallenge";
-    }
+//    @GetMapping("/detail/{challengeId}")
+//    public String detailChallenge(){
+//        return "view/challenge/detailChallenge";
+//    }
 
 }
