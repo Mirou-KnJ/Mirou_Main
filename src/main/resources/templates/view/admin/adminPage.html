@@ -10,6 +10,7 @@
 
             <div class="mt-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                 <a href="/challenge/createTest" class="btn btn-primary" >테스트 챌린지 생성</a>
+                <a href="/challenge/createChallenge" class="btn btn-primary" >챌린지 생성</a>
             </div>
 
             <div th:if="${#lists.isEmpty(challengeList)}">
