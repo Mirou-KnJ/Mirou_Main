@@ -17,15 +17,6 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-
-    @GetMapping("/createTest")
-    public String testCreate() {
-
-        challengeService.createTest();
-
-        return "redirect:/member/admin";
-    }
-
     @GetMapping("/create")
     public String createChallenge(){
 

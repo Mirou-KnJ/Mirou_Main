@@ -21,25 +21,6 @@ public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
 
-    @Transactional
-    public void createTest() {
-        
-        Challenge newChallenge = Challenge.builder()
-                .name("임시 챌린지")
-                .contents("임시로 생성한 챌린지 입니다")
-                .joinDeadline(LocalDate.now())
-                .period(ChallengePeriod.DAY7)
-                .status(ChallengeStatus.OPEN)
-                .tag(ChallengeTag.ROUTINE)
-                .method(AuthenticationMethod.PHOTO)
-                .level(5)
-                .joinCost(1000)
-                .precautions("임시 주의사항")
-                .build();
-
-        challengeRepository.save(newChallenge);
-    }
-
     public List<Challenge> getAllList() {
 
         return challengeRepository.findAll();
@@ -49,6 +30,7 @@ public class ChallengeService {
 
         Optional<Challenge> OById = challengeRepository.findById(id);
 
+        //FIXME : Present와 Empty시의 동작 구분 확실히.
         if(OById.isPresent()) {
             return OById.get();
         }
