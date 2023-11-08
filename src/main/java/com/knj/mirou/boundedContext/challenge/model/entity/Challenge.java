@@ -28,7 +28,7 @@ public class Challenge extends BaseEntity {
 
     private String contents;
 
-    @OneToMany(mappedBy = "linkedChallenge", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "linkedChallenge", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<PublicReward> publicReward;
 
     private LocalDate joinDeadline;
