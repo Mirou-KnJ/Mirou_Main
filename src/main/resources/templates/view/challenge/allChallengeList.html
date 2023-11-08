@@ -10,87 +10,33 @@
             <h1>전체 챌린지 리스트</h1>
             <div class="overflow-x-auto">
 
-                <div th:if="${#lists.isEmpty(allChallengeList)}">
+                <div th:if="${#lists.isEmpty(challengeList)}">
                     <h1>생성된 챌린지가 없습니다</h1>
                 </div>
 
-                <table class="table" th:unless="${#lists.isEmpty(allChallengeList)}">
+                <table class="table" >
                     <!-- head -->
                     <thead>
                     <tr>
-                        <th>챌린지 제목</th>
-                        <th>챌린지 내용</th>
-                        <th>소모 일상지원금</th>
-                        <th>상세보기</th>
+                        <td>챌린지 제목</td>
+                        <td>챌린지 내용</td>
+                        <td>소모 일상지원금</td>
+                        <td>상세보기</td>
                     </tr>
                     </thead>
 
-                    <
-                        <h1>현재 보상 상황</h1>
-                        <div class="flex flex-col">
-
-                            <div th:each="reward : ${rewardList}" class="flex gap-10">
-                                <p th:text="${reward.round}"></p>
-                                <p th:text="${reward.rewardType}"></p>
-                                <p th:text="${reward.reward}"></p>
-                            </div>
-                        </div>
-
-
-                    <tbody th:unless="${#strings.isEmpty(dataList)}">
-                        <tr>
-                            <td th:text=""></td>
-                        </tr>
-                    </tbody>
-
                     <tbody>
-                    <!-- row 1 -->
-                    <tr>
-                        <td>
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <div class="font-bold">Hart Hagerty</div>
-                                    <div class="text-sm opacity-50">United States</div>
-                                </div>
-                            </div>
-                        </td>
+                    <tr th:each="challenge : ${challengeList}">
+                        <td th:text="${challenge.name}"></td>
 
-                        <td>
-                            Zemlak, Daniel and Leannon
-                            <br/>
-                            <span class="badge badge-ghost badge-sm">Desktop Support Technician</span>
-                        </td>
+                        <td th:text="${challenge.contents}"></td>
 
-                        <td>Purple</td>
+                        <td th:text="${challenge.joinCost}"></td>
 
                         <th>
-                            <button class="btn btn-ghost btn-xs">details</button>
+                            <a th:href="|/challenge/detailChallenge/${challenge.id}|" class="btn btn-sm">detail</a>
                         </th>
                     </tr>
-
-
-
-                    <!-- row 2 -->
-                    <tr>
-                        <td>
-                            <div class="flex items-center space-x-3">
-                                <div>
-                                    <div class="font-bold">Brice Swyre</div>
-                                    <div class="text-sm opacity-50">China</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            Carroll Group
-                            <br/>
-                            <span class="badge badge-ghost badge-sm">Tax Accountant</span>
-                        </td>
-                        <td>Red</td>
-                        <th>
-                            <button class="btn btn-ghost btn-xs">details</button>
-                        </th>
-                    </tr>
-
 
                     </tbody>
 

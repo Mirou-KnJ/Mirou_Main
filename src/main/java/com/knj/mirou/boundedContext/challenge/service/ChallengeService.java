@@ -57,7 +57,4 @@ public class ChallengeService {
         return challengeRepository.save(newChallenge);
     }
 
-    public List<Challenge> allChallengeList() {
-        return challengeRepository.findAll();
-    }
 }
