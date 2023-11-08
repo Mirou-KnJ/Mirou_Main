@@ -32,6 +32,7 @@ public class ChallengeController {
 
         return "redirect:/";
     }
+
     @GetMapping("/allChallengeList")
     public String allChallengeList(Model model){
         model.addAttribute("challenges", challengeService.getAllChallenges());

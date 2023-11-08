@@ -38,6 +38,7 @@ public class ChallengeService {
         return null;
     }
 
+    @Transactional
     public Challenge create(String name, String contents, int joinCost, LocalDate joinDeadLine,
                                      String period, String tag, String method, int level, String status, String precautions) {
 

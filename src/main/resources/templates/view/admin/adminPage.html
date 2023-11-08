@@ -12,6 +12,10 @@
                 <p>챌린지가 생성되지 않았습니다!</p>
             </div>
 
+            <div class="mt-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                <a href="/challenge/createChallenge" class="btn btn-primary">챌린지 생성</a>
+            </div>
+
             <div class="flex flex-col gap-10" th:unless="${#lists.isEmpty(challengeList)}">
                 <div th:each="challenge : ${challengeList}">
                     <p th:text="${challenge.name}"></p>
