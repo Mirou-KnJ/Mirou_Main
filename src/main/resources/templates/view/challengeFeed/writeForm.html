@@ -37,6 +37,7 @@
             if(!isImageFile(file)) {
                 alert("이미지 파일만 업로드 가능합니다");
                 $("#preview").attr("src", null);
+                $("#img").val("");
                 return;
             }
 
