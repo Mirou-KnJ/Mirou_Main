@@ -54,4 +54,12 @@ public class ChallengeMemberService {
         return challengeMemberRepository.countByLinkedMemberAndProgress(member, progress);
     }
 
+    @Transactional
+    public void updateSuccess(Member member, Challenge challenge) {
+
+        ChallengeMember challengeMember = getByChallengeAndMember(challenge, member).get();
+
+        challengeMember.success();
+    }
+
 }

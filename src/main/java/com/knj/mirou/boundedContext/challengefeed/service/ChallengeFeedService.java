@@ -27,11 +27,8 @@ public class ChallengeFeedService {
     private final MemberService memberService;
 
     @Transactional
-    public RsData<String> writeFeed(long linkedChallengeId, String loginId, MultipartFile img,
+    public RsData<String> writeFeed(Challenge challenge, Member loginedMember, MultipartFile img,
                                     String contents) throws IOException {
-
-        Member writer = memberService.getByLoginId(loginId).get();
-        Challenge linkedChallenge = challengeService.getById(linkedChallengeId);
 
         RsData<String> uploadRsData = imageDataService.uploadImg(img, ImageTarget.FEED_IMG);
 
@@ -45,7 +42,7 @@ public class ChallengeFeedService {
         TODO:챌린지 별로 라벨 검출 기준점을 어떻게 잡는 것이 좋을까? => 챌린지별로 어떤 라벨이 있어야 하는지 저장?
          예를 들어, 물 마시기 챌린지의 경우 water, bottle, drink 와 같은 기준 설정
         */
-        RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, linkedChallenge);
+        RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, challenge);
 
         if(labelRsData.isFail()) {
             return labelRsData;
@@ -58,8 +55,8 @@ public class ChallengeFeedService {
         }
 
         ChallengeFeed newFeed = ChallengeFeed.builder()
-                .writer(writer)
-                .linkedChallenge(linkedChallenge)
+                .writer(loginedMember)
+                .linkedChallenge(challenge)
                 .contents(contents)
                 .build();
 
