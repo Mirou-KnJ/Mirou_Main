@@ -90,9 +90,6 @@ public class ImageDataService {
 
         String result = endPoint + "/%s/%s".formatted(bucket, key);
 
-//        detectLabelsGcs(result);
-//        safeSearchByGcs(result);
-
         return RsData.of("S-1", "이미지 업로드에 성공하였습니다.", result);
     }
 
@@ -200,7 +197,7 @@ public class ImageDataService {
                     for (String result : resultList) {
                         log.info("세이프 서치 결과 : " + result);
 
-                        if (result.equals("Likely") || result.equals("Very Likely")) {
+                        if (result.equals("LIKELY") || result.equals("VERY LIKELY")) {
                             return RsData.of("F-5", "유해한 이미지일 가능성이 높습니다.");
                         }
                     }
