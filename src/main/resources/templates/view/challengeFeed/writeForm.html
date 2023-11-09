@@ -9,7 +9,7 @@
         <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
 
             <form class="flex flex-col justify-center items-center min-h-screen" enctype="multipart/form-data"
-                  method="POST" action="/api/feed/write">
+                  method="POST" th:action="|/feed/write/${challengeId}|">
 
                 <input class="file-input file-input-bordered file-input-info w-full max-w-xs"
                        type="file" id="img" name="img">
