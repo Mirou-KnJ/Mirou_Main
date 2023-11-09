@@ -22,6 +22,7 @@
                     <span th:text="${reward.rewardType}"></span>
                 </div>
 
+                <!--FIXME: 1번 챌린지만 가입했는데 2,3번 챌린지의 인증하기가 보이는 오류 -->
                 <div class="mt-10" th:if="${isJoin}">
                     <a class="btn btn-warning" th:href="|/feed/write/${challenge.id}|">인증하기</a>
                 </div>

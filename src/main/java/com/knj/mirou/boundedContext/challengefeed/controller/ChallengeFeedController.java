@@ -34,9 +34,9 @@ public class ChallengeFeedController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write/{id}")
     public String write(@PathVariable(value = "id") long challengeId, MultipartFile img,
-                        Principal principal) throws IOException {
+                        String contents, Principal principal) throws IOException {
 
-        RsData<String> writeRsData = challengeFeedService.writeFeed(challengeId, principal.getName(), img);
+        RsData<String> writeRsData = challengeFeedService.writeFeed(challengeId, principal.getName(), img, contents);
 
         if(writeRsData.isFail()){
             writeRsData.printResult();

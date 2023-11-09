@@ -27,7 +27,8 @@ public class ChallengeFeedService {
     private final MemberService memberService;
 
     @Transactional
-    public RsData<String> writeFeed(long linkedChallengeId, String loginId, MultipartFile img) throws IOException {
+    public RsData<String> writeFeed(long linkedChallengeId, String loginId, MultipartFile img,
+                                    String contents) throws IOException {
 
         Member writer = memberService.getByLoginId(loginId).get();
         Challenge linkedChallenge = challengeService.getById(linkedChallengeId);
@@ -59,6 +60,7 @@ public class ChallengeFeedService {
         ChallengeFeed newFeed = ChallengeFeed.builder()
                 .writer(writer)
                 .linkedChallenge(linkedChallenge)
+                .contents(contents)
                 .build();
 
         Long feedId = challengeFeedRepository.save(newFeed).getId();
