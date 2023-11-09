@@ -3,8 +3,12 @@ package com.knj.mirou.boundedContext.challengefeed.controller;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
+import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
+import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,7 @@ public class ChallengeFeedController {
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
+    private final ImageDataService imageDataService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
@@ -57,7 +62,19 @@ public class ChallengeFeedController {
             writeRsData.printResult();
         }
 
-        return "redirect:/";
+        return "redirect:/challenge/detail/" + challengeId;
+    }
+
+    @GetMapping("/detail/{id}")
+    public String showDetail(@PathVariable(value = "id") long feedId, Model model) {
+
+        ChallengeFeed feed = challengeFeedService.getById(feedId);
+        ImageData feedImg = imageDataService.getByIdAndTarget(feedId, ImageTarget.FEED_IMG);
+
+        model.addAttribute("feed", feed);
+        model.addAttribute("feedImg", feedImg.getImageUrl());
+
+        return "/view/challengeFeed/detail";
     }
 
 }

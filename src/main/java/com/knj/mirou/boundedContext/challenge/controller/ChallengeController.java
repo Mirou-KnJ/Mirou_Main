@@ -2,6 +2,8 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final MemberService memberService;
     private final ChallengeMemberService challengeMemberService;
+    private final ChallengeFeedService challengeFeedService;
 
     @GetMapping("/create")
     public String createChallenge() {
@@ -53,6 +57,7 @@ public class ChallengeController {
 
         Member loginedMember = memberService.getByLoginId(principal.getName()).get();
         Challenge challenge = challengeService.getById(challengeId);
+        List<ChallengeFeed> feedList = challengeFeedService.getByChallenge(challenge);
 
         //FIXME: challengeMemberService 여기서 호출 X? => 순환 참조 문제 어떻게 할 것인가.
         if(challengeMemberService.getByChallengeAndMember(challenge, loginedMember).isPresent()) {
@@ -62,6 +67,7 @@ public class ChallengeController {
         }
 
         model.addAttribute("challenge", challenge);
+        model.addAttribute("feedList", feedList);
 
         return "view/challenge/detail";
     }

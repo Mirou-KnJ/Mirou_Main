@@ -48,12 +48,18 @@ public class ImageDataService {
         imageDataRepository.save(newImgData);
     }
 
+    public ImageData getByIdAndTarget(long targetId, ImageTarget target) {
+
+        //FIXME: not isPresent();
+        return imageDataRepository.findByTargetIdAndImageTarget(targetId, target).get();
+    }
+
     public RsData<String> uploadImg(MultipartFile file, ImageTarget imageTarget) throws IOException {
 
         RsData<String> isImg = isImgFile(file);
 
         //1차 차단 -> 이미지 여부 검사
-        if(isImg.isFail()) {
+        if (isImg.isFail()) {
             return isImg;
         }
 
@@ -92,10 +98,10 @@ public class ImageDataService {
 
     public RsData<String> isImgFile(MultipartFile file) {
 
-        String fileExt= StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String fileExt = StringUtils.getFilenameExtension(file.getOriginalFilename());
         List<String> imgExts = s3ConfigProps.getImgExt();
 
-        if(imgExts.contains(fileExt)) {
+        if (imgExts.contains(fileExt)) {
             return RsData.of("S-1", "이미지 파일입니다.");
         }
 
@@ -194,7 +200,7 @@ public class ImageDataService {
                     for (String result : resultList) {
                         log.info("세이프 서치 결과 : " + result);
 
-                        if(result.equals("Likely") || result.equals("Very Likely")) {
+                        if (result.equals("Likely") || result.equals("Very Likely")) {
                             return RsData.of("F-5", "유해한 이미지일 가능성이 높습니다.");
                         }
                     }

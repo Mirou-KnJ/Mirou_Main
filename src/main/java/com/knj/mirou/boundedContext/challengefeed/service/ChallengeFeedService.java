@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,6 +67,17 @@ public class ChallengeFeedService {
         imageDataService.create(feedId, ImageTarget.FEED_IMG, imgUrl);
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
+    }
+    
+    public ChallengeFeed getById(long feedId) {
+
+        //FIXME: isPresent 없는 get 호출
+        return challengeFeedRepository.findById(feedId).get();
+    }
+
+    public List<ChallengeFeed> getByChallenge(Challenge linkedChallenge) {
+
+        return challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
     }
 
 }

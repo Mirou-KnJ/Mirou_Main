@@ -31,6 +31,22 @@
                     <a class="btn btn-info" th:href="|/challengeMember/join/${challenge.id}|">참가하기</a>
                 </div>
 
+                <div class="divider"></div>
+
+                <div th:if="${#lists.isEmpty(feedList)}">
+                    <h1 class="text-bold">아직 인증글이 없습니다!</h1>
+                </div>
+
+                <div class="flex flex-row gap-3" th:unless="${#lists.isEmpty(feedList)}">
+                    <div class="indicator" th:each="feed : ${feedList}">
+                        <span class="indicator-item badge badge-primary">new</span>
+                        <a th:href="|/feed/detail/${feed.id}|">
+                            <div class="grid w-32 h-32 bg-gray-300 place-items-center">
+                                <span th:text="${feed.contents}"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
 
         </div>
