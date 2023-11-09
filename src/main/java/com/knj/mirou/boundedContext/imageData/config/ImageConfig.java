@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.image.config;
+package com.knj.mirou.boundedContext.imageData.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.vision.v1.ImageAnnotatorSettings;

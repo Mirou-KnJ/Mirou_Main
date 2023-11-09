@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.image.service;
+package com.knj.mirou.boundedContext.imageData.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -9,8 +9,10 @@ import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.image.config.S3ConfigProperties;
-import com.knj.mirou.boundedContext.image.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.config.S3ConfigProperties;
+import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
+import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.repository.ImageDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,24 @@ import java.util.*;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
-public class ImageService {
+public class ImageDataService {
 
     private final S3ConfigProperties s3ConfigProps;
     private final AmazonS3 amazonS3;
     private final ImageAnnotatorSettings visionAPISettings;
+    private final ImageDataRepository imageDataRepository;
+
+    @Transactional
+    public void create(long targetId, ImageTarget imageTarget, String imgUrl) {
+
+        ImageData newImgData = ImageData.builder()
+                .targetId(targetId)
+                .imageTarget(imageTarget)
+                .imageUrl(imgUrl)
+                .build();
+
+        imageDataRepository.save(newImgData);
+    }
 
     public RsData<String> uploadImg(MultipartFile file, ImageTarget imageTarget) throws IOException {
 

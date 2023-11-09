@@ -1,7 +1,7 @@
-package com.knj.mirou.boundedContext.image.model.entity;
+package com.knj.mirou.boundedContext.imageData.model.entity;
 
 
-import com.knj.mirou.boundedContext.image.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Image {
+public class ImageData {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.image.config;
+package com.knj.mirou.boundedContext.imageData.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
