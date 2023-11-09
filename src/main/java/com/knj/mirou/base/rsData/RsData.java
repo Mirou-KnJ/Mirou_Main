@@ -3,9 +3,11 @@ package com.knj.mirou.base.rsData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
 @AllArgsConstructor
 public class RsData<T> {
 
@@ -31,6 +33,14 @@ public class RsData<T> {
 
     public boolean isSuccess() {
         return resultCode.startsWith("S-");
+    }
+
+    public void printResult() {
+        if(isSuccess()) {
+            log.info(resultCode + ": " + msg);
+        } else {
+            log.error(resultCode + ": " + msg);
+        }
     }
 
     public boolean isFail() {

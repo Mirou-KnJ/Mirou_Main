@@ -39,9 +39,10 @@ public class ChallengeFeedController {
         RsData<String> writeRsData = challengeFeedService.writeFeed(challengeId, principal.getName(), img);
 
         if(writeRsData.isFail()){
-            System.out.println(writeRsData.getResultCode() + ":" + writeRsData.getMsg());
+            writeRsData.printResult();
+            return "redirect:/feed/write/" + challengeId;
         } else {
-            System.out.println(writeRsData.getResultCode() + ":" + writeRsData.getMsg());
+            writeRsData.printResult();
         }
 
         return "redirect:/";
