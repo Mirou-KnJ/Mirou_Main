@@ -38,6 +38,19 @@ public class ChallengeFeedService {
             return uploadRsData;
         }
 
+        String imgUrl = uploadRsData.getData();
+
+        /*
+        TODO:챌린지 별로 라벨 검출 기준점을 어떻게 잡는 것이 좋을까? => 챌린지별로 어떤 라벨이 있어야 하는지 저장?
+         예를 들어, 물 마시기 챌린지의 경우 water, bottle, drink 와 같은 기준 설정
+        */
+        RsData<String> labelRsData = imageService.detectLabelsGcs(imgUrl, linkedChallenge);
+
+        if(labelRsData.isFail()) {
+            return labelRsData;
+        }
+
+        imageService.safeSearchByGcs(imgUrl);
 
 //        ChallengeFeed newFeed = ChallengeFeed.builder()
 //                .writer(writer)
