@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
@@ -24,18 +25,17 @@ public class ChallengeFeedService {
     private final ImageService imageService;
     private final ChallengeService challengeService;
     private final MemberService memberService;
-    private final BaseService baseService;
 
     @Transactional
-    public void writeFeed(long linkedChallengeId, String loginId, MultipartFile img) throws IOException {
+    public RsData<String> writeFeed(long linkedChallengeId, String loginId, MultipartFile img) throws IOException {
 
         Member writer = memberService.getByLoginId(loginId).get();
         Challenge linkedChallenge = challengeService.getById(linkedChallengeId);
 
-        Map<String, String> uploadResult = imageService.uploadImg(img, ImageTarget.FEED_IMG);
+        RsData<String> uploadRsData = imageService.uploadImg(img, ImageTarget.FEED_IMG);
 
-        if(!baseService.checkResultCode(uploadResult)) {
-            return;
+        if(uploadRsData.isFail()) {
+            return uploadRsData;
         }
 
 
@@ -47,6 +47,8 @@ public class ChallengeFeedService {
 //        challengeFeedRepository.save(newFeed);
 //
 //        return imageService.uploadImg(img);
+
+        return RsData.of("S-1", "피드 작성에 성공했습니다.");
     }
 
 }

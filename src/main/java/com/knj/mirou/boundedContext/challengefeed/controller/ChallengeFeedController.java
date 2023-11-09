@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,13 @@ public class ChallengeFeedController {
     public String write(@PathVariable(value = "id") long challengeId, MultipartFile img,
                         Principal principal) throws IOException {
 
-        challengeFeedService.writeFeed(challengeId, principal.getName(), img);
+        RsData<String> writeRsData = challengeFeedService.writeFeed(challengeId, principal.getName(), img);
+
+        if(writeRsData.isFail()){
+            System.out.println(writeRsData.getResultCode() + ":" + writeRsData.getMsg());
+        } else {
+            System.out.println(writeRsData.getResultCode() + ":" + writeRsData.getMsg());
+        }
 
         return "redirect:/";
     }

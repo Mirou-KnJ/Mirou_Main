@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.image.model.enums.ImageTarget;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,18 +26,13 @@ public class ImageService {
     private final S3ConfigProperties s3ConfigProps;
     private final AmazonS3 amazonS3;
     private final ImageAnnotatorSettings visionAPISettings;
-    private final BaseService baseService;
 
-    //TODO: 프로젝트 전체적인 설정이 되도록
-    private static String SUCCESS_CODE = "SUCCESS";
-    private static String FAIL_CODE = "FAIL";
+    public RsData<String> uploadImg(MultipartFile file, ImageTarget imageTarget) throws IOException {
 
-    public RsData<String> uploadImg(MultipartFile img, ImageTarget imageTarget) throws IOException {
+        RsData<String> isImg = isImgFile(file);
 
-        Map<String, String> extCheckResult = isImgFile(img);
-
-        if(!baseService.checkResultCode(extCheckResult)) {
-            return extCheckResult;
+        if(isImg.isFail()) {
+            return isImg;
         }
 
 //        ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -69,24 +65,19 @@ public class ImageService {
 //        detectLabelsGcs(result);
 //        safeSearchByGcs(result);
 
-        return resultMap;
+        return RsData.of("S-1", "이미지 업로드에 성공하였습니다.");
     }
 
-    public Map<String, String> isImgFile(MultipartFile img) {
+    public RsData<String> isImgFile(MultipartFile file) {
 
-        Map<String, String> resultMap = new HashMap<>();
-
-        String fileExt = img.getOriginalFilename().split("\\.")[1];
-
+        String fileExt= StringUtils.getFilenameExtension(file.getOriginalFilename());
         List<String> imgExts = s3ConfigProps.getImgExt();
 
         if(imgExts.contains(fileExt)) {
-            resultMap.put("RS_CODE", SUCCESS_CODE);
-            return resultMap;
+            return RsData.of("S-1", "이미지 파일입니다.");
         }
 
-        resultMap.put("RS_CODE", FAIL_CODE + "이미지 파일이 아닙니다.");
-        return resultMap;
+        return RsData.of("F-1", "이미지 파일이 아닙니다.");
     }
 
     public void detectLabelsGcs(String imgUrl) throws IOException {
