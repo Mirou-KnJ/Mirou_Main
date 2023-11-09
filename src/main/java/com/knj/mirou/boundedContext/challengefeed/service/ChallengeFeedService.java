@@ -2,8 +2,8 @@ package com.knj.mirou.boundedContext.challengefeed.service;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
+import com.knj.mirou.boundedContext.image.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.image.service.ImageService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,23 +24,29 @@ public class ChallengeFeedService {
     private final ImageService imageService;
     private final ChallengeService challengeService;
     private final MemberService memberService;
+    private final BaseService baseService;
 
     @Transactional
-    public String writeFeed(long linkedChallengeId, String loginId, MultipartFile img) throws IOException {
+    public void writeFeed(long linkedChallengeId, String loginId, MultipartFile img) throws IOException {
 
         Member writer = memberService.getByLoginId(loginId).get();
         Challenge linkedChallenge = challengeService.getById(linkedChallengeId);
 
-        String imgUrl = imageService.uploadImg(img);
+        Map<String, String> uploadResult = imageService.uploadImg(img, ImageTarget.FEED_IMG);
 
-        ChallengeFeed newFeed = ChallengeFeed.builder()
-                .writer(writer)
-                .linkedChallenge(linkedChallenge)
-                .build();
+        if(!baseService.checkResultCode(uploadResult)) {
+            return;
+        }
 
-        challengeFeedRepository.save(newFeed);
 
-        return imageService.uploadImg(img);
+//        ChallengeFeed newFeed = ChallengeFeed.builder()
+//                .writer(writer)
+//                .linkedChallenge(linkedChallenge)
+//                .build();
+//
+//        challengeFeedRepository.save(newFeed);
+//
+//        return imageService.uploadImg(img);
     }
 
 }

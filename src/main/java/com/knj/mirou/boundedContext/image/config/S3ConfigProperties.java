@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Configuration
@@ -22,6 +24,7 @@ public class S3ConfigProperties {
     private String endPoint;
     private String region;
     private String bucket;
+    private List<String> imgExt;
 
     @Bean
     public AmazonS3 amazonS3Client() {

@@ -1,13 +1,12 @@
 package com.knj.mirou.boundedContext.image.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.image.config.S3ConfigProperties;
+import com.knj.mirou.boundedContext.image.model.enums.ImageTarget;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,42 +25,68 @@ public class ImageService {
     private final S3ConfigProperties s3ConfigProps;
     private final AmazonS3 amazonS3;
     private final ImageAnnotatorSettings visionAPISettings;
+    private final BaseService baseService;
 
-    public String uploadImg(MultipartFile img) throws IOException {
+    //TODO: 프로젝트 전체적인 설정이 되도록
+    private static String SUCCESS_CODE = "SUCCESS";
+    private static String FAIL_CODE = "FAIL";
 
-        //TODO 이미지 파일이 맞는지 검사
+    public RsData<String> uploadImg(MultipartFile img, ImageTarget imageTarget) throws IOException {
 
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(img.getContentType());
-        objectMetadata.setContentLength(img.getSize());
+        Map<String, String> extCheckResult = isImgFile(img);
 
-        String originFileName = img.getOriginalFilename();
-        int index = originFileName.lastIndexOf(".");
-        String ext = originFileName.substring(index + 1);
+        if(!baseService.checkResultCode(extCheckResult)) {
+            return extCheckResult;
+        }
 
-        String storeFileName = UUID.randomUUID() + "." + ext;
+//        ObjectMetadata objectMetadata = new ObjectMetadata();
+//        objectMetadata.setContentType(img.getContentType());
+//        objectMetadata.setContentLength(img.getSize());
+//
+//        String originFileName = img.getOriginalFilename();
+//        int index = originFileName.lastIndexOf(".");
+//        String ext = originFileName.substring(index + 1);
+//
+//        String storeFileName = UUID.randomUUID() + "." + ext;
+//
+//        //FIXME 이미지 종류에 따라 다른 저장소
+////        String storage = switch (imageTarget) {
+////            case FEED_IMAGE -> "feed_img";
+////        }
+//
+//        String key = "feed_img/" + storeFileName;
+//
+//        InputStream inputStream = img.getInputStream();
+//
+//        String bucket = s3ConfigProps.getBucket();
+//        String endPoint = s3ConfigProps.getEndPoint();
+//
+//        amazonS3.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)
+//                .withCannedAcl(CannedAccessControlList.PublicRead));
+//
+//        String result = endPoint + "/%s/%s".formatted(bucket, key);
+//
+//        detectLabelsGcs(result);
+//        safeSearchByGcs(result);
 
-        //FIXME 이미지 종류에 따라 다른 저장소
-//        String storage = switch (imageTarget) {
-//            case FEED_IMAGE -> "feed_img";
-//        }
+        return resultMap;
+    }
 
-        String key = "feed_img/" + storeFileName;
+    public Map<String, String> isImgFile(MultipartFile img) {
 
-        InputStream inputStream = img.getInputStream();
+        Map<String, String> resultMap = new HashMap<>();
 
-        String bucket = s3ConfigProps.getBucket();
-        String endPoint = s3ConfigProps.getEndPoint();
+        String fileExt = img.getOriginalFilename().split("\\.")[1];
 
-        amazonS3.putObject(new PutObjectRequest(bucket, key, inputStream, objectMetadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+        List<String> imgExts = s3ConfigProps.getImgExt();
 
-        String result = endPoint + "/%s/%s".formatted(bucket, key);
+        if(imgExts.contains(fileExt)) {
+            resultMap.put("RS_CODE", SUCCESS_CODE);
+            return resultMap;
+        }
 
-        detectLabelsGcs(result);
-        safeSearchByGcs(result);
-
-        return endPoint + "/%s/%s".formatted(bucket, key);
+        resultMap.put("RS_CODE", FAIL_CODE + "이미지 파일이 아닙니다.");
+        return resultMap;
     }
 
     public void detectLabelsGcs(String imgUrl) throws IOException {
