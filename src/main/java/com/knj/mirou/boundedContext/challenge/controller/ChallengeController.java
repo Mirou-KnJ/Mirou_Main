@@ -2,7 +2,6 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,20 +49,17 @@ public class ChallengeController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
-    public String detailChallenge(@PathVariable(value = "id") long challengeId, Principal principal, Model model) {
+    public String showDetail(@PathVariable(value = "id") long challengeId, Principal principal, Model model) {
 
         Member loginedMember = memberService.getByLoginId(principal.getName()).get();
+        Challenge challenge = challengeService.getById(challengeId);
 
-        //FIXME : 원래 ChallengeMember 서비스는 여기서 호출하면 안되며, 서비스 처리도 컨트롤러에서 이루어지면 안좋음.
-        Optional<ChallengeMember> byMember = challengeMemberService.getByMember(loginedMember);
-
-        if(byMember.isPresent()) {
+        //FIXME: challengeMemberService 여기서 호출 X? => 순환 참조 문제 어떻게 할 것인가.
+        if(challengeMemberService.getByChallengeAndMember(challenge, loginedMember).isPresent()) {
             model.addAttribute("isJoin", true);
         } else {
             model.addAttribute("isJoin", false);
         }
-
-        Challenge challenge = challengeService.getById(challengeId);
 
         model.addAttribute("challenge", challenge);
 

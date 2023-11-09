@@ -44,6 +44,11 @@ public class ChallengeMemberService {
         return challengeMemberRepository.findByLinkedMember(member);
     }
 
+    public Optional<ChallengeMember> getByChallengeAndMember(Challenge linkedChallenge, Member linkedMember) {
+
+        return challengeMemberRepository.findByLinkedChallengeAndLinkedMember(linkedChallenge, linkedMember);
+    }
+
     public long getCountByMemberAndProgress(Member member, Progress progress) {
 
         return challengeMemberRepository.countByLinkedMemberAndProgress(member, progress);
