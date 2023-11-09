@@ -132,7 +132,7 @@ public class ImageService {
                 }
 
 //                if(!hasLabel) {
-//                    return RsData.of("F-2", "챌린지에 맞지 않는 이미지 입니다.");
+//                    return RsData.of("F-3", "챌린지에 맞지 않는 이미지 입니다.");
 //                }
 
                 return RsData.of("S-2", "챌린지에 적합한 이미지 입니다.");
@@ -159,9 +159,10 @@ public class ImageService {
                 List<AnnotateImageResponse> responses = response.getResponsesList();
 
                 for (AnnotateImageResponse res : responses) {
+
                     if (res.hasError()) {
                         System.out.format("Error: %s%n", res.getError().getMessage());
-                        return RsData.of("F-3", "올바르지 않은 이미지 입니다.");
+                        return RsData.of("F-4", "올바르지 않은 이미지 입니다.");
                     }
 
                     SafeSearchAnnotation safeSearchAnnotation = res.getSafeSearchAnnotation();
@@ -176,12 +177,15 @@ public class ImageService {
                     resultList.add(safeSearchAnnotation.getRacy().toString());
 
                     for (String result : resultList) {
-                        System.out.println("result = " + result);
+                        log.info("세이프 서치 결과 : " + result);
+
+                        if(result.equals("Likely") || result.equals("Very Likely")) {
+                            return RsData.of("F-5", "유해한 이미지일 가능성이 높습니다.");
+                        }
                     }
                 }
             }
         }
-        return;
+        return RsData.of("S-3", "유해하지 않은 이미지 입니다.");
     }
-
 }

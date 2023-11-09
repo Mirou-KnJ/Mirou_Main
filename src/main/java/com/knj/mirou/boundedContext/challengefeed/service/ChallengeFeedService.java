@@ -3,6 +3,7 @@ package com.knj.mirou.boundedContext.challengefeed.service;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
 import com.knj.mirou.boundedContext.image.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.image.service.ImageService;
@@ -50,16 +51,18 @@ public class ChallengeFeedService {
             return labelRsData;
         }
 
-        imageService.safeSearchByGcs(imgUrl);
+        RsData<String> safeSearchRsData = imageService.safeSearchByGcs(imgUrl);
 
-//        ChallengeFeed newFeed = ChallengeFeed.builder()
-//                .writer(writer)
-//                .linkedChallenge(linkedChallenge)
-//                .build();
-//
-//        challengeFeedRepository.save(newFeed);
-//
-//        return imageService.uploadImg(img);
+        if(safeSearchRsData.isFail()) {
+            return safeSearchRsData;
+        }
+
+        ChallengeFeed newFeed = ChallengeFeed.builder()
+                .writer(writer)
+                .linkedChallenge(linkedChallenge)
+                .build();
+
+        Long feedId = challengeFeedRepository.save(newFeed).getId();
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
     }
