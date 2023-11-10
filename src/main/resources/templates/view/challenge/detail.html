@@ -6,7 +6,7 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
             <div class="flex flex-col h-full">
 
@@ -14,26 +14,76 @@
                     <img class="border rounded-lg" th:src="${challengeImg}" alt="challengeImg">
                 </div>
 
-                <h1 th:text="${challenge.name}"></h1>
+                <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
 
-                <p th:text="'내용 : ' + ${challenge.contents}"></p>
-                <p th:text="'참가 비용 : ' + ${challenge.joinCost}"></p>
-                <p th:text="'난이도 : ' + ${challenge.level}"></p>
-
-                <p class="justify-center mt-10">보상 내용</p>
-                <div class="flex flex-row mt-4" th:each="reward : ${challenge.publicReward}">
-                    <span th:text="${reward.round} + '회차 : '"></span>
-                    <span th:text="${reward.reward}"></span>
-                    <span th:text="${reward.rewardType}"></span>
+                <div class="flex justify-center inline-block">
+                    <i class="mt-2 flex fa-solid fa-star fa-lg" style="color: #f9c406;"></i>
+                    <span class="flex ml-2 font-light text-sm">00명 참여중</span>
                 </div>
 
-                <!--FIXME: 1번 챌린지만 가입했는데 2,3번 챌린지의 인증하기가 보이는 오류 -->
-                <div class="mt-10" th:if="${isJoin}">
-                    <a class="btn btn-warning" th:href="|/feed/write/${challenge.id}|">인증하기</a>
+                <div class="flex w-full justify-between my-6">
+                    <div class="flex flex-col">
+                        <div>
+                            <p th:text="${challenge.createDate}"></p>
+                        </div>
+
+                        <div class="flex gap-1">
+                            <div class="badge badge-primary badge-outline" th:text="${challenge.method}"></div>
+                            <div class="badge badge-secondary badge-outline"
+                                 th:text="${challenge.period} + '일 챌린지'"></div>
+                            <div class="badge badge-primary badge-outline" th:text="${challenge.tag}"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex" th:if="${isJoin}">
+                        <a class="btn btn-warning" th:href="|/feed/write/${challenge.id}|">인증하기</a>
+                    </div>
+
+                    <div class="flex" th:unless="${isJoin}">
+                        <a class="btn btn-info" th:href="|/challengeMember/join/${challenge.id}|">참가하기</a>
+                    </div>
                 </div>
 
-                <div class="mt-10" th:unless="${isJoin}">
-                    <a class="btn btn-info" th:href="|/challengeMember/join/${challenge.id}|">참가하기</a>
+                <div class="divider"></div>
+
+                <div class="flex flex-col w-full justify-start">
+                    <h1 class="text-lg font-bold">챌린지 내용</h1>
+
+                    <p th:text="'참가 비용 : ' + ${challenge.joinCost}"></p>
+                    <p th:text="'난이도 : ' + ${challenge.level}"></p>
+
+                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${challenge.contents}"></p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="flex w-full flex-col justify-start">
+                    <p class="text-lg font-bold">보상</p>
+
+                    <div class="flex overflow-x-auto w-full">
+                        <table class="table table-zebra">
+                            <thead>
+                            <tr class="flex justify-around">
+                                <th class="mr-5">회차</th>
+                                <th class="mr-5">보상</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="flex justify-around" th:each="reward : ${challenge.publicReward}">
+                                <td th:text="${reward.round}"></td>
+                                <td th:text="${reward.reward} + ${reward.rewardType}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="flex flex-col w-full justify-start">
+                    <h1 class="text-lg font-bold">유의사항</h1>
+
+                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${challenge.precautions}"></p>
                 </div>
 
                 <div class="divider"></div>
