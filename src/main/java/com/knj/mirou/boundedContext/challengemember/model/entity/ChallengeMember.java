@@ -33,4 +33,8 @@ public class ChallengeMember extends BaseEntity {
     private Progress progress;
 
     private LocalDateTime endDate;
+
+    public void success() {
+        this.successNumber = this.successNumber + 1;
+    }
 }

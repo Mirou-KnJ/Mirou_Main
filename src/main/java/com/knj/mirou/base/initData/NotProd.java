@@ -26,6 +26,10 @@ public class NotProd {
             @Transactional
             public void run (String... args) throws Exception {
 
+                if(memberService.getByLoginId("TEST_USER_1").isPresent()) {
+                    return;
+                }
+
                 for(int i=1; i<=3; i++) {
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);
                     challengeService.create("테스트 챌린지 " + i, "테스트 챌린지 " + i + "의 내용입니다.",

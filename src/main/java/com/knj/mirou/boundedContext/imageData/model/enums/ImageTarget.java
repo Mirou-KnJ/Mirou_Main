@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.image.model.enums;
+package com.knj.mirou.boundedContext.imageData.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

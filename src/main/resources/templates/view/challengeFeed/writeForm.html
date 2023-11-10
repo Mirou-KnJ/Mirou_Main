@@ -7,18 +7,53 @@
 <th:block layout:fragment="Content">
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
-
-            <form class="flex flex-col justify-center items-center min-h-screen" enctype="multipart/form-data"
+            <form class="flex flex-col justify-center min-h-screen" enctype="multipart/form-data"
                   method="POST" th:action="|/feed/write/${challengeId}|">
 
-                <input class="file-input file-input-bordered file-input-info w-full max-w-xs"
-                       type="file" id="img" name="img">
+                <img id="preview">
+                <input type="file" class="file-input file-input-bordered file-input-info w-full max-w-xs"
+                       id="img" name="img">
+
+                <div class="form-control w-full max-w-xs">
+                    <label class="label">
+                        <span class="label-text">한줄 소감</span>
+                    </label>
+                    <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs"
+                           id="contents" name="contents"/>
+                </div>
 
                 <button class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
             </form>
-
         </div>
     </main>
+
+    <script>
+        $("#img").on("change", function(event) {
+
+            var file = event.target.files[0];
+
+            if(!isImageFile(file)) {
+                alert("이미지 파일만 업로드 가능합니다");
+                $("#preview").attr("src", null);
+                $("#img").val("");
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#preview").attr("src", e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+        });
+
+        function isImageFile(file) {
+
+            var ext = file.name.split(".").pop().toLowerCase();
+
+            return ($.inArray(ext, ["jpg", "jpeg", "gif", "png"]) === -1) ? false : true;
+        }
+    </script>
 </th:block>
 </body>
 </html>

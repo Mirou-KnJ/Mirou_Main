@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.image.config;
+package com.knj.mirou.boundedContext.imageData.config;
 
 import lombok.Getter;
 import lombok.Setter;
