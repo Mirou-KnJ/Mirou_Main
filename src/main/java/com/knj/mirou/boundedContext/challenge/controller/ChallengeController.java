@@ -8,6 +8,7 @@ import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -92,8 +93,9 @@ public class ChallengeController {
             model.addAttribute("isJoin", false);
         }
 
-        if(challengeImg != null) {
-            model.addAttribute("challengeImg", challengeImg.getImageUrl());
+        if (challengeImg != null) {
+            model.addAttribute("challengeImg",
+                    imageDataService.getOptimizingUrl(challengeImg, OptimizerOption.CHALLENGE_DETAIL));
         } else {
             model.addAttribute("challengeImg", null);
         }

@@ -25,6 +25,7 @@ public class S3ConfigProperties {
     private String region;
     private String bucket;
     private List<String> imgExt;
+    private String cdnUrl;
 
     @Bean
     public AmazonS3 amazonS3Client() {
