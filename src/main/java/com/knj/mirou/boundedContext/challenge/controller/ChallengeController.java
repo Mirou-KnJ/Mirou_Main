@@ -30,12 +30,14 @@ public class ChallengeController {
     private final ChallengeMemberService challengeMemberService;
     private final ChallengeFeedService challengeFeedService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
-    public String createChallenge() {
+    public String createForm() {
 
-        return "view/challenge/createChallenge";
+        return "/view/challenge/createForm";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public String createChallenge(String name, String contents, int joinCost, LocalDate joinDeadLine, int period,
                                   String tag, String method, int level, String precaution) {
