@@ -11,7 +11,7 @@
             <div class="flex flex-col h-full">
 
                 <div th:if="${challengeImg}">
-                    <img th:src="${challengeImg}" alt="challengeImg">
+                    <img class="border rounded-lg" th:src="${challengeImg}" alt="challengeImg">
                 </div>
 
                 <h1 th:text="${challenge.name}"></h1>
