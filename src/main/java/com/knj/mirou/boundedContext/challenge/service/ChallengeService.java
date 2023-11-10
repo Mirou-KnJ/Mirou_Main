@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challenge.service;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
@@ -38,8 +39,10 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Challenge create(String name, String contents, int joinCost, LocalDate joinDeadLine,
-                                     int period, String tag, String method, int level, String precautions) {
+    public RsData<Challenge> create(String name, String contents, int joinCost, LocalDate joinDeadLine,
+                                 int period, String tag, String method, int level, String precautions) {
+
+        //TODO: 챌린지 생성 유효성 검사 ex) 이름 중복 불가, 비어있는 내용 불가 등
 
         Challenge newChallenge = Challenge.builder()
                 .name(name)
@@ -54,7 +57,9 @@ public class ChallengeService {
                 .precautions(precautions)
                 .build();
 
-        return challengeRepository.save(newChallenge);
+        Challenge challenge = challengeRepository.save(newChallenge);
+
+        return RsData.of("S-1", "챌린지가 생성되었습니다.", challenge);
     }
 
 }
