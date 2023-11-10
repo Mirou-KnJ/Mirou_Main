@@ -50,8 +50,13 @@ public class ImageDataService {
 
     public ImageData getByIdAndTarget(long targetId, ImageTarget target) {
 
-        //FIXME: not isPresent();
-        return imageDataRepository.findByTargetIdAndImageTarget(targetId, target).get();
+        Optional<ImageData> OImageData = imageDataRepository.findByTargetIdAndImageTarget(targetId, target);
+
+        if(OImageData.isEmpty()) {
+            return null;
+        }
+
+        return OImageData.get();
     }
 
     public RsData<String> uploadImg(MultipartFile file, ImageTarget imageTarget) throws IOException {

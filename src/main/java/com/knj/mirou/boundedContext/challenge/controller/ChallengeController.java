@@ -6,6 +6,7 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
+import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -82,12 +83,19 @@ public class ChallengeController {
         Member loginedMember = memberService.getByLoginId(principal.getName()).get();
         Challenge challenge = challengeService.getById(challengeId);
         List<ChallengeFeed> feedList = challengeFeedService.getByChallenge(challenge);
+        ImageData challengeImg = imageDataService.getByIdAndTarget(challenge.getId(), ImageTarget.CHALLENGE_IMG);
 
-        //FIXME: challengeMemberService 여기서 호출 X? => 순환 참조 문제 어떻게 할 것인가.
+        //TODO: 구조 개선
         if (challengeMemberService.getByChallengeAndMember(challenge, loginedMember).isPresent()) {
             model.addAttribute("isJoin", true);
         } else {
             model.addAttribute("isJoin", false);
+        }
+
+        if(challengeImg != null) {
+            model.addAttribute("challengeImg", challengeImg.getImageUrl());
+        } else {
+            model.addAttribute("challengeImg", null);
         }
 
         model.addAttribute("challenge", challenge);
