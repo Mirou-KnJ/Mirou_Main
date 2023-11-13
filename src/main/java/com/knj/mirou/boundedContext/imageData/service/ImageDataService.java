@@ -12,6 +12,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.imageData.config.S3ConfigProperties;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.repository.ImageDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -210,5 +211,18 @@ public class ImageDataService {
             }
         }
         return RsData.of("S-3", "유해하지 않은 이미지 입니다.");
+    }
+
+    public String getOptimizingUrl(String imgUrl, OptimizerOption option) {
+
+        String[] split = imgUrl.split(s3ConfigProps.getBucket());
+        String cdnUrl = s3ConfigProps.getCdnUrl();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(cdnUrl);
+        sb.append(split[1]);
+        sb.append(option.getOption());
+
+        return sb.toString();
     }
 }
