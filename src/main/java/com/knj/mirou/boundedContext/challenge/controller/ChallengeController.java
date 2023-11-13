@@ -43,7 +43,7 @@ public class ChallengeController {
     @GetMapping("/create")
     public String createForm() {
 
-        return "/view/challenge/createForm";
+        return "view/challenge/createForm";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
