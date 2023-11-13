@@ -38,7 +38,15 @@
                     </div>
 
                     <div class="flex" th:unless="${isJoin}">
-                        <a class="btn btn-info" th:href="|/challengeMember/join/${challenge.id}|">참가하기</a>
+
+                        <div th:if="${canJoin}">
+                            <a class="btn btn-info" th:href="|/challengeMember/join/${challenge.id}|">참가하기</a>
+                        </div>
+
+                        <div class="flex" th:unless="${canJoin}">
+                            <a class="btn btn-info">참여불가</a>
+                        </div>
+
                     </div>
                 </div>
 

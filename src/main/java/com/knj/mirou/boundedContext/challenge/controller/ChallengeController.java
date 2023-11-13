@@ -5,6 +5,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
@@ -92,6 +93,9 @@ public class ChallengeController {
         } else {
             model.addAttribute("isJoin", false);
         }
+
+        //멤버가 챌린지에 3회 이하로 참여했으면 true, 3회 초과로 참여했으면 false
+        model.addAttribute("canJoin", challengeMemberService.canJoin(loginedMember));
 
         if (challengeImg != null) {
             model.addAttribute("challengeImg",
