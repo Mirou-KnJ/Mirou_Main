@@ -7,7 +7,7 @@
 <th:block layout:fragment="Content">
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
-            <form class="flex flex-col w-3/4" method="post" action="/challenge/create" enctype="multipart/form-data">
+            <form class="flex flex-col w-full" method="post" action="/challenge/create" enctype="multipart/form-data">
                 <div class="flex justify-center form-control w-full">
                     <label class="label">
                         <span class="label-text">챌린지 제목</span>
@@ -23,7 +23,7 @@
                               name="contents"></textarea>
                 </div>
 
-                <div class="flex flex-col justify-between mt-4">
+                <div class="flex flex-col w-full justify-between mt-4">
                     <label class="label">
                         <span class="label-text">대표 이미지</span>
                     </label>

@@ -95,9 +95,13 @@ public class ChallengeController {
 
         if (challengeImg != null) {
             model.addAttribute("challengeImg",
-                    imageDataService.getOptimizingUrl(challengeImg, OptimizerOption.CHALLENGE_DETAIL));
+                    imageDataService.getOptimizingUrl(challengeImg.getImageUrl(), OptimizerOption.CHALLENGE_DETAIL));
         } else {
-            model.addAttribute("challengeImg", null);
+            //FIXME: 없는 이미지 처리
+            model.addAttribute("challengeImg",
+                    imageDataService.getOptimizingUrl(
+                            "https://kr.object.ncloudstorage.com/mirou/etc/no_img.png",
+                            OptimizerOption.CHALLENGE_DETAIL));
         }
 
         model.addAttribute("challenge", challenge);

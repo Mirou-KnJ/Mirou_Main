@@ -213,9 +213,8 @@ public class ImageDataService {
         return RsData.of("S-3", "유해하지 않은 이미지 입니다.");
     }
 
-    public String getOptimizingUrl(ImageData imageData, OptimizerOption option) {
+    public String getOptimizingUrl(String imgUrl, OptimizerOption option) {
 
-        String imgUrl = imageData.getImageUrl();
         String[] split = imgUrl.split(s3ConfigProps.getBucket());
         String cdnUrl = s3ConfigProps.getCdnUrl();
 
