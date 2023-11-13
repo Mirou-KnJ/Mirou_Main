@@ -41,7 +41,7 @@ public class ChallengeFeedController {
 
         model.addAttribute("challengeId", challengeId);
 
-        return "/view/challengeFeed/writeForm";
+        return "view/challengeFeed/writeForm";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -74,7 +74,7 @@ public class ChallengeFeedController {
         model.addAttribute("feed", feed);
         model.addAttribute("feedImg", feedImg.getImageUrl());
 
-        return "/view/challengeFeed/detail";
+        return "view/challengeFeed/detail";
     }
 
 }

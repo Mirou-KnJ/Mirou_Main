@@ -33,7 +33,7 @@ public class RewardController {
         model.addAttribute("challengeId", challengeId);
         model.addAttribute("rewardList", rewardList);
 
-        return "/view/reward/settingForm";
+        return "view/reward/settingForm";
     }
 
     @PostMapping("/setting")

@@ -29,7 +29,7 @@ public class MemberController {
     @GetMapping("/login")
     public String showLoginPage(){
 
-        return "/view/member/login";
+        return "view/member/login";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -57,7 +57,7 @@ public class MemberController {
             return null;
         }
 
-        return "/view/member/mypage";
+        return "view/member/mypage";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -68,7 +68,7 @@ public class MemberController {
 
         model.addAttribute("challengeList", challengeList);
 
-        return "/view/admin/adminPage";
+        return "view/admin/adminPage";
     }
 
 }
