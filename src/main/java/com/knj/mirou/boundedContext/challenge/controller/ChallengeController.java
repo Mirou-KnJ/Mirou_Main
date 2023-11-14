@@ -93,10 +93,10 @@ public class ChallengeController {
         //TODO: 구조 개선
         if (OChallengeMember.isPresent()) {
             ChallengeMember challengeMember = OChallengeMember.get();
-            model.addAttribute("reward", challengeMember.getPrivateReward());
+            model.addAttribute("rewardList", challengeMember.getPrivateReward());
             model.addAttribute("isJoin", true);
         } else {
-            model.addAttribute("reward", challenge.getPublicReward());
+            model.addAttribute("rewardList", challenge.getPublicReward());
             model.addAttribute("isJoin", false);
         }
 
