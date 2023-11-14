@@ -54,8 +54,7 @@ public class ChallengeMemberService {
 
         int count = challengeMemberRepository.countByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
 
-        log.info("count : " + count);
-
+        //FIXME: 하드코딩 x
         if(count >= 3) {
             return false;
         }
