@@ -31,5 +31,4 @@ public class PrivateReward extends BaseEntity {
     private RewardType rewardType;
 
     private String reward;
-
 }

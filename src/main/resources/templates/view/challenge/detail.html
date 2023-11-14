@@ -85,7 +85,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="flex justify-around" th:each="reward : ${challenge.publicReward}">
+                            <tr class="flex justify-around" th:each="reward : ${rewardList}">
                                 <td th:text="${reward.round}"></td>
                                 <td th:text="${reward.reward} + ${reward.rewardType}"></td>
                             </tr>
