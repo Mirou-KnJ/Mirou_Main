@@ -5,7 +5,6 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
-import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,8 +39,14 @@ public class ChallengeMember extends BaseEntity {
 
     private LocalDateTime endDate;
 
-    public void success() {
+    public int success() {
         this.successNumber = this.successNumber + 1;
+
+        return successNumber;
+    }
+
+    public void finishChallenge() {
+        this.progress = Progress.PROGRESS_END;
     }
 
 }

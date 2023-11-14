@@ -45,9 +45,7 @@ public class NotProd {
                 publicRewardService.create(2, 4, "COIN", "400");
                 publicRewardService.create(2, 6, "COIN", "600");
 
-                publicRewardService.create(3, 3, "COIN", "100");
-                publicRewardService.create(3, 5, "COIN", "500");
-                publicRewardService.create(3, 7, "COIN", "1000");
+                publicRewardService.create(3, 1, "COIN", "100");
             }
         };
     }

@@ -8,12 +8,14 @@ import com.knj.mirou.boundedContext.challengemember.repository.ChallengeMemberRe
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -52,6 +54,7 @@ public class ChallengeMemberService {
 
         int count = challengeMemberRepository.countByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
 
+        //FIXME: 하드코딩 x
         if(count >= 3) {
             return false;
         }
@@ -60,11 +63,15 @@ public class ChallengeMemberService {
     }
 
     @Transactional
-    public void updateSuccess(Member member, Challenge challenge) {
+    public int updateSuccess(ChallengeMember challengeMember) {
 
-        ChallengeMember challengeMember = getByChallengeAndMember(challenge, member).get();
+        return challengeMember.success();
+    }
 
-        challengeMember.success();
+    @Transactional
+    public void finishChallenge(ChallengeMember challengeMember) {
+
+        challengeMember.finishChallenge();
     }
 
 }
