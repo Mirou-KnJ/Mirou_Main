@@ -43,4 +43,23 @@ public class RewardController {
 
         return "redirect:/reward/setting/" + id;
     }
+
+    @GetMapping("/confirmSettings/{id}")
+    public String getConfirmForm(@PathVariable(value = "id") long challengeId, Model model) {
+
+        Challenge challenge = challengeService.getById(challengeId);
+        model.addAttribute("challenge", challenge);
+
+        return "view/reward/confirmForm";
+    }
+
+    @PostMapping("/confirmSettings/{id}")
+    public String confirmSettings(@PathVariable(value = "id") long challengeId) {
+
+        //TODO: 유효성 검사 (진행 일수에 적절한 보상 설정인지 등)
+        Challenge challenge = challengeService.getById(challengeId);
+        challengeService.opening(challenge);
+
+        return "redirect:/member/admin";
+    }
 }

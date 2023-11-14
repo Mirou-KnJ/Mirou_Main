@@ -43,4 +43,5 @@ public class ChallengeMember extends BaseEntity {
     public void success() {
         this.successNumber = this.successNumber + 1;
     }
+
 }

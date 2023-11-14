@@ -2,10 +2,12 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
+import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
@@ -73,10 +75,12 @@ public class ChallengeController {
         return "redirect:/challenge/detail/" + challengeId;
     }
 
-    @GetMapping("/allChallengeList")
-    public String allChallengeList(Model model) {
-        model.addAttribute("challengeList", challengeService.getAllList());
-        return "view/challenge/allChallengeList";
+    @GetMapping("/list")
+    public String openedChallengeList(Model model) {
+
+        List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+        model.addAttribute("openedChallenges", openedChallenges);
+        return "view/challenge/list";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -99,6 +103,9 @@ public class ChallengeController {
             model.addAttribute("rewardList", challenge.getPublicReward());
             model.addAttribute("isJoin", false);
         }
+
+        //멤버가 챌린지에 3회 이하로 참여했으면 true, 3회 초과로 참여했으면 false
+        model.addAttribute("canJoin", challengeMemberService.canJoin(loginedMember));
 
         if (challengeImg != null) {
             model.addAttribute("challengeImg",

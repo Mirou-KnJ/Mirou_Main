@@ -45,13 +45,6 @@ public class MemberController {
             Member member = ObyLoginId.get();
             model.addAttribute("member", member);
 
-            //fixme 컨트롤러에서 다른 위치의 서비스 호출?
-            long inProgressCount = challengeMemberService.getCountByMemberAndProgress(member, Progress.IN_PROGRESS);
-            long endCount = challengeMemberService.getCountByMemberAndProgress(member, Progress.PROGRESS_END);
-
-            model.addAttribute("inProgressCount", inProgressCount);
-            model.addAttribute("endCount", endCount);
-
         } else {
             //FIXME 에러페이지 렌더링?
             return null;
@@ -65,7 +58,6 @@ public class MemberController {
     public String adminPage(Model model) {
 
         List<Challenge> challengeList = challengeService.getAllList();
-
         model.addAttribute("challengeList", challengeList);
 
         return "view/admin/adminPage";
