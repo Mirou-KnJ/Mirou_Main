@@ -72,7 +72,7 @@ public class ChallengeController {
         return "redirect:/challenge/detail/" + challengeId;
     }
 
-    @GetMapping("/allChallengeList")
+    @GetMapping("/list")
     public String openedChallengeList(Model model) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);

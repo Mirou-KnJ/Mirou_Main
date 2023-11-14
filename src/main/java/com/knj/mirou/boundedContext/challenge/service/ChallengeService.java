@@ -69,8 +69,8 @@ public class ChallengeService {
 
     @Transactional
     public void opening(Challenge challenge) {
-        challenge.openingChallenge();
 
+        challenge.openingChallenge();
         challengeRepository.save(challenge);
     }
 
