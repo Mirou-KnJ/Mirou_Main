@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -72,9 +73,11 @@ public class ChallengeController {
     }
 
     @GetMapping("/allChallengeList")
-    public String allChallengeList(Model model) {
-        model.addAttribute("challengeList", challengeService.getAllList());
-        return "view/challenge/allChallengeList";
+    public String openedChallengeList(Model model) {
+
+        List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+        model.addAttribute("openedChallenges", openedChallenges);
+        return "view/challenge/list";
     }
 
     @PreAuthorize("isAuthenticated()")

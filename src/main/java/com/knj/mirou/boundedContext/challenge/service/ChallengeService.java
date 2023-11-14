@@ -26,6 +26,11 @@ public class ChallengeService {
         return challengeRepository.findAll();
     }
 
+    public List<Challenge> getByStatus(ChallengeStatus status) {
+
+        return challengeRepository.findByStatus(status);
+    }
+
     public Challenge getById(long id) {
 
         Optional<Challenge> OById = challengeRepository.findById(id);

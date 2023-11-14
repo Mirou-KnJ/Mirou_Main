@@ -10,11 +10,11 @@
             <h1>전체 챌린지 리스트</h1>
             <div class="overflow-x-auto">
 
-                <div th:if="${#lists.isEmpty(challengeList)}">
-                    <h1>생성된 챌린지가 없습니다</h1>
+                <div th:if="${#lists.isEmpty(openedChallenges)}">
+                    <h1>진행중인 챌린지가 없습니다!!</h1>
                 </div>
 
-                <table class="table" th:unless="${#lists.isEmpty(challengeList)}">
+                <table class="table" th:unless="${#lists.isEmpty(openedChallenges)}">
                     <!-- head -->
                     <thead>
                     <tr>
@@ -26,7 +26,7 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="challenge : ${challengeList}">
+                    <tr th:each="challenge : ${openedChallenges}">
                         <td th:text="${challenge.name}"></td>
 
                         <td th:text="${challenge.contents}"></td>
