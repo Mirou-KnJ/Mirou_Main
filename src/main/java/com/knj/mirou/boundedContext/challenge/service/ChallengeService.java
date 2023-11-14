@@ -67,4 +67,11 @@ public class ChallengeService {
         return RsData.of("S-1", "챌린지가 생성되었습니다.", challenge);
     }
 
+    @Transactional
+    public void opening(Challenge challenge) {
+        challenge.openingChallenge();
+
+        challengeRepository.save(challenge);
+    }
+
 }

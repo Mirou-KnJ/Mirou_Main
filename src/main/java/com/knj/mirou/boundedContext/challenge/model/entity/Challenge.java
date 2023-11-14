@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,4 +49,12 @@ public class Challenge extends BaseEntity {
     private int joinCost;
 
     private String precautions;
+
+    public void openingChallenge() {
+        this.status = ChallengeStatus.OPEN;
+    }
+
+    public void closingChallenge() {
+        this.status = ChallengeStatus.CLOSE;
+    }
 }

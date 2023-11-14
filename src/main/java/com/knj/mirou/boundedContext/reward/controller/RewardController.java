@@ -56,7 +56,8 @@ public class RewardController {
     @PostMapping("/confirmSettings/{id}")
     public String confirmSettings(@PathVariable(value = "id") long challengeId) {
 
-        System.out.println("post" + challengeId);
+        Challenge challenge = challengeService.getById(challengeId);
+        challengeService.opening(challenge);
 
         return "redirect:/member/admin";
     }
