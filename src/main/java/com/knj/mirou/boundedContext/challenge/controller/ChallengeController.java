@@ -7,7 +7,6 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
-import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;

@@ -37,11 +37,11 @@ public class Member extends BaseEntity {
 
     private String inviteCode;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(referencedColumnName = "id")
     private Coin coin;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(referencedColumnName = "id")
     private Point point;
 

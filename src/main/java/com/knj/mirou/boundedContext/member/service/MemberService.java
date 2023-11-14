@@ -44,7 +44,6 @@ public class MemberService {
             return joinResultMap;
         } else {
 
-
             MemberRole role = isAdmin(loginId) ? MemberRole.ADMIN : MemberRole.USER;
 
             Member member = Member.builder()
