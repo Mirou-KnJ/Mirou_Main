@@ -1,0 +1,88 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>리워드 세팅 완료 폼</title>
+
+    <script th:inline="javascript">
+
+        let period = /*[[${challenge.period}]]*/'';
+        let size = /*[[${challenge.publicReward.size()}]]*/'';
+
+        function checkSettings() {
+
+            var confirmMsg = period + '일간 진행되는 챌린지에 대한 리워드 세팅이 맞습니까? \n';
+            confirmMsg = confirmMsg.concat("-------".repeat(10));
+
+            for (let i = 0; i < size; i++) {
+                let round = document.getElementById('round' + i).innerText;
+                let type = document.getElementById('type' + i).innerText;
+                let reward = document.getElementById('reward' + i).innerText;
+                let rewardMsg = '\n' + round + '회 보상 => ' + reward + ' ' + type;
+
+                confirmMsg = confirmMsg.concat(rewardMsg);
+            }
+
+            var result = confirm(confirmMsg);
+
+            if (result) {
+                let challengeId = /*[[${challenge.id}]]*/'';
+                let url = '/reward/confirmSettings/'+challengeId;
+
+                fetch(url, {
+                    method: 'POST',
+                })
+                    .then(response => {
+                        if(response.ok) {
+                            window.location.href = "/member/admin";
+                        } else {
+                            console.error('Error:', response.status);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    })
+            } else {
+                alert("세팅이 취소되었습니다.");
+            }
+        }
+    </script>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+            <div class="flex w-full flex-col justify-center">
+
+                <h1 th:text="${challenge.name} + '에 대한 세팅 내용입니다.'"></h1>
+
+                <div class="divider"></div>
+
+                <div>
+                    <h1 th:text="'내용 : ' + ${challenge.contents}"></h1>
+                    <h1 th:text="'진행 일 수 : ' + ${challenge.period}"></h1>
+                </div>
+
+                <div class="flex flex-col justify-center w-full" th:unless="${#lists.isEmpty(challenge.publicReward)}">
+                    <h1 class="text-lg flex justify-center">현재 보상 상황</h1>
+                    <div class="flex flex-col justify-center items-center">
+                        <div class="flex gap-10">
+                            <p>회차</p>
+                            <p>보상 종류</p>
+                            <p>보상 내용</p>
+                        </div>
+                        <div th:each="reward, idx : ${challenge.publicReward}" class="flex gap-20">
+                            <p th:id="'round'+${idx.index}" th:text="${reward.round}"></p>
+                            <p th:id="'type'+${idx.index}" th:text="${reward.rewardType}"></p>
+                            <p th:id="'reward'+${idx.index}" th:text="${reward.reward}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button id="confirm" class="btn btn-sm btn-success" onclick="checkSettings()">세팅 완료</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</th:block>
+</body>
+</html>

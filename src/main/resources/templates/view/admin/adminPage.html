@@ -6,23 +6,49 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+        <div class="mx-auto w-1/2 py-20">
+            <div class="flex flex-col w-full justify-center">
+                <div th:if="${#lists.isEmpty(challengeList)}">
+                    <p>챌린지가 생성되지 않았습니다!</p>
+                </div>
 
-            <div th:if="${#lists.isEmpty(challengeList)}">
-                <p>챌린지가 생성되지 않았습니다!</p>
-            </div>
+                <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a href="/challenge/create" class="btn btn-primary">챌린지 생성</a>
+                </div>
 
-            <div class="mt-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                <a href="/challenge/create" class="btn btn-primary">챌린지 생성</a>
-            </div>
-
-            <div class="flex flex-col gap-10" th:unless="${#lists.isEmpty(challengeList)}">
-                <div th:each="challenge : ${challengeList}">
-                    <a th:text="${challenge.name}"></a>
-                    <p th:text="${challenge.contents}"></p>
-                    <a th:href="|/reward/setting/${challenge.id}|" class="btn btn-sm btn-accent">보상 설정하기</a>
+                <div class="flex overflow-x-auto w-full" th:unless="${#lists.isEmpty(challengeList)}">
+                    <table class="w-full table table-zebra">
+                        <thead>
+                        <tr>
+                            <th class="mr-5">이름</th>
+                            <th class="mr-8">보상 세팅</th>
+                            <th class="mr-5">(보상 수/진행 일수)</th>
+                            <th class="mr-5">옵션</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="w-full" th:each="challenge : ${challengeList}">
+                            <td th:text="${challenge.name}"></td>
+                            <td>
+                                <a th:href="|/reward/setting/${challenge.id}|" class="btn btn-sm btn-accent">보상 설정</a>
+                            </td>
+                            <td class="flex justify-center">
+                                <p th:text="${challenge.publicReward.size()} + '/'+ ${challenge.period}"></p>
+                            </td>
+                            <td th:unless="${challenge.status.getStatus().equals('세팅 전')}">
+                                <!-- TODO: 챌린지의 종료와 보상의 수정(Modify) -->
+                                <a class="btn btn-sm btn-warning" href="#">수정/종료</a>
+                            </td>
+                            <td th:if="${challenge.status.getStatus().equals('세팅 전')}">
+                                <a th:href="|/reward/confirmSettings/${challenge.id}|"
+                                   class="btn btn-sm btn-info">세팅마치기</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
         </div>
     </main>
 </th:block>
