@@ -65,7 +65,6 @@ public class MemberController {
     public String adminPage(Model model) {
 
         List<Challenge> challengeList = challengeService.getAllList();
-
         model.addAttribute("challengeList", challengeList);
 
         return "view/admin/adminPage";

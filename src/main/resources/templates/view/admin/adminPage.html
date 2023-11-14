@@ -27,15 +27,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="challenge : ${challengeList}">
+                        <tr class="w-full" th:each="challenge : ${challengeList}">
                             <td th:text="${challenge.name}"></td>
                             <td>
                                 <a th:href="|/reward/setting/${challenge.id}|" class="btn btn-sm btn-accent">보상 설정</a>
                             </td>
                             <td class="flex justify-center">
-                                <p th:text="'0' '/'+ ${challenge.period}"></p>
+                                <p th:text="${challenge.publicReward.size()} + '/'+ ${challenge.period}"></p>
                             </td>
-                            <td th:text="${challenge.status.getStatus()}"></td>
+                            <td th:unless="${challenge.status.getStatus().equals('세팅 전')}"
+                            th:text="${challenge.status.getStatus()}"></td>
+                            <td th:if="${challenge.status.getStatus().equals('세팅 전')}">
+                                <a th:href="|/reward/confirmSettings/${challenge.id}|"
+                                   class="btn btn-sm btn-info">세팅마치기</a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

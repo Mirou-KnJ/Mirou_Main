@@ -43,4 +43,21 @@ public class RewardController {
 
         return "redirect:/reward/setting/" + id;
     }
+
+    @GetMapping("/confirmSettings/{id}")
+    public String getConfirmForm(@PathVariable(value = "id") long challengeId, Model model) {
+
+        Challenge challenge = challengeService.getById(challengeId);
+        model.addAttribute("challenge", challenge);
+
+        return "view/reward/confirmForm";
+    }
+
+    @PostMapping("/confirmSettings/{id}")
+    public String confirmSettings(@PathVariable(value = "id") long challengeId) {
+
+        System.out.println("post" + challengeId);
+
+        return "redirect:/member/admin";
+    }
 }
