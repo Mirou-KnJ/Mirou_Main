@@ -56,6 +56,7 @@ public class RewardController {
     @PostMapping("/confirmSettings/{id}")
     public String confirmSettings(@PathVariable(value = "id") long challengeId) {
 
+        //TODO: 유효성 검사 (진행 일수에 적절한 보상 설정인지 등)
         Challenge challenge = challengeService.getById(challengeId);
         challengeService.opening(challenge);
 

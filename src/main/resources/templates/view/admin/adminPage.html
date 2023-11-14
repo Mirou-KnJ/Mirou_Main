@@ -23,7 +23,7 @@
                             <th class="mr-5">이름</th>
                             <th class="mr-8">보상 세팅</th>
                             <th class="mr-5">(보상 수/진행 일수)</th>
-                            <th class="mr-5">상태</th>
+                            <th class="mr-5">옵션</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -35,8 +35,10 @@
                             <td class="flex justify-center">
                                 <p th:text="${challenge.publicReward.size()} + '/'+ ${challenge.period}"></p>
                             </td>
-                            <td th:unless="${challenge.status.getStatus().equals('세팅 전')}"
-                            th:text="${challenge.status.getStatus()}"></td>
+                            <td th:unless="${challenge.status.getStatus().equals('세팅 전')}">
+                                <!-- TODO: 챌린지의 종료와 보상의 수정(Modify) -->
+                                <a class="btn btn-sm btn-warning" href="#">수정/종료</a>
+                            </td>
                             <td th:if="${challenge.status.getStatus().equals('세팅 전')}">
                                 <a th:href="|/reward/confirmSettings/${challenge.id}|"
                                    class="btn btn-sm btn-info">세팅마치기</a>
