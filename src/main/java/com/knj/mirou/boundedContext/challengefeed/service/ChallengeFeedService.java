@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,7 +71,20 @@ public class ChallengeFeedService {
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
     }
-    
+
+    public boolean alreadyPostedToday(Member member, Challenge challenge){
+
+        LocalDate today = LocalDate.now();
+        LocalTime startTime = LocalTime.of(0, 0);
+        LocalTime endTime = LocalTime.of(23,59);
+
+        LocalDateTime startDate = LocalDateTime.of(today, startTime);
+        LocalDateTime endDate = LocalDateTime.of(today, endTime);
+
+        return challengeFeedRepository
+                .findTodayLinkedChallengesForMember(challenge, member, startDate, endDate).isPresent();
+    }
+
     public ChallengeFeed getById(long feedId) {
 
         //FIXME: isPresent 없는 get 호출

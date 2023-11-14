@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,11 +39,12 @@ public class ChallengeFeedController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
-    public String writeForm(@PathVariable(value = "id") long challengeId, Model model) {
-
+    public String writeForm(@PathVariable(value = "id") long challengeId, Model model, Principal principal) {
+        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
         model.addAttribute("challengeId", challengeId);
 
         return "view/challengeFeed/writeForm";
+
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -54,7 +57,7 @@ public class ChallengeFeedController {
 
         RsData<String> writeRsData = challengeFeedService.writeFeed(challenge, loginedMember, img, contents);
 
-        if(writeRsData.isFail()){
+        if (writeRsData.isFail()) {
             writeRsData.printResult();
             return "redirect:/feed/write/" + challengeId;
         } else {

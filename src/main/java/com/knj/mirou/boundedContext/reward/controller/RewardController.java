@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.reward.controller;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
