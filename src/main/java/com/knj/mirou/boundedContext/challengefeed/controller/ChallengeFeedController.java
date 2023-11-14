@@ -16,6 +16,7 @@ import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/feed")
@@ -73,7 +75,12 @@ public class ChallengeFeedController {
             RsData<PrivateReward> validReward =
                     privateRewardService.getValidReward(challenge, challengeMember, successNum);
 
-            if(validReward.isSuccess()) {
+            validReward.printResult();
+
+            if(validReward.getResultCode().startsWith("S-2")) {
+                challengeMemberService.finishChallenge(challengeMember);
+                coinService.giveCoin(loginedMember, validReward.getData());
+            } else if(validReward.isSuccess()) {
                 coinService.giveCoin(loginedMember, validReward.getData());
             }
 

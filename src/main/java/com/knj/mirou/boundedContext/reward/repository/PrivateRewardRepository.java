@@ -5,12 +5,12 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface PrivateRewardRepository extends JpaRepository<PrivateReward, Long> {
 
-    Optional<PrivateReward> findByLinkedChallengeAndLinkedChallengeMemberAndRound(Challenge challenge,
-                                                                                  ChallengeMember challengeMember,
-                                                                                  int round);
+    List<PrivateReward> findByLinkedChallengeAndLinkedChallengeMember(Challenge challenge, ChallengeMember challengeMember);
+
+
 
 }

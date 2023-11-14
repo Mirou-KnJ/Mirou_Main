@@ -40,14 +40,31 @@ public class PrivateRewardService {
 
     public RsData<PrivateReward> getValidReward(Challenge challenge, ChallengeMember challengeMember, int successNum) {
 
-        Optional<PrivateReward> OValidReward = privateRewardRepository
-                .findByLinkedChallengeAndLinkedChallengeMemberAndRound(challenge, challengeMember, successNum);
+        List<PrivateReward> rewards = privateRewardRepository
+                .findByLinkedChallengeAndLinkedChallengeMember(challenge, challengeMember);
 
-        if(OValidReward.isPresent()) {
-            return RsData.of("S-1", "받을 수 있는 보상이 있습니다!", OValidReward.get());
+        PrivateReward validReward = null;
+        boolean lastFlag = false;
+
+        for(PrivateReward reward : rewards) {
+            if (reward.getRound() == successNum) {
+                validReward = reward;
+                if(rewards.get(rewards.size()-1).equals(validReward)) {
+                    lastFlag = true;
+                }
+                break;
+            }
         }
 
-        return RsData.of("F-1", "받을 수 있는 보상이 없습니다.");
+        if(validReward == null) {
+            return RsData.of("F-1", "받을 수 있는 보상이 없습니다.");
+        }
+
+        if(!lastFlag ) {
+            return RsData.of("S-1", "이번 회차 보상이 존재합니다", validReward);
+        }
+
+        return RsData.of("S-2", "마지막 회차 보상입니다.", validReward);
     }
 
 }

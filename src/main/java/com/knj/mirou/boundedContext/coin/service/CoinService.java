@@ -33,6 +33,9 @@ public class CoinService {
         Coin coin = member.getCoin();
         int rewardCoin = Integer.parseInt(reward.getReward());
 
+        //TODO: 확률 조정 알고리즘
+        //TODO: 지급 히스토리 기록
+
         coin = Coin.builder()
                 .id(coin.getId())
                 .currentCoin(coin.getCurrentCoin() + rewardCoin)

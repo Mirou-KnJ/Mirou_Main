@@ -47,13 +47,11 @@ public class ChallengeFeedService {
          예를 들어, 물 마시기 챌린지의 경우 water, bottle, drink 와 같은 기준 설정
         */
         RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, challenge);
-
         if(labelRsData.isFail()) {
             return labelRsData;
         }
 
         RsData<String> safeSearchRsData = imageDataService.safeSearchByGcs(imgUrl);
-
         if(safeSearchRsData.isFail()) {
             return safeSearchRsData;
         }

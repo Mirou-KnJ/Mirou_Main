@@ -45,4 +45,8 @@ public class ChallengeMember extends BaseEntity {
         return successNumber;
     }
 
+    public void finishChallenge() {
+        this.progress = Progress.PROGRESS_END;
+    }
+
 }

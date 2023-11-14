@@ -69,4 +69,10 @@ public class ChallengeMemberService {
         return challengeMember.success();
     }
 
+    @Transactional
+    public void finishChallenge(ChallengeMember challengeMember) {
+
+        challengeMember.finishChallenge();
+    }
+
 }
