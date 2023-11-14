@@ -42,8 +42,12 @@
                             <div class="badge badge-primary badge-outline" th:text="${challenge.tag}"></div>
                         </div>
                     </div>
+                    <div th:if="${canWrite}">
+                        <h1>이미 작성 했습니다.</h1>
+                    </div>
 
-                    <div class="flex" th:if="${isJoin}">
+                    <!--                    이미 오늘 인증을 완료한 챌린지이면 인증하기 버튼을 눌렀을 때 '인증 완료한 챌린지' 경고문 출력-->
+                    <div class="flex" th:if="${isJoin}" th:unless="${canWrite}">
                         <a class="btn btn-warning" th:href="|/feed/write/${challenge.id}|">인증하기</a>
                     </div>
 

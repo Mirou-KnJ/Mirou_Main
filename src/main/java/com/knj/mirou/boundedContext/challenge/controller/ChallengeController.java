@@ -118,6 +118,7 @@ public class ChallengeController {
                             OptimizerOption.CHALLENGE_DETAIL));
         }
 
+        model.addAttribute("canWrite", challengeFeedService.alreadyPostedToday(loginedMember, challenge));
         model.addAttribute("challenge", challenge);
         model.addAttribute("feedList", feedList);
 
