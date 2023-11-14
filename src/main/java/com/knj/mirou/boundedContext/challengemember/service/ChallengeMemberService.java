@@ -24,9 +24,8 @@ public class ChallengeMemberService {
     private final ChallengeMemberRepository challengeMemberRepository;
 
     @Transactional
-    public void join(long linkedChallengeId, String loginId) {
+    public ChallengeMember join(Challenge linkedChallenge, String loginId) {
 
-        Challenge linkedChallenge = challengeService.getById(linkedChallengeId);
         Member linkedMember = memberService.getByLoginId(loginId).get();
 
         ChallengeMember newChallengeMember = ChallengeMember.builder()
@@ -36,7 +35,7 @@ public class ChallengeMemberService {
                 .endDate(LocalDateTime.now())      //FIXME : 가입날짜 + 챌린지의 period 그리고 LocalDate로 수정필요
                 .build();
 
-        challengeMemberRepository.save(newChallengeMember);
+        return challengeMemberRepository.save(newChallengeMember);
     }
 
     public Optional<ChallengeMember> getByMember(Member member) {

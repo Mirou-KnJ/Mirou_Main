@@ -5,6 +5,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -85,11 +87,16 @@ public class ChallengeController {
         Challenge challenge = challengeService.getById(challengeId);
         List<ChallengeFeed> feedList = challengeFeedService.getByChallenge(challenge);
         ImageData challengeImg = imageDataService.getByIdAndTarget(challenge.getId(), ImageTarget.CHALLENGE_IMG);
+        Optional<ChallengeMember> OChallengeMember =
+                challengeMemberService.getByChallengeAndMember(challenge, loginedMember);
 
         //TODO: 구조 개선
-        if (challengeMemberService.getByChallengeAndMember(challenge, loginedMember).isPresent()) {
+        if (OChallengeMember.isPresent()) {
+            ChallengeMember challengeMember = OChallengeMember.get();
+            model.addAttribute("reward", challengeMember.getPrivateReward());
             model.addAttribute("isJoin", true);
         } else {
+            model.addAttribute("reward", challenge.getPublicReward());
             model.addAttribute("isJoin", false);
         }
 
