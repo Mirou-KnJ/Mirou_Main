@@ -49,9 +49,15 @@ public class ChallengeMemberService {
         return challengeMemberRepository.findByLinkedChallengeAndLinkedMember(linkedChallenge, linkedMember);
     }
 
-    public long getCountByMemberAndProgress(Member member, Progress progress) {
+    public boolean canJoin(Member member) {
 
-        return challengeMemberRepository.countByLinkedMemberAndProgress(member, progress);
+        int count = challengeMemberRepository.countByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
+
+        if(count >= 3) {
+            return false;
+        }
+
+        return true;
     }
 
     @Transactional
