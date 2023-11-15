@@ -2,11 +2,11 @@ package com.knj.mirou.boundedContext.coin.service;
 
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.coin.repository.CoinRepository;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -26,22 +26,39 @@ public class CoinService {
         return coinRepository.save(createCoin);
     }
 
-    public int randomCoin(int maximumCoin) {
-        Random random = new Random();
-        int result = 0;
+    @Transactional
+    public void giveCoin(Member member, PrivateReward reward) {
 
-        double probability = random.nextDouble();
+        Coin coin = member.getCoin();
+        int rewardCoin = Integer.parseInt(reward.getReward());
 
-        if (probability < 0.4) {
-            result = random.nextInt((int) (maximumCoin / 4.0));
-        } else if (probability < 0.7) {
-            result = random.nextInt((int) (maximumCoin / 4.0)) + (int) (maximumCoin / 4.0);
-        } else if (probability < 0.9) {
-            result = random.nextInt((int) (maximumCoin / 4.0)) + (int) (maximumCoin / 2.0);
+        //TODO: 확률 조정 알고리즘
+        double randomCoin = Math.random();
+
+        if (randomCoin < 0.25) {
+            rewardCoin = (int) (rewardCoin * 0.4);  // 0 ~ 1/4 구간: 40% 확률
+        } else if (randomCoin < 0.5) {
+            rewardCoin = (int)(rewardCoin * 0.3);   // 1/4 ~ 1/2 : 30% 확률
+        } else if (randomCoin < 0.75) {
+            rewardCoin = (int)(rewardCoin * 0.2);   // 1/2 ~ 3/4 : 20% 확률
         } else {
-            result = random.nextInt((int) (maximumCoin / 4.0)) + (int) (3 * maximumCoin / 4.0);
+            rewardCoin = (int)(rewardCoin * 0.1);   // 3/4 ~ 100 : 10% 확률
         }
 
-        return result;
+        //TODO: 지급 히스토리 기록
+
+        coin = Coin.builder()
+                .id(coin.getId())
+                .currentCoin(coin.getCurrentCoin() + rewardCoin)
+                .totalGetCoin(coin.getTotalGetCoin() + rewardCoin)
+                .build();
+
+        coinRepository.save(coin);
     }
+
 }
+
+
+
+
+

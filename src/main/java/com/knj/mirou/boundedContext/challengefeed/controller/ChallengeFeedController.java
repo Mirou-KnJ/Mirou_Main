@@ -5,13 +5,18 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
+import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
+import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
+import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/feed")
@@ -36,6 +40,8 @@ public class ChallengeFeedController {
     private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
     private final ImageDataService imageDataService;
+    private final PrivateRewardService privateRewardService;
+    private final CoinService coinService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
@@ -57,11 +63,27 @@ public class ChallengeFeedController {
 
         RsData<String> writeRsData = challengeFeedService.writeFeed(challenge, loginedMember, img, contents);
 
+        //TODO: 반드시 구조개선
         if (writeRsData.isFail()) {
             writeRsData.printResult();
             return "redirect:/feed/write/" + challengeId;
         } else {
-            challengeMemberService.updateSuccess(loginedMember, challenge);
+            ChallengeMember challengeMember =
+                    challengeMemberService.getByChallengeAndMember(challenge, loginedMember).get();
+
+            int successNum = challengeMemberService.updateSuccess(challengeMember);
+            RsData<PrivateReward> validReward =
+                    privateRewardService.getValidReward(challenge, challengeMember, successNum);
+
+            validReward.printResult();
+
+            if(validReward.getResultCode().startsWith("S-2")) {
+                challengeMemberService.finishChallenge(challengeMember);
+                coinService.giveCoin(loginedMember, validReward.getData());
+            } else if(validReward.isSuccess()) {
+                coinService.giveCoin(loginedMember, validReward.getData());
+            }
+
             writeRsData.printResult();
         }
 
