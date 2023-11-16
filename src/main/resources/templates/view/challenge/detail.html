@@ -142,22 +142,23 @@
                         </div>
 
                         <!-- FIXME -->
-                        <div class="w-1/2 h-full bg-yellow-200">
+                        <div class="w-1/2 h-full">
 <!--                            <div id="progress" class="radial-progress"-->
 <!--                                 th:style="'&#45;&#45;value:' + (1*100)/${rewardList.get(#lists.size(rewardList)-1).round}"-->
 <!--                                 th:text="${#numbers.formatPercent(rewardList.get(#lists.size(rewardList)-1).round}"-->
 <!--                                 role="progressbar" ></div>-->
+                            <div> 종료까지 00일 남았습니다.</div>
                         </div>
                     </div>
 
                 </div>
 
-                <div th:if="${isJoin}">
+                <div class="w-full" th:if="${isJoin}">
                     <div class="divider"></div>
 
                     <h1 class="flex justify-start text-lg font-bold mb-2">인증 피드</h1>
-                    <div th:if="${#lists.isEmpty(feedList)}">
-                        <h1 class="text-bold">아직 인증글이 없습니다!</h1>
+                    <div class="flex justify-center" th:if="${#lists.isEmpty(feedList)}">
+                        <h1 class="font-thin text-gray-500">아직 인증글이 없습니다!</h1>
                     </div>
 
                     <div class="flex gap-3" th:unless="${#lists.isEmpty(feedList)}">
