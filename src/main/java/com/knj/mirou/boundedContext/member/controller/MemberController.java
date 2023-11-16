@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.member.controller;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -40,10 +41,14 @@ public class MemberController {
         Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
 
         if(ObyLoginId.isPresent()) {
-
             Member member = ObyLoginId.get();
+            int inProgressNum = challengeMemberService
+                    .getCountByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
+            int endProgressNum = challengeMemberService
+                    .getCountByLinkedMemberAndProgress(member, Progress.PROGRESS_END);
             model.addAttribute("member", member);
-
+            model.addAttribute("inProgressNum", inProgressNum);
+            model.addAttribute("endProgressNum", endProgressNum);
         } else {
             //FIXME 에러페이지 렌더링?
             return null;

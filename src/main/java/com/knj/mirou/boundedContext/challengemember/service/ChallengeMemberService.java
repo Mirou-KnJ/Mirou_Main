@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -43,6 +44,11 @@ public class ChallengeMemberService {
     public Optional<ChallengeMember> getByMember(Member member) {
 
         return challengeMemberRepository.findByLinkedMember(member);
+    }
+
+    public int getCountByLinkedMemberAndProgress(Member member, Progress progress) {
+
+        return challengeMemberRepository.countByLinkedMemberAndProgress(member, progress);
     }
 
     public Optional<ChallengeMember> getByChallengeAndMember(Challenge linkedChallenge, Member linkedMember) {
