@@ -29,38 +29,57 @@
                     <span class="flex ml-2 font-light text-sm" th:text="${memberCount} + '명 참여중'"></span>
                 </div>
 
-                <div class="flex w-full justify-between my-6">
+                <div class="flex w-full justify-between items-center mt-3">
                     <div class="flex flex-col">
                         <div>
                             <p th:text="${challenge.getJoinDeadLineFormat()}"></p>
                         </div>
 
                         <div class="flex gap-1">
-                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4" th:text="${challenge.method}"></div>
+                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4"
+                                 th:text="${challenge.method}"></div>
                             <div class="badge badge-secondary badge-outline rounded-md px-3 py-4"
                                  th:text="${challenge.period} + '일 챌린지'"></div>
-                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4" th:text="${challenge.tag}"></div>
+                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4"
+                                 th:text="${challenge.tag}"></div>
                         </div>
                     </div>
+
+                    <!-- FIXME: 텍스트로 떡하니 띄우지 말고, 인증하기 버튼이 눌렸을때 검사하는 것으로 변경 -->
                     <div th:if="${canWrite}">
                         <h1>이미 작성 했습니다.</h1>
                     </div>
 
-                    <!--                    이미 오늘 인증을 완료한 챌린지이면 인증하기 버튼을 눌렀을 때 '인증 완료한 챌린지' 경고문 출력-->
-                    <div class="flex" th:if="${isJoin}" th:unless="${canWrite}">
-                        <a class="btn btn-warning" th:href="|/feed/write/${challenge.id}|">인증하기</a>
+                    <div class="flex shadow-xl mr-5" th:if="${isJoin}" th:unless="${canWrite}">
+                        <div class="flex flex-col rounded-md bg-white py-3 px-2">
+                            <a class="btn m-3 rounded-md bg-yellow-300"
+                               th:href="|/feed/write/${challenge.id}|">
+                                <i class="fa-solid fa-check"></i>
+                            </a>
+                            <span class="flex justify-center text-sm font-thin">인증하기</span>
+                        </div>
                     </div>
 
+                    <!-- FIXME: 두 가지 상황을 다 코드에 놓지 말고, 클릭했을 때 검사하는 것으로 변경 -->
                     <div class="flex" th:unless="${isJoin}">
-
-                        <div th:if="${canJoin}">
-                            <a class="btn btn-info" th:href="|/challengeMember/join/${challenge.id}|">참가하기</a>
+                        <div class="flex shadow-xl mr-5" th:if="${canJoin}">
+                            <div class="flex flex-col rounded-md bg-white py-3 px-2">
+                                <a class="btn m-3 rounded-md bg-purple-300"
+                                   th:href="|/challengeMember/join/${challenge.id}|">
+                                    <i class="fa-regular fa-user fa-lg"></i>
+                                </a>
+                                <span class="flex justify-center text-sm font-thin">참가하기</span>
+                            </div>
                         </div>
 
-                        <div class="flex" th:unless="${canJoin}">
-                            <a id="cantJoinBtn" class="btn btn-info">참가하기</a>
+                        <div class="flex shadow-xl mr-5" th:unless="${canJoin}">
+                            <div class="flex flex-col rounded-md bg-white py-3 px-2">
+                                <a id="cantJoinBtn" class="btn btn-info rounded-md">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
+                                <span class="flex justify-center text-sm font-thin">참가하기</span>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
