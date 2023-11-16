@@ -74,7 +74,7 @@
 
                     <!-- FIXME: 두 가지 상황을 다 코드에 놓지 말고, 클릭했을 때 검사하는 것으로 변경 -->
                     <div class="flex mb-2" th:unless="${isJoin}">
-                        <div class="flex shadow-xl mr-5" th:if="${canJoin}">
+                        <div class="flex shadow-xl ml-3" th:if="${canJoin}">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a class="btn m-3 rounded-md bg-purple-300"
                                    th:href="|/challengeMember/join/${challenge.id}|">
@@ -84,7 +84,7 @@
                             </div>
                         </div>
 
-                        <div class="flex shadow-xl" th:unless="${canJoin}">
+                        <div class="flex shadow-xl ml-3" th:unless="${canJoin}">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a id="cantJoinBtn" class="btn btn-info rounded-md">
                                     <i class="fa-regular fa-user"></i>
@@ -132,7 +132,8 @@
                     <div class="flex flex-row">
                         <div class="w-1/2 mt-3">
                             <div class="flex justify-center">
-                                <progress class="progress w-48" value="1"
+                                <!-- TODO: value값을 challengeMember의 successNumber로-->
+                                <progress class="progress progress-success w-48" value="1"
                                           th:max="${rewardList.get(#lists.size(rewardList)-1).round}"></progress>
                             </div>
                             <div class="flex justify-center mt-2">
@@ -140,8 +141,12 @@
                             </div>
                         </div>
 
+                        <!-- FIXME -->
                         <div class="w-1/2 h-full bg-yellow-200">
-
+<!--                            <div id="progress" class="radial-progress"-->
+<!--                                 th:style="'&#45;&#45;value:' + (1*100)/${rewardList.get(#lists.size(rewardList)-1).round}"-->
+<!--                                 th:text="${#numbers.formatPercent(rewardList.get(#lists.size(rewardList)-1).round}"-->
+<!--                                 role="progressbar" ></div>-->
                         </div>
                     </div>
 
@@ -159,7 +164,7 @@
                         <div class="flex flex-col w-full" th:each="feed : ${feedList}">
                             <div class="flex justify-center">
                                 <a th:href="|/feed/detail/${feed.id}|">
-                                    <div class="grid w-32 h-32 bg-gray-300 place-items-center rounded-xl">
+                                    <div class="grid w-28 h-28 bg-indigo-300 place-items-center rounded-xl">
                                         <span th:text="${feed.contents}"></span>
                                     </div>
                                 </a>
