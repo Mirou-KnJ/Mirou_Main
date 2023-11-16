@@ -93,6 +93,8 @@ public class ChallengeController {
         Optional<ChallengeMember> OChallengeMember =
                 challengeMemberService.getByChallengeAndMember(challenge, loginedMember);
 
+        int memberCount = challengeMemberService.getCountByLinkedChallenge(challenge);
+
         //TODO: 구조 개선
         if (OChallengeMember.isPresent()) {
             ChallengeMember challengeMember = OChallengeMember.get();
@@ -120,6 +122,7 @@ public class ChallengeController {
         model.addAttribute("canWrite", challengeFeedService.alreadyPostedToday(loginedMember, challenge));
         model.addAttribute("challenge", challenge);
         model.addAttribute("feedList", feedList);
+        model.addAttribute("memberCount", memberCount);
 
         return "view/challenge/detail";
     }
