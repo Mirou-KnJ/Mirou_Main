@@ -1,7 +1,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <title>사용할 페이지 명</title>
+    <title th:text="${challenge.name}"></title>
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function () {
             var cantJoinBtn = document.getElementById('cantJoinBtn');
@@ -35,49 +35,58 @@
                             <p th:text="${challenge.getJoinDeadLineFormat()}"></p>
                         </div>
 
-                        <div class="flex gap-1">
-                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4"
-                                 th:text="${challenge.method}"></div>
-                            <div class="badge badge-secondary badge-outline rounded-md px-3 py-4"
-                                 th:text="${challenge.period} + '일 챌린지'"></div>
-                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4"
-                                 th:text="${challenge.tag}"></div>
+                        <div class="flex mt-2 gap-2">
+
+                            <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
+                            th:data-tip="${challenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
+                                <i class="fa-solid fa-camera-retro fa-lg mr-2"></i>
+                                <p th:text="${challenge.method.getMethod()}"></p>
+                            </div>
+                            <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
+                            th:data-tip="'참여 당일부터 ' + ${challenge.period} + '일 간 진행되요!'">
+                                <i class="fa-regular fa-calendar fa-lg mr-2"></i>
+                                <p th:text="${challenge.period} + '일 챌린지'"></p>
+                            </div>
+
+                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
+                                <i class="fa-solid fa-person-walking fa-lg mr-2" th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                                <i class="fa-solid fa-tree fa-lg mr-2" th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                <i class="fa-solid fa-pen fa-lg mr-2" th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
+                                <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- FIXME: 텍스트로 떡하니 띄우지 말고, 인증하기 버튼이 눌렸을때 검사하는 것으로 변경 -->
-                    <div th:if="${canWrite}">
-                        <h1>이미 작성 했습니다.</h1>
-                    </div>
-
-                    <div class="flex shadow-xl mr-5" th:if="${isJoin}" th:unless="${canWrite}">
+                    <div class="flex shadow-xl mb-2" th:if="${isJoin}">
                         <div class="flex flex-col rounded-md bg-white py-3 px-2">
                             <a class="btn m-3 rounded-md bg-yellow-300"
-                               th:href="|/feed/write/${challenge.id}|">
+                               th:href="|/feed/write/${challenge.id}|" th:disabled="${canWrite}">
                                 <i class="fa-solid fa-check"></i>
                             </a>
-                            <span class="flex justify-center text-sm font-thin">인증하기</span>
+                            <span th:if="${!canWrite}" class="flex justify-center text-sm font-thin">인증하기</span>
+                            <span th:if="${canWrite}" class="flex justify-center text-sm font-thin tooltip"
+                            data-tip="오늘은 이미 인증을 완료했어요!">인증완료</span>
                         </div>
                     </div>
 
                     <!-- FIXME: 두 가지 상황을 다 코드에 놓지 말고, 클릭했을 때 검사하는 것으로 변경 -->
-                    <div class="flex" th:unless="${isJoin}">
+                    <div class="flex mb-2" th:unless="${isJoin}">
                         <div class="flex shadow-xl mr-5" th:if="${canJoin}">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a class="btn m-3 rounded-md bg-purple-300"
                                    th:href="|/challengeMember/join/${challenge.id}|">
                                     <i class="fa-regular fa-user fa-lg"></i>
                                 </a>
-                                <span class="flex justify-center text-sm font-thin">참가하기</span>
+                                <span class="mt-2 flex justify-center text-sm font-thin">참가하기</span>
                             </div>
                         </div>
 
-                        <div class="flex shadow-xl mr-5" th:unless="${canJoin}">
+                        <div class="flex shadow-xl" th:unless="${canJoin}">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a id="cantJoinBtn" class="btn btn-info rounded-md">
                                     <i class="fa-regular fa-user"></i>
                                 </a>
-                                <span class="flex justify-center text-sm font-thin">참가하기</span>
+                                <span class="mt-2 flex justify-center text-sm font-thin">참가하기</span>
                             </div>
                         </div>
                     </div>
@@ -88,9 +97,28 @@
                 <div class="flex flex-col w-full justify-start">
                     <h1 class="text-lg font-bold">챌린지 내용</h1>
 
-                    <p th:text="'참가 비용 : ' + ${challenge.joinCost}"></p>
-                    <p th:text="'난이도 : ' + ${challenge.level}"></p>
+                    <div class="flex flex-col">
+                        <div class="rating mb-2">
+                            <h1 class="mt-2 font-thin text-gray-500 mr-4">예상 난이도</h1>
+                            <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
+                                   th:checked="${challenge.level} == 1"/>
+                            <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
+                                   th:checked="${challenge.level} == 2"/>
+                            <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
+                                   th:checked="${challenge.level} == 3"/>
+                            <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
+                                   th:checked="${challenge.level} == 4"/>
+                            <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
+                                   th:checked="${challenge.level} == 5"/>
+                        </div>
 
+                        <div class="flex tooltip"
+                             data-tip="생활지원금은 챌린지 참여 시에만 사용되며, 매주 월요일에 3000원씩 지급되요.">
+                            <h1 class="mr-4 font-thin text-gray-500">참가비</h1>
+                            <p th:text="'생활지원금 ' + ${challenge.joinCost} + '원' "></p>
+                            <i class="pl-2 pt-2 fa-solid fa-money-bill-wave fa-lg" style="color: #3faa31;"></i>
+                        </div>
+                    </div>
                     <p class="my-2 text-sm font-thin text-gray-500" th:text="${challenge.contents}"></p>
                 </div>
 
@@ -104,13 +132,20 @@
                             <thead>
                             <tr class="flex justify-around">
                                 <th class="mr-5">회차</th>
-                                <th class="mr-5">보상</th>
+                                <th class="mr-5">최대 보상</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr class="flex justify-around" th:each="reward : ${rewardList}">
                                 <td th:text="${reward.round}"></td>
-                                <td th:text="${reward.reward} + ${reward.rewardType}"></td>
+                                <td>
+                                    <span th:text="${reward.reward}"></span>
+                                    <span th:text="${reward.rewardType.getRewardType()}"></span>
+                                    <i class="fa-solid fa-coins fa-lg pl-2 pt-2" style="color: #eac02a;"
+                                       th:if="${reward.rewardType.getRewardType().equals('코인')}"></i>
+                                    <i class="fa-solid fa-gift fa-lg pl-2 pt-2" style="color: #d23232;"
+                                       th:if="${reward.rewardType.getRewardType().equals('상품')}"></i>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -127,22 +162,35 @@
 
                 <div class="divider"></div>
 
-                <div th:if="${#lists.isEmpty(feedList)}">
-                    <h1 class="text-bold">아직 인증글이 없습니다!</h1>
-                </div>
+                <div>
+                    <h1 class="flex justify-start text-lg font-bold mb-2">인증 피드</h1>
+                    <div th:if="${#lists.isEmpty(feedList)}">
+                        <h1 class="text-bold">아직 인증글이 없습니다!</h1>
+                    </div>
 
-                <div class="flex flex-row gap-3" th:unless="${#lists.isEmpty(feedList)}">
-                    <div class="indicator" th:each="feed : ${feedList}">
-                        <span class="indicator-item badge badge-primary">new</span>
-                        <a th:href="|/feed/detail/${feed.id}|">
-                            <div class="grid w-32 h-32 bg-gray-300 place-items-center">
-                                <span th:text="${feed.contents}"></span>
+                    <div class="flex gap-3" th:unless="${#lists.isEmpty(feedList)}">
+                        <div class="flex flex-col w-full" th:each="feed : ${feedList}">
+                            <div class="flex justify-center">
+                                <a th:href="|/feed/detail/${feed.id}|">
+                                    <div class="grid w-32 h-32 bg-gray-300 place-items-center rounded-xl">
+                                        <span th:text="${feed.contents}"></span>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
+                            <div class="flex justify-center">
+                                <span th:text="${#strings.substring(feed.writer.nickname, 0, 10) + '...'}"></span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center items-center">
+                            <button class="btn btn-outline btn-secondary">
+                                <i class="fa-solid fa-arrow-right fa-lg"></i>
+                                더보기
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 </th:block>
