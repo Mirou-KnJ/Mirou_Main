@@ -80,4 +80,9 @@ public class ChallengeMemberService {
         challengeMember.finishChallenge();
     }
 
+    public int getCountByLinkedChallenge(Challenge challenge) {
+
+        return challengeMemberRepository.countByLinkedChallenge(challenge);
+    }
+
 }
