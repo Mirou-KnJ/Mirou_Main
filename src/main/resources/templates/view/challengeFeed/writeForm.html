@@ -1,16 +1,49 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <title>챌린지 인증하기</title>
+    <title th:text="${challenge.name} + '인증'"></title>
 </head>
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
-            <form class="flex flex-col justify-center min-h-screen" enctype="multipart/form-data"
-                  method="POST" th:action="|/feed/write/${challengeId}|">
+        <div class="flex flex-col justify-center w-1/2 mx-auto min-h-screen py-20 navbar bg-base-100">
 
-                <img id="preview">
+            <div class="flex flex-col">
+                <!-- FIXME NO IMG URL -->
+                <img th:if="${challengeImg}" class="border rounded-lg" th:src="${challengeImg}" alt="challengeImg">
+
+                <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
+                <div class="flex w-full items-center justify-center mt-3">
+                    <div class="flex flex-col">
+                        <div class="flex mt-2 gap-2">
+                            <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
+                                 th:data-tip="${challenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
+                                <i class="fa-solid fa-camera-retro fa-lg mr-2"></i>
+                                <p th:text="${challenge.method.getMethod()}"></p>
+                            </div>
+                            <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
+                                 th:data-tip="'참여 당일부터 ' + ${challenge.period} + '일 간 진행되요!'">
+                                <i class="fa-regular fa-calendar fa-lg mr-2"></i>
+                                <p th:text="${challenge.period} + '일 챌린지'"></p>
+                            </div>
+
+                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
+                                <i class="fa-solid fa-person-walking fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                                <i class="fa-solid fa-tree fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                <i class="fa-solid fa-pen fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
+                                <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="flex flex-col justify-center" enctype="multipart/form-data"
+                  method="POST" th:action="|/feed/write/${challenge.id}|">
+                <img class="my-5" id="preview">
                 <input type="file" class="file-input file-input-bordered file-input-info w-full max-w-xs"
                        id="img" name="img">
 
@@ -28,11 +61,11 @@
     </main>
 
     <script>
-        $("#img").on("change", function(event) {
+        $("#img").on("change", function (event) {
 
             var file = event.target.files[0];
 
-            if(!isImageFile(file)) {
+            if (!isImageFile(file)) {
                 alert("이미지 파일만 업로드 가능합니다");
                 $("#preview").attr("src", null);
                 $("#img").val("");
@@ -40,7 +73,7 @@
             }
 
             var reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 $("#preview").attr("src", e.target.result);
             }
 
