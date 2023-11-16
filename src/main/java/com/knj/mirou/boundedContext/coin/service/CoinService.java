@@ -33,34 +33,33 @@ public class CoinService {
 
         Coin coin = member.getCoin();
         int rewardCoin = Integer.parseInt(reward.getReward());
-
-        //TODO: 확률 조정 알고리즘
-        int randomCoin = randomCoin(rewardCoin);
+        double randomCoin = randomCoin(rewardCoin);
+        int randomResult = (int) randomCoin;
 
         //TODO: 지급 히스토리 기록
 
         coin = Coin.builder()
                 .id(coin.getId())
-                .currentCoin(coin.getCurrentCoin() + rewardCoin)
-                .totalGetCoin(coin.getTotalGetCoin() + rewardCoin)
+                .currentCoin(coin.getCurrentCoin() + randomResult)
+                .totalGetCoin(coin.getTotalGetCoin() + randomResult)
                 .build();
 
         coinRepository.save(coin);
     }
 
-    private int randomCoin(int rewardCoin) {
-        Random random = new Random();
-        int quarter = rewardCoin / 4;
-        int rand = random.nextInt(rewardCoin);
+    private double randomCoin(int rewardCoin) {
 
-        if (rand < quarter) {
-            return (int)(rewardCoin * 0.4);
-        } else if (rand < 2 * quarter) {
-            return (int)(rewardCoin * 0.3);
-        } else if (rand < 3 * quarter) {
-            return (int)(rewardCoin * 0.2);
+        Random random = new Random();
+        double quarter = 0.25;
+        double[] standard = {0.5, 0.9, 1.0};
+        double rand = random.nextDouble(0.0, 1.0);
+
+        if (rand < standard[0]) {
+            return random.nextDouble(rewardCoin * quarter, rewardCoin * quarter * 2);
+        } else if (rand < standard[1]) {
+            return random.nextDouble(rewardCoin * quarter * 2, rewardCoin * quarter * 3);
         } else {
-            return (int)(rewardCoin * 0.1);
+            return random.nextDouble(rewardCoin * quarter * 3, rewardCoin * quarter * 4);
         }
     }
 
