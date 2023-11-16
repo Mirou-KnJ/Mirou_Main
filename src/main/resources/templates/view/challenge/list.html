@@ -2,43 +2,103 @@
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>전체 챌린지 리스트 페이지</title>
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: #F9F9F9;
+            margin-right: 15px;
+            margin-bottom: 30px;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+
+        .btn-detail{
+            background-color: #DADADA;
+            border-radius: 20px;
+            overflow: hidden;
+            text-align: center;
+            display: inline-block;
+            padding: 7px;
+        }
+
+        .search{
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
-            <h1>전체 챌린지 리스트</h1>
+
+            <div class="search">
+                <div>
+                    <div>
+                        <input class="input input-bordered join-item" placeholder="Search"/>
+                    </div>
+                </div>
+                <select class="select select-bordered join-item">
+                    <option disabled selected>전체</option>
+                    <option>신규</option>
+                    <option>환경</option>
+                    <option>기타</option>
+                </select>
+                <div class="indicator">
+                    <button class="btn join-item">Search</button>
+                </div>
+            </div>
+
             <div class="overflow-x-auto">
 
                 <div th:if="${#lists.isEmpty(openedChallenges)}">
                     <h1>진행중인 챌린지가 없습니다!!</h1>
                 </div>
 
-                <table class="table" th:unless="${#lists.isEmpty(openedChallenges)}">
-                    <!-- head -->
-                    <thead>
-                    <tr>
-                        <td>챌린지 제목</td>
-                        <td>챌린지 내용</td>
-                        <td>소모 일상지원금</td>
-                        <td>상세보기</td>
-                    </tr>
-                    </thead>
+                <div th:unless="${#lists.isEmpty(openedChallenges)}">
 
-                    <tbody>
-                    <tr th:each="challenge : ${openedChallenges}">
-                        <td th:text="${challenge.name}"></td>
+                    <div class="card-container" th:each="challenge : ${openedChallenges}">
 
-                        <td th:text="${challenge.contents}"></td>
+                        <div class="card card-side shadow-xl">
 
-                        <td th:text="${challenge.joinCost}"></td>
+                            <figure><img class="card-img border rounded-lg" th:src="${challengeImg}" alt="challengeImg"></figure>
 
-                        <th>
-                            <a th:href="|/challenge/detail/${challenge.id}|" class="btn btn-sm">detail</a>
-                        </th>
-                    </tr>
-                    </tbody>
-                </table>
+                            <div class="card-body">
+                                <h2 class="card-title" th:text="${challenge.name}"></h2>
+
+                                <div class="stat-title">일상지원금</div>
+                                <div class="stat-value">
+                                    <span th:text="${challenge.joinCost}"></span>
+                                </div>
+
+                                <div class="stat-title">최대 소득</div>
+                                <div class="stat-value">
+                                    <span th:text="${challenge.joinCost}"></span>
+                                </div>
+
+                                <div class="flex gap-1">
+                                    <div class="badge badge-primary badge-outline" th:text="${challenge.method}"></div>
+                                    <div class="badge badge-secondary badge-outline"
+                                         th:text="${challenge.period} + '일 챌린지'"></div>
+                                    <div class="badge badge-primary badge-outline" th:text="${challenge.tag}"></div>
+                                </div>
+
+                                <div class="flex justify-center inline-block">
+                                    <i class="mt-2 flex fa-solid fa-star fa-lg" style="color: #f9c406;"></i>
+                                    <span class="flex ml-2 font-light text-sm">00명 참여중</span>
+                                </div>
+
+                                <div class="card-actions justify-end">
+                                    <a th:href="|/challenge/detail/${challenge.id}|" class="btn-detail btn-m">detail</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
