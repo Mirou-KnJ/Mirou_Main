@@ -37,6 +37,8 @@ public class ChallengeController {
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
 
+
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
     public String createForm() {

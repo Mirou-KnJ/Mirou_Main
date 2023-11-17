@@ -8,6 +8,7 @@ import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -29,6 +30,7 @@ public class ChallengeService {
 
     private final MemberService memberService;
     private final ChallengeMemberService challengeMemberService;
+    private final ChallengeFeedService challengeFeedService;
     private final ChallengeRepository challengeRepository;
 
     public List<Challenge> getAllList() {
@@ -107,6 +109,8 @@ public class ChallengeService {
 
         detailDTO.setCanJoin(challengeMemberService.canJoin(member));
         detailDTO.setMemberCount(challengeMemberService.getCountByLinkedChallenge(challenge));
+        detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(member, challenge));
+        detailDTO.setRecently3Feeds(challengeFeedService.getRecently3Feed(challenge));
 
         return RsData.of("S-1", "디테일 정보가 성공적으로 수집되었습니다.", detailDTO);
     }
