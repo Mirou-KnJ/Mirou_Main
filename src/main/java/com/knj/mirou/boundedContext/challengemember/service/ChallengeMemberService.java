@@ -3,6 +3,7 @@ package com.knj.mirou.boundedContext.challengemember.service;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengemember.config.CMemberConfigProperties;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.repository.ChallengeMemberRepository;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ChallengeMemberService {
 
+    private final CMemberConfigProperties CMemberConfigProps;
     private final PrivateRewardService privateRewardService;
     private final MemberService memberService;
     private final ChallengeMemberRepository challengeMemberRepository;
@@ -69,11 +71,9 @@ public class ChallengeMemberService {
 
         int count = challengeMemberRepository.countByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
 
-        //FIXME: 하드코딩 x
-        if(count >= 3) {
+        if(count >= CMemberConfigProps.getJoinLimit()) {
             return false;
         }
-
         return true;
     }
 
