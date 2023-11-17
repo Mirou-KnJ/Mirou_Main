@@ -76,6 +76,9 @@ public class ChallengeController {
     public String openedChallengeList(Model model) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+
+        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
+        model.addAttribute("ImageDateService", imageDataService);
         model.addAttribute("openedChallenges", openedChallenges);
         return "view/challenge/list";
     }

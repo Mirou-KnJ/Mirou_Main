@@ -51,7 +51,7 @@ public class ChallengeFeedController {
 
 
         //FIXME
-        Challenge challenge = challengeService.getById(challengeId);
+        Challenge challenge = challengeService.getById(challengeId).get();
         ImageData challengeImageData = imageDataService.getByIdAndTarget(challengeId, ImageTarget.CHALLENGE_IMG);
         String challengeImg;
 

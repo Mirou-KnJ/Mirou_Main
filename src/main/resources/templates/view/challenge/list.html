@@ -9,7 +9,6 @@
         }
 
         .card {
-            background-color: #F9F9F9;
             margin-right: 15px;
             margin-bottom: 30px;
             border-radius: 30px;
@@ -27,6 +26,24 @@
 
         .search{
             margin-bottom: 30px;
+        }
+
+        .info-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-item span {
+            margin-top: 5px;
+            font-size: 14px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -64,36 +81,34 @@
 
                         <div class="card card-side shadow-xl">
 
-                            <figure><img class="card-img border rounded-lg" th:src="${challengeImg}" alt="challengeImg"></figure>
+                            <figure style="height: 100%">
+                                <img class="card-img border rounded-lg" th:src="${ImageDateService.getOptimizingUrl(challenge.imgUrl, ListOption)}" alt="challengeImg">
+                            </figure>
 
                             <div class="card-body">
                                 <h2 class="card-title" th:text="${challenge.name}"></h2>
 
-                                <div class="stat-title">일상지원금</div>
-                                <div class="stat-value">
-                                    <span th:text="${challenge.joinCost}"></span>
-                                </div>
+                                <div class="info-container">
+                                    <div class="info-item">
+                                        <p class="mt-2 font-thin text-gray-500 mr-2">일상지원금</p>
+                                        <span th:text="${challenge.joinCost}"></span>
+                                    </div>
 
-                                <div class="stat-title">최대 소득</div>
-                                <div class="stat-value">
-                                    <span th:text="${challenge.joinCost}"></span>
-                                </div>
-
-                                <div class="flex gap-1">
-                                    <div class="badge badge-primary badge-outline" th:text="${challenge.method}"></div>
-                                    <div class="badge badge-secondary badge-outline"
-                                         th:text="${challenge.period} + '일 챌린지'"></div>
-                                    <div class="badge badge-primary badge-outline" th:text="${challenge.tag}"></div>
+                                    <div class="info-item">
+                                        <p class="mt-2 font-thin text-gray-500 mr-4">최대 소득</p>
+                                        <span th:text="${challenge.joinCost}"></span>
+                                    </div>
                                 </div>
 
                                 <div class="flex justify-center inline-block">
                                     <i class="mt-2 flex fa-solid fa-star fa-lg" style="color: #f9c406;"></i>
-                                    <span class="flex ml-2 font-light text-sm">00명 참여중</span>
+                                    <span class="flex ml-2 font-light text-sm mr-4">마감00남음</span>
                                 </div>
 
                                 <div class="card-actions justify-end">
                                     <a th:href="|/challenge/detail/${challenge.id}|" class="btn-detail btn-m">detail</a>
                                 </div>
+
                             </div>
                         </div>
                     </div>
