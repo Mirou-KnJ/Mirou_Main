@@ -1,5 +1,6 @@
 package com.knj.mirou.base.initData;
 
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
@@ -31,10 +32,9 @@ public class NotProd {
                 }
 
                 for(int i=1; i<=3; i++) {
+
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);
-                    challengeService.create("테스트 챌린지 " + i, "테스트 챌린지 " + i + "의 내용입니다.",
-                            1000, LocalDate.now(), 7, "ETC", "PHOTO",
-                            3, "테스트 챌린지 주의사항 입니다.");
+
                 }
 
                 publicRewardService.create(1, 1, "COIN", "100");

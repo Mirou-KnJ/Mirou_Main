@@ -50,6 +50,8 @@ public class Challenge extends BaseEntity {
 
     private String precautions;
 
+    private String imgUrl;
+
     public void openingChallenge() {
         this.status = ChallengeStatus.OPEN;
     }

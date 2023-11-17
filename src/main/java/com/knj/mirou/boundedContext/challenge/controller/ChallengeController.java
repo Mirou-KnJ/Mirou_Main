@@ -15,10 +15,13 @@ import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,10 +30,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/challenge")
@@ -51,27 +54,24 @@ public class ChallengeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
-    public String createChallenge(ChallengeCreateDTO createDTO) throws IOException {
+    public String create(@Valid ChallengeCreateDTO createDTO, MultipartFile img,
+                         BindingResult bindingResult) throws IOException {
 
-        RsData<Challenge> createRsData =
-                challengeService.tryCreate(createDTO);
+        if(bindingResult.hasErrors()) {
+            log.error("[ERROR] : " + bindingResult.getAllErrors());
+            return "redirect:/challenge/create";
+        }
 
+        RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, img);
         if (createRsData.isFail()) {
-            //TODO : 오류 원인 반환 후 다시 생성페이지로 리다이렉트
+            createRsData.printResult();
             return "redirect:/challenge/create";
         }
 
-        long challengeId = createRsData.getData().getId();
-        RsData<String> uploadRsData = imageDataService.uploadImg(createDTO.getImg(), ImageTarget.CHALLENGE_IMG);
+        Challenge createdChallenge = createRsData.getData();
+        imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, createdChallenge.getImgUrl());
 
-        if (uploadRsData.isFail()) {
-            //TODO : 오류 원인 반환 후 다시 생성페이지로 리다이렉트
-            return "redirect:/challenge/create";
-        }
-
-        imageDataService.create(challengeId, ImageTarget.CHALLENGE_IMG, uploadRsData.getData());
-
-        return "redirect:/challenge/detail/" + challengeId;
+        return "redirect:/challenge/detail/" + createdChallenge.getId();        //굳이 디테일로 리다이렉트?
     }
 
     @GetMapping("/list")

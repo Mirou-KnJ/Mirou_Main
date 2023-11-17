@@ -60,12 +60,11 @@ public class ImageDataService {
         return OImageData.get();
     }
 
-    public RsData<String> uploadImg(MultipartFile file, ImageTarget imageTarget) throws IOException {
+    public RsData<String> tryUploadImg(MultipartFile file, ImageTarget imageTarget) throws IOException {
 
         RsData<String> isImg = isImgFile(file);
 
-        //1차 차단 -> 이미지 여부 검사
-        if (isImg.isFail()) {
+        if (isImgFile(file).isFail()) {
             return isImg;
         }
 

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class ChallengeCreateDTO {
 
     @NotBlank
@@ -35,7 +37,7 @@ public class ChallengeCreateDTO {
     private int period;
 
     @NotBlank
-    private String challengeTag;
+    private String tag;
 
     @NotBlank
     private String method;
@@ -47,7 +49,4 @@ public class ChallengeCreateDTO {
 
     @NotBlank
     private String precaution;
-
-    @NotBlank
-    private MultipartFile img;
 }

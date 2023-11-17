@@ -34,7 +34,7 @@ public class ChallengeFeedService {
     public RsData<String> writeFeed(Challenge challenge, Member loginedMember, MultipartFile img,
                                     String contents) throws IOException {
 
-        RsData<String> uploadRsData = imageDataService.uploadImg(img, ImageTarget.FEED_IMG);
+        RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
 
         if(uploadRsData.isFail()) {
             return uploadRsData;
