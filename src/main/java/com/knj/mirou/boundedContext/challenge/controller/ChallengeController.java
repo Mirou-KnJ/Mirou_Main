@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
@@ -50,11 +51,10 @@ public class ChallengeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
-    public String createChallenge(String name, String contents, MultipartFile img, int joinCost, LocalDate joinDeadLine,
-                                  int period, String tag, String method, int level, String precaution) throws IOException {
+    public String createChallenge(ChallengeCreateDTO createDTO) throws IOException {
 
         RsData<Challenge> createRsData =
-                challengeService.create(name, contents, joinCost, joinDeadLine, period, tag, method, level, precaution);
+                challengeService.tryCreate(createDTO);
 
         if (createRsData.isFail()) {
             //TODO : 오류 원인 반환 후 다시 생성페이지로 리다이렉트
@@ -62,7 +62,7 @@ public class ChallengeController {
         }
 
         long challengeId = createRsData.getData().getId();
-        RsData<String> uploadRsData = imageDataService.uploadImg(img, ImageTarget.CHALLENGE_IMG);
+        RsData<String> uploadRsData = imageDataService.uploadImg(createDTO.getImg(), ImageTarget.CHALLENGE_IMG);
 
         if (uploadRsData.isFail()) {
             //TODO : 오류 원인 반환 후 다시 생성페이지로 리다이렉트
