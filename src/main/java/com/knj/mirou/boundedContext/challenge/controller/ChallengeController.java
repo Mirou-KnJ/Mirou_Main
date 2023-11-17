@@ -62,7 +62,13 @@ public class ChallengeController {
             return "redirect:/challenge/create";
         }
 
-        RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, img);
+        RsData<String> tryUploadRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
+        if(tryUploadRs.isFail()) {
+            tryUploadRs.printResult();
+            return "redirect:/challenge/create";
+        }
+
+        RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, tryUploadRs.getData());
         if (createRsData.isFail()) {
             createRsData.printResult();
             return "redirect:/challenge/create";

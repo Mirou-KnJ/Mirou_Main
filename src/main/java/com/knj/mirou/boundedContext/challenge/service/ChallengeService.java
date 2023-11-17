@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -50,9 +52,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, MultipartFile img) throws IOException {
-
-        //TODO: 챌린지 생성 유효성 검사 ex) 이름 중복 불가, 비어있는 내용 불가 등
+    public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
 
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
@@ -60,11 +60,6 @@ public class ChallengeService {
 
         if(!checkUniqueName(createDTO.getName())) {
             return RsData.of("F-2", "%s는 이미 사용 중인 챌린지 이름 입니다.".formatted(createDTO.getName()));
-        }
-
-        RsData<String> tryUploadRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
-        if(tryUploadRs.isFail()) {
-            return RsData.of(tryUploadRs.getResultCode(), tryUploadRs.getMsg());
         }
 
         Challenge newChallenge = Challenge.builder()
@@ -78,7 +73,7 @@ public class ChallengeService {
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
                 .precautions(createDTO.getPrecaution())
-                .imgUrl(tryUploadRs.getData())
+                .imgUrl(imgUrl)
                 .build();
 
         Challenge challenge = challengeRepository.save(newChallenge);
