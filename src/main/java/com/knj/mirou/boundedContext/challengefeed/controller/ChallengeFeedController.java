@@ -38,6 +38,7 @@ public class ChallengeFeedController {
 
     private final MemberService memberService;
     private final ChallengeService challengeService;
+    private final ChallengeMemberService challengeMemberService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
 
@@ -55,23 +56,16 @@ public class ChallengeFeedController {
     public String write(@PathVariable(value = "id") long challengeId, MultipartFile img,
                         String contents, Principal principal) throws IOException {
 
-        Optional<Member> OMember = memberService.getByLoginId(principal.getName());
-        if(OMember.isEmpty()) {
-            log.error("회원 정보가 누락되었습니다.");
-            return "redirect:/feed/write" + challengeId;
+        String loginId = principal.getName();
+        RsData<ChallengeMember> checkValidRs = challengeFeedService.checkValidRequest(challengeId, loginId);
+        if(checkValidRs.isFail()) {
+            checkValidRs.printResult();
+            return "redirect:/";    //FIXME
         }
 
-        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()){
-            log.error("대상 챌린지를 찾을 수 없습니다.");
-            return "redirect:/feed/write" + challengeId;
-        }
-        Member loginMember = OMember.get();
-        Challenge challenge = OChallenge.get();
+        RsData<String> writeRsData =
+                challengeFeedService.tryWrite(checkValidRs.getData(), img, contents);
 
-        RsData<String> writeRsData = challengeFeedService.tryWrite(challenge, loginMember, img, contents);
-
-        //TODO: 반드시 구조개선
         if (writeRsData.isFail()) {
             writeRsData.printResult();
             return "redirect:/feed/write/" + challengeId;

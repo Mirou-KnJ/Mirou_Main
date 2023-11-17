@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challenge.model.dtos;
 
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
@@ -21,6 +22,7 @@ public class ChallengeDetailDTO {
     private boolean canJoin;
     private boolean canWrite;
     private int memberCount;
+    private Member loginMember;
     private Challenge challenge;
     private List<PublicReward> publicRewards;
     private List<PrivateReward> privateRewards;

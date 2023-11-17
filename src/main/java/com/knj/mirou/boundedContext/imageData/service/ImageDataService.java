@@ -110,7 +110,7 @@ public class ImageDataService {
         return RsData.of("F-1", "이미지 파일이 아닙니다.");
     }
 
-    public RsData<String> detectLabelsGcs(String imgUrl, Challenge linkedChallenge) throws IOException {
+    public RsData<String> detectLabelsGcs(String imgUrl) throws IOException {
 
         try (ImageAnnotatorClient vision = ImageAnnotatorClient.create(visionAPISettings)) {
 
