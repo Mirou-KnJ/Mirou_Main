@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberServi
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -46,8 +47,24 @@ public class ChallengeFeedController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
     public String writeForm(@PathVariable(value = "id") long challengeId, Model model, Principal principal) {
-        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
-        model.addAttribute("challengeId", challengeId);
+
+
+        //FIXME
+        Challenge challenge = challengeService.getById(challengeId);
+        ImageData challengeImageData = imageDataService.getByIdAndTarget(challengeId, ImageTarget.CHALLENGE_IMG);
+        String challengeImg;
+
+        if(challengeImageData == null) {
+            challengeImg = imageDataService
+                    .getOptimizingUrl("https://kr.object.ncloudstorage.com/mirou/etc/no_img.png"
+                            , OptimizerOption.CHALLENGE_DETAIL);
+        } else {
+            challengeImg = imageDataService
+                    .getOptimizingUrl(challengeImageData.getImageUrl(), OptimizerOption.CHALLENGE_DETAIL);
+        }
+
+        model.addAttribute("challenge", challenge);
+        model.addAttribute("challengeImg", challengeImg);
 
         return "view/challengeFeed/writeForm";
 
