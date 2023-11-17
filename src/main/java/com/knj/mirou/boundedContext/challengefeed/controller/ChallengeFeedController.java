@@ -1,20 +1,15 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
-import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
-import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
-import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
-import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,9 +31,6 @@ import java.util.Optional;
 @RequestMapping("/feed")
 public class ChallengeFeedController {
 
-    private final MemberService memberService;
-    private final ChallengeService challengeService;
-    private final ChallengeMemberService challengeMemberService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
 
@@ -65,7 +57,6 @@ public class ChallengeFeedController {
 
         RsData<String> writeRsData =
                 challengeFeedService.tryWrite(checkValidRs.getData(), img, contents);
-
         if (writeRsData.isFail()) {
             writeRsData.printResult();
             return "redirect:/feed/write/" + challengeId;
@@ -77,7 +68,13 @@ public class ChallengeFeedController {
     @GetMapping("/detail/{id}")
     public String showDetail(@PathVariable(value = "id") long feedId, Model model) {
 
-        ChallengeFeed feed = challengeFeedService.getById(feedId);
+        Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
+        if(OFeed.isEmpty()) {
+            return "redirect:/";        //FIXME
+        }
+        ChallengeFeed feed = OFeed.get();
+
+        //FIXME: 크기 조정된 이미지로 변경 필요
         ImageData feedImg = imageDataService.getByIdAndTarget(feedId, ImageTarget.FEED_IMG);
 
         model.addAttribute("feed", feed);

@@ -1,8 +1,8 @@
 package com.knj.mirou.boundedContext.challenge.model.dtos;
 
-import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import lombok.Data;

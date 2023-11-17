@@ -47,8 +47,7 @@ public class ChallengeFeedService {
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
 
         if(OMember.isEmpty() || OChallenge.isEmpty()) {
-            log.error("챌린지 참여 상태가 올바르지 않습니다.");
-            return RsData.of("F-1", "XXX");
+            return RsData.of("F-1", "챌린지 참여 상태가 올바르지 않습니다.");
         }
 
         Challenge challenge = OChallenge.get();
@@ -57,11 +56,10 @@ public class ChallengeFeedService {
         Optional<ChallengeMember> OChallengeMember =
                 challengeMemberService.getByChallengeAndMember(challenge, loginMember);
         if(OChallengeMember.isEmpty()) {
-            log.error("챌린지 참여 상태가 올바르지 않습니다.");
-            return RsData.of("F-2", "XXX");
+            return RsData.of("F-2", "챌린지 참여 상태가 올바르지 않습니다.");
         }
 
-        return RsData.of("S-1", "OOO", OChallengeMember.get());
+        return RsData.of("S-1", "참여 정보가 확인되었습니다.", OChallengeMember.get());
     }
 
     @Transactional
@@ -102,11 +100,12 @@ public class ChallengeFeedService {
         RsData<PrivateReward> validRewardRs =
                 privateRewardService.getValidReward(challenge, linkedChallengeMember, successNum);
 
-        if(validRewardRs.getResultCode().startsWith("S-2")) {
+        if(validRewardRs.isSuccess()) {
+            coinService.giveCoin(loginMember, validRewardRs.getData());
+        }
+
+        if(validRewardRs.getResultCode().contains("S-2")) {
             challengeMemberService.finishChallenge(linkedChallengeMember);
-            coinService.giveCoin(loginMember, validRewardRs.getData());
-        } else if(validRewardRs.isSuccess()) {
-            coinService.giveCoin(loginMember, validRewardRs.getData());
         }
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
@@ -125,15 +124,9 @@ public class ChallengeFeedService {
                 .findTodayLinkedChallengesForMember(challenge, member, startDate, endDate).isPresent();
     }
 
-    public ChallengeFeed getById(long feedId) {
+    public Optional<ChallengeFeed> getById(long feedId) {
 
-        //FIXME: isPresent 없는 get 호출
-        return challengeFeedRepository.findById(feedId).get();
-    }
-
-    public List<ChallengeFeed> getByChallenge(Challenge linkedChallenge) {
-
-        return challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
+        return challengeFeedRepository.findById(feedId);
     }
 
     public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
