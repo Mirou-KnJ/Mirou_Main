@@ -144,10 +144,12 @@
                             <div class="flex justify-center">
                                 <!-- TODO: value값을 challengeMember의 successNumber로-->
                                 <progress class="progress progress-success w-48" value="1"
-                                          th:max="${rewardList.get(#lists.size(rewardList)-1).round}"></progress>
+                                          th:max="${detailDTO.privateRewards
+                                          .get(#lists.size(detailDTO.privateRewards)-1).round}"></progress>
                             </div>
                             <div class="flex justify-center mt-2">
-                                <h1 th:text=" '1' + ' / ' + ${rewardList.get(#lists.size(rewardList)-1).round}"></h1>
+                                <h1 th:text=" '1' + ' / ' + ${detailDTO.privateRewards
+                                .get(#lists.size(detailDTO.privateRewards)-1).round}"></h1>
                             </div>
                         </div>
 
@@ -207,8 +209,22 @@
                                 <th class="mr-5">최대 보상</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr class="flex justify-around" th:each="reward : ${rewardList}">
+                            <tbody th:if="${detailDTO.isJoin()}">
+                            <tr class="flex justify-around" th:each="reward : ${detailDTO.privateRewards}">
+                                <td th:text="${reward.round}"></td>
+                                <td>
+                                    <span th:text="${reward.reward}"></span>
+                                    <span th:text="${reward.rewardType.getRewardType()}"></span>
+                                    <i class="fa-solid fa-coins fa-lg pl-2 pt-2" style="color: #eac02a;"
+                                       th:if="${reward.rewardType.getRewardType().equals('코인')}"></i>
+                                    <i class="fa-solid fa-gift fa-lg pl-2 pt-2" style="color: #d23232;"
+                                       th:if="${reward.rewardType.getRewardType().equals('상품')}"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                            <tbody th:unless="${detailDTO.isJoin()}">
+                            <tr class="flex justify-around" th:each="reward : ${detailDTO.publicRewards}">
                                 <td th:text="${reward.round}"></td>
                                 <td>
                                     <span th:text="${reward.reward}"></span>

@@ -107,12 +107,6 @@ public class ChallengeController {
         model.addAttribute("challengeImg",
                 imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
 
-        if(detailDTO.isJoin()) {
-            model.addAttribute("rewardList", detailDTO.getPrivateRewards());
-        } else {
-            model.addAttribute("rewardList", detailDTO.getPublicRewards());
-        }
-
         return "view/challenge/detail";
     }
 
