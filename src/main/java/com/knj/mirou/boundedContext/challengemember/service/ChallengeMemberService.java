@@ -23,7 +23,6 @@ import java.util.Optional;
 public class ChallengeMemberService {
 
     private final MemberService memberService;
-    private final ChallengeService challengeService;
     private final ChallengeMemberRepository challengeMemberRepository;
 
     @Transactional

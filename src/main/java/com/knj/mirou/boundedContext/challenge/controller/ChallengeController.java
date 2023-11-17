@@ -41,10 +41,9 @@ import java.util.Optional;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
-    private final MemberService memberService;
-    private final ChallengeMemberService challengeMemberService;
-    private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
+
+
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
@@ -94,8 +93,8 @@ public class ChallengeController {
     public String showDetail(@PathVariable(value = "id") long challengeId, Principal principal, Model model) {
 
         String loginId = principal.getName();
-        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
 
+        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
         if(getDetailRs.isFail()) {
             getDetailRs.printResult();
             return "redirect:/";        //fixme
@@ -104,21 +103,15 @@ public class ChallengeController {
         ChallengeDetailDTO detailDTO = getDetailRs.getData();
         Challenge challenge = detailDTO.getChallenge();
 
-        model.addAttribute("isJoin", detailDTO.isJoin());
+        model.addAttribute("detailDTO", detailDTO);
+        model.addAttribute("challengeImg",
+                imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
 
         if(detailDTO.isJoin()) {
             model.addAttribute("rewardList", detailDTO.getPrivateRewards());
         } else {
             model.addAttribute("rewardList", detailDTO.getPublicRewards());
         }
-
-        model.addAttribute("memberCount", detailDTO.getMemberCount());
-        model.addAttribute("canJoin", detailDTO.isCanJoin());
-        model.addAttribute("challengeImg",
-                imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
-        model.addAttribute("canWrite", detailDTO.isCanWrite());
-        model.addAttribute("challenge", challenge);
-        model.addAttribute("feedList", detailDTO.getRecently3Feeds());
 
         return "view/challenge/detail";
     }

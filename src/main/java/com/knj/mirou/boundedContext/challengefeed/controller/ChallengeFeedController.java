@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -59,7 +60,13 @@ public class ChallengeFeedController {
                         String contents, Principal principal) throws IOException {
 
         Member loginedMember = memberService.getByLoginId(principal.getName()).get();
-        Challenge challenge = challengeService.getById(challengeId);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()){
+            log.error("대상 챌린지를 찾을 수 없습니다.");
+            return "redirect:/feed/write" + challengeId;
+        }
+
+        Challenge challenge = OChallenge.get();
 
         RsData<String> writeRsData = challengeFeedService.writeFeed(challenge, loginedMember, img, contents);
 

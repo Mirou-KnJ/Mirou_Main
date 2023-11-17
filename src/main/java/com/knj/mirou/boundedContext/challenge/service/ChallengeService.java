@@ -37,8 +37,6 @@ public class ChallengeService {
 
     private final MemberService memberService;
     private final ChallengeMemberService challengeMemberService;
-    private final PublicRewardService publicRewardService;
-    private final PrivateRewardService privateRewardService;
     private final ChallengeFeedService challengeFeedService;
     private final ChallengeRepository challengeRepository;
 

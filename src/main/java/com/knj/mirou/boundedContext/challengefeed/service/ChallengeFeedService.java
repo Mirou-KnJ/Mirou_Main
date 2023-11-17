@@ -27,8 +27,6 @@ public class ChallengeFeedService {
 
     private final ChallengeFeedRepository challengeFeedRepository;
     private final ImageDataService imageDataService;
-    private final ChallengeService challengeService;
-    private final MemberService memberService;
 
     @Transactional
     public RsData<String> writeFeed(Challenge challenge, Member loginedMember, MultipartFile img,
