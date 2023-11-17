@@ -39,19 +39,15 @@ public class ChallengeFeedController {
     private final MemberService memberService;
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
-    private final ChallengeMemberService challengeMemberService;
     private final ImageDataService imageDataService;
-    private final PrivateRewardService privateRewardService;
-    private final CoinService coinService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
-    public String writeForm(@PathVariable(value = "id") long challengeId, Model model, Principal principal) {
-        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
+    public String writeForm(@PathVariable(value = "id") long challengeId, Model model) {
+
         model.addAttribute("challengeId", challengeId);
 
         return "view/challengeFeed/writeForm";
-
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -59,39 +55,26 @@ public class ChallengeFeedController {
     public String write(@PathVariable(value = "id") long challengeId, MultipartFile img,
                         String contents, Principal principal) throws IOException {
 
-        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
+        Optional<Member> OMember = memberService.getByLoginId(principal.getName());
+        if(OMember.isEmpty()) {
+            log.error("회원 정보가 누락되었습니다.");
+            return "redirect:/feed/write" + challengeId;
+        }
+
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()){
             log.error("대상 챌린지를 찾을 수 없습니다.");
             return "redirect:/feed/write" + challengeId;
         }
-
+        Member loginMember = OMember.get();
         Challenge challenge = OChallenge.get();
 
-        RsData<String> writeRsData = challengeFeedService.writeFeed(challenge, loginedMember, img, contents);
+        RsData<String> writeRsData = challengeFeedService.tryWrite(challenge, loginMember, img, contents);
 
         //TODO: 반드시 구조개선
         if (writeRsData.isFail()) {
             writeRsData.printResult();
             return "redirect:/feed/write/" + challengeId;
-        } else {
-            ChallengeMember challengeMember =
-                    challengeMemberService.getByChallengeAndMember(challenge, loginedMember).get();
-
-            int successNum = challengeMemberService.updateSuccess(challengeMember);
-            RsData<PrivateReward> validReward =
-                    privateRewardService.getValidReward(challenge, challengeMember, successNum);
-
-            validReward.printResult();
-
-            if(validReward.getResultCode().startsWith("S-2")) {
-                challengeMemberService.finishChallenge(challengeMember);
-                coinService.giveCoin(loginedMember, validReward.getData());
-            } else if(validReward.isSuccess()) {
-                coinService.giveCoin(loginedMember, validReward.getData());
-            }
-
-            writeRsData.printResult();
         }
 
         return "redirect:/challenge/detail/" + challengeId;

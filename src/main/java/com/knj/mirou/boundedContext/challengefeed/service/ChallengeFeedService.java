@@ -4,9 +4,14 @@ import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
+import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
+import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
+import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,13 +31,21 @@ public class ChallengeFeedService {
 
     private final ChallengeFeedRepository challengeFeedRepository;
     private final ImageDataService imageDataService;
+    private final ChallengeMemberService challengeMemberService;
+    private final PrivateRewardService privateRewardService;
+    private final CoinService coinService;
 
     @Transactional
-    public RsData<String> writeFeed(Challenge challenge, Member loginedMember, MultipartFile img,
+    public RsData<String> tryWrite(Challenge challenge, Member loginedMember, MultipartFile img,
                                     String contents) throws IOException {
 
-        RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
+        Optional<ChallengeMember> OChallengeMember =
+                challengeMemberService.getByChallengeAndMember(challenge, loginedMember);
+        if(OChallengeMember.isEmpty()) {
+            return RsData.of("F-1", "챌린지 참여 정보가 유효하지 않습니다.");
+        }
 
+        RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
         if(uploadRsData.isFail()) {
             return uploadRsData;
         }
@@ -52,15 +66,29 @@ public class ChallengeFeedService {
             return safeSearchRsData;
         }
 
-        ChallengeFeed newFeed = ChallengeFeed.builder()
+        ChallengeFeed feed = ChallengeFeed.builder()
                 .writer(loginedMember)
                 .linkedChallenge(challenge)
                 .contents(contents)
+                .imgUrl(imgUrl)
                 .build();
 
-        Long feedId = challengeFeedRepository.save(newFeed).getId();
+        ChallengeFeed saveFeed = challengeFeedRepository.save(feed);
+        imageDataService.create(saveFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
 
-        imageDataService.create(feedId, ImageTarget.FEED_IMG, imgUrl);
+        ChallengeMember linkedChallengeMember = OChallengeMember.get();
+
+        int successNum = challengeMemberService.updateSuccess(linkedChallengeMember);
+
+        RsData<PrivateReward> validRewardRs =
+                privateRewardService.getValidReward(challenge, linkedChallengeMember, successNum);
+
+        if(validRewardRs.getResultCode().startsWith("S-2")) {
+            challengeMemberService.finishChallenge(linkedChallengeMember);
+            coinService.giveCoin(loginedMember, validRewardRs.getData());
+        } else if(validRewardRs.isSuccess()) {
+            coinService.giveCoin(loginedMember, validRewardRs.getData());
+        }
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
     }
