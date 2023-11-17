@@ -49,9 +49,8 @@ public class ChallengeFeedController {
     @GetMapping("/write/{id}")
     public String writeForm(@PathVariable(value = "id") long challengeId, Model model, Principal principal) {
 
-
         //FIXME
-        Challenge challenge = challengeService.getById(challengeId);
+        Challenge challenge = challengeService.getById(challengeId).get();
         ImageData challengeImageData = imageDataService.getByIdAndTarget(challengeId, ImageTarget.CHALLENGE_IMG);
         String challengeImg;
 
