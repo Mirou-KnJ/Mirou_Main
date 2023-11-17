@@ -1,7 +1,9 @@
 package com.knj.mirou.boundedContext.coin.service;
 
+import com.knj.mirou.base.enums.ChangeType;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.coin.repository.CoinRepository;
+import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.Random;
 @Transactional(readOnly = true)
 public class CoinService {
 
+    private final CoinHistoryService coinHistoryService;
     private final CoinRepository coinRepository;
 
     @Transactional
@@ -36,8 +39,6 @@ public class CoinService {
         double randomCoin = randomCoin(rewardCoin);
         int randomResult = (int) randomCoin;
 
-        //TODO: 지급 히스토리 기록
-
         coin = Coin.builder()
                 .id(coin.getId())
                 .currentCoin(coin.getCurrentCoin() + randomResult)
@@ -45,6 +46,9 @@ public class CoinService {
                 .build();
 
         coinRepository.save(coin);
+
+        //FIXME: 명확한 적립 경로(contents) 기재
+        coinHistoryService.create(member, ChangeType.GET, randomResult, "챌린지 인증 성공 적립");
     }
 
     private double randomCoin(int rewardCoin) {
