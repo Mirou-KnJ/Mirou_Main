@@ -5,6 +5,7 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/reward")
@@ -26,8 +29,13 @@ public class RewardController {
     @GetMapping("/setting/{challengeId}")
     public String settingForm(@PathVariable(value = "challengeId") long challengeId, Model model) {
 
-        Challenge byId = challengeService.getById(challengeId);
-        List<PublicReward> rewardList = byId.getPublicReward();
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            log.error("세팅 대상 챌린지를 찾을 수 없습니다.");
+            return "redirect:/";        //FIXME
+        }
+
+        List<PublicReward> rewardList = OChallenge.get().getPublicReward();
 
         model.addAttribute("challengeId", challengeId);
         model.addAttribute("rewardList", rewardList);
@@ -46,8 +54,13 @@ public class RewardController {
     @GetMapping("/confirmSettings/{id}")
     public String getConfirmForm(@PathVariable(value = "id") long challengeId, Model model) {
 
-        Challenge challenge = challengeService.getById(challengeId);
-        model.addAttribute("challenge", challenge);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            log.error("세팅 대상 챌린지를 찾을 수 없습니다");
+            return "redirect:/";        //FIXME
+        }
+
+        model.addAttribute("challenge", OChallenge.get());
 
         return "view/reward/confirmForm";
     }
@@ -56,8 +69,13 @@ public class RewardController {
     public String confirmSettings(@PathVariable(value = "id") long challengeId) {
 
         //TODO: 유효성 검사 (진행 일수에 적절한 보상 설정인지 등)
-        Challenge challenge = challengeService.getById(challengeId);
-        challengeService.opening(challenge);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            log.info("세팅 대상 챌린지를 찾을 수 없습니다.");
+            return "redirect:/confirmSettings/" + challengeId;
+        }
+
+        challengeService.opening(OChallenge.get());
 
         return "redirect:/member/admin";
     }

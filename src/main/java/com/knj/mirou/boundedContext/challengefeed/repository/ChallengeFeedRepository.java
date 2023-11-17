@@ -27,4 +27,6 @@ public interface ChallengeFeedRepository extends JpaRepository<ChallengeFeed, Lo
             @Param("endOfDay") LocalDateTime endOfDay
     );
 
+    List<ChallengeFeed> findTop3ByLinkedChallengeOrderByCreateDateAsc(Challenge linkedChallenge);
+
 }

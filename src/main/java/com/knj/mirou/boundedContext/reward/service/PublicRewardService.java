@@ -6,11 +6,14 @@ import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.model.enums.RewardType;
 import com.knj.mirou.boundedContext.reward.repository.PublicRewardRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -22,10 +25,15 @@ public class PublicRewardService {
     @Transactional
     public void create(long challengeId, int round, String rewardType, String reward) {
 
-        Challenge challengeById = challengeService.getById(challengeId);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+
+        if(OChallenge.isEmpty()) {
+            log.error("챌린지를 찾을 수 없습니다");
+            return;
+        }
 
         PublicReward newReward = PublicReward.builder()
-                .linkedChallenge(challengeById)
+                .linkedChallenge(OChallenge.get())
                 .round(round)
                 .rewardType(RewardType.valueOf(rewardType))
                 .reward(reward)

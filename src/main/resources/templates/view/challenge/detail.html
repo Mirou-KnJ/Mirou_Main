@@ -1,7 +1,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <title th:text="${challenge.name}"></title>
+    <title th:text="${detailDTO.challenge.name}"></title>
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function () {
             var cantJoinBtn = document.getElementById('cantJoinBtn');
@@ -22,69 +22,79 @@
 
                 <img class="border rounded-lg" th:src="${challengeImg}" alt="challengeImg">
 
-                <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
+                <h1 class="my-3 text-2xl font-bold" th:text="${detailDTO.challenge.name}"></h1>
 
                 <div class="flex justify-center inline-block">
                     <i class="mt-2 flex fa-solid fa-star fa-lg" style="color: #f9c406;"></i>
-                    <span class="flex ml-2 font-light text-sm" th:text="${memberCount} + '명 참여중'"></span>
+                    <span class="flex ml-2 font-light text-sm" th:text="${detailDTO.memberCount} + '명 참여중'"></span>
                 </div>
 
                 <div class="flex w-full justify-between items-center mt-3">
                     <div class="flex flex-col">
                         <div>
-                            <p th:text="${challenge.getJoinDeadLineFormat()}"></p>
+                            <p th:text="${detailDTO.challenge.getJoinDeadLineFormat()}"></p>
                         </div>
 
                         <div class="flex mt-2 gap-2">
 
                             <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
-                                 th:data-tip="${challenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
-                                <i class="fa-solid fa-camera-retro fa-lg mr-2"></i>
-                                <p th:text="${challenge.method.getMethod()}"></p>
+                                 th:data-tip="${detailDTO.challenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
+
+                                <i class="fa-solid fa-camera-retro fa-lg mr-2"
+                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('인증샷 인증')}"></i>
+                                <i class="fa-solid fa-font fa-lg mr-2"
+                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('텍스트 인증')}"></i>
+                                <i class="fa-solid fa-star-of-life fa-lg mr-2"
+                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('기타')}"></i>
+
+
+                                <p th:text="${detailDTO.challenge.method.getMethod()}"></p>
                             </div>
                             <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
-                                 th:data-tip="'참여 당일부터 ' + ${challenge.period} + '일 간 진행되요!'">
+                                 th:data-tip="'참여 당일부터 ' + ${detailDTO.challenge.period} + '일 간 진행되요!'">
                                 <i class="fa-regular fa-calendar fa-lg mr-2"></i>
-                                <p th:text="${challenge.period} + '일 챌린지'"></p>
+                                <p th:text="${detailDTO.challenge.period} + '일 챌린지'"></p>
                             </div>
 
                             <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
+
                                 <i class="fa-solid fa-person-walking fa-lg mr-2"
-                                   th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
                                 <i class="fa-solid fa-tree fa-lg mr-2"
-                                   th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
                                 <i class="fa-solid fa-pen fa-lg mr-2"
-                                   th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
-                                <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('기타')}"></i>
+
+                                <p th:text="${detailDTO.challenge.tag.getChallengeTag()}"></p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex shadow-xl mb-2" th:if="${isJoin}">
+                    <div class="flex shadow-xl mb-2" th:if="${detailDTO.isJoin}">
                         <div class="flex flex-col rounded-md bg-white py-3 px-2">
                             <a class="btn m-3 rounded-md bg-yellow-300"
-                               th:href="|/feed/write/${challenge.id}|" th:disabled="${canWrite}">
+                               th:href="|/feed/write/${detailDTO.challenge.id}|" th:disabled="${detailDTO.canWrite}">
                                 <i class="fa-solid fa-check"></i>
                             </a>
-                            <span th:if="${!canWrite}" class="flex justify-center text-sm font-thin">인증하기</span>
-                            <span th:if="${canWrite}" class="flex justify-center text-sm font-thin tooltip"
+                            <span th:if="${!detailDTO.canWrite}" class="flex justify-center text-sm font-thin">인증하기</span>
+                            <span th:if="${detailDTO.canWrite}" class="flex justify-center text-sm font-thin tooltip"
                                   data-tip="오늘은 이미 인증을 완료했어요!">인증완료</span>
                         </div>
                     </div>
 
                     <!-- FIXME: 두 가지 상황을 다 코드에 놓지 말고, 클릭했을 때 검사하는 것으로 변경 -->
-                    <div class="flex mb-2" th:unless="${isJoin}">
-                        <div class="flex shadow-xl ml-3" th:if="${canJoin}">
+                    <div class="flex mb-2" th:unless="${detailDTO.isJoin}">
+                        <div class="flex shadow-xl ml-3" th:if="${detailDTO.canJoin}">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a class="btn m-3 rounded-md bg-purple-300"
-                                   th:href="|/challengeMember/join/${challenge.id}|">
+                                   th:href="|/challengeMember/join/${detailDTO.challenge.id}|">
                                     <i class="fa-regular fa-user fa-lg"></i>
                                 </a>
                                 <span class="mt-2 flex justify-center text-sm font-thin">참가하기</span>
                             </div>
                         </div>
 
-                        <div class="flex shadow-xl ml-3" th:unless="${canJoin}">
+                        <div class="flex shadow-xl ml-3" th:unless="${detailDTO.canJoin}">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a id="cantJoinBtn" class="btn btn-info rounded-md">
                                     <i class="fa-regular fa-user"></i>
@@ -104,28 +114,28 @@
                         <div class="rating mb-2">
                             <h1 class="mt-2 font-thin text-gray-500 mr-4">예상 난이도</h1>
                             <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
-                                   th:checked="${challenge.level} == 1"/>
+                                   th:checked="${detailDTO.challenge.level} == 1"/>
                             <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
-                                   th:checked="${challenge.level} == 2"/>
+                                   th:checked="${detailDTO.challenge.level} == 2"/>
                             <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
-                                   th:checked="${challenge.level} == 3"/>
+                                   th:checked="${detailDTO.challenge.level} == 3"/>
                             <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
-                                   th:checked="${challenge.level} == 4"/>
+                                   th:checked="${detailDTO.challenge.level} == 4"/>
                             <input disabled type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400"
-                                   th:checked="${challenge.level} == 5"/>
+                                   th:checked="${detailDTO.challenge.level} == 5"/>
                         </div>
 
                         <div class="flex tooltip"
                              data-tip="생활지원금은 챌린지 참여 시에만 사용되며, 매주 월요일에 3000원씩 지급되요.">
                             <h1 class="mr-4 font-thin text-gray-500">참가비</h1>
-                            <p th:text="'생활지원금 ' + ${challenge.joinCost} + '원' "></p>
+                            <p th:text="'생활지원금 ' + ${detailDTO.challenge.joinCost} + '원' "></p>
                             <i class="pl-2 pt-2 fa-solid fa-money-bill-wave fa-lg" style="color: #3faa31;"></i>
                         </div>
                     </div>
-                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${challenge.contents}"></p>
+                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${detailDTO.challenge.contents}"></p>
                 </div>
 
-                <div class="w-full" th:if="${isJoin}">
+                <div class="w-full" th:if="${detailDTO.isJoin}">
                     <div class="divider"></div>
 
                     <h1 class="flex justify-start text-lg font-bold mb-2">나의 진행 현황</h1>
@@ -134,10 +144,12 @@
                             <div class="flex justify-center">
                                 <!-- TODO: value값을 challengeMember의 successNumber로-->
                                 <progress class="progress progress-success w-48" value="1"
-                                          th:max="${rewardList.get(#lists.size(rewardList)-1).round}"></progress>
+                                          th:max="${detailDTO.privateRewards
+                                          .get(#lists.size(detailDTO.privateRewards)-1).round}"></progress>
                             </div>
                             <div class="flex justify-center mt-2">
-                                <h1 th:text=" '1' + ' / ' + ${rewardList.get(#lists.size(rewardList)-1).round}"></h1>
+                                <h1 th:text=" '1' + ' / ' + ${detailDTO.privateRewards
+                                .get(#lists.size(detailDTO.privateRewards)-1).round}"></h1>
                             </div>
                         </div>
 
@@ -153,16 +165,16 @@
 
                 </div>
 
-                <div class="w-full" th:if="${isJoin}">
+                <div class="w-full" th:if="${detailDTO.isJoin}">
                     <div class="divider"></div>
 
                     <h1 class="flex justify-start text-lg font-bold mb-2">인증 피드</h1>
-                    <div class="flex justify-center" th:if="${#lists.isEmpty(feedList)}">
+                    <div class="flex justify-center" th:if="${#lists.isEmpty(detailDTO.recently3Feeds)}">
                         <h1 class="font-thin text-gray-500">아직 인증글이 없습니다!</h1>
                     </div>
 
-                    <div class="flex gap-3" th:unless="${#lists.isEmpty(feedList)}">
-                        <div class="flex flex-col w-full" th:each="feed : ${feedList}">
+                    <div class="flex gap-3" th:unless="${#lists.isEmpty(detailDTO.recently3Feeds)}">
+                        <div class="flex flex-col w-full" th:each="feed : ${detailDTO.recently3Feeds}">
                             <div class="flex justify-center">
                                 <a th:href="|/feed/detail/${feed.id}|">
                                     <div class="grid w-28 h-28 bg-indigo-300 place-items-center rounded-xl">
@@ -197,8 +209,22 @@
                                 <th class="mr-5">최대 보상</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr class="flex justify-around" th:each="reward : ${rewardList}">
+                            <tbody th:if="${detailDTO.isJoin()}">
+                            <tr class="flex justify-around" th:each="reward : ${detailDTO.privateRewards}">
+                                <td th:text="${reward.round}"></td>
+                                <td>
+                                    <span th:text="${reward.reward}"></span>
+                                    <span th:text="${reward.rewardType.getRewardType()}"></span>
+                                    <i class="fa-solid fa-coins fa-lg pl-2 pt-2" style="color: #eac02a;"
+                                       th:if="${reward.rewardType.getRewardType().equals('코인')}"></i>
+                                    <i class="fa-solid fa-gift fa-lg pl-2 pt-2" style="color: #d23232;"
+                                       th:if="${reward.rewardType.getRewardType().equals('상품')}"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                            <tbody th:unless="${detailDTO.isJoin()}">
+                            <tr class="flex justify-around" th:each="reward : ${detailDTO.publicRewards}">
                                 <td th:text="${reward.round}"></td>
                                 <td>
                                     <span th:text="${reward.reward}"></span>
@@ -219,7 +245,7 @@
                 <div class="flex flex-col w-full justify-start">
                     <h1 class="text-lg font-bold">유의사항</h1>
 
-                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${challenge.precautions}"></p>
+                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${detailDTO.challenge.precautions}"></p>
                 </div>
 
                 <div class="divider"></div>

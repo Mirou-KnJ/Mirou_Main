@@ -33,6 +33,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
 	//테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
