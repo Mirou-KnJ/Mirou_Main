@@ -2,13 +2,22 @@ package com.knj.mirou.boundedContext.challenge.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
+import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
+import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.member.service.MemberService;
+import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
+import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +35,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ChallengeService {
 
-    private final ImageDataService imageDataService;
+    private final MemberService memberService;
+    private final ChallengeMemberService challengeMemberService;
+    private final PublicRewardService publicRewardService;
+    private final PrivateRewardService privateRewardService;
+    private final ChallengeFeedService challengeFeedService;
     private final ChallengeRepository challengeRepository;
 
     public List<Challenge> getAllList() {
@@ -39,16 +52,9 @@ public class ChallengeService {
         return challengeRepository.findByStatus(status);
     }
 
-    public Challenge getById(long id) {
+    public Optional<Challenge> getById(long id) {
 
-        Optional<Challenge> OById = challengeRepository.findById(id);
-
-        //FIXME : Present와 Empty시의 동작 구분 확실히.
-        if (OById.isPresent()) {
-            return OById.get();
-        }
-
-        return null;
+        return challengeRepository.findById(id);
     }
 
     @Transactional
@@ -79,6 +85,42 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.save(newChallenge);
 
         return RsData.of("S-1", "챌린지가 성공적으로 생성되었습니다.", challenge);
+    }
+
+    public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, String loginId) {
+
+        Optional<Member> OLoginMember = memberService.getByLoginId(loginId);
+        if(OLoginMember.isEmpty()) {
+            return RsData.of("F-1", "회원의 정보를 찾을 수 없습니다. 다시 로그인 해주세요.");
+        }
+
+        Optional<Challenge> OChallenge = getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            return RsData.of("F-2", "유효한 챌린지가 아닙니다.");
+        }
+
+        Member member = OLoginMember.get();
+        Challenge challenge = OChallenge.get();
+        ChallengeDetailDTO detailDTO = new ChallengeDetailDTO();
+        detailDTO.setChallenge(challenge);
+
+        Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
+        detailDTO.setJoin(OChallengeMember.isPresent());
+
+        ChallengeMember challengeMember;
+        if(!detailDTO.isJoin()) {
+            detailDTO.setPublicRewards(challenge.getPublicReward());
+        } else {
+            challengeMember = OChallengeMember.get();
+            detailDTO.setPrivateRewards(challengeMember.getPrivateReward());
+        }
+
+        detailDTO.setCanJoin(challengeMemberService.canJoin(member));
+        detailDTO.setMemberCount(challengeMemberService.getCountByLinkedChallenge(challenge));
+        detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(member, challenge));
+        detailDTO.setRecently3Feeds(challengeFeedService.getRecently3Feed(challenge));
+
+        return RsData.of("S-1", "디테일 정보가 성공적으로 수집되었습니다.", detailDTO);
     }
 
     public boolean checkDeadLine(LocalDate deadLine) {

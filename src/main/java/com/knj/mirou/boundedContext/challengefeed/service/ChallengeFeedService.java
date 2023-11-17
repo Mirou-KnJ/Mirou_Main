@@ -93,4 +93,9 @@ public class ChallengeFeedService {
         return challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
     }
 
+    public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
+
+        return challengeFeedRepository.findTop3ByLinkedChallengeOrderByCreateDateAsc(linkedChallenge);
+    }
+
 }

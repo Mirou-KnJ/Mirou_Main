@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
@@ -92,43 +93,32 @@ public class ChallengeController {
     @GetMapping("/detail/{id}")
     public String showDetail(@PathVariable(value = "id") long challengeId, Principal principal, Model model) {
 
-        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
-        Challenge challenge = challengeService.getById(challengeId);
-        List<ChallengeFeed> feedList = challengeFeedService.getByChallenge(challenge);
-        ImageData challengeImg = imageDataService.getByIdAndTarget(challenge.getId(), ImageTarget.CHALLENGE_IMG);
-        Optional<ChallengeMember> OChallengeMember =
-                challengeMemberService.getByChallengeAndMember(challenge, loginedMember);
+        String loginId = principal.getName();
+        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
 
-        int memberCount = challengeMemberService.getCountByLinkedChallenge(challenge);
-
-        //TODO: 구조 개선
-        if (OChallengeMember.isPresent()) {
-            ChallengeMember challengeMember = OChallengeMember.get();
-            model.addAttribute("rewardList", challengeMember.getPrivateReward());
-            model.addAttribute("isJoin", true);
-        } else {
-            model.addAttribute("rewardList", challenge.getPublicReward());
-            model.addAttribute("isJoin", false);
+        if(getDetailRs.isFail()) {
+            getDetailRs.printResult();
+            return "redirect:/";        //fixme
         }
 
-        //멤버가 챌린지에 3회 이하로 참여했으면 true, 3회 초과로 참여했으면 false
-        model.addAttribute("canJoin", challengeMemberService.canJoin(loginedMember));
+        ChallengeDetailDTO detailDTO = getDetailRs.getData();
+        Challenge challenge = detailDTO.getChallenge();
 
-        if (challengeImg != null) {
-            model.addAttribute("challengeImg",
-                    imageDataService.getOptimizingUrl(challengeImg.getImageUrl(), OptimizerOption.CHALLENGE_DETAIL));
+        model.addAttribute("isJoin", detailDTO.isJoin());
+
+        if(detailDTO.isJoin()) {
+            model.addAttribute("rewardList", detailDTO.getPrivateRewards());
         } else {
-            //FIXME: 없는 이미지 처리
-            model.addAttribute("challengeImg",
-                    imageDataService.getOptimizingUrl(
-                            "https://kr.object.ncloudstorage.com/mirou/etc/no_img.png",
-                            OptimizerOption.CHALLENGE_DETAIL));
+            model.addAttribute("rewardList", detailDTO.getPublicRewards());
         }
 
-        model.addAttribute("canWrite", challengeFeedService.alreadyPostedToday(loginedMember, challenge));
+        model.addAttribute("memberCount", detailDTO.getMemberCount());
+        model.addAttribute("canJoin", detailDTO.isCanJoin());
+        model.addAttribute("challengeImg",
+                imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
+        model.addAttribute("canWrite", detailDTO.isCanWrite());
         model.addAttribute("challenge", challenge);
-        model.addAttribute("feedList", feedList);
-        model.addAttribute("memberCount", memberCount);
+        model.addAttribute("feedList", detailDTO.getRecently3Feeds());
 
         return "view/challenge/detail";
     }
