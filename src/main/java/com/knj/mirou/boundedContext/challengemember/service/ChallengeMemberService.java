@@ -1,7 +1,6 @@
 package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.repository.ChallengeMemberRepository;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -23,7 +21,6 @@ import java.util.Optional;
 public class ChallengeMemberService {
 
     private final MemberService memberService;
-    private final ChallengeService challengeService;
     private final ChallengeMemberRepository challengeMemberRepository;
 
     @Transactional
@@ -78,6 +75,11 @@ public class ChallengeMemberService {
     public void finishChallenge(ChallengeMember challengeMember) {
 
         challengeMember.finishChallenge();
+    }
+
+    public int getCountByLinkedChallenge(Challenge challenge) {
+
+        return challengeMemberRepository.countByLinkedChallenge(challenge);
     }
 
 }

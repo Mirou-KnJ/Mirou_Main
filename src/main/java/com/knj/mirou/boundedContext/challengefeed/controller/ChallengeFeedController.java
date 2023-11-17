@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberServi
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -46,8 +48,24 @@ public class ChallengeFeedController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
     public String writeForm(@PathVariable(value = "id") long challengeId, Model model, Principal principal) {
-        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
-        model.addAttribute("challengeId", challengeId);
+
+
+        //FIXME
+        Challenge challenge = challengeService.getById(challengeId);
+        ImageData challengeImageData = imageDataService.getByIdAndTarget(challengeId, ImageTarget.CHALLENGE_IMG);
+        String challengeImg;
+
+        if(challengeImageData == null) {
+            challengeImg = imageDataService
+                    .getOptimizingUrl("https://kr.object.ncloudstorage.com/mirou/etc/no_img.png"
+                            , OptimizerOption.CHALLENGE_DETAIL);
+        } else {
+            challengeImg = imageDataService
+                    .getOptimizingUrl(challengeImageData.getImageUrl(), OptimizerOption.CHALLENGE_DETAIL);
+        }
+
+        model.addAttribute("challenge", challenge);
+        model.addAttribute("challengeImg", challengeImg);
 
         return "view/challengeFeed/writeForm";
 
@@ -59,7 +77,13 @@ public class ChallengeFeedController {
                         String contents, Principal principal) throws IOException {
 
         Member loginedMember = memberService.getByLoginId(principal.getName()).get();
-        Challenge challenge = challengeService.getById(challengeId);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()){
+            log.error("대상 챌린지를 찾을 수 없습니다.");
+            return "redirect:/feed/write" + challengeId;
+        }
+
+        Challenge challenge = OChallenge.get();
 
         RsData<String> writeRsData = challengeFeedService.writeFeed(challenge, loginedMember, img, contents);
 

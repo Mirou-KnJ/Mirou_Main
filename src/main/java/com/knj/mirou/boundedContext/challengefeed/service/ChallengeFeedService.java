@@ -2,13 +2,11 @@ package com.knj.mirou.boundedContext.challengefeed.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +25,12 @@ public class ChallengeFeedService {
 
     private final ChallengeFeedRepository challengeFeedRepository;
     private final ImageDataService imageDataService;
-    private final ChallengeService challengeService;
-    private final MemberService memberService;
 
     @Transactional
     public RsData<String> writeFeed(Challenge challenge, Member loginedMember, MultipartFile img,
                                     String contents) throws IOException {
 
-        RsData<String> uploadRsData = imageDataService.uploadImg(img, ImageTarget.FEED_IMG);
+        RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
 
         if(uploadRsData.isFail()) {
             return uploadRsData;
@@ -91,6 +87,11 @@ public class ChallengeFeedService {
     public List<ChallengeFeed> getByChallenge(Challenge linkedChallenge) {
 
         return challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
+    }
+
+    public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
+
+        return challengeFeedRepository.findTop3ByLinkedChallengeOrderByCreateDateAsc(linkedChallenge);
     }
 
 }

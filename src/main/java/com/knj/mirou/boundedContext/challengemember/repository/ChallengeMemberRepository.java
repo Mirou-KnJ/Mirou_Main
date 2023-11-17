@@ -15,4 +15,6 @@ public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember
     Optional<ChallengeMember> findByLinkedMember(Member linkedMember);
 
     Optional<ChallengeMember> findByLinkedChallengeAndLinkedMember(Challenge linkedChallenge, Member linkedMember);
+
+    int countByLinkedChallenge(Challenge challenge);
 }

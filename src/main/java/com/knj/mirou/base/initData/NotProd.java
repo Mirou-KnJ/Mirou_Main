@@ -1,6 +1,11 @@
 package com.knj.mirou.base.initData;
 
+import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import org.springframework.boot.CommandLineRunner;
@@ -15,11 +20,14 @@ import java.time.LocalDate;
 @Profile({"dev", "test"})
 public class NotProd {
 
+    private static final String DEFAULT_IMG_URL = "https://kr.object.ncloudstorage.com/mirou/etc/no_img.png";
+
     @Bean
     CommandLineRunner initData(
             MemberService memberService,
             ChallengeService challengeService,
-            PublicRewardService publicRewardService
+            PublicRewardService publicRewardService,
+            ImageDataService imageDataService
     ){
         return new CommandLineRunner() {
             @Override
@@ -31,10 +39,24 @@ public class NotProd {
                 }
 
                 for(int i=1; i<=3; i++) {
+
+                    LocalDate date = LocalDate.now().plusDays(30);
+                    ChallengeCreateDTO createDto = ChallengeCreateDTO.builder()
+                            .name("테스트 챌린지 %d".formatted(i))
+                            .contents("테스트 챌린지 %d의 내용입니다.".formatted(i))
+                            .level(3)
+                            .tag("ETC")
+                            .joinDeadLine(date)
+                            .precaution("주의사항 입니다.")
+                            .period(7)
+                            .joinCost(1000)
+                            .method("PHOTO")
+                            .build();
+
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);
-                    challengeService.create("테스트 챌린지 " + i, "테스트 챌린지 " + i + "의 내용입니다.",
-                            1000, LocalDate.now(), 7, "ETC", "PHOTO",
-                            3, "테스트 챌린지 주의사항 입니다.");
+                    RsData<Challenge> createRs = challengeService.tryCreate(createDto, DEFAULT_IMG_URL);
+                    Challenge createdChallenge = createRs.getData();
+                    imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, DEFAULT_IMG_URL);
                 }
 
                 publicRewardService.create(1, 1, "COIN", "100");

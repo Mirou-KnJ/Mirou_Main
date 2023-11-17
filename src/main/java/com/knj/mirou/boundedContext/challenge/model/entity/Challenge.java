@@ -13,6 +13,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -49,11 +50,19 @@ public class Challenge extends BaseEntity {
 
     private String precautions;
 
+    private String imgUrl;
+
     public void openingChallenge() {
         this.status = ChallengeStatus.OPEN;
     }
 
     public void closingChallenge() {
         this.status = ChallengeStatus.CLOSE;
+    }
+
+    public String getJoinDeadLineFormat() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("~ MM월 dd일(E) 까지");
+        return formatter.format(joinDeadline);
     }
 }
