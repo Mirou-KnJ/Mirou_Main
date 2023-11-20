@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -32,6 +33,7 @@ import java.util.Optional;
 @RequestMapping("/feed")
 public class ChallengeFeedController {
 
+    private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
 
@@ -39,7 +41,18 @@ public class ChallengeFeedController {
     @GetMapping("/write/{id}")
     public String writeForm(@PathVariable(value = "id") long challengeId, Model model) {
 
-        model.addAttribute("challengeId", challengeId);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            log.error("피드를 작성하려는 챌린지를 찾을 수 없습니다.");
+            return "redirect:/";        //FIXME
+        }
+        Challenge challenge = OChallenge.get();
+
+        //FIXME 챌린지 디테일이 아님.
+        String challengeImg = imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL);
+
+        model.addAttribute("challenge", challenge);
+        model.addAttribute("challengeImg", challengeImg);
 
         return "view/challengeFeed/writeForm";
     }

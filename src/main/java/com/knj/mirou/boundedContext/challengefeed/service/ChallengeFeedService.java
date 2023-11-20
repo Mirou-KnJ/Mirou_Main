@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challengefeed.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
@@ -67,7 +68,6 @@ public class ChallengeFeedService {
 
         Member loginMember = linkedChallengeMember.getLinkedMember();
         Challenge challenge = linkedChallengeMember.getLinkedChallenge();
-        RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
 
         RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
         if(uploadRsData.isFail()) {
@@ -127,11 +127,6 @@ public class ChallengeFeedService {
     public Optional<ChallengeFeed> getById(long feedId) {
 
         return challengeFeedRepository.findById(feedId);
-    }
-
-    public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
-
-        return challengeFeedRepository.findTop3ByLinkedChallengeOrderByCreateDateAsc(linkedChallenge);
     }
 
     public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
