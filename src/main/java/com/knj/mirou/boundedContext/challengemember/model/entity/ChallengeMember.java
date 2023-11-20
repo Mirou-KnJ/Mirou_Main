@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ChallengeMember extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Progress progress;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     public int success() {
         this.successNumber = this.successNumber + 1;
