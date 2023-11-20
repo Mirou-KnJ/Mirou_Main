@@ -8,7 +8,6 @@ import com.amazonaws.util.IOUtils;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.imageData.config.S3ConfigProperties;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
@@ -110,7 +109,7 @@ public class ImageDataService {
         return RsData.of("F-1", "이미지 파일이 아닙니다.");
     }
 
-    public RsData<String> detectLabelsGcs(String imgUrl, Challenge linkedChallenge) throws IOException {
+    public RsData<String> detectLabelsGcs(String imgUrl) throws IOException {
 
         try (ImageAnnotatorClient vision = ImageAnnotatorClient.create(visionAPISettings)) {
 
