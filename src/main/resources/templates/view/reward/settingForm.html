@@ -8,11 +8,11 @@
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
             <div class="flex flex-col mb-10">
-                <h1 class="text-lg" th:text="${challengeId} + '번 챌린지에 대한 리워드 설정입니다.'"></h1>
+                <h1 class="text-lg" th:text="${challenge.name} + '에 대한 리워드 설정입니다.'"></h1>
 
                 <div class="flex mt-10">
                     <form method="POST" action="/reward/setting">
-                        <input type="hidden" th:value="${challengeId}" name="id">
+                        <input type="hidden" th:value="${challenge.id}" name="id">
 
                         <div class="flex flex-row w-full justify-around mb-10">
                             <div class="form-control">
@@ -48,7 +48,8 @@
                             <span>400</span>
                             <span>500</span>
                         </div>
-                        <div class="flex justify-center w-full mt-5">
+                        <div class="flex justify-center w-full mt-5 gap-5">
+                            <a href="/member/admin" class="btn btn-ghost btn-outline">돌아가기</a>
                             <button type="submit" class="btn btn-accent">보상 설정 완료</button>
                         </div>
                     </form>
@@ -56,11 +57,11 @@
 
                 <div class="divider"></div>
 
-                <div th:if="${#lists.isEmpty(rewardList)}">
+                <div th:if="${#lists.isEmpty(challenge.publicReward)}">
                     <h1>아직 보상이 없습니다!!</h1>
                 </div>
 
-                <div class="flex flex-col justify-center w-full " th:unless="${#lists.isEmpty(rewardList)}">
+                <div class="flex flex-col justify-center w-full " th:unless="${#lists.isEmpty(challenge.publicReward)}">
                     <h1 class="text-lg flex justify-center">현재 보상 상황</h1>
                     <div class="flex flex-col justify-center items-center">
                         <div class="flex gap-10">
@@ -68,7 +69,7 @@
                             <p>보상 종류</p>
                             <p>보상 내용</p>
                         </div>
-                        <div th:each="reward : ${rewardList}" class="flex gap-20">
+                        <div th:each="reward : ${challenge.publicReward}" class="flex gap-20">
                             <p th:text="${reward.round}"></p>
                             <p th:text="${reward.rewardType}"></p>
                             <p th:text="${reward.reward}"></p>
