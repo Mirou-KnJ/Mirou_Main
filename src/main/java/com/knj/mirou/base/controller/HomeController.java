@@ -1,6 +1,6 @@
 package com.knj.mirou.base.controller;
 
-import com.knj.mirou.boundedContext.challenge.config.LabelConfig;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final LabelConfig labelConfig;
-
     @GetMapping("/")
     public String home() {
+
+        System.out.println("워터 : " + ChallengeLabel.WATER.getLabels());
+        System.out.println("독서 : " + ChallengeLabel.BOOKS.getLabels());
 
         return "view/index";
     }

@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challenge.config;
 
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,7 @@ public class LabelConfig {
 
                 List<String> targetList = (List<String>) field.get(labelConfigProps);
 
-                ChallengeTag.valueOf(target).setLabels(targetList);
+                ChallengeLabel.valueOf(target).setLabels(targetList);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
