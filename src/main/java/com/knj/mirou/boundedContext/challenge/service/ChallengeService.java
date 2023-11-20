@@ -30,7 +30,6 @@ public class ChallengeService {
 
     private final MemberService memberService;
     private final ChallengeMemberService challengeMemberService;
-    private final ChallengeFeedService challengeFeedService;
     private final ChallengeRepository challengeRepository;
 
     public List<Challenge> getAllList() {
@@ -94,6 +93,7 @@ public class ChallengeService {
         Challenge challenge = OChallenge.get();
         ChallengeDetailDTO detailDTO = new ChallengeDetailDTO();
         detailDTO.setChallenge(challenge);
+        detailDTO.setLoginMember(member);
 
         Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
         detailDTO.setJoin(OChallengeMember.isPresent());
@@ -108,8 +108,6 @@ public class ChallengeService {
 
         detailDTO.setCanJoin(challengeMemberService.canJoin(member));
         detailDTO.setMemberCount(challengeMemberService.getCountByLinkedChallenge(challenge));
-        detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(member, challenge));
-        detailDTO.setRecently3Feeds(challengeFeedService.getRecently3Feed(challenge));
 
         return RsData.of("S-1", "디테일 정보가 성공적으로 수집되었습니다.", detailDTO);
     }

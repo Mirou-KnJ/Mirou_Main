@@ -7,15 +7,11 @@ import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
-import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
-import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
-import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
-import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,38 +33,28 @@ import java.util.Optional;
 @RequestMapping("/feed")
 public class ChallengeFeedController {
 
-    private final MemberService memberService;
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
-    private final ChallengeMemberService challengeMemberService;
     private final ImageDataService imageDataService;
-    private final PrivateRewardService privateRewardService;
-    private final CoinService coinService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
-    public String writeForm(@PathVariable(value = "id") long challengeId, Model model, Principal principal) {
+    public String writeForm(@PathVariable(value = "id") long challengeId, Model model) {
 
-
-        //FIXME
-        Challenge challenge = challengeService.getById(challengeId).get();
-        ImageData challengeImageData = imageDataService.getByIdAndTarget(challengeId, ImageTarget.CHALLENGE_IMG);
-        String challengeImg;
-
-        if(challengeImageData == null) {
-            challengeImg = imageDataService
-                    .getOptimizingUrl("https://kr.object.ncloudstorage.com/mirou/etc/no_img.png"
-                            , OptimizerOption.CHALLENGE_DETAIL);
-        } else {
-            challengeImg = imageDataService
-                    .getOptimizingUrl(challengeImageData.getImageUrl(), OptimizerOption.CHALLENGE_DETAIL);
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            log.error("피드를 작성하려는 챌린지를 찾을 수 없습니다.");
+            return "redirect:/";        //FIXME
         }
+        Challenge challenge = OChallenge.get();
+
+        //FIXME 챌린지 디테일이 아님.
+        String challengeImg = imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL);
 
         model.addAttribute("challenge", challenge);
         model.addAttribute("challengeImg", challengeImg);
 
         return "view/challengeFeed/writeForm";
-
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -76,39 +62,18 @@ public class ChallengeFeedController {
     public String write(@PathVariable(value = "id") long challengeId, MultipartFile img,
                         String contents, Principal principal) throws IOException {
 
-        Member loginedMember = memberService.getByLoginId(principal.getName()).get();
-        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()){
-            log.error("대상 챌린지를 찾을 수 없습니다.");
-            return "redirect:/feed/write" + challengeId;
+        String loginId = principal.getName();
+        RsData<ChallengeMember> checkValidRs = challengeFeedService.checkValidRequest(challengeId, loginId);
+        if(checkValidRs.isFail()) {
+            checkValidRs.printResult();
+            return "redirect:/";    //FIXME
         }
 
-        Challenge challenge = OChallenge.get();
-
-        RsData<String> writeRsData = challengeFeedService.writeFeed(challenge, loginedMember, img, contents);
-
-        //TODO: 반드시 구조개선
+        RsData<String> writeRsData =
+                challengeFeedService.tryWrite(checkValidRs.getData(), img, contents);
         if (writeRsData.isFail()) {
             writeRsData.printResult();
             return "redirect:/feed/write/" + challengeId;
-        } else {
-            ChallengeMember challengeMember =
-                    challengeMemberService.getByChallengeAndMember(challenge, loginedMember).get();
-
-            int successNum = challengeMemberService.updateSuccess(challengeMember);
-            RsData<PrivateReward> validReward =
-                    privateRewardService.getValidReward(challenge, challengeMember, successNum);
-
-            validReward.printResult();
-
-            if(validReward.getResultCode().startsWith("S-2")) {
-                challengeMemberService.finishChallenge(challengeMember);
-                coinService.giveCoin(loginedMember, validReward.getData());
-            } else if(validReward.isSuccess()) {
-                coinService.giveCoin(loginedMember, validReward.getData());
-            }
-
-            writeRsData.printResult();
         }
 
         return "redirect:/challenge/detail/" + challengeId;
@@ -117,7 +82,13 @@ public class ChallengeFeedController {
     @GetMapping("/detail/{id}")
     public String showDetail(@PathVariable(value = "id") long feedId, Model model) {
 
-        ChallengeFeed feed = challengeFeedService.getById(feedId);
+        Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
+        if(OFeed.isEmpty()) {
+            return "redirect:/";        //FIXME
+        }
+        ChallengeFeed feed = OFeed.get();
+
+        //FIXME: 크기 조정된 이미지로 변경 필요
         ImageData feedImg = imageDataService.getByIdAndTarget(feedId, ImageTarget.FEED_IMG);
 
         model.addAttribute("feed", feed);
