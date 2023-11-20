@@ -6,6 +6,7 @@ import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
@@ -33,6 +34,7 @@ import java.util.List;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
+    private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
 
 
@@ -94,6 +96,8 @@ public class ChallengeController {
 
         ChallengeDetailDTO detailDTO = getDetailRs.getData();
         Challenge challenge = detailDTO.getChallenge();
+        detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(detailDTO.getLoginMember(), challenge));
+        detailDTO.setRecently3Feeds(challengeFeedService.getRecently3Feed(challenge));
 
         model.addAttribute("detailDTO", detailDTO);
         model.addAttribute("challengeImg",
