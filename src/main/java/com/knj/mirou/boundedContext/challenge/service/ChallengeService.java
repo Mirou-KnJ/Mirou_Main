@@ -144,4 +144,9 @@ public class ChallengeService {
         challengeRepository.save(challenge);
     }
 
+    public List<Challenge> getMyValidChallengeList(String loginId) {
+
+        return challengeMemberService.getMyValidChallengeList(loginId);
+    }
+
 }

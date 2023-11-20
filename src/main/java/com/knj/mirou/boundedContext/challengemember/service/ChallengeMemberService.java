@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengemember.service;
 
+import com.amazonaws.services.ec2.model.PublicIpv4Pool;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -71,6 +74,7 @@ public class ChallengeMemberService {
 
         int count = challengeMemberRepository.countByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
 
+        log.info("카운트 : " + count);
         if(count >= CMemberConfigProps.getJoinLimit()) {
             return false;
         }
@@ -89,5 +93,23 @@ public class ChallengeMemberService {
 
     public int getCountByLinkedChallenge(Challenge challenge) {
         return challengeMemberRepository.countByLinkedChallenge(challenge);
+    }
+
+    public List<Challenge> getMyValidChallengeList (String loginId){
+
+
+        Optional<Member> OMember = memberService.getByLoginId(loginId);
+
+        Member member = OMember.get();
+        List<ChallengeMember> membersAllList =
+                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
+
+        List<Challenge> inProgressChallenges = new ArrayList<>();
+
+        for(ChallengeMember cm : membersAllList) {
+            inProgressChallenges.add(cm.getLinkedChallenge());
+        }
+
+        return inProgressChallenges;
     }
 }

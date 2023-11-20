@@ -6,6 +6,7 @@ import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember, Long> {
@@ -17,4 +18,6 @@ public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember
     Optional<ChallengeMember> findByLinkedChallengeAndLinkedMember(Challenge linkedChallenge, Member linkedMember);
 
     int countByLinkedChallenge(Challenge challenge);
+
+    List<ChallengeMember> findByLinkedMemberAndProgress(Member member, Progress progress);
 }
