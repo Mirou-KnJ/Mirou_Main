@@ -1,6 +1,7 @@
 package com.knj.mirou.base.initData;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.config.LabelConfig;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
@@ -27,12 +28,15 @@ public class NotProd {
             MemberService memberService,
             ChallengeService challengeService,
             PublicRewardService publicRewardService,
-            ImageDataService imageDataService
+            ImageDataService imageDataService,
+            LabelConfig labelConfig
     ){
         return new CommandLineRunner() {
             @Override
             @Transactional
             public void run (String... args) throws Exception {
+
+                labelConfig.setLabels();
 
                 if(memberService.getByLoginId("TEST_USER_1").isPresent()) {
                     return;
