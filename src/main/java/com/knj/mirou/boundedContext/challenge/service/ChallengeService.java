@@ -94,6 +94,7 @@ public class ChallengeService {
         Challenge challenge = OChallenge.get();
         ChallengeDetailDTO detailDTO = new ChallengeDetailDTO();
         detailDTO.setChallenge(challenge);
+        detailDTO.setLoginMember(member);
 
         Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
         detailDTO.setJoin(OChallengeMember.isPresent());

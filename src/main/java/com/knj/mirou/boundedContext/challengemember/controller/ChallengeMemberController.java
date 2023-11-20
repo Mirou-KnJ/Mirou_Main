@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengemember.controller;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
@@ -22,9 +23,8 @@ import java.util.Optional;
 @RequestMapping("/challengeMember")
 public class ChallengeMemberController {
 
-    private final ChallengeMemberService challengeMemberService;
     private final ChallengeService challengeService;
-    private final PrivateRewardService privateRewardService;
+    private final ChallengeMemberService challengeMemberService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/join/{id}")
@@ -32,15 +32,16 @@ public class ChallengeMemberController {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()) {
-            log.error("참여하려는 챌린지를 찾을 수 없습니다");
-            return "redirect:/challenge/detail" + challengeId;
+            log.error("챌린지 정보가 유효하지 않습니다.");
+            return "redirect:/";        //FIXME
         }
 
-        Challenge linkedChallenge = OChallenge.get();
+        RsData<String> joinRs = challengeMemberService.join(OChallenge.get(), principal.getName());
 
-        ChallengeMember challengeMember = challengeMemberService.join(linkedChallenge, principal.getName());
-
-        privateRewardService.create(linkedChallenge, challengeMember);
+        if(joinRs.isFail()) {
+            joinRs.printResult();
+            return "redirect:/challenge/detail" + challengeId;
+        }
 
         return "redirect:/challenge/detail/" + challengeId;
     }
