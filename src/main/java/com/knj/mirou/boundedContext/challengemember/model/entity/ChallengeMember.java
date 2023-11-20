@@ -41,7 +41,6 @@ public class ChallengeMember extends BaseEntity {
 
     public int success() {
         this.successNumber = this.successNumber + 1;
-
         return successNumber;
     }
 
