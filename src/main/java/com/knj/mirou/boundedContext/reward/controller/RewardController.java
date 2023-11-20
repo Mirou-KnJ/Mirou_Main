@@ -35,10 +35,8 @@ public class RewardController {
             return "redirect:/";        //FIXME
         }
 
-        List<PublicReward> rewardList = OChallenge.get().getPublicReward();
-
-        model.addAttribute("challengeId", challengeId);
-        model.addAttribute("rewardList", rewardList);
+        Challenge challenge = OChallenge.get();
+        model.addAttribute("challenge", challenge);
 
         return "view/reward/settingForm";
     }
