@@ -1,5 +1,6 @@
 package com.knj.mirou.base.security;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +35,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String loginId = socialCode + "__%s".formatted(oauthId);
         String nickname = socialCode + "__%s".formatted(oauthId);
 
-        Map<String, Object> socialResultMap = memberService.socialLogin(socialCode, loginId, nickname);
+        RsData<Member> socialLoginRs = memberService.socialLogin(socialCode, loginId, nickname);
 
-        if(socialResultMap.get("ResultCode").toString().startsWith("F")) {
-            return null;
+        if(socialLoginRs.isFail()) {
+            return null;            //FIXME
         }
 
-        Member member = (Member) socialResultMap.get("Data");
+        Member member = socialLoginRs.getData();
 
         return new CustomOAuth2User(member.getLoginId(), member.getNickname(),
                 memberService.getGrantedAuthorities(member.getLoginId()));

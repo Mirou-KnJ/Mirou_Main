@@ -37,7 +37,6 @@ public class MemberController {
     public String showMyPage(Principal principal, Model model){
 
         String loginId = principal.getName();
-
         Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
 
         if(ObyLoginId.isPresent()) {
