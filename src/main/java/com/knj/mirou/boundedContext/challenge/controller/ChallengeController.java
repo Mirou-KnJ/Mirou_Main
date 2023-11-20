@@ -37,8 +37,6 @@ public class ChallengeController {
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
 
-
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
     public String createForm() {
@@ -71,7 +69,7 @@ public class ChallengeController {
         Challenge createdChallenge = createRsData.getData();
         imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, createdChallenge.getImgUrl());
 
-        return "redirect:/challenge/detail/" + createdChallenge.getId();        //굳이 디테일로 리다이렉트?
+        return "redirect:/reward/setting/" + createdChallenge.getId();
     }
 
     @GetMapping("/list")

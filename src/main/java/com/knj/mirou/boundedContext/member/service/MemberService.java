@@ -1,5 +1,7 @@
 package com.knj.mirou.boundedContext.member.service;
 
+import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -20,10 +22,10 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final MemberRepository memberRepository;
     private final PointService pointService;
     private final CoinService coinService;
     private final MemberConfigProperties memberConfigProps;
+    private final MemberRepository memberRepository;
 
     public Optional<Member> getByLoginId(String loginId) {
 
@@ -31,66 +33,44 @@ public class MemberService {
     }
 
     @Transactional
-    public Map<String, Object> join(String socialCode, String loginId, String nickname) {
+    public RsData<Member> join(String socialCode, String loginId, String nickname) {
 
-        Map<String, Object> joinResultMap = new HashMap<>();
-
-        Optional<Member> ObyLoginId = getByLoginId(loginId);
-
-        if(ObyLoginId.isPresent()) {
-            joinResultMap.put("ResultCode", "F-1");
-            joinResultMap.put("Msg", "이미 가입된 회원 입니다.");
-            joinResultMap.put("Data", ObyLoginId.get());
-            return joinResultMap;
-        } else {
-
-            MemberRole role = isAdmin(loginId) ? MemberRole.ADMIN : MemberRole.USER;
-
-            Member member = Member.builder()
-                    .loginId(loginId)
-                    .nickname(nickname)
-                    .socialCode(SocialCode.valueOf(socialCode))   //FIXME 로그인 경로에 따라 다르게 설정
-                    .role(role)
-                    .inviteCode("123456789")                      //FIXME 난수 처리
-                    .coin(coinService.createCoin())
-                    .point(pointService.createPoint())
-                    .build();
-
-            Member joinMember = memberRepository.save(member);
-
-            joinResultMap.put("ResultCode", "S-1");
-            joinResultMap.put("Msg", "회원 가입이 완료 되었습니다.");
-            joinResultMap.put("Data", joinMember);
-
-            return joinResultMap;
+        Optional<Member> OByLoginId = getByLoginId(loginId);
+        if (OByLoginId.isPresent()) {
+            return RsData.of("F-1", "이미 가입된 회원입니다.", OByLoginId.get());
         }
+
+        MemberRole role = memberConfigProps.isAdmin(loginId) ? MemberRole.ADMIN : MemberRole.USER;
+
+        Member member = Member.builder()
+                .loginId(loginId)
+                .nickname(nickname)
+                .socialCode(SocialCode.valueOf(socialCode))
+                .role(role)
+                .inviteCode("123456789")                      //FIXME: 중복되지 않는 난수 처리
+                .coin(coinService.createCoin())
+                .point(pointService.createPoint())
+                .build();
+
+        Member joinMember = memberRepository.save(member);
+
+        return RsData.of("S-1", "회원가입이 완료되었습니다.", joinMember);
     }
 
-    public Map<String, Object> socialLogin(String socialCode, String loginId, String nickname) {
+    public RsData<Member> socialLogin(String socialCode, String loginId, String nickname) {
 
-        Map<String,Object> socialResultMap = new HashMap<>();
+        Optional<Member> OByLoginId = getByLoginId(loginId);
 
-        Optional<Member> ObyLoginId = getByLoginId(loginId);
-
-        if(ObyLoginId.isPresent()) {
-            socialResultMap.put("ResultCode", "S-1");
-            socialResultMap.put("Msg", "로그인 되었습니다(이미 가입한 회원)");
-            socialResultMap.put("Data", ObyLoginId.get());
-            return socialResultMap;
+        if (OByLoginId.isPresent()) {
+            return RsData.of("S-1", "로그인 되었습니다(이미 가입된 회원)", OByLoginId.get());
         }
 
-        Map<String, Object> joinResultMap = join(socialCode, loginId, nickname);
-
-        if(joinResultMap.get("ResultCode").toString().startsWith("S")) {
-            socialResultMap.put("ResultCode", "S-2");
-            socialResultMap.put("Msg", "로그인 되었습니다(새로 가입한 회원)");
-            socialResultMap.put("Data", joinResultMap.get("Data"));
-        } else {
-            socialResultMap.put("ResultCode", "F-1");
-            socialResultMap.put("Msg", "가입 및 로그인에 실패하였습니다.");
+        RsData<Member> joinRs = join(socialCode, loginId, nickname);
+        if (joinRs.isFail()) {
+            RsData.of("F-1", "가입 및 로그인에 실패하였습니다.");
         }
 
-        return socialResultMap;
+        return RsData.of("S-2", "로그인 되었습니다.(새로 가입한 회원)", joinRs.getData());
     }
 
     public List<? extends GrantedAuthority> getGrantedAuthorities(String loginId) {
@@ -98,16 +78,10 @@ public class MemberService {
 
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        if (isAdmin(loginId)) {
+        if (memberConfigProps.isAdmin(loginId)) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
         return grantedAuthorities;
     }
-
-    public boolean isAdmin(String loginId) {
-
-        return memberConfigProps.isAdmin(loginId);
-    }
-
 }
