@@ -8,17 +8,18 @@ import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
-import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,12 +51,19 @@ public class ChallengeService {
     @Transactional
     public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
 
+        List<String> labels = new ArrayList<>();
+
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
         }
 
         if(!checkUniqueName(createDTO.getName())) {
             return RsData.of("F-2", "%s는 이미 사용 중인 챌린지 이름 입니다.".formatted(createDTO.getName()));
+        }
+
+        if(createDTO.getMethod().equals("PHOTO")) {
+            log.info("Photo 입니다");
+            labels = labelProcessing(createDTO.getLabelList());
         }
 
         Challenge newChallenge = Challenge.builder()
@@ -66,6 +74,7 @@ public class ChallengeService {
                 .period(createDTO.getPeriod())
                 .tag(ChallengeTag.valueOf(createDTO.getTag()))
                 .method(AuthenticationMethod.valueOf(createDTO.getMethod()))
+                .labels(labels)
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
                 .precautions(createDTO.getPrecaution())
@@ -144,6 +153,34 @@ public class ChallengeService {
         challengeRepository.save(challenge);
     }
 
+    public List<String> labelProcessing(String labels) {
+
+        List<String> labelList = new ArrayList<>();
+        String[] splitLabels = labels.split(",");
+        for(String label : splitLabels) {
+            labelList.add(label);
+        }
+
+        return labelList;
+    }
+
+    //초 분 시 일 월 요일 년도
+    //매일 0시 0분 3초에 어제까지가 기한이었던 챌린지들을 종료시킴.
+    @Transactional
+    @Scheduled(cron= "3 0 0 * * ?")
+    public void getEndTargetList() {
+
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+        List<Challenge> endTargetChallenges =
+                challengeRepository.findByJoinDeadlineAndStatus(yesterDay, ChallengeStatus.OPEN);
+
+        if(!endTargetChallenges.isEmpty()) {
+            for(Challenge endTarget : endTargetChallenges) {
+                endTarget.closingChallenge();
+                log.info(endTarget.getName() + "챌린지가 종료 처리 되었습니다.");
+            }
+        }
+    }
     public List<Challenge> getMyValidChallengeList(String loginId) {
 
         return challengeMemberService.getMyValidChallengeList(loginId);
