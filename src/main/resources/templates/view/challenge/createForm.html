@@ -164,6 +164,7 @@
                     const selectedValue = document.querySelector('input[name="labels"]:checked').value;
                     const getLabelDiv = document.getElementById("getLabelDiv");
                     const labelArea = document.getElementById("labelArea");
+                    const csrfToken = /*[[${_csrf.token}]]*/'';
 
                     if (selectedValue === 'ETC') {
                         getLabelDiv.style.display = 'block';
@@ -171,6 +172,7 @@
                     } else {
                         const requestData = {
                             selectedValue: selectedValue,
+                            _csrf: csrfToken
                         };
 
                         $.ajax({
