@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="flex mb-2" th:unless="${detailDTO.isJoin}">
-                        <div class="flex shadow-xl ml-3" th:if="${detailDTO.canJoin}">
+                        <div class="flex shadow-xl ml-3">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a class="btn m-3 rounded-md bg-purple-300" onclick="tryJoinBtn()">
                                     <i class="fa-regular fa-user fa-lg"></i>
@@ -142,21 +142,16 @@
                     <div class="flex flex-row">
                         <div class="w-1/2 mt-3">
                             <div class="flex justify-center">
-                                <!-- TODO: value값을 challengeMember의 successNumber로-->
-                                <progress class="progress progress-success w-48" value="1"
-                                          th:max="${detailDTO.privateRewards
-                                          .get(#lists.size(detailDTO.privateRewards)-1).round}"></progress>
+                                <progress class="progress progress-success w-48" th:value="${detailDTO.successNum}"
+                                          th:max="${detailDTO.maxNum}"></progress>
                             </div>
                             <div class="flex justify-center mt-2">
-                                <h1 th:text=" '1' + ' / ' + ${detailDTO.privateRewards
-                                .get(#lists.size(detailDTO.privateRewards)-1).round}"></h1>
+                                <h1 th:text=" ${detailDTO.successNum} + ' / ' + ${detailDTO.maxNum}"></h1>
                             </div>
                         </div>
 
-
                         <div class="w-1/2 h-full">
-
-                            <div> 종료까지 00일 남았습니다.</div>
+                            <h1 th:text="'종료까지 ' + ${detailDTO.getLastDayNum()} + '일 남았습니다.'"></h1>
                         </div>
                     </div>
 
