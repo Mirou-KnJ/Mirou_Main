@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,8 +46,8 @@ public class Challenge extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuthenticationMethod method;
 
-    @Enumerated(EnumType.STRING)
-    private ChallengeLabel label;
+    @ElementCollection
+    private List<String> labels;
 
     private int level;
 

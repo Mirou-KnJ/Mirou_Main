@@ -112,8 +112,6 @@ public class ChallengeController {
         Object selectedValue = params.get("selectedValue");
         String selectedLabelType = selectedValue.toString();
 
-        log.info(selectedLabelType);
-
         List<String> labels = ChallengeLabel.valueOf(selectedLabelType).getLabels();
 
         Map<String, Object> result = new HashMap<>();

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,12 +50,19 @@ public class ChallengeService {
     @Transactional
     public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
 
+        List<String> labels = new ArrayList<>();
+
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
         }
 
         if(!checkUniqueName(createDTO.getName())) {
             return RsData.of("F-2", "%s는 이미 사용 중인 챌린지 이름 입니다.".formatted(createDTO.getName()));
+        }
+
+        if(createDTO.getMethod().equals("PHOTO")) {
+            log.info("Photo 입니다");
+            labels = labelProcessing(createDTO.getLabelList());
         }
 
         Challenge newChallenge = Challenge.builder()
@@ -65,6 +73,7 @@ public class ChallengeService {
                 .period(createDTO.getPeriod())
                 .tag(ChallengeTag.valueOf(createDTO.getTag()))
                 .method(AuthenticationMethod.valueOf(createDTO.getMethod()))
+                .labels(labels)
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
                 .precautions(createDTO.getPrecaution())
@@ -141,6 +150,17 @@ public class ChallengeService {
 
         challenge.openingChallenge();
         challengeRepository.save(challenge);
+    }
+
+    public List<String> labelProcessing(String labels) {
+
+        List<String> labelList = new ArrayList<>();
+        String[] splitLabels = labels.split(",");
+        for(String label : splitLabels) {
+            labelList.add(label);
+        }
+
+        return labelList;
     }
 
 }
