@@ -15,6 +15,7 @@ import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,4 +145,21 @@ public class ChallengeService {
         challengeRepository.save(challenge);
     }
 
+    //초 분 시 일 월 요일 년도
+    //매일 0시 0분 3초에 어제까지가 기한이었던 챌린지들을 종료시킴.
+    @Transactional
+    @Scheduled(cron= "3 0 0 * * ?")
+    public void getEndTargetList() {
+
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+        List<Challenge> endTargetChallenges =
+                challengeRepository.findByJoinDeadlineAndStatus(yesterDay, ChallengeStatus.OPEN);
+
+        if(!endTargetChallenges.isEmpty()) {
+            for(Challenge endTarget : endTargetChallenges) {
+                endTarget.closingChallenge();
+                log.info(endTarget.getName() + "챌린지가 종료 처리 되었습니다.");
+            }
+        }
+    }
 }

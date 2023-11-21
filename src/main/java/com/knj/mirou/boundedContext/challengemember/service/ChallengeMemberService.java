@@ -2,7 +2,6 @@ package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.config.CMemberConfigProperties;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
@@ -12,10 +11,13 @@ import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -53,8 +55,8 @@ public class ChallengeMemberService {
         return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.");
     }
 
-    public LocalDateTime calcEndDate(int challengePeriod) {
-        return LocalDateTime.now().plusDays(challengePeriod);
+    public LocalDate calcEndDate(int challengePeriod) {
+        return LocalDate.now().plusDays(challengePeriod);
     }
 
     public int getCountByLinkedMemberAndProgress(Member member, Progress progress) {
@@ -89,5 +91,21 @@ public class ChallengeMemberService {
 
     public int getCountByLinkedChallenge(Challenge challenge) {
         return challengeMemberRepository.countByLinkedChallenge(challenge);
+    }
+
+    @Transactional
+    @Scheduled(cron = "3 0 0 * * ?")
+    public void setEndForTargetCM() {
+
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+
+        List<ChallengeMember> endTargetChallengeMembers =
+                challengeMemberRepository.findByEndDateAndProgress(yesterDay, Progress.IN_PROGRESS);
+
+        for(ChallengeMember target : endTargetChallengeMembers) {
+            target.finishChallenge();
+            log.info(target.getLinkedMember().getLoginId() + "회원의 " + target.getLinkedChallenge().getName()
+                    + "에 대한 참여내용이 종료되었습니다.");
+        }
     }
 }
