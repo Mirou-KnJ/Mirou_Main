@@ -11,5 +11,5 @@ public enum ChallengeTag {
     ROUTINE("습관 챌린지"),
     ETC("기타");
 
-    private final String challengeTag;
+    public final String challengeTag;
 }
