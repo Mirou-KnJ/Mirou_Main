@@ -67,7 +67,7 @@ public class Challenge extends BaseEntity {
 
     public String getJoinDeadLineFormat() {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("~ MM월 dd일(E) 까지");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd(E) 마감");
         return formatter.format(joinDeadline);
     }
 }
