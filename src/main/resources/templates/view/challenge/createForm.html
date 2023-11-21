@@ -159,11 +159,12 @@
 
                     const selectedValue = document.querySelector('input[name="labels"]:checked').value;
                     const getLabelDiv = document.getElementById("getLabelDiv");
+                    const labelArea = document.getElementById("labelArea");
 
                     if (selectedValue === 'ETC') {
                         getLabelDiv.style.display = 'block';
+                        labelArea.value = "";
                     } else {
-
                         const requestData = {
                             selectedValue: selectedValue,
                         };
@@ -175,9 +176,6 @@
                             success: function (data) {
                                 const response = data;
                                 getLabelDiv.style.display = 'block';
-
-                                const labelArea = document.getElementById("labelArea");
-
                                 labelArea.value = response.labels;
                             }
                         })
