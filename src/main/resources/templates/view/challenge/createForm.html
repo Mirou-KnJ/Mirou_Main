@@ -166,7 +166,6 @@
 
                         const requestData = {
                             selectedValue: selectedValue,
-                            _csrf: csrfToken
                         };
 
                         $.ajax({
@@ -174,22 +173,18 @@
                             type: "POST",
                             data: requestData,
                             success: function (data) {
-
                                 const response = data;
+                                getLabelDiv.style.display = 'block';
 
+                                const labelArea = document.getElementById("labelArea");
 
+                                labelArea.value = response.labels;
                             }
                         })
                     }
-
-
                 })
-
             })
-
-
         </script>
-
     </main>
 </th:block>
 </body>

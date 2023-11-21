@@ -4,6 +4,7 @@ import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -13,19 +14,19 @@ import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -102,6 +103,24 @@ public class ChallengeController {
                 imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
 
         return "view/challenge/detail";
+    }
+
+    @ResponseBody
+    @PostMapping("/getLabels")
+    public ResponseEntity<Map<String, Object>> postLabelList(@RequestParam Map<String, Object> params) {
+
+        Object selectedValue = params.get("selectedValue");
+        String selectedLabelType = selectedValue.toString();
+
+        log.info(selectedLabelType);
+
+        List<String> labels = ChallengeLabel.valueOf(selectedLabelType).getLabels();
+
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("labels", labels);
+
+        return ResponseEntity.ok(result);
     }
 
 }
