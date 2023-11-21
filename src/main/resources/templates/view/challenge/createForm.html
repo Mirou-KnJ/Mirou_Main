@@ -145,11 +145,13 @@
                 var selectElement = document.getElementById('method');
                 var selectedValue = selectElement.value;
                 var labelDiv = document.getElementById('labelDiv')
+                const getLabelDiv = document.getElementById("getLabelDiv");
 
                 if (selectedValue === 'PHOTO') {
                     labelDiv.style.display = 'block';
                 } else {
                     labelDiv.style.display = 'none';
+                    getLabelDiv.style.display = 'none';
                 }
             }
 
