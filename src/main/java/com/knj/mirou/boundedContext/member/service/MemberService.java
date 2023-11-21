@@ -9,6 +9,8 @@ import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -84,5 +89,18 @@ public class MemberService {
         }
 
         return grantedAuthorities;
+    }
+
+    //매주 월요일 0시 0분 3초에 포인트를 3000으로 리셋함.
+    @Transactional
+    @Scheduled(cron = "3 0 0 * * 1")
+    public void resetPoint() {
+
+        log.info("현재시각 : " + LocalDateTime.now());
+
+        //FIXME: find 쿼리문 좀 더 섬세하게. (대상자만 가져올 수 있도록)
+        List<Member> allMembers = memberRepository.findAll();
+
+        pointService.resetPoint(allMembers);
     }
 }
