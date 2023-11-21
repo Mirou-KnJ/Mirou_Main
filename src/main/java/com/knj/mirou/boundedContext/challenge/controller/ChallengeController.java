@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challenge.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
@@ -34,6 +35,7 @@ import java.util.Map;
 @RequestMapping("/challenge")
 public class ChallengeController {
 
+    private final Rq rq;
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
@@ -58,13 +60,13 @@ public class ChallengeController {
         RsData<String> tryUploadRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
         if(tryUploadRs.isFail()) {
             tryUploadRs.printResult();
-            return "redirect:/challenge/create";
+            return rq.historyBack(tryUploadRs);
         }
 
         RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, tryUploadRs.getData());
         if (createRsData.isFail()) {
             createRsData.printResult();
-            return "redirect:/challenge/create";
+            return rq.historyBack(createRsData);
         }
 
         Challenge createdChallenge = createRsData.getData();
@@ -90,7 +92,7 @@ public class ChallengeController {
         RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
         if(getDetailRs.isFail()) {
             getDetailRs.printResult();
-            return "redirect:/";        //fixme
+            return rq.historyBack(getDetailRs);
         }
 
         ChallengeDetailDTO detailDTO = getDetailRs.getData();

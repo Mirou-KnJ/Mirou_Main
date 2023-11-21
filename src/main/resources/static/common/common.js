@@ -28,11 +28,11 @@ function parseMsg(msg) {
     return [pureMsg, true];
 }
 
-function toastSuccess(msg) {
+function toastNotice(msg) {
     const [pureMsg, needToShow] = parseMsg(msg);
 
     if (needToShow) {
-        toastr["success"](pureMsg, "성공");
+        toastr["success"](pureMsg, "알림");
     }
 }
 
@@ -44,22 +44,7 @@ function toastWarning(msg) {
     }
 }
 
-function toastError(msg) {
-    const [pureMsg, needToShow] = parseMsg(msg);
-
-    if (needToShow) {
-        toastr["error"](pureMsg, "에러");
-    }
-}
-
-function toastInfo(msg) {
-    const [pureMsg, needToShow] = parseMsg(msg);
-
-    if (needToShow) {
-        toastr["info"](pureMsg, "정보");
-    }
-}
-
+// 어떠한 기능을 살짝 늦게(0.1 초 미만)
 function setTimeoutZero(callback) {
     setTimeout(callback);
 }
