@@ -40,10 +40,8 @@
                 })
                     .then(response => {
                         if(response.ok) {
-                            alert("성공")
                             window.location.href = "/member/admin";
                         } else {
-                            alert("실패")
                             console.log('Error:', response.status);
                         }
                     })
