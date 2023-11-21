@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challengefeed.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
@@ -75,11 +76,15 @@ public class ChallengeFeedService {
         }
 
         String imgUrl = uploadRsData.getData();
-        RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl);
-        if(labelRsData.isFail()) {
-            return labelRsData;
-        }
 
+        //라벨 검사는 인증샷 인증인 경우에만 수행
+        if(challenge.getMethod().equals(AuthenticationMethod.PHOTO)) {
+            RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, challenge.getLabels());
+            if(labelRsData.isFail()) {
+                return labelRsData;
+            }
+        }
+        
         RsData<String> safeSearchRsData = imageDataService.safeSearchByGcs(imgUrl);
         if(safeSearchRsData.isFail()) {
             return safeSearchRsData;

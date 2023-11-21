@@ -1,8 +1,10 @@
 package com.knj.mirou.base.initData;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.config.LabelConfig;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
@@ -27,12 +29,15 @@ public class NotProd {
             MemberService memberService,
             ChallengeService challengeService,
             PublicRewardService publicRewardService,
-            ImageDataService imageDataService
+            ImageDataService imageDataService,
+            LabelConfig labelConfig
     ){
         return new CommandLineRunner() {
             @Override
             @Transactional
             public void run (String... args) throws Exception {
+
+                labelConfig.setLabels();
 
                 if(memberService.getByLoginId("TEST_USER_1").isPresent()) {
                     return;
@@ -51,6 +56,7 @@ public class NotProd {
                             .period(7)
                             .joinCost(1000)
                             .method("PHOTO")
+                            .labelList("LABEL1,LABEL2,LABEL3")
                             .build();
 
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);

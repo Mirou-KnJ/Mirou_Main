@@ -28,7 +28,7 @@ public class ChallengeCreateDTO {
     private int joinCost;
     
     @NotBlank
-    private LocalDate joinDeadLine;     //TODO: 참여기한 유효성검사 별도 필요
+    private LocalDate joinDeadLine;
 
     @NotBlank
     @Min(value = 1)
@@ -37,6 +37,8 @@ public class ChallengeCreateDTO {
 
     @NotBlank
     private String tag;
+
+    private String labelList;
 
     @NotBlank
     private String method;

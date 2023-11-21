@@ -109,7 +109,7 @@ public class ImageDataService {
         return RsData.of("F-1", "이미지 파일이 아닙니다.");
     }
 
-    public RsData<String> detectLabelsGcs(String imgUrl) throws IOException {
+    public RsData<String> detectLabelsGcs(String imgUrl, List<String> challengeLabels) throws IOException {
 
         try (ImageAnnotatorClient vision = ImageAnnotatorClient.create(visionAPISettings)) {
 
@@ -128,10 +128,7 @@ public class ImageDataService {
                         Collections.singletonList(request));
                 List<AnnotateImageResponse> responses = response.getResponsesList();
 
-                //FIXME: 어떤 라벨을 검출해야 하는지 챌린지에 저장한다면?
-//                List<String> challengeTag = linkedChallenge.getTag();
-//                boolean hasLabel = false;
-
+                boolean isValidImg = false;
                 for (AnnotateImageResponse res : responses) {
                     if (res.hasError()) {
                         return RsData.of("F-2", "올바르지 않은 이미지 입니다.");
@@ -139,23 +136,16 @@ public class ImageDataService {
 
                     for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
 
-//                        //아직 하나도 발견되지 않았을 때
-//                        if(!hasLabel) {
-//                            for(String tag : challengeTag) {
-//                                if(annotation.getDescription().contains(tag)) {
-//                                    hasLabel = true;
-//                                    break;
-//                                }
-//                            }
-//                        }
-
                         log.info("검출된 라벨 : " + annotation.getDescription());
+                        if(challengeLabels.contains(annotation.getDescription())) {
+                            isValidImg = true;
+                            break;
+                        }
                     }
                 }
-
-//                if(!hasLabel) {
-//                    return RsData.of("F-3", "챌린지에 맞지 않는 이미지 입니다.");
-//                }
+                if(!isValidImg) {
+                    return RsData.of("F-3", "챌린지에 맞지 않는 이미지 입니다.");
+                }
 
                 return RsData.of("S-2", "챌린지에 적합한 이미지 입니다.");
             }
