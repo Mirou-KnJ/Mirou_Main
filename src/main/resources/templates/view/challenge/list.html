@@ -6,42 +6,109 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
-            <h1>전체 챌린지 리스트</h1>
-            <div class="overflow-x-auto">
+        <div th:if="${#lists.isEmpty(openedChallenges)}">
+            <h1>참여가능한 챌린지가 없습니다!!</h1>
+        </div>
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100" th:unless="${#lists.isEmpty(openedChallenges)}">
+            <div>
+                <h1>나의 일상지원금, 현재 코인</h1>
+            </div><br>
 
-                <div th:if="${#lists.isEmpty(openedChallenges)}">
-                    <h1>진행중인 챌린지가 없습니다!!</h1>
-                </div>
+            <div>
+                <h1>현재 진행중인 챌린지</h1>
+            </div><br>
 
-                <table class="table" th:unless="${#lists.isEmpty(openedChallenges)}">
-                    <!-- head -->
-                    <thead>
-                    <tr>
-                        <td>챌린지 제목</td>
-                        <td>챌린지 내용</td>
-                        <td>소모 일상지원금</td>
-                        <td>상세보기</td>
-                    </tr>
-                    </thead>
+            <div class="flex rounded-lg overflow-hidden grid grid-cols-3">
+                <a class="card flex flex-row card-side shadow-xl border rounded m-3" th:each="challenge : ${myValidChallengeList}"
+                   th:href="@{|/challenge/detail/${challenge.id}|}">
+                    <figure>
+                        <img class="card-img border rounded-lg shadow-xl m-2"
+                             th:src="${ImageDateService.getOptimizingUrl(challenge.imgUrl, ListOption)}"
+                             alt="challengeImg">
+                    </figure>
+                    <div class="card-body flex p-2 text-center items-center">
+                        <h2 class="title font-bold" th:text="${challenge.name}"></h2>
+                        <div class="flex justify-center items-center">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-money-bill-wave fa-lg" style="color: #3faa31;"></i>
+                                <span class="text-sm"  th:text="${challenge.joinCost}"></span>
+                            </div>
+                            <div class="flex items-center ml-2">
+                                <i class="fa-solid fa-coins fa-lg" style="color: #eac02a;"></i>
+                                <span class="text-sm" th:text="${challenge.joinCost}"></span>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <i class="mt-2 flex fa-solid fa-calendar-days fa-lg" style="color: #6e95bf;"></i>
+                            <p class="text-sm" th:text="${challenge.getJoinDeadLineFormat()}"></p>
+                        </div>
+                        <div class="badge badge-sm badge-primary badge-outline rounded-md px-3 py-4">
+                            <i class="fa-solid fa-person-walking fa-lg mr-2"
+                               th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                            <i class="fa-solid fa-tree fa-lg mr-2"
+                               th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                            <i class="fa-solid fa-pen fa-lg mr-2"
+                               th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
+                            <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                        </div>
+                    </div>
+                </a>
+            </div><br>
 
-                    <tbody>
-                    <tr th:each="challenge : ${openedChallenges}">
-                        <td th:text="${challenge.name}"></td>
+            <div>
+                <h1>전체 챌린지</h1>
+            </div><br>
 
-                        <td th:text="${challenge.contents}"></td>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="label-text">전체</span>
+                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-3" checked/>
+                    <span class="label-text">환경</span>
+                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-3"/>
+                    <span class="label-text">습관</span>
+                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-3"/>
+                    <span class="label-text">기타</span>
+                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-3"/>
+                </label>
+            </div>
+            <br><br>
 
-                        <td th:text="${challenge.joinCost}"></td>
-
-                        <th>
-                            <a th:href="|/challenge/detail/${challenge.id}|" class="btn btn-sm">detail</a>
-                        </th>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="flex rounded-lg overflow-hidden grid grid-cols-2" th:if="${openedAndValid}">
+                <a class="card flex flex-row card-side shadow-xl border rounded m-3" th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">
+                    <figure>
+                        <img class="border rounded-lg shadow-xl m-2"
+                             th:src="${ImageDateService.getOptimizingUrl(challenge.imgUrl, ListOption)}"
+                             alt="challengeImg">
+                    </figure>
+                    <div class="card-body flex p-2 text-center items-center">
+                        <h2 class="title font-bold" th:text="${challenge.name}"></h2>
+                        <div class="flex justify-center items-center">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-money-bill-wave fa-lg" style="color: #3faa31;"></i>
+                                <span class="text-sm" th:text="${challenge.joinCost}"></span>
+                            </div>
+                            <div class="flex items-center ml-2">
+                                <i class="fa-solid fa-coins fa-lg" style="color: #eac02a;"></i>
+                                <span class="text-sm" th:text="${challenge.joinCost}"></span>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <i class="mt-2 flex fa-solid fa-calendar-days fa-lg" style="color: #6e95bf;"></i>
+                            <p class="text-sm" th:text="${challenge.getJoinDeadLineFormat()}"></p>
+                        </div>
+                        <div class="badge badge-sm badge-primary badge-outline rounded-md px-3 py-4">
+                            <i class="fa-solid fa-person-walking fa-lg mr-2"
+                               th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                            <i class="fa-solid fa-tree fa-lg mr-2"
+                               th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                            <i class="fa-solid fa-pen fa-lg mr-2"
+                               th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
+                            <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
-
     </main>
 </th:block>
 </body>

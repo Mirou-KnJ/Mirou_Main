@@ -181,4 +181,18 @@ public class ChallengeService {
             }
         }
     }
+    public List<Challenge> getMyValidChallengeList(String loginId) {
+
+        return challengeMemberService.getMyValidChallengeList(loginId);
+    }
+
+    public List<Challenge> getNotMineOpenedChallenge(List<Challenge> myChallenges, List<Challenge> openedChallenge) {
+
+        for(Challenge myChallenge : myChallenges) {
+            openedChallenge.remove(myChallenge);
+        }
+
+        return openedChallenge;
+    }
+
 }
