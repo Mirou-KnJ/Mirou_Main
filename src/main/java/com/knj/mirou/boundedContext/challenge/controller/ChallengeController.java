@@ -76,11 +76,11 @@ public class ChallengeController {
     public String openedChallengeList(Model model, Principal principal) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
-
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
 
+        model.addAttribute("openedAndValid",
+                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
         model.addAttribute("myValidChallengeList", myValidChallengeList);
-
         model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
         model.addAttribute("ImageDateService", imageDataService);
         model.addAttribute("openedChallenges", openedChallenges);

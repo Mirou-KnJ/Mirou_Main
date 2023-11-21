@@ -97,8 +97,9 @@ public class ChallengeMemberService {
 
     public List<Challenge> getMyValidChallengeList (String loginId){
 
-
         Optional<Member> OMember = memberService.getByLoginId(loginId);
+
+        //TODO 사용자가 로그인 했을 때 로그인 정보가 유효한지 검사
 
         Member member = OMember.get();
         List<ChallengeMember> membersAllList =

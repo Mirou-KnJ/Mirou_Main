@@ -51,13 +51,4 @@ public class ChallengeMemberController {
         return "redirect:/challenge/detail/" + challengeId;
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/list")
-//    public String progressChallengeList(Model model, Principal principal){
-//
-//
-//        return "view/challenge/list";
-//    }
-
-
 }

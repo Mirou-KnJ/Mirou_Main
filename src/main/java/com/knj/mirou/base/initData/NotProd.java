@@ -55,6 +55,9 @@ public class NotProd {
 
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);
                     RsData<Challenge> createRs = challengeService.tryCreate(createDto, DEFAULT_IMG_URL);
+
+                    createRs.printResult();
+
                     Challenge createdChallenge = createRs.getData();
                     imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, DEFAULT_IMG_URL);
                 }
