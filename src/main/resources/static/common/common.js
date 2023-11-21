@@ -28,11 +28,11 @@ function parseMsg(msg) {
     return [pureMsg, true];
 }
 
-function toastNotice(msg) {
+function toastSuccess(msg) {
     const [pureMsg, needToShow] = parseMsg(msg);
 
     if (needToShow) {
-        toastr["success"](pureMsg, "알림");
+        toastr["success"](pureMsg, "성공");
     }
 }
 
@@ -41,6 +41,22 @@ function toastWarning(msg) {
 
     if (needToShow) {
         toastr["warning"](pureMsg, "경고");
+    }
+}
+
+function toastError(msg) {
+    const [pureMsg, needToShow] = parseMsg(msg);
+
+    if (needToShow) {
+        toastr["error"](pureMsg, "에러");
+    }
+}
+
+function toastInfo(msg) {
+    const [pureMsg, needToShow] = parseMsg(msg);
+
+    if (needToShow) {
+        toastr["info"](pureMsg, "정보");
     }
 }
 

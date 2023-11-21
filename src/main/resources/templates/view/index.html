@@ -22,11 +22,21 @@
             </div>
 
             <div sec:authorize="isAuthenticated()">
-                <a class="btn btn-secondary" href="/feed/writeForm">인증하러 가기</a>
+                <a class="btn btn-secondary" onclick="toastTest()">인증하러 가기</a>
             </div>
 
         </div>
     </main>
+
+    <script th:inline="javascript">
+        function toastTest() {
+            toastWarning('제목을 입력해주세요.');
+            toastInfo('정보');
+            toastError('에러');
+            toastSuccess('성공');
+            return;
+        }
+    </script>
 </th:block>
 </body>
 </html>
