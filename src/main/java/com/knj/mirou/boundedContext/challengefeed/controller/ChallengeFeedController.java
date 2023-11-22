@@ -79,24 +79,6 @@ public class ChallengeFeedController {
         return "redirect:/challenge/detail/" + challengeId;
     }
 
-    @GetMapping("/detail/{id}")
-    public String showDetail(@PathVariable(value = "id") long feedId, Model model) {
-
-        Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
-        if(OFeed.isEmpty()) {
-            return "redirect:/";        //FIXME
-        }
-        ChallengeFeed feed = OFeed.get();
-
-        //FIXME: 크기 조정된 이미지로 변경 필요
-        ImageData feedImg = imageDataService.getByIdAndTarget(feedId, ImageTarget.FEED_IMG);
-
-        model.addAttribute("feed", feed);
-        model.addAttribute("feedImg", feedImg.getImageUrl());
-
-        return "view/challengeFeed/detail";
-    }
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/list/{id}")
     public String showList(@PathVariable(value = "id") long challengeId, Model model) {
