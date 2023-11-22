@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,6 +48,15 @@ public class ChallengeMember extends BaseEntity {
 
     public void finishChallenge() {
         this.progress = Progress.PROGRESS_END;
+    }
+
+    public int getLastDayNumber() {
+
+        LocalDate today = LocalDate.now();
+        int todayValue = (today.getYear() * 365) + (today.getMonthValue() * 12) + today.getDayOfMonth();
+        int endDateValue = (endDate.getYear() * 365) + (endDate.getMonthValue() * 12) + endDate.getDayOfMonth();
+
+        return endDateValue - todayValue;
     }
 
 }
