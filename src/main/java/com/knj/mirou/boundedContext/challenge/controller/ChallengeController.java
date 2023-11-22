@@ -8,9 +8,12 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -37,6 +41,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
+    private final MemberService memberService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
@@ -78,6 +83,15 @@ public class ChallengeController {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+        String loginId = principal.getName();
+        Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
+
+        if(ObyLoginId.isPresent()) {
+            Member member = ObyLoginId.get();
+            model.addAttribute("member", member);
+        } else {
+            return null;
+        }
 
         model.addAttribute("openedAndValid",
                 challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
