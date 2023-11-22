@@ -1,7 +1,6 @@
 package com.knj.mirou.base.initData;
 
 import com.knj.mirou.boundedContext.challenge.config.LabelConfig;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
