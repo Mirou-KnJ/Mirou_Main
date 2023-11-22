@@ -110,7 +110,11 @@ public class ChallengeFeedController {
 
         model.addAttribute("feedListDto", feedListDto);
 
-        return "view/challengeFeed/list";
+        //FIXME: 임시
+        model.addAttribute("ImageDataService", imageDataService);
+        model.addAttribute("option", OptimizerOption.FEED_MODAL);
+
+        return "/view/challengeFeed/list";
     }
 
 }
