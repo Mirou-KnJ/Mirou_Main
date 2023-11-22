@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -115,6 +112,23 @@ public class ChallengeFeedController {
         model.addAttribute("option", OptimizerOption.FEED_MODAL);
 
         return "/view/challengeFeed/list";
+    }
+
+    @ResponseBody
+    @PostMapping("/like/{id}")
+    public void like(@PathVariable(value = "id") long feedId) {
+
+        Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
+        if(OFeed.isEmpty()) {
+            return;
+        }
+
+        //FIXME: 새로고침만 된다면 좋아요는 몇번이고 누를 수 있으며, 좋아한 내용이 저장되지 않는 단순한 상황.
+        ChallengeFeed challengeFeed = OFeed.get();
+
+        challengeFeedService.updateLikeCount(challengeFeed);
+
+        log.info("좋아요 수 : " + challengeFeed.getLikeCount());
     }
 
 }

@@ -56,7 +56,8 @@
                  th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
                 <div class="w-auto grid grid-cols-3 gap-6">
                     <div class="flex flex-col bg-base-100 shadow-xl mb-3 w-full"
-                         th:each="feed : ${feedListDto.notMineFeeds}" th:onclick="'feedModal' + ${feed.id} + '.showModal()'">
+                         th:each="feed : ${feedListDto.notMineFeeds}"
+                         th:onclick="'feedModal' + ${feed.id} + '.showModal()'">
                         <img th:src="${ImageDataService.getOptimizingUrl(feed.imgUrl, option)}" alt="feedPreView">
 
                         <dialog th:id="'feedModal' + ${feed.id}" class="modal">
@@ -69,13 +70,15 @@
                                 <img th:src="${feed.imgUrl}" alt="feedImg">
                                 <p class="pt-2 text-sm text-gray-500" th:text="${feed.getCreateDateFormatStr()}"></p>
                                 <p class="pt-1 pb-6" th:text="${feed.contents}"></p>
-                                <div class="flex justify-center gap-5 mb-5">
-                                    <a href="#" >
+                                <div class="flex justify-center mb-5">
+                                    <a th:onclick="|tryLike(${feed.id}, this)|">
                                         <i class="fa-regular fa-heart fa-shake fa-2xl" style="color: #f72b2b;"></i>
                                     </a>
-                                    <a class="tooltip" data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요." href="#" >
+                                    <span class="text-xs inline-block" th:text="${feed.likeCount}" style="color: #f72b2b"></span>
+                                    <a class="ml-6 tooltip" data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요." href="#">
                                         <i class="fa-solid fa-ban fa-2xl" style="color: #f72b2b;"></i>
                                     </a>
+
                                 </div>
                             </div>
                         </dialog>
@@ -85,6 +88,33 @@
 
         </div>
     </main>
+
+    <script th:inline="javascript">
+
+        function tryLike(feedId, element) {
+
+            element.onclick = null;
+
+            let url = "/feed/like/" + feedId;
+
+            const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+            const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    [headerName]: tokenValue
+                }
+            })
+                .catch((error) => {
+                    console.log('Error:', error);
+                    return;
+                })
+
+            toastNotice("좋아요가 반영되었습니다.");
+        }
+    </script>
 </th:block>
 </body>
 </html>

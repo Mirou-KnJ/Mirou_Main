@@ -161,4 +161,9 @@ public class ChallengeFeedService {
         return feedListDto;
     }
 
+    @Transactional
+    public void updateLikeCount(ChallengeFeed challengeFeed) {
+        challengeFeed.updateLikeCount();
+    }
+
 }

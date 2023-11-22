@@ -37,4 +37,8 @@ public class ChallengeFeed extends BaseEntity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY년 MM월 dd일 HH시 mm분 인증");
         return formatter.format(getCreateDate());
     }
+
+    public void updateLikeCount() {
+        this.likeCount = likeCount + 1;
+    }
 }
