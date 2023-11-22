@@ -12,6 +12,7 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
+import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -105,7 +106,17 @@ public class ChallengeService {
         detailDTO.setLoginMember(member);
 
         Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
-        detailDTO.setJoin(OChallengeMember.isPresent());
+
+        if(OChallengeMember.isPresent()) {
+            ChallengeMember challengeMember = OChallengeMember.get();
+            List<PrivateReward> privateReward = challengeMember.getPrivateReward();
+            detailDTO.setJoin(true);
+            detailDTO.setSuccessNum(challengeMember.getSuccessNumber());
+            detailDTO.setMaxNum(privateReward.get(privateReward.size()-1).getRound());
+            detailDTO.setLastDayNum(challengeMember.getLastDayNumber());
+        } else {
+            detailDTO.setJoin(false);
+        }
 
         ChallengeMember challengeMember;
         if(!detailDTO.isJoin()) {

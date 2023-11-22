@@ -24,6 +24,9 @@ public class ChallengeDetailDTO {
     private int memberCount;
     private Member loginMember;
     private Challenge challenge;
+    private int successNum;
+    private int maxNum;
+    private int lastDayNum;
     private List<PublicReward> publicRewards;
     private List<PrivateReward> privateRewards;
     private List<ChallengeFeed> recently3Feeds;
