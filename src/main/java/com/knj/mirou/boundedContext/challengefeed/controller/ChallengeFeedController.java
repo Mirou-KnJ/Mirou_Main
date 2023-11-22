@@ -97,6 +97,7 @@ public class ChallengeFeedController {
         return "view/challengeFeed/detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/list/{id}")
     public String showList(@PathVariable(value = "id") long challengeId, Model model) {
 

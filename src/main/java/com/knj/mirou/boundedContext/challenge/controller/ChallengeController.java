@@ -81,6 +81,7 @@ public class ChallengeController {
         return "redirect:/reward/setting/" + createdChallenge.getId();
     }
 
+    @PreAuthorize("isAuthenticated()")      //FIXME: principal null 오류 임시 방지, 수정 필요
     @GetMapping("/list")
     public String openedChallengeList(Model model, Principal principal) {
 
