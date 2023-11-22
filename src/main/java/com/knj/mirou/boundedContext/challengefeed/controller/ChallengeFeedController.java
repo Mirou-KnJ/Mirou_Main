@@ -95,4 +95,12 @@ public class ChallengeFeedController {
         return "view/challengeFeed/detail";
     }
 
+    @GetMapping("/list/{id}")
+    public String showList(@PathVariable(value = "id") long challengeId) {
+
+
+
+        return "view/challengeFeed/list";
+    }
+
 }

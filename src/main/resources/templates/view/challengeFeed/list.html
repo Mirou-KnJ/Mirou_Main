@@ -1,0 +1,36 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title th:text="${detailDTO.challenge.name}"></title>
+    <script th:inline="javascript">
+
+        function tryJoinBtn() {
+            const challengeName = /*[[${detailDTO.challenge.name}]]*/'';
+            const joinCost =/*[[${detailDTO.challenge.joinCost}]]*/'';
+            const canJoin = /*[[${detailDTO.canJoin}]]*/'';
+            const successUrl = /*[[|/challengeMember/join/${detailDTO.challenge.id}|]]*/'';
+
+            if (canJoin) {
+                const confirmResult = confirm(challengeName + "에 참여하시겠습니까?\n참가비용 : " + joinCost + "포인트");
+                if (confirmResult) {
+                    window.location.href = successUrl;
+                } else {
+                    alert("참여가 취소되었습니다.");
+                }
+            } else {
+                alert("챌린지는 최대 3개만 참여 가능합니다.");
+            }
+        }
+    </script>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar">
+
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
