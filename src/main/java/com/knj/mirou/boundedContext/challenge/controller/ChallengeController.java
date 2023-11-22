@@ -66,7 +66,6 @@ public class ChallengeController {
         RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, tryUploadRs.getData());
         if (createRsData.isFail()) {
             createRsData.printResult();
-            bindingResult.reject("global.error", createRsData.getResultCode() + ": " + createRsData.getMsg());
             return rq.historyBack(createRsData);
         }
 
