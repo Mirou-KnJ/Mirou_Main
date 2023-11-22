@@ -28,18 +28,25 @@
                 let challengeId = /*[[${challenge.id}]]*/'';
                 let url = '/reward/confirmSettings/'+challengeId;
 
+                const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+                const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
                 fetch(url, {
                     method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        [headerName] : tokenValue
+                    }
                 })
                     .then(response => {
                         if(response.ok) {
                             window.location.href = "/member/admin";
                         } else {
-                            console.error('Error:', response.status);
+                            console.log('Error:', response.status);
                         }
                     })
                     .catch((error) => {
-                        console.error('Error:', error);
+                        console.log('Error:', error);
                     })
             } else {
                 alert("세팅이 취소되었습니다.");

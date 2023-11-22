@@ -76,9 +76,16 @@ public class ChallengeController {
     }
 
     @GetMapping("/list")
-    public String openedChallengeList(Model model) {
+    public String openedChallengeList(Model model, Principal principal) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+
+        model.addAttribute("openedAndValid",
+                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
+        model.addAttribute("myValidChallengeList", myValidChallengeList);
+        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
+        model.addAttribute("ImageDateService", imageDataService);
         model.addAttribute("openedChallenges", openedChallenges);
         return "view/challenge/list";
     }
@@ -99,6 +106,8 @@ public class ChallengeController {
         Challenge challenge = detailDTO.getChallenge();
         detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(detailDTO.getLoginMember(), challenge));
         detailDTO.setRecently3Feeds(challengeFeedService.getRecently3Feed(challenge));
+
+        log.info("canJoin : " + detailDTO.isCanJoin());
 
         model.addAttribute("detailDTO", detailDTO);
         model.addAttribute("challengeImg",

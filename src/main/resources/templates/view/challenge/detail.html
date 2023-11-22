@@ -3,14 +3,24 @@
 <head>
     <title th:text="${detailDTO.challenge.name}"></title>
     <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            var cantJoinBtn = document.getElementById('cantJoinBtn');
-            if (cantJoinBtn) {
-                cantJoinBtn.addEventListener('click', function () {
-                    alert('참여가능한 챌린지 횟수를 초과했습니다.');
-                });
+
+        function tryJoinBtn() {
+            const challengeName = /*[[${detailDTO.challenge.name}]]*/'';
+            const joinCost =/*[[${detailDTO.challenge.joinCost}]]*/'';
+            const canJoin = /*[[${detailDTO.canJoin}]]*/'';
+            const successUrl = /*[[|/challengeMember/join/${detailDTO.challenge.id}|]]*/'';
+
+            if (canJoin) {
+                const confirmResult = confirm(challengeName + "에 참여하시겠습니까?\n참가비용 : " + joinCost + "포인트");
+                if (confirmResult) {
+                    window.location.href = successUrl;
+                } else {
+                    alert("참여가 취소되었습니다.");
+                }
+            } else {
+                alert("챌린지는 최대 3개만 참여 가능합니다.");
             }
-        });
+        }
     </script>
 </head>
 <body>
@@ -76,28 +86,18 @@
                                th:href="|/feed/write/${detailDTO.challenge.id}|" th:disabled="${detailDTO.canWrite}">
                                 <i class="fa-solid fa-check"></i>
                             </a>
-                            <span th:if="${!detailDTO.canWrite}" class="flex justify-center text-sm font-thin">인증하기</span>
+                            <span th:if="${!detailDTO.canWrite}"
+                                  class="flex justify-center text-sm font-thin">인증하기</span>
                             <span th:if="${detailDTO.canWrite}" class="flex justify-center text-sm font-thin tooltip"
                                   data-tip="오늘은 이미 인증을 완료했어요!">인증완료</span>
                         </div>
                     </div>
 
-                    <!-- FIXME: 두 가지 상황을 다 코드에 놓지 말고, 클릭했을 때 검사하는 것으로 변경 -->
                     <div class="flex mb-2" th:unless="${detailDTO.isJoin}">
-                        <div class="flex shadow-xl ml-3" th:if="${detailDTO.canJoin}">
+                        <div class="flex shadow-xl ml-3">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
-                                <a class="btn m-3 rounded-md bg-purple-300"
-                                   th:href="|/challengeMember/join/${detailDTO.challenge.id}|">
+                                <a class="btn m-3 rounded-md bg-purple-300" onclick="tryJoinBtn()">
                                     <i class="fa-regular fa-user fa-lg"></i>
-                                </a>
-                                <span class="mt-2 flex justify-center text-sm font-thin">참가하기</span>
-                            </div>
-                        </div>
-
-                        <div class="flex shadow-xl ml-3" th:unless="${detailDTO.canJoin}">
-                            <div class="flex flex-col rounded-md bg-white py-3 px-2">
-                                <a id="cantJoinBtn" class="btn btn-info rounded-md">
-                                    <i class="fa-regular fa-user"></i>
                                 </a>
                                 <span class="mt-2 flex justify-center text-sm font-thin">참가하기</span>
                             </div>
@@ -142,24 +142,16 @@
                     <div class="flex flex-row">
                         <div class="w-1/2 mt-3">
                             <div class="flex justify-center">
-                                <!-- TODO: value값을 challengeMember의 successNumber로-->
-                                <progress class="progress progress-success w-48" value="1"
-                                          th:max="${detailDTO.privateRewards
-                                          .get(#lists.size(detailDTO.privateRewards)-1).round}"></progress>
+                                <progress class="progress progress-success w-48" th:value="${detailDTO.successNum}"
+                                          th:max="${detailDTO.maxNum}"></progress>
                             </div>
                             <div class="flex justify-center mt-2">
-                                <h1 th:text=" '1' + ' / ' + ${detailDTO.privateRewards
-                                .get(#lists.size(detailDTO.privateRewards)-1).round}"></h1>
+                                <h1 th:text=" ${detailDTO.successNum} + ' / ' + ${detailDTO.maxNum}"></h1>
                             </div>
                         </div>
 
-                        <!-- FIXME -->
                         <div class="w-1/2 h-full">
-<!--                            <div id="progress" class="radial-progress"-->
-<!--                                 th:style="'&#45;&#45;value:' + (1*100)/${rewardList.get(#lists.size(rewardList)-1).round}"-->
-<!--                                 th:text="${#numbers.formatPercent(rewardList.get(#lists.size(rewardList)-1).round}"-->
-<!--                                 role="progressbar" ></div>-->
-                            <div> 종료까지 00일 남았습니다.</div>
+                            <h1 th:text="'종료까지 ' + ${detailDTO.getLastDayNum()} + '일 남았습니다.'"></h1>
                         </div>
                     </div>
 

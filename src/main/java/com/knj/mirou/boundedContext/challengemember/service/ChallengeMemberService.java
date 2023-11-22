@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,6 +93,25 @@ public class ChallengeMemberService {
 
     public int getCountByLinkedChallenge(Challenge challenge) {
         return challengeMemberRepository.countByLinkedChallenge(challenge);
+    }
+
+    public List<Challenge> getMyValidChallengeList (String loginId){
+
+        Optional<Member> OMember = memberService.getByLoginId(loginId);
+
+        //TODO 사용자가 로그인 했을 때 로그인 정보가 유효한지 검사
+
+        Member member = OMember.get();
+        List<ChallengeMember> membersAllList =
+                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
+
+        List<Challenge> inProgressChallenges = new ArrayList<>();
+
+        for(ChallengeMember cm : membersAllList) {
+            inProgressChallenges.add(cm.getLinkedChallenge());
+        }
+
+        return inProgressChallenges;
     }
 
     @Transactional

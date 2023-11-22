@@ -6,11 +6,11 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
-            <div class="flex flex-col justify-center items-center w-full min-h-screen mb-30">
-                <div id="my" class="flex justify-center items-center bg-purple-300 w-full h-48">
-                    <span class="text-3xl font-extrabold text-white">마이페이지</span>
+            <div class="flex flex-col justify-center items-center w-full h-full mb-30">
+                <div id="my" class=" w-full flex justify-center items-center h-48">
+                    <span class="text-3xl font-extrabold text-black">마이페이지</span>
                 </div>
 
                 <!-- FIXME absolute 재설정 필요 -->
@@ -20,7 +20,7 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-50 w-full h-full">
+                <div class=" w-full h-full">
 
                     <div class="flex flex-col mt-24">
 
@@ -29,9 +29,9 @@
                         </div>
 
                         <div class="flex justify-center items-center">
-                            <div class="flex w-4/5 stats shadow">
-                                <div class="stat w-3/4">
-                                    <div class="stat-figure text-info mt-3">
+                            <div class="flex stats shadow min-w-min">
+                                <div class="stat w-full">
+                                    <div class="stat-figure text-info mt-3 pr-2">
                                         <i class="fa-solid fa-spinner inline-block fa-lg"></i>
                                     </div>
                                     <div class="stat-title">진행중인 챌린지</div>
@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
 
-                                <div class="stat w-3/4">
+                                <div class="stat w-full">
                                     <div class="stat-figure text-accent mt-3">
                                         <i class="fa-solid fa-check inline-block fa-lg"></i>
                                     </div>
@@ -60,8 +60,8 @@
                         </div>
 
                         <div class="flex justify-center items-center">
-                            <div class="flex w-4/5 stats shadow">
-                                <div class="stat w-3/4">
+                            <div class="flex stats shadow min-w-min">
+                                <div class="stat w-full mr-2">
                                     <div class="stat-figure text-primary mt-3">
                                         <i class="fa-solid fa-ticket-simple fa-lg"></i>
                                     </div>
@@ -71,8 +71,8 @@
                                     </div>
                                 </div>
 
-                                <div class="stat w-3/4">
-                                    <div class="stat-figure text-warning mt-3">
+                                <div class="stat w-full ml-4">
+                                    <div class="stat-figure text-warning mt-3 pr-6">
                                         <i class="fa-solid fa-coins fa-lg"></i>
                                     </div>
                                     <div class="stat-title">코인</div>
