@@ -74,8 +74,10 @@
                                     <a th:onclick="|tryLike(${feed.id}, this)|">
                                         <i class="fa-regular fa-heart fa-shake fa-2xl" style="color: #f72b2b;"></i>
                                     </a>
-                                    <span class="text-xs inline-block" th:text="${feed.likeCount}" style="color: #f72b2b"></span>
-                                    <a class="ml-6 tooltip" data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요." href="#">
+                                    <span class="text-xs inline-block" th:text="${feed.likeCount}"
+                                          style="color: #f72b2b"></span>
+                                    <a th:onclick="|tryReport(${feed.id})|" class="ml-6 tooltip"
+                                       data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요.">
                                         <i class="fa-solid fa-ban fa-2xl" style="color: #f72b2b;"></i>
                                     </a>
 
@@ -113,6 +115,35 @@
                 })
 
             toastNotice("좋아요가 반영되었습니다.");
+        }
+
+        function tryReport(targetFeedId) {
+
+            const reporterId = /*[[${@rq.member.id}]]*/'';
+            const csrfToken = /*[[${_csrf.token}]]*/'';
+            const contents = prompt("신고 사유를 작성해 주세요.");
+
+            if(contents === null) {
+                toastNotice("신고가 취소되었습니다.")
+                return;
+            }
+
+            const requestData = {
+                reporterId: reporterId,
+                targetFeedId: targetFeedId,
+                contents: contents,
+                _csrf: csrfToken
+            };
+
+            $.ajax({
+                url: "/report/tryReport",
+                type: "POST",
+                data: requestData,
+                success: function (data) {
+                    const response = data;
+                    // toastNotice(response.getMsg());
+                }
+            })
         }
     </script>
 </th:block>
