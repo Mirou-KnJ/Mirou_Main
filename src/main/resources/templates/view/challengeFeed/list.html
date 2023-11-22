@@ -65,8 +65,8 @@
                                 <h3 class="flex justify-center font-bold mb-2"
                                     th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
                                 <img th:src="${feed.imgUrl}" alt="feedImg">
-                                <p class="pt-2 text-sm text-gray-500" th:text="${feed.createDate}"></p>
-                                <p class="pt-1 pb-3" th:text="${feed.contents}"></p>
+                                <p class="pt-2 text-sm text-gray-500" th:text="${feed.getCreateDateFormatStr()}"></p>
+                                <p class="pt-1 pb-6" th:text="${feed.contents}"></p>
                                 <div class="flex justify-center gap-5 mb-5">
                                     <a href="#" >
                                         <i class="fa-regular fa-heart fa-shake fa-2xl" style="color: #f72b2b;"></i>

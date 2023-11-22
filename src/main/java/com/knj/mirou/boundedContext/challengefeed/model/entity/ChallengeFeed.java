@@ -9,6 +9,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -29,4 +32,9 @@ public class ChallengeFeed extends BaseEntity {
     private int likeCount = 0;
 
     private String imgUrl;
+
+    public String getCreateDateFormatStr() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY년 MM월 dd일 HH시 mm분 인증");
+        return formatter.format(getCreateDate());
+    }
 }
