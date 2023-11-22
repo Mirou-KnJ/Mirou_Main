@@ -4,8 +4,17 @@
     font-weight: normal;
     font-style: normal;
 }
+
 html > body {
     font-family: 'JalnanGothic';
     text-underline-position: under;
     word-break: keep-all;
+}
+
+#toast-container .toast-title {
+    font-size: 14px;
+}
+
+#toast-container .toast-message {
+    font-size: 12px;
 }
