@@ -25,13 +25,15 @@
                         <img th:src="${ImageDataService.getOptimizingUrl(myFeed.imgUrl, option)}" alt="feedPreView">
 
                         <dialog th:id="'feedModal' + ${myFeed.id}" class="modal">
-                            <div class="modal-box">
+                            <div class="flex flex-col justify-center modal-box">
                                 <form method="dialog">
                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                 </form>
-                                <h3 class="font-bold" th:text="${myFeed.writer.getNickname()}"></h3>
+                                <h3 class="flex justify-center font-bold mb-2"
+                                    th:text="${myFeed.writer.getNickname()} + ' 님의 인증글'"></h3>
                                 <img th:src="${myFeed.imgUrl}" alt="feedImg">
-                                <p class="py-4" th:text="${myFeed.contents}"></p>
+                                <p class="pt-2 text-sm text-gray-500" th:text="${myFeed.getCreateDateFormatStr()}"></p>
+                                <p class="pt-1 pb-6" th:text="${myFeed.contents}"></p>
                             </div>
                         </dialog>
                     </div>
