@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,13 +52,13 @@ public class ChallengeController {
     public String create(@Valid ChallengeCreateDTO createDTO, MultipartFile img,
                          BindingResult bindingResult) throws IOException {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             log.error("[ERROR] : " + bindingResult.getAllErrors());
             return "redirect:/challenge/create";
         }
 
         RsData<String> tryUploadRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
-        if(tryUploadRs.isFail()) {
+        if (tryUploadRs.isFail()) {
             tryUploadRs.printResult();
             return "redirect:/challenge/create";
         }
@@ -95,7 +97,7 @@ public class ChallengeController {
         String loginId = principal.getName();
 
         RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
-        if(getDetailRs.isFail()) {
+        if (getDetailRs.isFail()) {
             getDetailRs.printResult();
             return "redirect:/";        //fixme
         }
@@ -103,10 +105,17 @@ public class ChallengeController {
         ChallengeDetailDTO detailDTO = getDetailRs.getData();
         Challenge challenge = detailDTO.getChallenge();
         detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(detailDTO.getLoginMember(), challenge));
-        detailDTO.setRecently3Feeds(challengeFeedService.getRecently3Feed(challenge));
 
-        log.info("canJoin : " + detailDTO.isCanJoin());
+        List<ChallengeFeed> recently3Feed = challengeFeedService.getRecently3Feed(challenge);
+        detailDTO.setRecently3Feeds(recently3Feed);
 
+        //FIXME: 임시코드. 리팩토링 필수
+        List<String> imgList = new ArrayList<>();
+        for (ChallengeFeed feed : recently3Feed) {
+            imgList.add(imageDataService.getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL));
+        }
+
+        detailDTO.setFeedOptimizedImages(imgList);
         model.addAttribute("detailDTO", detailDTO);
         model.addAttribute("challengeImg",
                 imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));

@@ -27,6 +27,7 @@ public class ChallengeDetailDTO {
     private int successNum;
     private int maxNum;
     private int lastDayNum;
+    private List<String> feedOptimizedImages;
     private List<PublicReward> publicRewards;
     private List<PrivateReward> privateRewards;
     private List<ChallengeFeed> recently3Feeds;
