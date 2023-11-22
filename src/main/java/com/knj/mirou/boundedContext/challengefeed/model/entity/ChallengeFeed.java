@@ -31,6 +31,9 @@ public class ChallengeFeed extends BaseEntity {
     @Builder.Default
     private int likeCount = 0;
 
+    @Builder.Default
+    private int reportCount = 0;
+
     private String imgUrl;
 
     public String getCreateDateFormatStr() {
@@ -40,5 +43,9 @@ public class ChallengeFeed extends BaseEntity {
 
     public void updateLikeCount() {
         this.likeCount = likeCount + 1;
+    }
+
+    public void updateReportCount() {
+        this.reportCount = reportCount + 1;
     }
 }

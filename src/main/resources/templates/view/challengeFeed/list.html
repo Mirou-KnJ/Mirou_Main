@@ -141,7 +141,14 @@
                 data: requestData,
                 success: function (data) {
                     const response = data;
-                    // toastNotice(response.getMsg());
+                    const code = response.resultCode;
+                    const msg = response.msg;
+
+                    if(code.toString().startsWith('F')) {
+                        toastWarning(code + ': ' + msg);
+                    } else {
+                        toastNotice(code + ': ' + msg);
+                    }
                 }
             })
         }
