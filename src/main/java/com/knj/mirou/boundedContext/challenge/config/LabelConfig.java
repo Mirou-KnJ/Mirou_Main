@@ -1,7 +1,6 @@
 package com.knj.mirou.boundedContext.challenge.config;
 
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

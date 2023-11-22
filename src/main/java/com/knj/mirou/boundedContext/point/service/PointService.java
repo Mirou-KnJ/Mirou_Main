@@ -1,7 +1,6 @@
 package com.knj.mirou.boundedContext.point.service;
 
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;

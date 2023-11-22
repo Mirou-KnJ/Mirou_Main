@@ -6,7 +6,6 @@ import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

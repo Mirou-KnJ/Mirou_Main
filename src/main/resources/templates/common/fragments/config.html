@@ -13,6 +13,9 @@
     <!-- 공통 CSS 불러오기 -->
     <link href="/common/common.css" rel="stylesheet">
 
+    <!-- 공통 JS 불러오기 -->
+    <script src="/common/common.js"></script>
+
     <!-- csrf toekn-->
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
@@ -23,6 +26,10 @@
     <!-- toast ui 불러오기 -->
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" importance="high"/>
+
+    <!-- toastr 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
 
     <!-- 폰트어썸 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

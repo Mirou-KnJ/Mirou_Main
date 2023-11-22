@@ -23,16 +23,12 @@ public class RsData<T> {
         return of(resultCode, msg, null);
     }
 
-    public static <T> RsData<T> successOf(T data) {
-        return of("S-1", "성공", data);
-    }
-
-    public static <T> RsData<T> failOf(T data) {
-        return of("F-1", "실패", data);
-    }
-
     public boolean isSuccess() {
         return resultCode.startsWith("S-");
+    }
+
+    public boolean isFail() {
+        return !isSuccess();
     }
 
     public void printResult() {
@@ -41,9 +37,5 @@ public class RsData<T> {
         } else {
             log.error(resultCode + ": " + msg);
         }
-    }
-
-    public boolean isFail() {
-        return !isSuccess();
     }
 }
