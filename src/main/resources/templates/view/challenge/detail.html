@@ -168,11 +168,22 @@
                     <div class="flex gap-3" th:unless="${#lists.isEmpty(detailDTO.recently3Feeds)}">
                         <div class="flex flex-col w-full" th:each="feed : ${detailDTO.recently3Feeds}">
                             <div class="flex justify-center">
-                                <a th:href="|/feed/detail/${feed.id}|">
-                                    <div class="grid w-28 h-28 bg-indigo-300 place-items-center rounded-xl">
-                                        <span th:text="${feed.contents}"></span>
+                                <div th:onclick="'feedModal' + ${feed.id} + '.showModal()'"
+                                     class="grid w-28 h-28 bg-indigo-300 place-items-center rounded-xl">
+                                    <span th:text="${#strings.length(feed.contents) > 7
+                                    ? #strings.substring(feed.contents, 0, 7) + '...' : feed.contents}"></span>
+                                </div>
+                                <dialog th:id="'feedModal' + ${feed.id}" class="modal">
+                                    <div class="modal-box">
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                        </form>
+                                        <h3 class="font-bold" th:text="${feed.writer.getNickname()}"></h3>
+                                        <!-- TODO: 이미지 리사이징 -->
+                                        <img th:src="${feed.imgUrl}" alt="feedImg">
+                                        <p class="py-4" th:text="${feed.contents}"></p>
                                     </div>
-                                </a>
+                                </dialog>
                             </div>
                             <div class="flex justify-center">
                                 <span th:text="${#strings.substring(feed.writer.nickname, 0, 10) + '...'}"></span>
