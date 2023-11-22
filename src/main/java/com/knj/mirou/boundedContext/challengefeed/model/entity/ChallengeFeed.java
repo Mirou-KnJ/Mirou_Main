@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.challengefeed.entity;
+package com.knj.mirou.boundedContext.challengefeed.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;

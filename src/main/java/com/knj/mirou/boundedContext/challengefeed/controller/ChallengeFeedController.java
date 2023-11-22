@@ -1,9 +1,11 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
@@ -31,6 +33,7 @@ import java.util.Optional;
 @RequestMapping("/feed")
 public class ChallengeFeedController {
 
+    private final Rq rq;
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
@@ -96,9 +99,16 @@ public class ChallengeFeedController {
     }
 
     @GetMapping("/list/{id}")
-    public String showList(@PathVariable(value = "id") long challengeId) {
+    public String showList(@PathVariable(value = "id") long challengeId, Model model) {
 
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()){
+            return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
+        }
 
+        FeedListDTO feedListDto = challengeFeedService.getListDto(OChallenge.get());
+
+        model.addAttribute("feedListDto", feedListDto);
 
         return "view/challengeFeed/list";
     }
