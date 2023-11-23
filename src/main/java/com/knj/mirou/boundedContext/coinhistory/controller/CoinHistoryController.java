@@ -32,6 +32,7 @@ public class CoinHistoryController {
 
         List<CoinHistory> coinHistories = coinHistoryService.getAllOrderedDesc(loginedMember);
 
+        model.addAttribute("memberCoin", loginedMember.getCoin());
         model.addAttribute("coinHistories", coinHistories);
 
         return "view/coin/history";
