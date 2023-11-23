@@ -8,7 +8,7 @@
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
-            <div class="flex justify-center items-center mb-3">
+            <div class="flex justify-center items-center">
                 <div class="flex rounded-lg bg-purple-200 w-full py-1 px-2">
                     <div class="flex flex-col justify-center items-center mx-3 my-2">
                         <p class="text-sm text-gray-500">보유 코인</p>
@@ -28,6 +28,8 @@
                 </div>
             </div>
 
+            <div class="divider"></div>
+
             <div class="flex flex-col w-full">
                 <div th:if="${#lists.isEmpty(coinHistories)}">
                     <div>
@@ -40,10 +42,7 @@
 
                     <div class="flex w-full">
                         <div class="flex flex-grow-0 items-center">
-                            <!-- FIXME: 임시 이미지-->
-                            <img class="w-12 h-12 card rounded-full mx-5"
-                                 src="https://suicitorbsmu20367272.cdn.ntruss.com/feed_img/04114b20-62fb-43f7-9d0d-a0cf7cb178bb.jpg?type=m&w=50&h=50&quality=100&bgcolor=FFFFFF&ttype=png"
-                                 alt="CoinHistoryImg">
+                            <img class="w-12 h-12 card rounded-full mx-5" th:src="${history.imgUrl}" alt="CoinHistoryImg">
                         </div>
 
                         <div class="flex flex-col flex-grow mt-2">
