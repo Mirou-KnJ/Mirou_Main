@@ -21,7 +21,7 @@ import java.util.Optional;
 public class StoreService {
 
     private final ProductService productService;
-    private final StroeRepository stroeRepository;
+    private final StroeRepository storeRepository;
 
     public List<Product> getAllProducts() {
 
@@ -43,9 +43,14 @@ public class StoreService {
                 .saleType(SaleType.valueOf(saleType))
                 .build();
 
-        stroeRepository.save(store);
+        storeRepository.save(store);
 
         return RsData.of("S-1", "상점 등록에 성공하였습니다.");
+    }
+
+    public List<Store> getAllStoreProduct() {
+
+        return storeRepository.findAll();
     }
 
 }

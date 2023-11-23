@@ -3,6 +3,7 @@ package com.knj.mirou.boundedContext.store.controller;
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
+import com.knj.mirou.boundedContext.store.model.entity.Store;
 import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import com.knj.mirou.boundedContext.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,16 @@ public class StoreController {
         }
 
         return rq.redirectWithMsg("/store/add", createRs);
+    }
+
+    @GetMapping("/storePage")
+    public String storePage(Model model) {
+
+        List<Store> storeProducts = storeService.getAllStoreProduct();
+
+        model.addAttribute("storeProducts", storeProducts);
+
+        return "/view/store/storePage";
     }
 
 }

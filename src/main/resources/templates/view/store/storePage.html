@@ -1,0 +1,32 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>사용할 페이지 명</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+            <div class="flex grid grid-cols-4">
+
+                <div th:if="${#lists.isEmpty(storeProducts)}">
+                    <h1>아직 상점에 아무 아이템도 없습니다</h1>
+                </div>
+
+                <div class="gap-10" th:unless="${#lists.isEmpty(storeProducts)}" th:each="store : ${storeProducts}">
+                    <div>
+                        <img class="w-24 h-24" th:src="${store.product.imgUrl}" alt="productImg">
+                    </div>
+
+                    <div>
+                        <h1 th:text="'이름 : ' + ${store.product.name}"></h1>
+                        <h1 th:text="'가격 : ' + ${store.product.cost}"></h1>
+                        <h1 th:text="'수량 : ' + ${store.quantity}"></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
