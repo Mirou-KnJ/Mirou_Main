@@ -6,7 +6,8 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+        <form class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100"
+              method="POST" action="/store/add">
             <div class="w-full justify-center">
                 <div class="flex flex-col grid grid-cols-3 justify-center items-center gap-10">
                     <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2" th:each="product : ${products}">
@@ -21,7 +22,7 @@
                         </div>
 
                         <div class="flex justify-center w-full pb-1">
-                            <input type="radio" name="product" th:value="${product.id}" class="radio radio-error" />
+                            <input type="radio" name="productId" th:value="${product.id}" class="radio radio-error" />
                         </div>
                     </div>
                 </div>
@@ -46,10 +47,12 @@
                         <input type="radio" name="saleType" value="PRIZE_PROD" class="radio checked:bg-blue-500" />
                     </label>
 
-                    <button class="flex justify-center btn btn-info items-center">등록완료</button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <button type="submit" class="flex justify-center btn btn-info items-center">등록완료</button>
                 </div>
             </div>
-        </div>
+        </form>
     </main>
 </th:block>
 </body>

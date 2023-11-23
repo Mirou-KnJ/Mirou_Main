@@ -1,12 +1,15 @@
 package com.knj.mirou.boundedContext.store.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
+import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import com.knj.mirou.boundedContext.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreController {
 
+    private final Rq rq;
     private final StoreService storeService;
 
     @GetMapping("/add")
@@ -27,6 +31,16 @@ public class StoreController {
         model.addAttribute("products", products);
 
         return "/view/store/addForm";
+    }
+
+    @PostMapping("/add")
+    public String tryAdd(long productId, int number, String saleType) {
+
+        log.info("상품 id : " + productId);
+        log.info("갯수 : " + number);
+        log.info("타입 : " + SaleType.valueOf(saleType).getSaleType());
+
+        return rq.historyBack("매핑은 성공");
     }
 
 }
