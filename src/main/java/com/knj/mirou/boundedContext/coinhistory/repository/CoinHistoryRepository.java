@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CoinHistoryRepository extends JpaRepository<CoinHistory, Long> {
 
-    List<CoinHistory> findAllByLinkedMemberOrderByCreateDateAsc(Member linkedMember);
+    List<CoinHistory> findAllByLinkedMemberOrderByCreateDateDesc(Member linkedMember);
 
 }

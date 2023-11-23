@@ -14,16 +14,37 @@
                 </div>
             </div>
 
-            <div class="flex flex-col" th:unless="${#lists.isEmpty(coinHistories)}">
-                <div class="flex flex-col" th:each="history : ${coinHistories}">
+            <div class="flex flex-col w-full" th:unless="${#lists.isEmpty(coinHistories)}">
+                <div class="flex flex-col w-full" th:each="history : ${coinHistories}">
 
-                    <p th:text="${history.createDate}"></p>
+                    <div class="flex w-full">
+                        <div class="flex flex-grow-0 items-center mx-5">
+                            <!-- FIXME: 임시 이미지-->
+                            <img class="card rounded-lg" src="https://suicitorbsmu20367272.cdn.ntruss.com/feed_img/04114b20-62fb-43f7-9d0d-a0cf7cb178bb.jpg?type=m&w=50&h=50&quality=100&bgcolor=FFFFFF&ttype=png"
+                                 alt="CoinHistoryImg">
+                        </div>
 
-                    <p th:text="${history.contents}"></p>
+                        <div class="flex flex-col flex-grow">
+                            <p class="text-md" th:text="${history.contents}"></p>
+                            <p class="text-sm text-gray-400" th:text="${history.getCreateDateFormattedStr()}"></p>
+                        </div>
 
-                    <p th:text="${history.changedCoin} + 'Coin' + ${history.changeType.changeType}"></p>
+                        <div class="flex flex-grow-0 items-center">
+                            <div th:if="${history.changeType.changeType.equals('적립')}">
+                                <i class="fa-solid fa-plus fa-lg" style="color: #246deb;"></i>
+                                <span class="text-blue-300" th:text="${history.changedCoin} + 'Coin'"></span>
+                            </div>
 
-                    <div class="divider"></div>
+                            <div th:if="${history.changeType.changeType.equals('사용')}">
+                                <i class="fa-solid fa-minus fa-lg" style="color: #b53030;"></i>
+                                <span class="text-red-300" th:text="${history.changedCoin} + 'Coin'"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex w-full">
+                        <div class="divider mt-2 w-full"></div>
+                    </div>
 
                 </div>
             </div>

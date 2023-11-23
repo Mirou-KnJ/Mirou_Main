@@ -30,8 +30,8 @@ public class CoinHistoryService {
         coinHistoryRepository.save(coinHistory);
     }
 
-    public List<CoinHistory> getAllOrderedASC(Member member) {
+    public List<CoinHistory> getAllOrderedDesc(Member member) {
 
-        return coinHistoryRepository.findAllByLinkedMemberOrderByCreateDateAsc(member);
+        return coinHistoryRepository.findAllByLinkedMemberOrderByCreateDateDesc(member);
     }
 }

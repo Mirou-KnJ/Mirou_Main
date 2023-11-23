@@ -30,7 +30,7 @@ public class CoinHistoryController {
 
         Member loginedMember = rq.getMember();
 
-        List<CoinHistory> coinHistories = coinHistoryService.getAllOrderedASC(loginedMember);
+        List<CoinHistory> coinHistories = coinHistoryService.getAllOrderedDesc(loginedMember);
 
         model.addAttribute("coinHistories", coinHistories);
 
