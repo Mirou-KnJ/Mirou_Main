@@ -11,7 +11,7 @@
         </div>
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100" th:unless="${#lists.isEmpty(openedChallenges)}">
             <div class="flex w-full justify-center items-center pt-2">
-                <div class="flex stats shadow-lg">
+                <div class="flex stats shadow-lg border rounded">
                     <div class="stat">
                         <div class="stat-title mb-1">나의 일상지원금</div>
                         <div class="stat-figure mt-5">
@@ -35,13 +35,12 @@
             </div>
             <div class="divider"></div>
 
-
             <div>
                 <h1 class="text-4xl">현재 진행중인 챌린지</h1>
             </div><br>
 
             <div class="flex rounded-lg overflow-hidden grid grid-cols-3">
-                <a class="card flex flex-row card-side shadow-lg border rounded m-3" th:each="challenge : ${myValidChallengeList}"
+                <a class="card card-side flex flex-row shadow-lg border rounded m-3" th:each="challenge : ${myValidChallengeList}"
                    th:href="@{|/challenge/detail/${challenge.id}|}">
                     <figure>
                         <img class="card-img border rounded-lg shadow-lg m-2"
@@ -85,19 +84,20 @@
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="label-text mr-1">전체</span>
-                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-4" checked/>
+                    <a href="/challenge/list" class="radio checked:bg-blue-500 mr-4"></a>
                     <span class="label-text mr-1">환경</span>
-                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-4"/>
+                    <a href="/challenge/list/ENVIRONMENT" id="environment" class="radio checked:bg-blue-500 mr-4"></a>
                     <span class="label-text mr-1">습관</span>
-                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-4"/>
+                    <a href="/challenge/list/ROUTINE" id="routine" class="radio checked:bg-blue-500 mr-4"></a>
                     <span class="label-text mr-1">기타</span>
-                    <input type="radio" name="radio-10" class="radio checked:bg-blue-500 mr-4"/>
+                    <a href="/challenge/list/ETC" id="etc" class="radio checked:bg-blue-500 mr-4"></a>
                 </label>
             </div>
             <br><br>
 
             <div class="flex rounded-lg overflow-hidden grid grid-cols-3" th:if="${openedAndValid}">
-                <a class="card flex flex-row card-side shadow-lg border rounded m-3" th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">
+                <a class="card card-side flex flex-row shadow-lg border rounded m-3"
+                   th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">
                     <figure>
                         <img class="card-img border rounded-lg shadow-lg m-2"
                              th:src="${ImageDateService.getOptimizingUrl(challenge.imgUrl, ListOption)}"
