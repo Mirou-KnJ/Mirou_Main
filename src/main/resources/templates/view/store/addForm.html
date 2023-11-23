@@ -1,0 +1,56 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>사용할 페이지 명</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+            <div class="w-full justify-center">
+                <div class="flex flex-col grid grid-cols-3 justify-center items-center gap-10">
+                    <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2" th:each="product : ${products}">
+                        <div>
+                            <img class="w-12 h-12" th:src="${product.imgUrl}" alt="productImg">
+                        </div>
+
+                        <div class="flex flex-col items-center py-3">
+                            <h1 th:text="${product.name}"></h1>
+                            <h1 th:text="${product.cost} + ' 코인'"></h1>
+                            <h1 th:text="${product.brandName}"></h1>
+                        </div>
+
+                        <div class="flex justify-center w-full pb-1">
+                            <input type="radio" name="product" th:value="${product.id}" class="radio radio-error" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="w-full justify-center items-center">
+                <div class="flex flex-col justify-center">
+                    <h1 class="flex font-bold text-lg justify-center mb-5">등록하기</h1>
+
+                    <label class="label-text">수량</label>
+                    <input type="text" placeholder="수량을 입력해 주세요" name="number" class="input input-bordered w-full max-w-xs" />
+
+                    <label class="label-text mt-5">타입</label>
+                    <label class="label cursor-pointer">
+                        <span class="label-text">판매 상품</span>
+                        <input type="radio" name="saleType" value="SALE_PROD" class="radio checked:bg-red-500" checked />
+                    </label>
+                    <label class="label cursor-pointer">
+                        <span class="label-text">당첨 상품</span>
+                        <input type="radio" name="saleType" value="PRIZE_PROD" class="radio checked:bg-blue-500" />
+                    </label>
+
+                    <button class="flex justify-center btn btn-info items-center">등록완료</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
