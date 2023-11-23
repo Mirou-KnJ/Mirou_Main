@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,5 +28,10 @@ public class CoinHistoryService {
                 .build();
 
         coinHistoryRepository.save(coinHistory);
+    }
+
+    public List<CoinHistory> getAllOrderedASC(Member member) {
+
+        return coinHistoryRepository.findAllByLinkedMemberOrderByCreateDateAsc(member);
     }
 }

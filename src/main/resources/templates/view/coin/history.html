@@ -8,8 +8,24 @@
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
-            <div>
-                코인 히스토리 출력
+            <div th:if="${#lists.isEmpty(coinHistories)}">
+                <div>
+                    <h1>아직 아무런 기록도 없어요!</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col" th:unless="${#lists.isEmpty(coinHistories)}">
+                <div class="flex flex-col" th:each="history : ${coinHistories}">
+
+                    <p th:text="${history.createDate}"></p>
+
+                    <p th:text="${history.contents}"></p>
+
+                    <p th:text="${history.changedCoin} + 'Coin' + ${history.changeType.changeType}"></p>
+
+                    <div class="divider"></div>
+
+                </div>
             </div>
 
         </div>
