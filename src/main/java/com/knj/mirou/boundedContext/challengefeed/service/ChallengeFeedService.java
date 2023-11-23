@@ -109,7 +109,7 @@ public class ChallengeFeedService {
                 privateRewardService.getValidReward(challenge, linkedChallengeMember, successNum);
 
         if(validRewardRs.isSuccess()) {
-            coinService.giveCoin(loginMember, validRewardRs.getData());
+            coinService.giveCoin(loginMember, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
         }
 
         if(validRewardRs.getResultCode().contains("S-2")) {
