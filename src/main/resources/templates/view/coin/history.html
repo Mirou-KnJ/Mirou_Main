@@ -1,0 +1,79 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>Coin History</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+
+            <div class="flex justify-center items-center">
+                <div class="flex rounded-lg bg-purple-200 w-full py-1 px-2">
+                    <div class="flex flex-col justify-center items-center mx-3 my-2">
+                        <p class="text-sm text-gray-500">보유 코인</p>
+                        <p class="text-md" th:text="${#numbers.formatInteger(memberCoin.currentCoin, 1, 'COMMA')}"></p>
+                    </div>
+
+                    <div class="flex flex-col justify-center items-center mx-3 my-2">
+                        <p class="text-sm text-gray-500">누적 적립</p>
+                        <p class="text-md" th:text="${#numbers.formatInteger(memberCoin.totalGetCoin, 1, 'COMMA')}"></p>
+                    </div>
+
+                    <div class="flex flex-col justify-center items-center mx-3 my-2">
+                        <p class="text-sm text-gray-500">누적 사용</p>
+                        <p class="text-md"
+                           th:text="${#numbers.formatInteger(memberCoin.totalUsedCoin, 1, 'COMMA')}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="flex flex-col w-full">
+                <div th:if="${#lists.isEmpty(coinHistories)}">
+                    <div>
+                        <h1>아직 아무런 기록도 없어요!</h1>
+                    </div>
+                </div>
+
+                <div class="flex flex-col w-full" th:unless="${#lists.isEmpty(coinHistories)}"
+                     th:each="history : ${coinHistories}">
+
+                    <div class="flex w-full">
+                        <div class="flex flex-grow-0 items-center">
+                            <img class="w-12 h-12 card rounded-full mx-5" th:src="${history.imgUrl}" alt="CoinHistoryImg">
+                        </div>
+
+                        <div class="flex flex-col flex-grow mt-2">
+                            <p class="text-sm" th:text="${history.contents}"></p>
+                            <p class="text-xs text-gray-400" th:text="${history.getCreateDateFormattedStr()}"></p>
+                        </div>
+
+                        <div class="flex flex-grow-0 items-center mr-2">
+                            <div th:if="${history.changeType.changeType.equals('적립')}">
+                                <i class="fa-solid fa-plus fa-lg" style="color: #246deb;"></i>
+                                <span class="text-blue-300"
+                                      th:text="${#numbers.formatInteger(history.changedCoin, 1, 'COMMA') + ' 코인'}"></span>
+                            </div>
+
+                            <div th:if="${history.changeType.changeType.equals('사용')}">
+                                <i class="fa-solid fa-minus fa-lg" style="color: #b53030;"></i>
+                                <span class="text-red-300"
+                                      th:text="${#numbers.formatInteger(history.changedCoin, 1, 'COMMA') + ' 코인'}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex w-full">
+                        <div class="divider mt-2 w-full"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>

@@ -6,30 +6,31 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div th:if="${#lists.isEmpty(openedChallenges)}">
-            <h1>참여가능한 챌린지가 없습니다!!</h1>
-        </div>
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100" th:unless="${#lists.isEmpty(openedChallenges)}">
-            <div class="flex w-full justify-center items-center pt-2">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+            <div class="flex w-full justify-center items-center pt-2" th:unless="${#lists.isEmpty(openedChallenges)}">
                 <div class="flex stats shadow-lg border rounded">
-                    <div class="stat">
-                        <div class="stat-title mb-1">나의 일상지원금</div>
-                        <div class="stat-figure mt-5">
-                            <i class="fa-solid fa-money-bill-wave fa-2xl" style="color: #3faa31;"></i>
-                        </div>
-                        <div class="stat-value">
-                            <p class="text-center" th:text="${member.point.currentPoint}"></p>
-                        </div>
+                    <div>
+                        <a href="#" class="stat">
+                            <div class="stat-title mb-1">나의 일상지원금</div>
+                            <div class="stat-figure mt-5">
+                                <i class="fa-solid fa-money-bill-wave fa-2xl" style="color: #3faa31;"></i>
+                            </div>
+                            <div class="stat-value">
+                                <p class="text-center" th:text="${member.point.currentPoint}"></p>
+                            </div>
+                        </a>
                     </div>
 
-                    <div class="stat">
-                        <div class="stat-title mb-1">나의 코인</div>
-                        <div class="stat-figure mt-5">
-                            <i class="fa-solid fa-coins fa-2xl" style="color: #eac02a;"></i>
-                        </div>
-                        <div class="stat-value">
-                            <p class="text-center" th:text="${member.coin.currentCoin}"></p>
-                        </div>
+                    <div>
+                        <a href="/coin/history" class="stat">
+                            <div class="stat-title mb-1">나의 코인</div>
+                            <div class="stat-figure mt-5">
+                                <i class="fa-solid fa-coins fa-2xl" style="color: #eac02a;"></i>
+                            </div>
+                            <div class="stat-value">
+                                <p class="text-center" th:text="${member.coin.currentCoin}"></p>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -81,19 +82,17 @@
                 <h1 class="text-4xl">전체 챌린지</h1>
             </div><br>
 
-            <div class="form-control">
-                <label class="label cursor-pointer">
-                    <span class="label-text mr-1">전체</span>
-                    <a href="/challenge/list" class="radio checked:bg-blue-500 mr-4"></a>
-                    <span class="label-text mr-1">환경</span>
-                    <a href="/challenge/list/ENVIRONMENT" id="environment" class="radio checked:bg-blue-500 mr-4"></a>
-                    <span class="label-text mr-1">습관</span>
-                    <a href="/challenge/list/ROUTINE" id="routine" class="radio checked:bg-blue-500 mr-4"></a>
-                    <span class="label-text mr-1">기타</span>
-                    <a href="/challenge/list/ETC" id="etc" class="radio checked:bg-blue-500 mr-4"></a>
-                </label>
+            <div>
+                <a href="/challenge/list" class="btn rounded-full shadow-lg border mr-4">전체</a>
+                <a href="/challenge/list/ENVIRONMENT" class="btn rounded-full shadow-lg border mr-4">환경</a>
+                <a href="/challenge/list/ROUTINE" class="btn rounded-full shadow-lg border mr-4">습관</a>
+                <a href="/challenge/list/ETC" class="btn rounded-full shadow-lg border mr-4">기타</a>
             </div>
             <br><br>
+
+            <div th:if="${#lists.isEmpty(openedChallenges)}">
+                <h1 class="text-4xl mt-10">참여가능한 챌린지가 없습니다.</h1>
+            </div>
 
             <div class="flex rounded-lg overflow-hidden grid grid-cols-3" th:if="${openedAndValid}">
                 <a class="card card-side flex flex-row shadow-lg border rounded m-3"

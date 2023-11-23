@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.coin.service;
 
 import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.coin.config.CoinConfigProperties;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.coin.repository.CoinRepository;
@@ -35,7 +36,7 @@ public class CoinService {
     }
 
     @Transactional
-    public void giveCoin(Member member, PrivateReward reward) {
+    public void giveCoin(Member member, PrivateReward reward, String contents, String imgUrl) {
 
         Coin coin = member.getCoin();
         int rewardCoin = Integer.parseInt(reward.getReward());
@@ -50,8 +51,7 @@ public class CoinService {
 
         coinRepository.save(coin);
 
-        //FIXME: 명확한 적립 경로(contents) 기재
-        coinHistoryService.create(member, ChangeType.GET, randomResult, "챌린지 인증 성공 적립");
+        coinHistoryService.create(member, ChangeType.GET, randomResult, contents + " 적립", imgUrl);
     }
 
     private double randomCoin(int baseReward) {
