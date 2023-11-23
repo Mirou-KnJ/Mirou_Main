@@ -8,7 +8,9 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.service.MemberService;
+import com.knj.mirou.boundedContext.product.service.ProductService;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
+@Slf4j
 @Configuration
 @Profile({"dev", "test"})
 public class NotProd {
@@ -29,6 +32,7 @@ public class NotProd {
             ChallengeService challengeService,
             PublicRewardService publicRewardService,
             ImageDataService imageDataService,
+            ProductService productService,
             LabelConfig labelConfig
     ){
         return new CommandLineRunner() {
@@ -76,6 +80,13 @@ public class NotProd {
                 publicRewardService.create(2, 6, "COIN", "600");
 
                 publicRewardService.create(3, 1, "COIN", "100");
+
+                for(int j=1; j<=3; j++) {
+                    productService.create("샘플 상품" + j, "샘플 브랜드" + j, j*100,
+                            "샘플 상품 내용 입니다.", DEFAULT_IMG_URL, "교환처에 문의하세요."
+                            ,"기간 내에 사용하지 않으면 소멸됩니다.");
+                }
+
             }
         };
     }
