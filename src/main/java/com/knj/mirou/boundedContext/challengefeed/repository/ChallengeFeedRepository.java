@@ -1,7 +1,7 @@
 package com.knj.mirou.boundedContext.challengefeed.repository;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +28,7 @@ public interface ChallengeFeedRepository extends JpaRepository<ChallengeFeed, Lo
     );
 
     List<ChallengeFeed> findTop3ByLinkedChallengeOrderByCreateDateAsc(Challenge linkedChallenge);
+
+    List<ChallengeFeed> findByLinkedChallengeAndWriter(Challenge linkedChallenge, Member writer);
 
 }
