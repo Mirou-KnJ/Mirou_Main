@@ -30,7 +30,7 @@
 
             <div class="flex flex-col h-full bg-white">
 
-                <img class="border rounded-lg" th:src="${challengeImg}" alt="challengeImg">
+                <img class="rounded-lg" th:src="${challengeImg}" alt="challengeImg">
 
                 <h1 class="my-3 text-2xl font-bold" th:text="${detailDTO.challenge.name}"></h1>
 
@@ -50,20 +50,20 @@
                             <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
                                  th:data-tip="${detailDTO.challenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
 
-                                <i class="fa-solid fa-camera-retro fa-lg mr-2"
-                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('인증샷 인증')}"></i>
+                                <i class="fa-solid fa-camera-retro md:fa-mg sm:fa-sm lg:fa-lg mr-2"
+                                   th:if="${detailDTO.challenge.method.getMethod().equals('인증샷 인증')}"></i>
                                 <i class="fa-solid fa-font fa-lg mr-2"
-                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('텍스트 인증')}"></i>
+                                   th:if="${detailDTO.challenge.method.getMethod().equals('텍스트 인증')}"></i>
                                 <i class="fa-solid fa-star-of-life fa-lg mr-2"
-                                   th:if="${detailDTO.challenge.tag.getChallengeTag().equals('기타')}"></i>
+                                   th:if="${detailDTO.challenge.method.getMethod().equals('기타')}"></i>
 
-
-                                <p th:text="${detailDTO.challenge.method.getMethod()}"></p>
+                                <p class="md:text-xs lg:text-sm"
+                                   th:text="${detailDTO.challenge.method.getMethod()}"></p>
                             </div>
                             <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
                                  th:data-tip="'참여 당일부터 ' + ${detailDTO.challenge.period} + '일 간 진행되요!'">
                                 <i class="fa-regular fa-calendar fa-lg mr-2"></i>
-                                <p th:text="${detailDTO.challenge.period} + '일 챌린지'"></p>
+                                <p class="md:text-xs lg:text-sm" th:text="${detailDTO.challenge.period} + '일 챌린지'"></p>
                             </div>
 
                             <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
@@ -75,21 +75,26 @@
                                 <i class="fa-solid fa-pen fa-lg mr-2"
                                    th:if="${detailDTO.challenge.tag.getChallengeTag().equals('기타')}"></i>
 
-                                <p th:text="${detailDTO.challenge.tag.getChallengeTag()}"></p>
+                                <p class="md:text-xs lg:text-sm"
+                                   th:text="${detailDTO.challenge.tag.getChallengeTag()}"></p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex shadow-xl mb-2" th:if="${detailDTO.isJoin}">
-                        <div class="flex flex-col rounded-md bg-white py-3 px-2">
-                            <a class="btn m-3 rounded-md bg-yellow-300"
-                               th:href="|/feed/write/${detailDTO.challenge.id}|" th:disabled="${detailDTO.canWrite}">
-                                <i class="fa-solid fa-check"></i>
-                            </a>
-                            <span th:if="${!detailDTO.canWrite}"
-                                  class="flex justify-center text-sm font-thin">인증하기</span>
-                            <span th:if="${detailDTO.canWrite}" class="flex justify-center text-sm font-thin tooltip"
-                                  data-tip="오늘은 이미 인증을 완료했어요!">인증완료</span>
+                    <div class="flex mb-2" th:if="${detailDTO.isJoin}">
+                        <div class="flex shadow-xl ml-3">
+                            <div class="flex flex-col rounded-md bg-white py-3 px-2">
+                                <a class="btn m-3 rounded-md bg-yellow-300"
+                                   th:href="|/feed/write/${detailDTO.challenge.id}|"
+                                   th:disabled="${detailDTO.canWrite}">
+                                    <i class="fa-solid fa-check"></i>
+                                </a>
+                                <span th:if="${!detailDTO.canWrite}"
+                                      class="flex justify-center text-sm font-thin">인증하기</span>
+                                <span th:if="${detailDTO.canWrite}"
+                                      class="flex justify-center text-sm font-thin tooltip"
+                                      data-tip="오늘은 이미 인증을 완료했어요!">인증완료</span>
+                            </div>
                         </div>
                     </div>
 
@@ -166,21 +171,36 @@
                     </div>
 
                     <div class="flex gap-3" th:unless="${#lists.isEmpty(detailDTO.recently3Feeds)}">
-                        <div class="flex flex-col w-full" th:each="feed : ${detailDTO.recently3Feeds}">
+                        <div class="flex flex-col w-full" th:each="feed, iterStat : ${detailDTO.recently3Feeds}">
                             <div class="flex justify-center">
-                                <a th:href="|/feed/detail/${feed.id}|">
-                                    <div class="grid w-28 h-28 bg-indigo-300 place-items-center rounded-xl">
-                                        <span th:text="${feed.contents}"></span>
+                                <div class="card grid w-28 h-28 bg-gray-200 rounded-lg shadow-xl">
+                                    <img th:src="${detailDTO.getFeedOptimizedImages().get(iterStat.index)}"
+                                         alt="feedFreeView" th:onclick="'feedModal' + ${feed.id} + '.showModal()'"
+                                         class="place-items-center rounded-lg">
+                                    <span class="flex mt-1 justify-center text-sm" th:text="${#strings.length(feed.contents) > 7
+                                    ? #strings.substring(feed.contents, 0, 7) + '...' : feed.contents}"></span>
+                                </div>
+
+                                <dialog th:id="'feedModal' + ${feed.id}" class="modal">
+                                    <div class="modal-box">
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕
+                                            </button>
+                                        </form>
+                                        <h3 class="font-bold" th:text="${feed.writer.getNickname()}"></h3>
+                                        <img th:src="${feed.imgUrl}" alt="feedImg">
+                                        <p class="py-4" th:text="${feed.contents}"></p>
                                     </div>
-                                </a>
+                                </dialog>
                             </div>
-                            <div class="flex justify-center">
-                                <span th:text="${#strings.substring(feed.writer.nickname, 0, 10) + '...'}"></span>
+                            <div class="flex justify-center mt-2">
+                                <span class="text-sm"
+                                      th:text="${#strings.substring(feed.writer.nickname, 0, 10) + '...'}"></span>
                             </div>
                         </div>
 
-                        <div class="flex justify-center items-center">
-                            <a href="#" class="btn btn-outline btn-secondary">
+                        <div class="flex justify-center items-center ml-3">
+                            <a th:href="|/feed/list/${detailDTO.challenge.id}|" class="btn btn-outline btn-secondary">
                                 <i class="fa-solid fa-arrow-right fa-lg"></i>
                                 더보기
                             </a>

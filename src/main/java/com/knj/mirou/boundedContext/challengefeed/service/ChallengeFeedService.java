@@ -1,10 +1,12 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
@@ -34,6 +36,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChallengeFeedService {
 
+    private final Rq rq;
     private final ImageDataService imageDataService;
     private final ChallengeMemberService challengeMemberService;
     private final PrivateRewardService privateRewardService;
@@ -137,6 +140,30 @@ public class ChallengeFeedService {
     public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
 
         return challengeFeedRepository.findTop3ByLinkedChallengeOrderByCreateDateAsc(linkedChallenge);
+    }
+
+    public FeedListDTO getListDto(Challenge linkedChallenge) {
+
+        FeedListDTO feedListDto = new FeedListDTO();
+
+        Member writer = rq.getMember();
+
+        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
+        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
+
+        for(ChallengeFeed myFeed : myFeeds) {
+            feeds.remove(myFeed);
+        }
+
+        feedListDto.setMyFeeds(myFeeds);
+        feedListDto.setNotMineFeeds(feeds);
+
+        return feedListDto;
+    }
+
+    @Transactional
+    public void updateLikeCount(ChallengeFeed challengeFeed) {
+        challengeFeed.updateLikeCount();
     }
 
 }

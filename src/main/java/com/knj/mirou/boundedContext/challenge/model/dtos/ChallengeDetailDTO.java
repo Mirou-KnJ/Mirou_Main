@@ -1,7 +1,7 @@
 package com.knj.mirou.boundedContext.challenge.model.dtos;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
@@ -27,6 +27,7 @@ public class ChallengeDetailDTO {
     private int successNum;
     private int maxNum;
     private int lastDayNum;
+    private List<String> feedOptimizedImages;
     private List<PublicReward> publicRewards;
     private List<PrivateReward> privateRewards;
     private List<ChallengeFeed> recently3Feeds;

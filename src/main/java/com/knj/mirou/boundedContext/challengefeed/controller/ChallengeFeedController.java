@@ -1,9 +1,11 @@
 package com.knj.mirou.boundedContext.challengefeed.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengefeed.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
@@ -12,17 +14,16 @@ import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -31,6 +32,7 @@ import java.util.Optional;
 @RequestMapping("/feed")
 public class ChallengeFeedController {
 
+    private final Rq rq;
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
@@ -77,22 +79,41 @@ public class ChallengeFeedController {
         return "redirect:/challenge/detail/" + challengeId;
     }
 
-    @GetMapping("/detail/{id}")
-    public String showDetail(@PathVariable(value = "id") long feedId, Model model) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/list/{id}")
+    public String showList(@PathVariable(value = "id") long challengeId, Model model) {
+
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()){
+            return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
+        }
+
+        FeedListDTO feedListDto = challengeFeedService.getListDto(OChallenge.get());
+
+        model.addAttribute("feedListDto", feedListDto);
+
+        //FIXME: 임시
+        model.addAttribute("ImageDataService", imageDataService);
+        model.addAttribute("option", OptimizerOption.FEED_MODAL);
+
+        return "/view/challengeFeed/list";
+    }
+
+    @ResponseBody
+    @PostMapping("/like/{id}")
+    public void like(@PathVariable(value = "id") long feedId) {
 
         Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
         if(OFeed.isEmpty()) {
-            return "redirect:/";        //FIXME
+            return;
         }
-        ChallengeFeed feed = OFeed.get();
 
-        //FIXME: 크기 조정된 이미지로 변경 필요
-        ImageData feedImg = imageDataService.getByIdAndTarget(feedId, ImageTarget.FEED_IMG);
+        //FIXME: 새로고침만 된다면 좋아요는 몇번이고 누를 수 있으며, 좋아한 내용이 저장되지 않는 단순한 상황.
+        ChallengeFeed challengeFeed = OFeed.get();
 
-        model.addAttribute("feed", feed);
-        model.addAttribute("feedImg", feedImg.getImageUrl());
+        challengeFeedService.updateLikeCount(challengeFeed);
 
-        return "view/challengeFeed/detail";
+        log.info("좋아요 수 : " + challengeFeed.getLikeCount());
     }
 
 }
