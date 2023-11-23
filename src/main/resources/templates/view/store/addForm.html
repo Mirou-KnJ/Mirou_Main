@@ -10,7 +10,13 @@
               method="POST" action="/store/add">
             <div class="w-full justify-center">
                 <div class="flex flex-col grid grid-cols-3 justify-center items-center gap-10">
-                    <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2" th:each="product : ${products}">
+
+                    <div class="flex justify-center" th:if="${#lists.isEmpty(products)}">
+                        <h1>아직 등록되어있는 상품이 존재하지 않습니다!</h1>
+                    </div>
+
+                    <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2"
+                         th:unless="${#lists.isEmpty(products)}" th:each="product : ${products}">
                         <div>
                             <img class="w-12 h-12" th:src="${product.imgUrl}" alt="productImg">
                         </div>

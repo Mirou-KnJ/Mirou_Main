@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.store.controller;
 
 import com.knj.mirou.base.rq.Rq;
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import com.knj.mirou.boundedContext.store.service.StoreService;
@@ -36,11 +37,12 @@ public class StoreController {
     @PostMapping("/add")
     public String tryAdd(long productId, int number, String saleType) {
 
-        log.info("상품 id : " + productId);
-        log.info("갯수 : " + number);
-        log.info("타입 : " + SaleType.valueOf(saleType).getSaleType());
+        RsData<String> createRs = storeService.create(productId, number, saleType);
+        if(createRs.isFail()) {
+            return rq.historyBack(createRs);
+        }
 
-        return rq.historyBack("매핑은 성공");
+        return rq.redirectWithMsg("/store/add", createRs);
     }
 
 }
