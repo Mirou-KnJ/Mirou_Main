@@ -206,4 +206,9 @@ public class ChallengeService {
         return openedChallenge;
     }
 
+    public List<Challenge> getOpenedChallengeByTag(ChallengeTag tag) {
+
+        return challengeRepository.findByTagAndStatus(tag, ChallengeStatus.OPEN);
+    }
+
 }

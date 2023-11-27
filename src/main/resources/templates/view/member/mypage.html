@@ -60,24 +60,28 @@
                         </div>
 
                         <div class="flex justify-center items-center">
-                            <div class="flex stats shadow min-w-min">
-                                <div class="stat w-full mr-2">
-                                    <div class="stat-figure text-primary mt-3">
-                                        <i class="fa-solid fa-ticket-simple fa-lg"></i>
-                                    </div>
-                                    <div class="stat-title">일상지원금</div>
-                                    <div class="stat-value text-primary">
-                                        <span th:text="${member.point.currentPoint}"></span>
-                                    </div>
+                            <div class="flex stats shadow-lg border rounded">
+                                <div>
+                                    <a href="#" class="stat">
+                                        <div class="stat-title mb-1">나의 일상지원금</div>
+                                        <div class="stat-figure mt-5">
+                                            <i class="fa-solid fa-money-bill-wave fa-2xl" style="color: #3faa31;"></i>
+                                        </div>
+                                        <div class="stat-value">
+                                            <p class="text-center" th:text="${member.point.currentPoint}"></p>
+                                        </div>
+                                    </a>
                                 </div>
 
-                                <div class="stat w-full ml-4">
-                                    <div class="stat-figure text-warning mt-3 pr-6">
-                                        <i class="fa-solid fa-coins fa-lg"></i>
-                                    </div>
-                                    <div class="stat-title">코인</div>
-                                    <a href="/coin/history" class="stat-value text-warning">
-                                        <span th:text="${member.coin.currentCoin}"></span>
+                                <div>
+                                    <a href="/coin/history" class="stat">
+                                        <div class="stat-title mb-1">나의 코인</div>
+                                        <div class="stat-figure mt-5">
+                                            <i class="fa-solid fa-coins fa-2xl" style="color: #eac02a;"></i>
+                                        </div>
+                                        <div class="stat-value">
+                                            <p class="text-center" th:text="${member.coin.currentCoin}"></p>
+                                        </div>
                                     </a>
                                 </div>
                             </div>

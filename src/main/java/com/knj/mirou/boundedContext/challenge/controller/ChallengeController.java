@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -81,6 +82,7 @@ public class ChallengeController {
         return "redirect:/reward/setting/" + createdChallenge.getId();
     }
 
+
     @PreAuthorize("isAuthenticated()")      //FIXME: principal null 오류 임시 방지, 수정 필요
     @GetMapping("/list")
     public String openedChallengeList(Model model, Principal principal) {
@@ -103,6 +105,7 @@ public class ChallengeController {
         model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
         model.addAttribute("ImageDateService", imageDataService);
         model.addAttribute("openedChallenges", openedChallenges);
+
         return "view/challenge/list";
     }
 
@@ -153,6 +156,26 @@ public class ChallengeController {
         result.put("labels", labels);
 
         return ResponseEntity.ok(result);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/list/{tag}")
+    public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
+
+        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+        List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
+
+        Member member = rq.getMember();
+
+        model.addAttribute("openedAndValid",
+                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
+        model.addAttribute("member", member);
+        model.addAttribute("myValidChallengeList", myValidChallengeList);
+        model.addAttribute("openedChallenges", openedChallenges);
+        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
+        model.addAttribute("ImageDateService", imageDataService);
+
+        return "view/challenge/list";
     }
 
 }
