@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -27,5 +29,13 @@ public class PointHistory extends BaseEntity {
     private ChangeType changeType;
 
     private String contents;
+
+    private String imgUrl;
+
+    public String getCreateDateFormattedStr(){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일");
+        return formatter.format(getCreateDate());
+    }
 
 }
