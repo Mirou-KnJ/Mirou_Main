@@ -5,7 +5,7 @@ import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.service.ProductService;
 import com.knj.mirou.boundedContext.store.model.entity.Store;
 import com.knj.mirou.boundedContext.store.model.enums.SaleType;
-import com.knj.mirou.boundedContext.store.repository.StroeRepository;
+import com.knj.mirou.boundedContext.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class StoreService {
 
     private final ProductService productService;
-    private final StroeRepository storeRepository;
+    private final StoreRepository storeRepository;
 
     public List<Product> getAllProducts() {
 
