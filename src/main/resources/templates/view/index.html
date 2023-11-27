@@ -13,11 +13,15 @@
                     <span class="text-[15px] text-center text-black">나의 습관이 </span>
                     <span class="text-xl text-center text-yellow-300">소득</span>
                     <span class="text-[15px] text-center text-black">이되는</span><br/><br/>
-                    <span class="text-3xl text-center text-black">Miracle Routine</span>
+                    <span class="text-3xl text-center text-b`l`ack">Miracle Routine</span>
                 </p>
 
                 <div class="mt-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                     <a href="/member/admin" class="btn btn-primary" >관리자 페이지로 이동</a>
+                </div>
+
+                <div class="mt-6">
+                    <a href="/challenge/map/test" class="btn btn-info"> 지도 테스트 </a>
                 </div>
             </div>
         </div>

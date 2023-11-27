@@ -178,4 +178,10 @@ public class ChallengeController {
         return "view/challenge/list";
     }
 
+    @GetMapping("/map/test")
+    public String mapTestPage() {
+
+        return "view/challenge/mapTest";
+    }
+
 }
