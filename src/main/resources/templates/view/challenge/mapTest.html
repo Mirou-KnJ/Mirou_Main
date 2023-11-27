@@ -3,7 +3,8 @@
 <head>
     <title>Map Test</title>
 
-    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${mapKey}"></script>
+    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${mapKey}
+    + '&libraries=services,clusterer,drawing'"></script>
 </head>
 <body>
 <th:block layout:fragment="Content">
@@ -16,8 +17,6 @@
 
             <div>
                 <div id="map" style="width:500px;height:400px;"></div>
-
-
             </div>
 
         </div>
