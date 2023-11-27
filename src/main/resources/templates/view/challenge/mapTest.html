@@ -1,17 +1,40 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <title>사용할 페이지 명</title>
+    <title>Map Test</title>
+
+    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${mapKey}"></script>
 </head>
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
-            <h1> 지도 api 테스트 </h1>
+            <div>
+                <h1> 지도 api 테스트 </h1>
+            </div>
+
+            <div>
+                <div id="map" style="width:500px;height:400px;"></div>
+
+
+            </div>
 
         </div>
     </main>
+
+    <script>
+
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            level: 3
+        };
+
+        var map = new kakao.maps.Map(container, options);
+
+    </script>
 </th:block>
+
 </body>
 </html>
