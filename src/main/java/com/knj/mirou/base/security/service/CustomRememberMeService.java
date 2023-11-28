@@ -1,11 +1,10 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.service;
 
 import com.knj.mirou.base.rq.Rq;
-import com.knj.mirou.base.security.token.entity.PersistentLogin;
-import com.knj.mirou.base.security.token.repository.PersistentLoginRepository;
+import com.knj.mirou.base.security.entity.PersistentLogin;
+import com.knj.mirou.base.security.repository.PersistentLoginRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,6 @@ public class CustomRememberMeService implements RememberMeServices {
         // Remember Me 쿠키 생성
         RememberMeAuthenticationToken rememberMeToken = new RememberMeAuthenticationToken("key",
                 persistentToken, memberService.getGrantedAuthorities(username));
-//        createRememberMeCookie(rememberMeToken, response);
 
         return rememberMeToken;
     }
@@ -65,13 +63,4 @@ public class CustomRememberMeService implements RememberMeServices {
         log.info("loginSuccess!!!!");
         return;
     }
-
-//    private void createRememberMeCookie(RememberMeAuthenticationToken rememberMeToken, HttpServletResponse response) {
-//        // Remember Me 토큰을 쿠키에 추가
-//        RememberMeAuthenticationFilter
-//                .makeTokenSignature(rememberMeToken, System.currentTimeMillis(), "yourSecretKey")
-//                .ifPresent(signature -> response.addCookie(
-//                        new Cookie(RememberMeConfigurer.DEFAULT_REMEMBER_ME_COOKIE_NAME, signature))
-//                );
-//    }
 }

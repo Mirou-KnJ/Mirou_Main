@@ -1,4 +1,4 @@
-package com.knj.mirou.base.security.token.entity;
+package com.knj.mirou.base.security.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

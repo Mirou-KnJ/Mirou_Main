@@ -1,7 +1,7 @@
-package com.knj.mirou.base.security.token.repository;
+package com.knj.mirou.base.security.repository;
 
 
-import com.knj.mirou.base.security.token.entity.PersistentLogin;
+import com.knj.mirou.base.security.entity.PersistentLogin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

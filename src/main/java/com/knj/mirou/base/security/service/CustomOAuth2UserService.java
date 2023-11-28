@@ -1,31 +1,21 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.service;
 
-import com.google.auto.value.extension.serializable.SerializableAutoValue;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.base.security.token.entity.PersistentLogin;
-import com.knj.mirou.base.security.token.repository.PersistentLoginRepository;
+import com.knj.mirou.base.security.entity.PersistentLogin;
+import com.knj.mirou.base.security.repository.PersistentLoginRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.RememberMeAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
-import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;

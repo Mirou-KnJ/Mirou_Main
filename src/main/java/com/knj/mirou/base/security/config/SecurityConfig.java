@@ -1,5 +1,7 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.config;
 
+import com.knj.mirou.base.security.service.CustomOAuth2UserService;
+import com.knj.mirou.base.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

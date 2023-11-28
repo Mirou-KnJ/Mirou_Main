@@ -1,6 +1,6 @@
-package com.knj.mirou.base.security.token.repository;
+package com.knj.mirou.base.security.repository;
 
-import com.knj.mirou.base.security.token.entity.PersistentLogin;
+import com.knj.mirou.base.security.entity.PersistentLogin;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 

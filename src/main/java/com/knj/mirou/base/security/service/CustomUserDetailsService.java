@@ -1,4 +1,4 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.service;
 
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
