@@ -1,8 +1,15 @@
 package com.knj.mirou.boundedContext.point.service;
 
+import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.repository.PointRepository;
+import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +35,20 @@ public class PointService {
                 .build();
 
         return pointRepository.save(createPoint);
+    }
+
+    @Transactional
+    public void usedPoint(Point point, int cost){
+
+        point.usingPoint(cost);
+
+//        point = Point.builder()
+//                .id(point.getId())
+//                .currentPoint(point.getCurrentPoint() - cost)
+//                .totalUsedPoint(point.getTotalUsedPoint() + cost)
+//                .build();
+//
+//        pointRepository.save(point);
     }
 
     @Transactional

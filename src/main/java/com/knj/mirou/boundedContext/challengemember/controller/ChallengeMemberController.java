@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengemember.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequestMapping("/challengeMember")
 public class ChallengeMemberController {
 
+    private final Rq rq;
     private final ChallengeService challengeService;
     private final ChallengeMemberService challengeMemberService;
 
@@ -34,7 +36,7 @@ public class ChallengeMemberController {
             return "redirect:/";        //FIXME
         }
 
-        RsData<String> joinRs = challengeMemberService.join(OChallenge.get(), principal.getName());
+        RsData<String> joinRs = challengeMemberService.join(OChallenge.get(), rq.getMember());
 
         if(joinRs.isFail()) {
             joinRs.printResult();

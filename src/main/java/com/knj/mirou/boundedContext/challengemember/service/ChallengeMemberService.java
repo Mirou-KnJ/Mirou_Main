@@ -1,13 +1,18 @@
 package com.knj.mirou.boundedContext.challengemember.service;
 
+import com.knj.mirou.base.enums.ChangeType;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.config.CMemberConfigProperties;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.repository.ChallengeMemberRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
+import com.knj.mirou.boundedContext.point.entity.Point;
+import com.knj.mirou.boundedContext.point.service.PointService;
+import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,27 +35,37 @@ public class ChallengeMemberService {
     private final PrivateRewardService privateRewardService;
     private final MemberService memberService;
     private final ChallengeMemberRepository challengeMemberRepository;
+    private final PointService pointService;
+    private final PointHistoryService pointHistoryService;
 
     @Transactional
-    public RsData<String> join(Challenge linkedChallenge, String loginId) {
+    public RsData<String> join(Challenge challenge, Member member) {
 
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
+        //포인트가 있는지 검사
+        Point point = member.getPoint();
+        int cost = challenge.getJoinCost();
 
-        if(OMember.isEmpty()) {
-            return RsData.of("F-1", "회원 정보가 유효하지 않습니다.");
+        if(cost > point.getCurrentPoint()) {
+            return RsData.of("F-2", "참가 비용이 부족합니다.");
         }
 
-        Member linkedMember = OMember.get();
+        pointService.usedPoint(point, cost);
+        pointHistoryService.create(member, ChangeType.USED, cost, challenge.getName() + " 사용",
+                challenge.getImgUrl());
+
+        //참여비용 만큼의 포인트를 가지고 있는지 검사
+        //1. 없으며 에러
+        //2. 있으면 포인트 차감 시도 + 차감하면 히스트리 생성과 연결.
 
         ChallengeMember challengeMember = ChallengeMember.builder()
-                .linkedChallenge(linkedChallenge)
-                .linkedMember(linkedMember)
+                .linkedChallenge(challenge)
+                .linkedMember(member)
                 .progress(Progress.IN_PROGRESS)
-                .endDate(calcEndDate(linkedChallenge.getPeriod()))
+                .endDate(calcEndDate(challenge.getPeriod()))
                 .build();
 
         ChallengeMember savedChallengeMember = challengeMemberRepository.save(challengeMember);
-        privateRewardService.create(linkedChallenge, savedChallengeMember);
+        privateRewardService.create(challenge, savedChallengeMember);
 
         return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.");
     }

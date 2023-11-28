@@ -25,4 +25,9 @@ public class Point extends BaseEntity {
     public void resetCurrentPoint() {
         this.currentPoint = 3000;
     }
+
+    public void usingPoint(int cost) {
+        this.currentPoint = this.currentPoint - cost;
+        this.totalUsedPoint = this.totalUsedPoint + cost;
+    }
 }

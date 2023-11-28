@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.pointhistory.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.pointhistory.entity.PointHistory;
 import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,12 @@ public class PointHistoryController {
     @GetMapping("/history")
     public String showPointHistory(Model model){
         Member loginedMember = rq.getMember();
+
+        Point point = loginedMember.getPoint();
+
+        log.info("nickname : " + loginedMember.getNickname());
+        log.info("cur : " + point.getCurrentPoint());
+        log.info("used : " + point.getTotalUsedPoint());
 
         List<PointHistory> pointHistories = pointHistoryService.getAllOrderedDesc(loginedMember);
 
