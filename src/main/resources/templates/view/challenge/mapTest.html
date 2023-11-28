@@ -27,6 +27,14 @@
                 <button onclick="searchPlace('CE7')" class="btn btn-success">주변 카페(CE7) 조회하기</button>
             </div>
 
+            <div id="addressDiv" class="hidden">
+                <h1>hello</h1>
+            </div>
+
+            <div id="placeNameDiv" class="hidden">
+                <h1>bye</h1>
+            </div>
+
         </div>
     </main>
 
@@ -34,7 +42,7 @@
 
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                center: new kakao.maps.LatLng(37.49, 126.92), // 지도의 중심좌표
                 level: 4 // 지도의 확대 레벨
             };
 
@@ -53,9 +61,33 @@
             if (status === kakao.maps.services.Status.OK) {
                 toastNotice("조회에 성공하였습니다");
 
-                for ( var i = 0; i < data.length; i++ ) {
-                    console.log(data[i]);
+                console.log(data);
+
+                var size = 0;
+
+                if(data.length > 10) {
+                    size = 10;
+                } else {
+                    size = data.length;
                 }
+
+                var address_name = [];
+                var place_name = [];
+
+                for(var i=0; i<size; i++) {
+                    address_name[i] = data[i].address_name;
+                    place_name[i] = data[i].place_name;
+                }
+
+                var addressDiv = document.getElementById("addressDiv");
+                var placeNameDiv = document.getElementById("placeNameDiv");
+
+                addressDiv.style.display = 'block';
+                placeNameDiv.style.display = 'block';
+
+                console.log(address_name);
+                console.log(place_name);
+
 
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
                 toastWarning("주변에 존재하지 않는 것 같아요!");
@@ -81,11 +113,15 @@
                     // 마커와 인포윈도우를 표시합니다
                     displayMarker(locPosition, message);
 
+                    // FIXME: 위치 얻기 진행한 뒤 실제로는 드래그 및 확대 불가능. 나중에 주석 해제
+                    map.setDraggable(false);
+                    map.setZoomable(false);
+
                 });
 
             } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-                var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+                var locPosition = new kakao.maps.LatLng(37.49, 126.92),
                     message = 'geolocation을 사용할수 없어요..'
 
                 displayMarker(locPosition, message);
