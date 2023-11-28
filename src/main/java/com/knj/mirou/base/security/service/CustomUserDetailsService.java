@@ -1,4 +1,4 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.service;
 
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = false)
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

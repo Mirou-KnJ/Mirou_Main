@@ -12,9 +12,20 @@
                     <p>챌린지가 생성되지 않았습니다!</p>
                 </div>
 
-                <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                    <a href="/challenge/create" class="btn btn-primary">챌린지 생성</a>
+                <div class="flex gap-6 justify-center ">
+                    <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a href="/challenge/create" class="btn btn-primary">챌린지 생성</a>
+                    </div>
+
+                    <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a href="#" class="btn btn-warning">상품 추가</a>
+                    </div>
+
+                    <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a href="/store/add" class="btn btn-info">상점 등록</a>
+                    </div>
                 </div>
+
 
                 <div class="flex overflow-x-auto w-full" th:unless="${#lists.isEmpty(challengeList)}">
                     <table class="w-full table table-zebra">
