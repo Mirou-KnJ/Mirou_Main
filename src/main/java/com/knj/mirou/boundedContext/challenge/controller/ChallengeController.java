@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.config.MapConfigProperties;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -46,6 +47,7 @@ public class ChallengeController {
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
     private final MemberService memberService;
+    private final MapConfigProperties mapConfigProps;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
@@ -176,6 +178,16 @@ public class ChallengeController {
         model.addAttribute("ImageDateService", imageDataService);
 
         return "view/challenge/list";
+    }
+
+    @GetMapping("/map/test")
+    public String mapTestPage(Model model) {
+
+        String mapKey = mapConfigProps.getKey();
+
+        model.addAttribute("mapKey", mapKey);
+
+        return "view/challenge/mapTest";
     }
 
 }

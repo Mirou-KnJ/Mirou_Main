@@ -174,3 +174,4 @@ gradle-app.setting
 application-secret.yml
 application-prod.yml
 src/main/resources/google-account.json
+keystore.p12
