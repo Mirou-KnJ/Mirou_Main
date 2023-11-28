@@ -1,6 +1,8 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.service;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.base.security.entity.PersistentLogin;
+import com.knj.mirou.base.security.repository.PersistentLoginRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +12,14 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +27,11 @@ import java.util.Map;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberService memberService;
+    private final CustomUserDetailsService userDetailsService;
+    private final PersistentLoginRepository persistentLoginRepository;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -37,7 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         RsData<Member> socialLoginRs = memberService.socialLogin(socialCode, loginId, nickname);
 
-        if(socialLoginRs.isFail()) {
+        if (socialLoginRs.isFail()) {
             return null;            //FIXME
         }
 
@@ -63,4 +71,5 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return getUsername();
         }
     }
+
 }
