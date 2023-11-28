@@ -32,6 +32,8 @@ public class Product {
 
     private String content;
 
+    private String imgUrl;
+
     private String usingWay;
 
     private String usingCaution;
