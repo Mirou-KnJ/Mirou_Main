@@ -16,11 +16,15 @@
             </div>
 
             <div>
-                <div id="map" style="width:500px;height:400px;"></div>
+                <div id="map" class="w-96 h-96" ></div>
             </div>
 
-            <div>
+            <div class="flex flex-col gap-5">
                 <button onclick="getCurPosition()" class="btn btn-warning">현재 위치 받아오기</button>
+                <button onclick="searchPlace('AT4')" class="btn btn-ghost">주변 관광명소(AT4) 조회하기</button>
+                <button onclick="searchPlace('CT1')" class="btn btn-primary">주변 문화시설(CT1) 조회하기</button>
+                <button onclick="searchPlace('FD6')" class="btn btn-danger">주변 음식점(FD6) 조회하기</button>
+                <button onclick="searchPlace('CE7')" class="btn btn-success">주변 카페(CE7) 조회하기</button>
             </div>
 
         </div>
@@ -28,15 +32,39 @@
 
     <script>
 
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 4 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        var ps = new kakao.maps.services.Places(map);
+
+        function searchPlace(code) {
+
+            console.log(code);
+
+            ps.categorySearch(code, placeSearchCB, {useMapBounds:true});
+        }
+
+        function placeSearchCB(data, status, pagination) {
+
+            if (status === kakao.maps.services.Status.OK) {
+                toastNotice("조회에 성공하였습니다");
+
+                for ( var i = 0; i < data.length; i++ ) {
+                    console.log(data[i]);
+                }
+
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                toastWarning("주변에 존재하지 않는 것 같아요!");
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                toastWarning("[ERROR] 옳지 않은 호출입니다.");
+            }
+        }
+
         function getCurPosition() {
-
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-                mapOption = {
-                    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                    level: 10 // 지도의 확대 레벨
-                };
-
-            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
             // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
             if (navigator.geolocation) {
@@ -48,7 +76,7 @@
                         lon = position.coords.longitude; // 경도
 
                     var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                        message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+                        message = '<div style="padding:5px;">현재 예상 위치</div>'; // 인포윈도우에 표시될 내용입니다
 
                     // 마커와 인포윈도우를 표시합니다
                     displayMarker(locPosition, message);
