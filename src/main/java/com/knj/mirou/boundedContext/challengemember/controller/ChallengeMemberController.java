@@ -40,7 +40,7 @@ public class ChallengeMemberController {
 
         if(joinRs.isFail()) {
             joinRs.printResult();
-            return "redirect:/challenge/detail" + challengeId;
+            return rq.historyBack(joinRs);
         }
 
         return "redirect:/challenge/detail/" + challengeId;
