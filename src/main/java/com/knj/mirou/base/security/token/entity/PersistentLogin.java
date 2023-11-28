@@ -2,6 +2,7 @@ package com.knj.mirou.base.security.token.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 
@@ -10,7 +11,8 @@ import java.util.Date;
 
 @Getter
 @Entity
-public class RememberMeToken implements Serializable {
+@Table(name = "persistent_logins")
+public class PersistentLogin implements Serializable {
 
     @Id
     private String series;
@@ -21,18 +23,18 @@ public class RememberMeToken implements Serializable {
 
     private Date lastUsed;
 
-    protected RememberMeToken() {
+    protected PersistentLogin() {
     }
 
-    private RememberMeToken(final PersistentRememberMeToken token) {
+    public PersistentLogin(final PersistentRememberMeToken token) {
         this.series = token.getSeries();
         this.username = token.getUsername();
         this.token = token.getTokenValue();
         this.lastUsed = token.getDate();
     }
 
-    public static RememberMeToken from(final PersistentRememberMeToken token) {
-        return new RememberMeToken(token);
+    public static PersistentLogin from(final PersistentRememberMeToken token) {
+        return new PersistentLogin(token);
     }
 
     public void updateToken(final String tokenValue, final Date lastUsed) {

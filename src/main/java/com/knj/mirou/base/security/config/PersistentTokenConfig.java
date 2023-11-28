@@ -1,7 +1,7 @@
 package com.knj.mirou.base.security.config;
 
 import com.knj.mirou.base.security.token.repository.JpaPersistentTokenRepository;
-import com.knj.mirou.base.security.token.repository.RememberMeTokenRepository;
+import com.knj.mirou.base.security.token.repository.PersistentLoginRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -10,7 +10,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 public class PersistentTokenConfig {
 
     @Bean
-    public PersistentTokenRepository persistentTokenRepository(final RememberMeTokenRepository repository) {
+    public PersistentTokenRepository persistentTokenRepository(final PersistentLoginRepository repository) {
         return new JpaPersistentTokenRepository(repository);
     }
+
 }

@@ -16,6 +16,7 @@ public class SecurityConfig {
 
     private final PersistentTokenRepository tokenRepository;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -25,22 +26,26 @@ public class SecurityConfig {
                         oauth2Login -> oauth2Login
                                 .loginPage("/member/login")
                                 .defaultSuccessUrl("/")
+                                .userInfoEndpoint(userInfoEndpoint ->
+                                        userInfoEndpoint
+                                                .userService(customOAuth2UserService)
+                                )
+                )
+                .rememberMe(
+                        (rememberMe) -> rememberMe
+                                .key("key")
+                                .tokenValiditySeconds(3600)
+                                .userDetailsService(customUserDetailsService)
+                                .tokenRepository(tokenRepository)
+                                .alwaysRemember(true)
                 )
                 .logout(
                         (logout) -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true)
-                )
-                .rememberMe(
-                        (rememberMe) -> rememberMe
-                                .key("key")
-                                .userDetailsService(customUserDetailsService)
-                                .tokenRepository(tokenRepository)
-
                 );
 
         return http.build();
     }
-
 }
