@@ -13,6 +13,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    private final CustomUserDetailsService userDetailsService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -27,7 +29,13 @@ public class SecurityConfig {
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true)
-                );
+                )
+                .rememberMe(
+                        (rememberMe) -> rememberMe
+                                .tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService)
+                )
+
+        ;
 
         return http.build();
     }
