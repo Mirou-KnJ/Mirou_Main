@@ -51,17 +51,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Member member = socialLoginRs.getData();
 
-        // Remember Me 토큰 생성
-        String username = member.getNickname();
-        String series = String.valueOf(UUID.randomUUID());
-        String tokenValue = loginId;
-
-        PersistentRememberMeToken persistentToken = new PersistentRememberMeToken(username, series, tokenValue, new Date());
-        PersistentLogin persistentLogin = new PersistentLogin(persistentToken);
-
-        // 토큰을 저장소에 저장
-        persistentLoginRepository.save(persistentLogin);
-
         return new CustomOAuth2User(member.getLoginId(), member.getNickname(),
                 memberService.getGrantedAuthorities(member.getLoginId()));
     }
