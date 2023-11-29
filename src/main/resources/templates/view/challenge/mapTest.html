@@ -20,15 +20,12 @@
                 <div id="map" class="w-96 h-96" ></div>
             </div>
 
-            <div class="flex flex-col gap-5">
-                <button onclick="getCurPosition()" class="btn btn-warning">현재 위치 받아오기</button>
-                <button onclick="searchPlace('AT4')" class="btn btn-ghost">주변 관광명소(AT4) 조회하기</button>
-                <button onclick="searchPlace('CT1')" class="btn btn-primary">주변 문화시설(CT1) 조회하기</button>
-                <button onclick="searchPlace('FD6')" class="btn btn-danger">주변 음식점(FD6) 조회하기</button>
-                <button onclick="searchPlace('CE7')" class="btn btn-success">주변 카페(CE7) 조회하기</button>
+            <div class="flex mt-5">
+                <button th:onclick="searchPlace([[${category.code}]])" class="btn btn-neutral"
+                th:text="'주변 ' + ${category.name} + ' 조회하기'"></button>
             </div>
 
-            <div id="menu_wrap" class="bg_white">
+            <div id="menu_wrap" class="mt-5">
                 <ul id="placesList"></ul>
             </div>
 

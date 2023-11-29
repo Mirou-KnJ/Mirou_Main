@@ -9,6 +9,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
+import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -181,7 +182,11 @@ public class ChallengeController {
 
         String mapKey = mapConfigProps.getKey();
 
+        //FIXME: 챌린지에 설정된 카테고리로 반환되어야 함.
+        model.addAttribute("category", MapCategory.ATTRACTION);
+
         model.addAttribute("mapKey", mapKey);
+
 
         return "view/challenge/mapTest";
     }
