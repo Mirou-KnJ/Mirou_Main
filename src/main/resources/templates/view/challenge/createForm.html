@@ -109,8 +109,9 @@
                     </label>
                     <div class="flex justify-center">
                         <select class="select select-bordered max-w-xs" name="placeCategory">
+                            <option value="NONE" selected>없음</option>
                             <option th:each="category : ${categories}"
-                            th:value="${category.code}" th:text="${category.name}"></option>
+                            th:value="${category.name}" th:text="${category.placeName}"></option>
                         </select>
                     </div>
                 </div>

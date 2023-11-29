@@ -184,7 +184,6 @@ public class ChallengeController {
 
         //FIXME: 챌린지에 설정된 카테고리로 반환되어야 함.
         model.addAttribute("category", MapCategory.ATTRACTION);
-
         model.addAttribute("mapKey", mapKey);
 
 

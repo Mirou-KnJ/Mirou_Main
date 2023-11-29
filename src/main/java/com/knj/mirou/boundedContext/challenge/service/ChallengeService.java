@@ -75,11 +75,6 @@ public class ChallengeService {
             labels = labelProcessing(createDTO.getLabelList());
         }
 
-        String category = "NONE";
-        if(createDTO.getMethod().equals("LOCATION")) {
-            category = createDTO.getPlaceCategory();
-        }
-
         Challenge newChallenge = Challenge.builder()
                 .name(createDTO.getName())
                 .contents(createDTO.getContents())
@@ -89,7 +84,7 @@ public class ChallengeService {
                 .tag(ChallengeTag.valueOf(createDTO.getTag()))
                 .method(AuthenticationMethod.valueOf(createDTO.getMethod()))
                 .labels(labels)
-                .placeCategory(category)
+                .mapCategory(MapCategory.valueOf(createDTO.getPlaceCategory()))
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
                 .precautions(createDTO.getPrecaution())

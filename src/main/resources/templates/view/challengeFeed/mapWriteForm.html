@@ -1,0 +1,263 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>위치 기반 인증</title>
+
+    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${mapKey}
+    + '&libraries=services,clusterer,drawing'"></script>
+
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+
+        <div class="flex flex-col">
+            <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+
+                <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
+                <!-- FIXME NO IMG URL -->
+                <img th:if="${challengeImg}" class="border rounded-lg" th:src="${challengeImg}" alt="challengeImg">
+
+                <div class="flex w-full items-center justify-center mt-3">
+                    <div class="flex flex-col">
+                        <div class="flex mt-2 gap-2">
+                            <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
+                                 th:data-tip="${challenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
+                                <i class="fa-solid fa-camera-retro fa-lg mr-2"></i>
+                                <p th:text="${challenge.method.getMethod()}"></p>
+                            </div>
+                            <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
+                                 th:data-tip="'참여 당일부터 ' + ${challenge.period} + '일 간 진행되요!'">
+                                <i class="fa-regular fa-calendar fa-lg mr-2"></i>
+                                <p th:text="${challenge.period} + '일 챌린지'"></p>
+                            </div>
+
+                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
+                                <i class="fa-solid fa-person-walking fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                                <i class="fa-solid fa-tree fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                <i class="fa-solid fa-pen fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
+                                <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col">
+            <div id="map" class="w-96 h-96"></div>
+
+            <div class="flex mt-5">
+                <button th:onclick="searchPlace([[${category.code}]])" class="btn btn-neutral"
+                        th:text="'주변 ' + ${category.name} + ' 조회하기'"></button>
+            </div>
+
+            <div>
+                <table id="menu_wrap" class="mt-5 table table-zebra">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>이름</th>
+                        <th>주소</th>
+                    </tr>
+                    </thead>
+                    <tbody id="placesList">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var markers = [];
+
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(37.49, 126.92),
+                level: 4
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        var ps = new kakao.maps.services.Places(map);
+        var infowindow = new kakao.maps.InfoWindow({zIndex: 1});
+        var searchFlag = false;
+
+        //FIXME: 배포시 주석 해제
+        // getCurPosition();
+        map.setDraggable(false);
+        map.setZoomable(false);
+
+        function searchPlace(code) {
+
+            if (searchFlag === true) {
+                toastWarning("이미 조회가 완료되었어요!");
+                return;
+            }
+
+            ps.categorySearch(code, placeSearchCB, {useMapBounds: true});
+        }
+
+        function placeSearchCB(data, status, pagination) {
+
+            if (status === kakao.maps.services.Status.OK) {
+
+                toastNotice("조회에 성공하였습니다");
+
+                displayPlaces(data);
+
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                toastWarning("주변에 존재하지 않는 것 같아요!");
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                toastWarning("[ERROR] 옳지 않은 호출입니다.");
+            }
+        }
+
+        function displayInfowindow(marker, title) {
+            var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+        }
+
+        function displayPlaces(places) {
+
+            searchFlag = true;
+
+            var listEl = document.getElementById('placesList'),
+                menuEl = document.getElementById('menu_wrap'),
+                fragment = document.createDocumentFragment(),
+                bounds = map.getBounds(),
+                listStr = '';
+
+            removeAllChildNods(listEl);
+
+            removeMarker();
+
+            for (var i = 0; i < places.length; i++) {
+
+                var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+                    marker = addMarker(placePosition, i),
+                    itemEl = getListItem(i, places[i]);
+
+                bounds.extend(placePosition);
+
+                (function (marker, title) {
+                    kakao.maps.event.addListener(marker, 'mouseover', function () {
+                        displayInfowindow(marker, title);
+                    });
+
+                    kakao.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close();
+                    });
+
+                    itemEl.onmouseover = function () {
+                        displayInfowindow(marker, title);
+                    };
+
+                    itemEl.onmouseout = function () {
+                        infowindow.close();
+                    };
+                })(marker, places[i].place_name);
+
+                fragment.appendChild(itemEl);
+            }
+
+            listEl.appendChild(fragment);
+            menuEl.scrollTop = 0;
+        }
+
+        function getListItem(index, places) {
+
+            var el = document.createElement('tr'),
+                itemStr = '<td class="markerbg marker_' + (index + 1) + '">' + (index + 1) + '</td>';
+
+            itemStr += `<td onclick="selectPlace('${places.place_name}')">${places.place_name}</td>`;
+
+            if (places.road_address_name) {
+                itemStr += '<td>' + places.road_address_name + '</td>';
+            } else {
+                itemStr += '<td>' + places.address_name + '</td>';
+            }
+
+            el.innerHTML = itemStr;
+            el.className = 'item';
+
+            return el;
+        }
+
+        function addMarker(position, idx, title) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+                imageSize = new kakao.maps.Size(36, 37),
+                imgOptions = {
+                    spriteSize: new kakao.maps.Size(36, 691),
+                    spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10),
+                    offset: new kakao.maps.Point(13, 37)
+                },
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: position,
+                    image: markerImage
+                });
+
+            marker.setMap(map);
+            markers.push(marker);
+
+            return marker;
+        }
+
+        function removeMarker() {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+        }
+
+        function removeAllChildNods(el) {
+            while (el.hasChildNodes()) {
+                el.removeChild(el.lastChild);
+            }
+        }
+
+        function getCurPosition() {
+
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+
+                    var lat = position.coords.latitude, // 위도
+                        lon = position.coords.longitude; // 경도
+
+                    var locPosition = new kakao.maps.LatLng(lat, lon)
+
+                    map.setCenter(locPosition);
+
+                    map.setDraggable(false);
+                    map.setZoomable(false);
+                });
+
+            } else {
+                var locPosition = new kakao.maps.LatLng(37.49, 126.92)
+
+                map.setCenter(locPosition);
+                toastWarning("위치 정보를 얻어올 수 없습니다");
+            }
+        }
+
+        function selectPlace(place) {
+            var select = confirm(place + '로 인증 하시겠습니까?');
+
+            if (select) {
+                window.location.href = "/"
+
+            } else {
+                toastNotice("인증이 취소되었습니다.");
+            }
+        }
+    </script>
+</th:block>
+
+</body>
+</html>
