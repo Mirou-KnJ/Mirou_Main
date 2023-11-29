@@ -42,27 +42,32 @@
                 </div>
             </div>
 
-            <form class="flex flex-col justify-center w-full" enctype="multipart/form-data"
-                  method="POST" th:action="|/feed/write/${challenge.id}|">
-                <div class="flex flex-col w-full">
-                    <img class="my-5" id="preview">
+            <div class="flex flex-col justify-center">
+                <form class="flex flex-col justify-center w-full" enctype="multipart/form-data"
+                      method="POST" th:action="|/feed/write/${challenge.id}|">
+
+                    <div class="flex flex-col w-full">
+                        <img class="my-5" id="preview">
+                        <span class="flex justify-start w-full label tooltip"
+                              data-tip="jpg, jpeg, png, gif 등의 이미지 형식만 첨부 해주세요!">인증샷 첨부</span>
+                        <input type="file" class="file-input file-input-bordered file-input-info"
+                               id="img" name="img">
+                    </div>
+
+                    <div class="mt-10 flex flex-col form-control w-full">
                     <span class="flex justify-start w-full label tooltip"
-                          data-tip="jpg, jpeg, png, gif 등의 이미지 형식만 첨부 해주세요!">인증샷 첨부</span>
-                    <input type="file" class="file-input file-input-bordered file-input-info"
-                           id="img" name="img">
-                </div>
+                          data-tip="30자 이내로 한줄 소감을 작성 해보세요!">한줄 소감</span>
+                        <input type="text" placeholder="Type here" class="input input-bordered"
+                               id="contents" name="contents"/>
+                    </div>
 
-                <div class="mt-10 flex flex-col form-control w-full">
-                    <span class="flex justify-start w-full label tooltip"
-                    data-tip="30자 이내로 한줄 소감을 작성 해보세요!">한줄 소감</span>
-                    <input type="text" placeholder="Type here" class="input input-bordered"
-                           id="contents" name="contents"/>
-                </div>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-                <button class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
-            </form>
+                    <div class="flex justify-center w-full">
+                        <button class="btn btn-outline btn-accent" type="submit">인증 완료</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
 

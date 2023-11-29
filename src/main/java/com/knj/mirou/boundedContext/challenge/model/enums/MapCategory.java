@@ -10,8 +10,9 @@ public enum MapCategory {
     ATTRACTION("관광명소", "AT4"),
     CULTURE("문화시설", "CT1"),
     RESTAURANT("음식점", "FD6"),
-    CAFE("카페", "CE7");
+    CAFE("카페", "CE7"),
+    NONE("NONE", "NONE");
 
-    private final String name;
+    private final String placeName;
     private final String code;
 }

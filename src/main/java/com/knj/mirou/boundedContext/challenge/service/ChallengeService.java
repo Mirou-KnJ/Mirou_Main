@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
+import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +42,14 @@ public class ChallengeService {
         return challengeRepository.findAll();
     }
 
+    public List<AuthenticationMethod> getAllMethods() {
+        return Arrays.asList(AuthenticationMethod.values());
+    }
+
+    public List<MapCategory> getAllCategories() {
+        return Arrays.asList(MapCategory.values());
+    }
+
     public List<Challenge> getByStatus(ChallengeStatus status) {
 
         return challengeRepository.findByStatus(status);
@@ -53,8 +63,6 @@ public class ChallengeService {
     @Transactional
     public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
 
-        List<String> labels = new ArrayList<>();
-
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
         }
@@ -63,8 +71,8 @@ public class ChallengeService {
             return RsData.of("F-2", "%s는 이미 사용 중인 챌린지 이름 입니다.".formatted(createDTO.getName()));
         }
 
+        List<String> labels = new ArrayList<>();
         if(createDTO.getMethod().equals("PHOTO")) {
-            log.info("Photo 입니다");
             labels = labelProcessing(createDTO.getLabelList());
         }
 
@@ -77,6 +85,7 @@ public class ChallengeService {
                 .tag(ChallengeTag.valueOf(createDTO.getTag()))
                 .method(AuthenticationMethod.valueOf(createDTO.getMethod()))
                 .labels(labels)
+                .mapCategory(MapCategory.valueOf(createDTO.getPlaceCategory()))
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
                 .precautions(createDTO.getPrecaution())

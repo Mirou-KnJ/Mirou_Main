@@ -13,4 +13,5 @@ public enum AuthenticationMethod {
     ETC("기타");
 
     private final String method;
+
 }
