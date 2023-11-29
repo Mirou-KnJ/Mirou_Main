@@ -20,7 +20,7 @@
                     <input type="text" name="cost" class="input input-bordered">
 
                     <label class="label-text">쿠폰 번호</label>
-                    <input type="text" name="contents" class="input input-bordered">
+                    <input type="text" name="content" class="input input-bordered">
 
                     <label class="label-text">사용처</label>
                     <input type="text" name="usingWay" class="input input-bordered">
@@ -29,7 +29,9 @@
                     <input type="text" name="usingCaution" class="input input-bordered">
 
                     <label class="label-text">대표 이미지</label>
-                    <input type="file" name="contents" class="file-input file-input-bordered file-input-primary w-full">
+                    <input type="file" name="img" class="file-input file-input-bordered file-input-primary w-full">
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                     <button type="submit" class="btn btn-success mt-5">등록하기</button>
                 </form>
