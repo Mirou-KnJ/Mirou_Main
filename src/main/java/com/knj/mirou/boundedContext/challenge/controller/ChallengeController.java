@@ -6,10 +6,7 @@ import com.knj.mirou.boundedContext.challenge.config.MapConfigProperties;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
-import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
+import com.knj.mirou.boundedContext.challenge.model.enums.*;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -48,7 +45,9 @@ public class ChallengeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
-    public String createForm() {
+    public String createForm(Model model) {
+
+        model.addAttribute("methods", challengeService.getAllMethods());
 
         return "view/challenge/createForm";
     }

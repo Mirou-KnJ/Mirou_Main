@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,11 @@ public class ChallengeService {
     public List<Challenge> getAllList() {
 
         return challengeRepository.findAll();
+    }
+
+    public List<AuthenticationMethod> getAllMethods() {
+
+        return Arrays.asList(AuthenticationMethod.values());
     }
 
     public List<Challenge> getByStatus(ChallengeStatus status) {

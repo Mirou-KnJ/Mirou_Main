@@ -59,9 +59,8 @@
                     <select id="method" class="select select-bordered max-w-xs" name="method"
                             onchange="whenPhotoSelect()">
                         <option disabled selected>인증 방법</option>
-                        <option value="TEXT">텍스트 인증</option>
-                        <option value="PHOTO">인증샷 인증</option>
-                        <option value="ETC">기타</option>
+                        <option th:each="method : ${methods}" th:value="${method.name}"
+                                th:text="${method.method}"></option>
                     </select>
 
                     <select class="select select-bordered max-w-xs" name="joinCost">
