@@ -162,7 +162,7 @@ public class ChallengeController {
 
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
         List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
-
+        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         Member member = rq.getMember();
 
         model.addAttribute("openedAndValid",
