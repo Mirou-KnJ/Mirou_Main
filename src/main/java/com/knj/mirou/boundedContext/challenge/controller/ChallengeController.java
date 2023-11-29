@@ -2,7 +2,6 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.challenge.config.MapConfigProperties;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -43,11 +42,13 @@ public class ChallengeController {
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
     private final MemberService memberService;
-    private final MapConfigProperties mapConfigProps;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
-    public String createForm() {
+    public String createForm(Model model) {
+
+        model.addAttribute("categories", challengeService.getAllCategories());
+        model.addAttribute("methods", challengeService.getAllMethods());
 
         return "view/challenge/createForm";
     }
@@ -86,7 +87,9 @@ public class ChallengeController {
     public String openedChallengeList(Model model, Principal principal) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
         String loginId = principal.getName();
         Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
 
@@ -98,7 +101,7 @@ public class ChallengeController {
         }
 
         model.addAttribute("openedAndValid",
-                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
+                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
         model.addAttribute("myValidChallengeList", myValidChallengeList);
         model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
         model.addAttribute("ImageDateService", imageDataService);
@@ -161,12 +164,13 @@ public class ChallengeController {
     public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
 
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
         List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
-
+        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         Member member = rq.getMember();
 
         model.addAttribute("openedAndValid",
-                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
+                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
         model.addAttribute("member", member);
         model.addAttribute("myValidChallengeList", myValidChallengeList);
         model.addAttribute("openedChallenges", openedChallenges);
@@ -174,16 +178,6 @@ public class ChallengeController {
         model.addAttribute("ImageDateService", imageDataService);
 
         return "view/challenge/list";
-    }
-
-    @GetMapping("/map/test")
-    public String mapTestPage(Model model) {
-
-        String mapKey = mapConfigProps.getKey();
-
-        model.addAttribute("mapKey", mapKey);
-
-        return "view/challenge/mapTest";
     }
 
 }

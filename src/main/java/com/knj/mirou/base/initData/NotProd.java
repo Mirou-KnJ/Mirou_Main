@@ -60,6 +60,7 @@ public class NotProd {
                             .joinCost(1000)
                             .method("PHOTO")
                             .labelList("Water,Bottle,Drink,Glass,Cup,Tumbler,Drinking Water,Drinkware")
+                            .placeCategory("NONE")
                             .build();
 
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);

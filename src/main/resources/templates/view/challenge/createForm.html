@@ -57,11 +57,10 @@
 
                 <div class="mt-4 flex justify-around w-full">
                     <select id="method" class="select select-bordered max-w-xs" name="method"
-                            onchange="whenPhotoSelect()">
+                            onchange="methodSelect()">
                         <option disabled selected>인증 방법</option>
-                        <option value="TEXT">텍스트 인증</option>
-                        <option value="PHOTO">인증샷 인증</option>
-                        <option value="ETC">기타</option>
+                        <option th:each="method : ${methods}" th:value="${method.name}"
+                                th:text="${method.method}"></option>
                     </select>
 
                     <select class="select select-bordered max-w-xs" name="joinCost">
@@ -104,6 +103,19 @@
                     </div>
                 </div>
 
+                <div id="getCategoryDiv" class="hidden">
+                    <label class="label">
+                        <span class="label-text">장소 카테고리</span>
+                    </label>
+                    <div class="flex justify-center">
+                        <select class="select select-bordered max-w-xs" name="placeCategory">
+                            <option value="NONE" selected>없음</option>
+                            <option th:each="category : ${categories}"
+                            th:value="${category.name}" th:text="${category.placeName}"></option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="flex w-full justify-between mt-4">
                     <label class="label">
                         <span class="label-text">종료일 설정</span>
@@ -143,17 +155,24 @@
 
         <script th:inline="javascript">
 
-            function whenPhotoSelect() {
+            function methodSelect() {
                 var selectElement = document.getElementById('method');
                 var selectedValue = selectElement.value;
                 var labelDiv = document.getElementById('labelDiv')
                 const getLabelDiv = document.getElementById("getLabelDiv");
+                const getCategoryDiv = document.getElementById("getCategoryDiv");
 
                 if (selectedValue === 'PHOTO') {
                     labelDiv.style.display = 'block';
+                    getCategoryDiv.style.display = 'none';
+                } else if(selectedValue === 'LOCATION') {
+                    getCategoryDiv.style.display = 'block';
+                    labelDiv.style.display = 'none';
+                    getLabelDiv.style.display = 'none';
                 } else {
                     labelDiv.style.display = 'none';
                     getLabelDiv.style.display = 'none';
+                    getCategoryDiv.style.display = 'none';
                 }
             }
 

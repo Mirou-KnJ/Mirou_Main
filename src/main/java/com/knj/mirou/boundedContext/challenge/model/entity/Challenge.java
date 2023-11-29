@@ -4,6 +4,7 @@ import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
+import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,9 @@ public class Challenge extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ChallengeTag tag;
+
+    @Enumerated(EnumType.STRING)
+    private MapCategory mapCategory;
 
     @Enumerated(EnumType.STRING)
     private AuthenticationMethod method;

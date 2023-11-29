@@ -2,7 +2,9 @@ package com.knj.mirou.boundedContext.challengefeed.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.config.MapConfigProperties;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
@@ -32,6 +34,7 @@ public class ChallengeFeedController {
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
+    private final MapConfigProperties mapConfigProps;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
@@ -49,6 +52,15 @@ public class ChallengeFeedController {
 
         model.addAttribute("challenge", challenge);
         model.addAttribute("challengeImg", challengeImg);
+
+        if(challenge.getMethod().equals(AuthenticationMethod.LOCATION)) {
+
+            String mapKey = mapConfigProps.getKey();
+            model.addAttribute("mapKey", mapKey);
+            model.addAttribute("category", challenge.getMapCategory());
+
+            return "view/challengeFeed/mapWriteForm";
+        }
 
         return "view/challengeFeed/writeForm";
     }
