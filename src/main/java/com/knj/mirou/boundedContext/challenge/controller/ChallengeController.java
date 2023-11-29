@@ -27,14 +27,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -90,6 +85,7 @@ public class ChallengeController {
     public String openedChallengeList(Model model, Principal principal) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
         String loginId = principal.getName();
         Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
