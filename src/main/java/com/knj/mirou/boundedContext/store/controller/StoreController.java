@@ -4,7 +4,6 @@ import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.store.model.entity.Store;
-import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import com.knj.mirou.boundedContext.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

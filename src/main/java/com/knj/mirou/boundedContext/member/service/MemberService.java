@@ -65,7 +65,6 @@ public class MemberService {
     public RsData<Member> socialLogin(String socialCode, String loginId, String nickname) {
 
         Optional<Member> OByLoginId = getByLoginId(loginId);
-
         if (OByLoginId.isPresent()) {
             return RsData.of("S-1", "로그인 되었습니다(이미 가입된 회원)", OByLoginId.get());
         }

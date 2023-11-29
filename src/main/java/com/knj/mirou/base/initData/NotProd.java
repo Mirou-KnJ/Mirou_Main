@@ -59,7 +59,7 @@ public class NotProd {
                             .period(7)
                             .joinCost(1000)
                             .method("PHOTO")
-                            .labelList("LABEL1,LABEL2,LABEL3")
+                            .labelList("Water,Bottle,Drink,Glass,Cup,Tumbler,Drinking Water,Drinkware")
                             .build();
 
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);
