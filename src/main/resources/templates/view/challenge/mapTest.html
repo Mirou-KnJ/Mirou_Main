@@ -25,10 +25,17 @@
                 th:text="'주변 ' + ${category.name} + ' 조회하기'"></button>
             </div>
 
-            <div id="menu_wrap" class="mt-5">
-                <ul id="placesList"></ul>
-            </div>
-
+            <table id="menu_wrap" class="mt-5 table table-zebra">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>주소</th>
+                </tr>
+                </thead>
+                <tbody id="placesList">
+                </tbody>
+            </table>
         </div>
     </main>
 
@@ -49,6 +56,8 @@
 
         //FIXME: 배포시 주석 해제
         // getCurPosition();
+        map.setDraggable(false);
+        map.setZoomable(false);
 
         function searchPlace(code) {
 
@@ -131,20 +140,16 @@
 
         function getListItem(index, places) {
 
-            var el = document.createElement('li'),
-                itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-                    '<div class="info">' +
-                    '   <h5>' + places.place_name + '</h5>';
+            var el = document.createElement('tr'),
+                itemStr = '<td class="markerbg marker_' + (index+1) + '">' + (index+1) + '</td>';
+
+            itemStr += `<td onclick="selectPlace('${places.place_name}')">${places.place_name}</td>`;
 
             if (places.road_address_name) {
-                itemStr += '    <span>' + places.road_address_name + '</span>' +
-                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+                itemStr += '<td>' + places.road_address_name + '</td>';
             } else {
-                itemStr += '    <span>' +  places.address_name  + '</span>';
+                itemStr += '<td>' +  places.address_name  + '</td>';
             }
-
-            itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-                '</div>';
 
             el.innerHTML = itemStr;
             el.className = 'item';
@@ -208,6 +213,10 @@
                 map.setCenter(locPosition);
                 toastWarning("위치 정보를 얻어올 수 없습니다");
             }
+        }
+
+        function selectPlace(place) {
+            var select = confirm(place + '로 인증 하시겠습니까?');
         }
     </script>
 </th:block>
