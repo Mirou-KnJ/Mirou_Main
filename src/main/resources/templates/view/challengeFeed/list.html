@@ -93,28 +93,28 @@
 
     <script th:inline="javascript">
 
-        // function tryLike(feedId, element) {
-        //
-        //     element.onclick = null;
-        //
-        //     let url = "/feed/like/" + feedId;
-        //
-        //     const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
-        //     const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
-        //
-        //     fetch(url, {
-        //         method: 'POST',
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             [headerName]: tokenValue
-        //         }
-        //     })
-        //         .catch((error) => {
-        //             console.log('Error:', error);
-        //             return;
-        //         })
-        //
-        //     toastNotice("좋아요가 반영되었습니다.");
+        function tryLike(feedId, element) {
+
+            element.onclick = null;
+
+            let url = "/feed/like/" + feedId;
+
+            const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+            const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    [headerName]: tokenValue
+                }
+            })
+                .catch((error) => {
+                    console.log('Error:', error);
+                    return;
+                })
+
+            toastNotice("좋아요가 반영되었습니다.");
         }
 
         function tryReport(targetFeedId) {

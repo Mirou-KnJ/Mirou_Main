@@ -93,6 +93,9 @@ public class ChallengeFeedController {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()){
+
+            log.error("NONE CHALLENGE ERROR");
+
             return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
         }
 
@@ -104,7 +107,7 @@ public class ChallengeFeedController {
         model.addAttribute("ImageDataService", imageDataService);
         model.addAttribute("option", OptimizerOption.FEED_MODAL);
 
-        return "/view/challengeFeed/list";
+        return "view/challengeFeed/list";
     }
 
     @ResponseBody
