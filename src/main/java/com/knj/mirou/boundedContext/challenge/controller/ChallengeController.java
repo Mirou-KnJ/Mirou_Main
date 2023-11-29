@@ -27,7 +27,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
@@ -86,6 +85,7 @@ public class ChallengeController {
     public String openedChallengeList(Model model, Principal principal) {
 
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
+        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
         String loginId = principal.getName();
         Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
@@ -162,7 +162,7 @@ public class ChallengeController {
 
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
         List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
-
+        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         Member member = rq.getMember();
 
         model.addAttribute("openedAndValid",
