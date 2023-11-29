@@ -31,6 +31,20 @@ public class PointService {
     }
 
     @Transactional
+    public void usedPoint(Point point, int cost){
+
+        point.usingPoint(cost);
+
+//        point = Point.builder()
+//                .id(point.getId())
+//                .currentPoint(point.getCurrentPoint() - cost)
+//                .totalUsedPoint(point.getTotalUsedPoint() + cost)
+//                .build();
+//
+//        pointRepository.save(point);
+    }
+
+    @Transactional
     public void resetPoint(List<Member> members) {
 
         for(Member targetMember : members) {

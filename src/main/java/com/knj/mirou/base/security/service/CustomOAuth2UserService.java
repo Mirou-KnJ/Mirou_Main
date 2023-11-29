@@ -1,9 +1,10 @@
-package com.knj.mirou.base.security;
+package com.knj.mirou.base.security.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,20 +26,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberService memberService;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String oauthId = oAuth2User.getName();      //회원번호? 같은 느낌. 3143014618
-
-        String socialCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();    //KAKAO
-
+        String oauthId = oAuth2User.getName();
+        String socialCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         String loginId = socialCode + "__%s".formatted(oauthId);
         String nickname = socialCode + "__%s".formatted(oauthId);
 
         RsData<Member> socialLoginRs = memberService.socialLogin(socialCode, loginId, nickname);
 
-        if(socialLoginRs.isFail()) {
+        if (socialLoginRs.isFail()) {
             return null;            //FIXME
         }
 
@@ -63,4 +64,5 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return getUsername();
         }
     }
+
 }
