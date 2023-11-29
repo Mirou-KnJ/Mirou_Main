@@ -11,8 +11,8 @@
 <th:block layout:fragment="Content">
     <main class="flex w-full">
 
-        <div class="flex flex-col">
-            <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center w-full mx-auto min-h-screen py-20 navbar bg-base-100">
+            <div class="flex flex-col">
 
                 <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
                 <!-- FIXME NO IMG URL -->
@@ -45,29 +45,56 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="flex flex-col">
-            <div id="map" class="w-96 h-96"></div>
+            <div id="mapDiv" class="flex flex-col mt-5">
+                <div id="map" class="w-96 h-96"></div>
 
-            <div class="flex mt-5">
-                <button th:onclick="searchPlace([[${category.code}]])" class="btn btn-neutral"
-                        th:text="'주변 ' + ${category.name} + ' 조회하기'"></button>
+                <div class="flex mt-5">
+                    <button th:onclick="searchPlace([[${category.code}]])" class="btn btn-neutral"
+                            th:text="'주변 ' + ${category.placeName} + ' 조회하기'"></button>
+                </div>
+
+                <div class="w-full">
+                    <table id="menu_wrap" class="mt-5 table table-zebra">
+                        <thead>
+                        <tr>
+                            <th class="w-4">번호</th>
+                            <th>이름</th>
+                            <th>주소</th>
+                        </tr>
+                        </thead>
+                        <tbody id="placesList">
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div>
-                <table id="menu_wrap" class="mt-5 table table-zebra">
-                    <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>이름</th>
-                        <th>주소</th>
-                    </tr>
-                    </thead>
-                    <tbody id="placesList">
-                    </tbody>
-                </table>
+                <form id="submitForm" class="hidden flex flex-col justify-center w-full" enctype="multipart/form-data"
+                      method="POST" th:action="|/feed/write/${challenge.id}|">
+
+                    <div class="flex flex-col w-full">
+                        <img class="my-5" id="preview">
+                        <span class="flex justify-start w-full label tooltip"
+                              data-tip="jpg, jpeg, png, gif 등의 이미지 형식만 첨부 해주세요!">인증샷 첨부</span>
+                        <input type="file" class="file-input file-input-bordered file-input-info"
+                               id="img" name="img">
+                    </div>
+
+                    <div class="flex flex-col w-full mt-3">
+                        <span class="flex justify-start w-full label">선택된 장소</span>
+                        <input type="text" class="input input-bordered" id="contents" name="contents" readonly/>
+                    </div>
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <div class="flex w-full justify-center items-center">
+                        <button class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
+                    </div>
+
+                </form>
             </div>
+
         </div>
     </main>
 
@@ -250,7 +277,14 @@
             var select = confirm(place + '로 인증 하시겠습니까?');
 
             if (select) {
-                window.location.href = "/"
+
+                var mapDiv = document.getElementById("mapDiv");
+                var submitForm = document.getElementById("submitForm");
+                var inputPlace = document.getElementById("contents");
+
+                mapDiv.style.display = 'none';
+                submitForm.style.display = 'block';
+                inputPlace.value = place;
 
             } else {
                 toastNotice("인증이 취소되었습니다.");
