@@ -62,8 +62,6 @@ public class ChallengeService {
     @Transactional
     public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
 
-        List<String> labels = new ArrayList<>();
-
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
         }
@@ -72,9 +70,14 @@ public class ChallengeService {
             return RsData.of("F-2", "%s는 이미 사용 중인 챌린지 이름 입니다.".formatted(createDTO.getName()));
         }
 
+        List<String> labels = new ArrayList<>();
         if(createDTO.getMethod().equals("PHOTO")) {
-            log.info("Photo 입니다");
             labels = labelProcessing(createDTO.getLabelList());
+        }
+
+        String category = "NONE";
+        if(createDTO.getMethod().equals("LOCATION")) {
+            category = createDTO.getPlaceCategory();
         }
 
         Challenge newChallenge = Challenge.builder()
@@ -86,6 +89,7 @@ public class ChallengeService {
                 .tag(ChallengeTag.valueOf(createDTO.getTag()))
                 .method(AuthenticationMethod.valueOf(createDTO.getMethod()))
                 .labels(labels)
+                .placeCategory(category)
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
                 .precautions(createDTO.getPrecaution())

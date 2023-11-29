@@ -41,6 +41,8 @@ public class Challenge extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ChallengeTag tag;
 
+    private String placeCategory;
+
     @Enumerated(EnumType.STRING)
     private AuthenticationMethod method;
 
