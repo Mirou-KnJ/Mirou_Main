@@ -19,10 +19,6 @@
                 <div class="mt-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                     <a href="/member/admin" class="btn btn-primary" >관리자 페이지로 이동</a>
                 </div>
-
-                <div class="mt-6">
-                    <a href="/challenge/map/test" class="btn btn-info"> 지도 테스트 </a>
-                </div>
             </div>
         </div>
     </main>
