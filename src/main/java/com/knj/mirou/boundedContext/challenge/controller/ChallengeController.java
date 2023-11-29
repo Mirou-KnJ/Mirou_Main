@@ -87,6 +87,7 @@ public class ChallengeController {
         List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
         openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
         String loginId = principal.getName();
         Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
 
@@ -98,7 +99,7 @@ public class ChallengeController {
         }
 
         model.addAttribute("openedAndValid",
-                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
+                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
         model.addAttribute("myValidChallengeList", myValidChallengeList);
         model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
         model.addAttribute("ImageDateService", imageDataService);
@@ -161,12 +162,13 @@ public class ChallengeController {
     public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
 
         List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
         List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
         openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
         Member member = rq.getMember();
 
         model.addAttribute("openedAndValid",
-                challengeService.getNotMineOpenedChallenge(myValidChallengeList, openedChallenges));
+                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
         model.addAttribute("member", member);
         model.addAttribute("myValidChallengeList", myValidChallengeList);
         model.addAttribute("openedChallenges", openedChallenges);

@@ -127,6 +127,22 @@ public class ChallengeMemberService {
         return inProgressChallenges;
     }
 
+    public List<Challenge> getMyCompletedChallengeList(String loginId){
+        Optional<Member> OMember = memberService.getByLoginId(loginId);
+
+        Member member = OMember.get();
+        List<ChallengeMember> completedChallengeMembers =
+                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.PROGRESS_END);
+
+        List<Challenge> completedChallenges = new ArrayList<>();
+
+        for (ChallengeMember cm : completedChallengeMembers){
+            completedChallenges.add(cm.getLinkedChallenge());
+        }
+
+        return completedChallenges;
+    }
+
     @Transactional
     @Scheduled(cron = "3 0 0 * * ?")
     public void setEndForTargetCM() {
