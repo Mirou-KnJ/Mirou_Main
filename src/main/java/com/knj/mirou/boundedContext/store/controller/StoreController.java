@@ -35,9 +35,9 @@ public class StoreController {
     }
 
     @PostMapping("/add")
-    public String tryAdd(long productId, int number, String saleType) {
+    public String tryAdd(long productId, String saleType) {
 
-        RsData<String> createRs = storeService.create(productId, number, saleType);
+        RsData<String> createRs = storeService.create(productId, saleType);
         if(createRs.isFail()) {
             return rq.historyBack(createRs);
         }

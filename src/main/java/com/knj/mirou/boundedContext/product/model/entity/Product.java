@@ -37,5 +37,4 @@ public class Product {
     private String usingWay;
 
     private String usingCaution;
-
 }

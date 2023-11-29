@@ -28,24 +28,21 @@ public class StoreService {
         return productService.getAll();
     }
 
-    public RsData<String> create(long productId, int number, String saleType) {
+    public RsData<String> create(long productId, String saleType) {
 
         Optional<Product> OProduct = productService.getById(productId);
         if(OProduct.isEmpty()) {
             return RsData.of("F-1", "대상 상품을 찾을 수 없습니다.");
         }
 
-        //TODO: 이미 등록 되어있는 상품이었다면 갯수를 추가하는 방향으로.
-
         Store store = Store.builder()
                 .product(OProduct.get())
-                .quantity(number)
                 .saleType(SaleType.valueOf(saleType))
                 .build();
 
         storeRepository.save(store);
 
-        return RsData.of("S-1", "상점 등록에 성공하였습니다.");
+        return RsData.of("S-1", "새 상품 등록에 성공하였습니다.");
     }
 
     public List<Store> getAllStoreProduct() {

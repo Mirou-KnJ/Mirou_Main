@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -24,12 +26,9 @@ public class Store {
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-
-    private int quantity;
 
     @Enumerated(EnumType.STRING)
     private SaleType saleType;
-
 }
