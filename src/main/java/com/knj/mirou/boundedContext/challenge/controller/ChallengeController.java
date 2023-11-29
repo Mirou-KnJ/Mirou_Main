@@ -2,11 +2,12 @@ package com.knj.mirou.boundedContext.challenge.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.challenge.config.MapConfigProperties;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.model.enums.*;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -41,7 +42,6 @@ public class ChallengeController {
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
     private final MemberService memberService;
-    private final MapConfigProperties mapConfigProps;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
@@ -175,19 +175,6 @@ public class ChallengeController {
         model.addAttribute("ImageDateService", imageDataService);
 
         return "view/challenge/list";
-    }
-
-    @GetMapping("/map/test")
-    public String mapTestPage(Model model) {
-
-        String mapKey = mapConfigProps.getKey();
-
-        //FIXME: 챌린지에 설정된 카테고리로 반환되어야 함.
-        model.addAttribute("category", MapCategory.ATTRACTION);
-        model.addAttribute("mapKey", mapKey);
-
-
-        return "view/challenge/mapTest";
     }
 
 }
