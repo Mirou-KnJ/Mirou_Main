@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
+import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
@@ -41,8 +42,11 @@ public class ChallengeService {
     }
 
     public List<AuthenticationMethod> getAllMethods() {
-
         return Arrays.asList(AuthenticationMethod.values());
+    }
+
+    public List<MapCategory> getAllCategories() {
+        return Arrays.asList(MapCategory.values());
     }
 
     public List<Challenge> getByStatus(ChallengeStatus status) {

@@ -47,6 +47,7 @@ public class ChallengeController {
     @GetMapping("/create")
     public String createForm(Model model) {
 
+        model.addAttribute("categories", challengeService.getAllCategories());
         model.addAttribute("methods", challengeService.getAllMethods());
 
         return "view/challenge/createForm";
