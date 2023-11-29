@@ -47,7 +47,8 @@ public class StoreService {
 
     public List<Store> getAllStoreProduct() {
 
-        return storeRepository.findAll();
+        //FIXME
+        return storeRepository.findAllByProductName("스타벅스");
     }
 
 }
