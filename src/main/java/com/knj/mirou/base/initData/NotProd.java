@@ -4,7 +4,6 @@ import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.config.LabelConfig;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;

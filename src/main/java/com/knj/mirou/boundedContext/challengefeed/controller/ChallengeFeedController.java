@@ -8,13 +8,10 @@ import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
-import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
-import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
