@@ -5,6 +5,7 @@
 
     <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${mapKey}
     + '&libraries=services,clusterer,drawing'"></script>
+
 </head>
 <body>
 <th:block layout:fragment="Content">
@@ -16,78 +17,206 @@
             </div>
 
             <div>
-                <div id="map" style="width:500px;height:400px;"></div>
+                <div id="map" class="w-96 h-96" ></div>
             </div>
 
-            <div>
-                <button onclick="getCurPosition()" class="btn btn-warning">현재 위치 받아오기</button>
+            <div class="flex mt-5">
+                <button th:onclick="searchPlace([[${category.code}]])" class="btn btn-neutral"
+                th:text="'주변 ' + ${category.name} + ' 조회하기'"></button>
             </div>
 
+            <table id="menu_wrap" class="mt-5 table table-zebra">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>주소</th>
+                </tr>
+                </thead>
+                <tbody id="placesList">
+                </tbody>
+            </table>
         </div>
     </main>
 
     <script>
 
+        var markers = [];
+
+        var mapContainer = document.getElementById('map'),
+            mapOption = {
+                center: new kakao.maps.LatLng(37.49, 126.92),
+                level: 4
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        var ps = new kakao.maps.services.Places(map);
+        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+        var searchFlag = false;
+
+        //FIXME: 배포시 주석 해제
+        // getCurPosition();
+        map.setDraggable(false);
+        map.setZoomable(false);
+
+        function searchPlace(code) {
+
+            if(searchFlag === true) {
+                toastWarning("이미 조회가 완료되었어요!");
+                return;
+            }
+
+            ps.categorySearch(code, placeSearchCB, {useMapBounds:true});
+        }
+
+        function placeSearchCB(data, status, pagination) {
+
+            if (status === kakao.maps.services.Status.OK) {
+
+                toastNotice("조회에 성공하였습니다");
+
+                displayPlaces(data);
+
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                toastWarning("주변에 존재하지 않는 것 같아요!");
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                toastWarning("[ERROR] 옳지 않은 호출입니다.");
+            }
+        }
+
+        function displayInfowindow(marker, title) {
+            var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+        }
+
+        function displayPlaces(places) {
+
+            searchFlag = true;
+
+            var listEl = document.getElementById('placesList'),
+                menuEl = document.getElementById('menu_wrap'),
+                fragment = document.createDocumentFragment(),
+                bounds = map.getBounds(),
+                listStr = '';
+
+            removeAllChildNods(listEl);
+
+            removeMarker();
+
+            for ( var i=0; i<places.length; i++ ) {
+
+                var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+                    marker = addMarker(placePosition, i),
+                    itemEl = getListItem(i, places[i]);
+
+                bounds.extend(placePosition);
+
+                (function(marker, title) {
+                    kakao.maps.event.addListener(marker, 'mouseover', function() {
+                        displayInfowindow(marker, title);
+                    });
+
+                    kakao.maps.event.addListener(marker, 'mouseout', function() {
+                        infowindow.close();
+                    });
+
+                    itemEl.onmouseover =  function () {
+                        displayInfowindow(marker, title);
+                    };
+
+                    itemEl.onmouseout =  function () {
+                        infowindow.close();
+                    };
+                })(marker, places[i].place_name);
+
+                fragment.appendChild(itemEl);
+            }
+
+            listEl.appendChild(fragment);
+            menuEl.scrollTop = 0;
+        }
+
+        function getListItem(index, places) {
+
+            var el = document.createElement('tr'),
+                itemStr = '<td class="markerbg marker_' + (index+1) + '">' + (index+1) + '</td>';
+
+            itemStr += `<td onclick="selectPlace('${places.place_name}')">${places.place_name}</td>`;
+
+            if (places.road_address_name) {
+                itemStr += '<td>' + places.road_address_name + '</td>';
+            } else {
+                itemStr += '<td>' +  places.address_name  + '</td>';
+            }
+
+            el.innerHTML = itemStr;
+            el.className = 'item';
+
+            return el;
+        }
+
+        function addMarker(position, idx, title) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+                imageSize = new kakao.maps.Size(36, 37),
+                imgOptions =  {
+                    spriteSize : new kakao.maps.Size(36, 691),
+                    spriteOrigin : new kakao.maps.Point(0, (idx*46)+10),
+                    offset: new kakao.maps.Point(13, 37)
+                },
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: position,
+                    image: markerImage
+                });
+
+            marker.setMap(map);
+            markers.push(marker);
+
+            return marker;
+        }
+
+        function removeMarker() {
+            for ( var i = 0; i < markers.length; i++ ) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+        }
+
+        function removeAllChildNods(el) {
+            while (el.hasChildNodes()) {
+                el.removeChild (el.lastChild);
+            }
+        }
+
         function getCurPosition() {
 
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-                mapOption = {
-                    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                    level: 10 // 지도의 확대 레벨
-                };
-
-            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-            // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
             if (navigator.geolocation) {
 
-                // GeoLocation을 이용해서 접속 위치를 얻어옵니다
                 navigator.geolocation.getCurrentPosition(function(position) {
 
                     var lat = position.coords.latitude, // 위도
                         lon = position.coords.longitude; // 경도
 
-                    var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                        message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+                    var locPosition = new kakao.maps.LatLng(lat, lon)
 
-                    // 마커와 인포윈도우를 표시합니다
-                    displayMarker(locPosition, message);
+                    map.setCenter(locPosition);
 
+                    map.setDraggable(false);
+                    map.setZoomable(false);
                 });
 
-            } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+            } else {
+                var locPosition = new kakao.maps.LatLng(37.49, 126.92)
 
-                var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-                    message = 'geolocation을 사용할수 없어요..'
-
-                displayMarker(locPosition, message);
-            }
-
-            // 지도에 마커와 인포윈도우를 표시하는 함수입니다
-            function displayMarker(locPosition, message) {
-
-                // 마커를 생성합니다
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: locPosition
-                });
-
-                var iwContent = message, // 인포윈도우에 표시할 내용
-                    iwRemoveable = true;
-
-                // 인포윈도우를 생성합니다
-                var infowindow = new kakao.maps.InfoWindow({
-                    content : iwContent,
-                    removable : iwRemoveable
-                });
-
-                // 인포윈도우를 마커위에 표시합니다
-                infowindow.open(map, marker);
-
-                // 지도 중심좌표를 접속위치로 변경합니다
                 map.setCenter(locPosition);
+                toastWarning("위치 정보를 얻어올 수 없습니다");
             }
+        }
 
+        function selectPlace(place) {
+            var select = confirm(place + '로 인증 하시겠습니까?');
         }
     </script>
 </th:block>
