@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
+import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
@@ -206,13 +207,19 @@ public class ChallengeService {
         return challengeMemberService.getMyValidChallengeList(loginId);
     }
 
-    public List<Challenge> getNotMineOpenedChallenge(List<Challenge> myChallenges, List<Challenge> openedChallenge) {
+    public List<Challenge> getNotMineNotCompletedOpenedChallenge(List<Challenge> myChallenges, List<Challenge> myCompletedChallenges, List<Challenge> openedChallenge) {
 
         for(Challenge myChallenge : myChallenges) {
             openedChallenge.remove(myChallenge);
         }
-
+        for(Challenge myCompleted : myCompletedChallenges){
+            openedChallenge.remove(myCompleted);
+        }
         return openedChallenge;
+    }
+
+    public List<Challenge> getMyCompletedChallengeList(String loginId){
+        return challengeMemberService.getMyCompletedChallengeList(loginId);
     }
 
     public List<Challenge> getOpenedChallengeByTag(ChallengeTag tag) {
