@@ -39,4 +39,9 @@ public class ProductService {
         return productInfoService.getAll();
     }
 
+    public List<Long> getRegisteredIds() {
+
+        return productRepository.findDistinctProductIds();
+    }
+
 }

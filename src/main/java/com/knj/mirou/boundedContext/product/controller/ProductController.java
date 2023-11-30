@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.product.controller;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
+import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
