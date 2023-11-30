@@ -1,9 +1,8 @@
 package com.knj.mirou.boundedContext.product.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,4 +21,7 @@ public class Product extends BaseEntity {
     private ProductInfo info;
 
     private String code;
+
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 }
