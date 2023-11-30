@@ -96,4 +96,36 @@ public class ProductService {
         return RsData.of("S-1", "판매가 시작되었습니다.");
     }
 
+    public List<Product> getSalingProducts() {
+
+        List<Long> registeredIds = getRegisteredIds();
+
+        List<Product> SalingProducts = new ArrayList<>();
+
+        for(Long id : registeredIds) {
+            ProductInfo info = productInfoService.getById(id).get();
+
+            Optional<Product> OSaleProduct = productRepository.findDistinctByInfoAndStatus(info, ProductStatus.SALE);
+            if(OSaleProduct.isPresent()) {
+                SalingProducts.add(OSaleProduct.get());
+            }
+        }
+
+        return SalingProducts;
+    }
+
+    public List<Integer> getSalingCounts() {
+
+        List<Integer> counts = new ArrayList<>();
+        List<Long> registeredIds = getRegisteredIds();
+
+        for(Long id : registeredIds) {
+            ProductInfo info = productInfoService.getById(id).get();
+
+            counts.add(getCountByInfoAndStatus(info, ProductStatus.SALE));
+        }
+
+        return counts;
+    }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -14,6 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Long> findDistinctProductIds();
 
     List<Product> findAllByInfoAndStatus(ProductInfo info, ProductStatus status);
+
+    Optional<Product> findDistinctByInfoAndStatus(ProductInfo info, ProductStatus status);
 
     int countByInfoAndStatus(ProductInfo info, ProductStatus status);
 }

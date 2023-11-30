@@ -4,6 +4,7 @@ import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
+import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
 import com.knj.mirou.boundedContext.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,5 +58,17 @@ public class ProductController {
         RsData<String> startSaleRs = productService.startSale(infoId);
 
         return ResponseEntity.ok(startSaleRs);
+    }
+
+    @GetMapping("/store")
+    public String storePage(Model model) {
+
+        List<Product> salingProducts = productService.getSalingProducts();
+        List<Integer> salingCounts = productService.getSalingCounts();
+
+        model.addAttribute("products", salingProducts);
+        model.addAttribute("counts", salingCounts);
+
+        return "view/product/store";
     }
 }
