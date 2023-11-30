@@ -14,7 +14,7 @@
                     <h1 class="text-lg">등록된 상품 정보 리스트</h1>
                 </div>
 
-                <div class="flex flex-col grid grid-cols-3 justify-center items-center gap-10">
+                <div class="flex flex-col w-96 grid grid-cols-2 justify-center items-center gap-10">
                     <div class="flex justify-center" th:if="${#lists.isEmpty(productInfos)}">
                         <h1>아직 등록되어있는 상품이 존재하지 않습니다!</h1>
                     </div>
@@ -32,8 +32,11 @@
                             <h1 th:text="'보유 수량 : ' + ${counts.get(index.index)}"></h1>
                         </div>
 
-                        <button class="btn" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록
-                        </button>
+                        <div class="flex flex-col gap-3">
+                            <button class="btn btn-sm" th:onclick="saleStart([[${productInfo.name}]], [[${productInfo.id}]])">판매 시작</button>
+                            <button class="btn btn-sm" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록</button>
+                        </div>
+
                         <dialog th:id="'submitCode' + ${productInfo.id} " class="modal">
                             <div class="flex flex-col modal-box">
                                 <form method="dialog">
@@ -58,14 +61,39 @@
     </main>
 
     <script>
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+        function saleStart(name, id) {
+            var confirmRs = confirm(name + " 판매를 시작할까요?" + id);
+
+            if(confirmRs) {
+                const requestData = {
+                    id: id,
+                    _csrf: csrfToken
+                };
+
+                $.ajax({
+                    url: "/product/startSale",
+                    type: "POST",
+                    data: requestData,
+                    success: function (data) {
+                        const response = data;
+
+                        toastNotice(response.msg);
+                    }
+                })
+
+            } else {
+                toastWarning("판매가 취소되었습니다.");
+            }
+        }
 
         function addCode(id) {
-            var couponCode = document.getElementById('code' + id).value;
-            const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+            var couponCode = document.getElementById('code' + id);
 
             const requestData = {
                 infoId: id,
-                code: couponCode,
+                code: couponCode.value,
                 _csrf: csrfToken
             };
 
@@ -75,6 +103,7 @@
                 data: requestData,
                 success: function (data) {
                     const response = data;
+                    couponCode.value = "";
 
                     toastNotice(response.msg);
                 }

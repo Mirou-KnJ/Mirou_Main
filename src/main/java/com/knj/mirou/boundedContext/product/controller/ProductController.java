@@ -47,4 +47,15 @@ public class ProductController {
 
         return ResponseEntity.ok(createRs);
     }
+
+    @ResponseBody
+    @PostMapping("/startSale")
+    public ResponseEntity<RsData<String>> startSale(@RequestParam Map<String, Object> params) {
+
+        long infoId = Long.parseLong(params.get("id").toString());
+
+        RsData<String> startSaleRs = productService.startSale(infoId);
+
+        return ResponseEntity.ok(startSaleRs);
+    }
 }

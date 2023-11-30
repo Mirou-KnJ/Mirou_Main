@@ -77,4 +77,23 @@ public class ProductService {
         return counts;
     }
 
+    @Transactional
+    public RsData<String> startSale(long infoId) {
+
+        Optional<ProductInfo> OInfo = productInfoService.getById(infoId);
+        if(OInfo.isEmpty()) {
+            return RsData.of("F-1", "상품 정보가 잘못되었습니다.");
+        }
+
+        ProductInfo productInfo = OInfo.get();
+
+        List<Product> beforeProducts = getAllByInfoAndStatus(productInfo, ProductStatus.BEFORE_SALE);
+
+        for(Product product : beforeProducts) {
+            product.setStatus(ProductStatus.SALE);
+        }
+
+        return RsData.of("S-1", "판매가 시작되었습니다.");
+    }
+
 }
