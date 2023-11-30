@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,22 @@ public class ProductService {
     public List<Product> getAllByInfoAndStatus(ProductInfo info, ProductStatus status) {
 
         return productRepository.findAllByInfoAndStatus(info, status);
+    }
+
+    public int getCountByInfoAndStatus(ProductInfo info, ProductStatus status) {
+
+        return productRepository.countByInfoAndStatus(info, status);
+    }
+
+    public List<Integer> getInfoCountList(List<ProductInfo> productInfos) {
+
+        List<Integer> counts = new ArrayList<>();
+
+        for(ProductInfo info : productInfos) {
+            counts.add(getCountByInfoAndStatus(info, ProductStatus.BEFORE_SALE));
+        }
+
+        return counts;
     }
 
 }

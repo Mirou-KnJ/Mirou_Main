@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2"
-                         th:unless="${#lists.isEmpty(productInfos)}" th:each="productInfo : ${productInfos}">
+                         th:unless="${#lists.isEmpty(productInfos)}" th:each="productInfo, index : ${productInfos}">
                         <div>
                             <img class="w-12 h-12" th:src="${productInfo.imgUrl}" alt="productImg">
                         </div>
@@ -29,6 +29,7 @@
                             <h1 th:text="${productInfo.name}"></h1>
                             <h1 th:text="${productInfo.cost} + ' 코인'"></h1>
                             <h1 th:text="${productInfo.brandName}"></h1>
+                            <h1 th:text="'보유 수량 : ' + ${counts.get(index.index)}"></h1>
                         </div>
 
                         <button class="btn" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록

@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Long> findDistinctProductIds();
 
     List<Product> findAllByInfoAndStatus(ProductInfo info, ProductStatus status);
+
+    int countByInfoAndStatus(ProductInfo info, ProductStatus status);
 }
