@@ -1,8 +1,8 @@
 package com.knj.mirou.boundedContext.store.service;
 
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.product.model.entity.Product;
-import com.knj.mirou.boundedContext.product.service.ProductService;
+import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
+import com.knj.mirou.boundedContext.productinfo.service.ProductInfoService;
 import com.knj.mirou.boundedContext.store.model.entity.Store;
 import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import com.knj.mirou.boundedContext.store.repository.StoreRepository;
@@ -20,23 +20,23 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class StoreService {
 
-    private final ProductService productService;
+    private final ProductInfoService productInfoService;
     private final StoreRepository storeRepository;
 
-    public List<Product> getAllProducts() {
+    public List<ProductInfo> getAllProducts() {
 
-        return productService.getAll();
+        return productInfoService.getAll();
     }
 
     public RsData<String> create(long productId, String saleType) {
 
-        Optional<Product> OProduct = productService.getById(productId);
+        Optional<ProductInfo> OProduct = productInfoService.getById(productId);
         if(OProduct.isEmpty()) {
             return RsData.of("F-1", "대상 상품을 찾을 수 없습니다.");
         }
 
         Store store = Store.builder()
-                .product(OProduct.get())
+                .productInfo(OProduct.get())
                 .saleType(SaleType.valueOf(saleType))
                 .build();
 

@@ -18,7 +18,7 @@
                     </div>
 
                     <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                        <a href="/product/add" class="btn btn-warning">상품 추가</a>
+                        <a href="/productInfo/add" class="btn btn-warning">상품 추가</a>
                     </div>
 
                     <div class="flex justify-center my-6" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">

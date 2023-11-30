@@ -8,7 +8,7 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.service.MemberService;
-import com.knj.mirou.boundedContext.product.service.ProductService;
+import com.knj.mirou.boundedContext.productinfo.service.ProductInfoService;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -32,7 +32,7 @@ public class NotProd {
             ChallengeService challengeService,
             PublicRewardService publicRewardService,
             ImageDataService imageDataService,
-            ProductService productService,
+            ProductInfoService productInfoService,
             LabelConfig labelConfig
     ){
         return new CommandLineRunner() {
@@ -83,7 +83,7 @@ public class NotProd {
                 publicRewardService.create(3, 1, "COIN", "100");
 
                 for(int j=1; j<=3; j++) {
-                    productService.create("샘플 상품" + j, "샘플 브랜드" + j, j*100,
+                    productInfoService.create("샘플 상품" + j, "샘플 브랜드" + j, j*100,
                             "샘플 상품 내용 입니다.", DEFAULT_IMG_URL, "교환처에 문의하세요."
                             ,"기간 내에 사용하지 않으면 소멸됩니다.");
                 }

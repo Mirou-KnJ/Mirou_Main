@@ -2,7 +2,7 @@ package com.knj.mirou.boundedContext.store.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.product.model.entity.Product;
+import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.store.model.entity.Store;
 import com.knj.mirou.boundedContext.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,9 @@ public class StoreController {
     @GetMapping("/add")
     public String showAddPage(Model model) {
 
-        List<Product> products = storeService.getAllProducts();
+        List<ProductInfo> productInfos = storeService.getAllProducts();
 
-        model.addAttribute("products", products);
+        model.addAttribute("products", productInfos);
 
         return "/view/store/addForm";
     }

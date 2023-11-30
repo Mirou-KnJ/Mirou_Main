@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.product.model.entity;
+package com.knj.mirou.boundedContext.productinfo.model.entity;
 
 
 import jakarta.persistence.Entity;
@@ -18,7 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Product {
+public class ProductInfo {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -2,7 +2,7 @@ package com.knj.mirou.boundedContext.inventory.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.product.model.entity.Product;
+import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class Inventory extends BaseEntity {
     private Member owner;
 
     @ManyToOne
-    private Product product;
+    private ProductInfo productInfo;
 
     private LocalDateTime expDate;
 

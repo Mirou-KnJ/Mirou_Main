@@ -1,7 +1,7 @@
 package com.knj.mirou.boundedContext.store.model.entity;
 
 
-import com.knj.mirou.boundedContext.product.model.entity.Product;
+import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -27,7 +25,7 @@ public class Store {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    private ProductInfo productInfo;
 
     @Enumerated(EnumType.STRING)
     private SaleType saleType;

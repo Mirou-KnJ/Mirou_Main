@@ -1,7 +1,7 @@
-package com.knj.mirou.boundedContext.product.service;
+package com.knj.mirou.boundedContext.productinfo.service;
 
-import com.knj.mirou.boundedContext.product.model.entity.Product;
-import com.knj.mirou.boundedContext.product.repository.ProductRepository;
+import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
+import com.knj.mirou.boundedContext.productinfo.repository.ProductInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ProductService {
+public class ProductInfoService {
 
-    private final ProductRepository productRepository;
+    private final ProductInfoRepository productInfoRepository;
 
     @Transactional
     public void create(String name, String brandName, int cost, String content, String imgUrl, String usingWay, String usingCaution) {
 
-        Product product = Product.builder()
+        ProductInfo productInfo = ProductInfo.builder()
                 .name(name)
                 .brandName(brandName)
                 .cost(cost)
@@ -32,16 +32,16 @@ public class ProductService {
                 .usingCaution(usingCaution)
                 .build();
 
-        productRepository.save(product);
+        productInfoRepository.save(productInfo);
     }
 
-    public List<Product> getAll() {
+    public List<ProductInfo> getAll() {
 
-        return productRepository.findAll();
+        return productInfoRepository.findAll();
     }
 
-    public Optional<Product> getById(long productId) {
+    public Optional<ProductInfo> getById(long productId) {
 
-        return productRepository.findById(productId);
+        return productInfoRepository.findById(productId);
     }
 }
