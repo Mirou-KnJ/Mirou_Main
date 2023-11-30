@@ -31,7 +31,8 @@
                             <h1 th:text="${productInfo.brandName}"></h1>
                         </div>
 
-                        <button class="btn" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록</button>
+                        <button class="btn" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록
+                        </button>
                         <dialog th:id="'submitCode' + ${productInfo.id} " class="modal">
                             <div class="flex flex-col modal-box">
                                 <form method="dialog">
@@ -39,10 +40,13 @@
                                 </form>
                                 <h3 class="font-bold text-lg" th:text="${productInfo.name} + ' 코드 등록'"></h3>
                                 <label class="label-text mt-3">물품 코드를 입력해 주세요</label>
-                                <input th:id="code+${productInfo.id}" type="text" name="code" class="input input-bordered w-full">
+                                <input th:id="code+${productInfo.id}" type="text" name="code"
+                                       class="input input-bordered w-full">
 
                                 <div class="flex justify-center mt-3">
-                                    <button th:onclick="addCode([[${productInfo.id}]])" class="btn btn-warning w-24">등록 완료</button>
+                                    <button th:onclick="addCode([[${productInfo.id}]])" class="btn btn-warning w-24">등록
+                                        완료
+                                    </button>
                                 </div>
                             </div>
                         </dialog>
@@ -55,13 +59,26 @@
     <script>
 
         function addCode(id) {
-
             var couponCode = document.getElementById('code' + id).value;
+            const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
 
+            const requestData = {
+                infoId: id,
+                code: couponCode,
+                _csrf: csrfToken
+            };
 
+            $.ajax({
+                url: "/product/addCode",
+                type: "POST",
+                data: requestData,
+                success: function (data) {
+                    const response = data;
 
+                    toastNotice(response.msg);
+                }
+            })
         }
-
     </script>
 </th:block>
 </body>
