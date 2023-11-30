@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/productInfo")
 public class ProductInfoController {
 
     private final Rq rq;
