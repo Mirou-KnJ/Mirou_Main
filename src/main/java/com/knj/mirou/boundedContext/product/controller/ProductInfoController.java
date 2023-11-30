@@ -22,13 +22,13 @@ public class ProductInfoController {
     private final ProductInfoService productInfoService;
     private final ImageDataService imageDataService;
 
-    @GetMapping("/add")
+    @GetMapping("/infoForm")
     public String addForm() {
 
         return "view/product/infoAddForm";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/infoForm")
     public String addProduct(String name, String brandName, int cost, String content, String usingWay,
                              String usingCaution, MultipartFile img) throws IOException {
 
@@ -36,7 +36,7 @@ public class ProductInfoController {
 
         productInfoService.create(name, brandName, cost, content, imgUrl, usingWay, usingCaution);
 
-        return rq.redirectWithMsg("/product/add", "등록 되었습니다.");
+        return rq.redirectWithMsg("/productInfo/add", "등록 되었습니다.");
     }
 
 }

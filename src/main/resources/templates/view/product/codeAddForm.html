@@ -1,0 +1,20 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>물품 코드 등록 폼</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+            <div th:each=" info : ${productInfos}">
+
+                <h1 th:text="${info.name}"></h1>
+                <h1 th:text="${info.cost}"></h1>
+
+            </div>
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
