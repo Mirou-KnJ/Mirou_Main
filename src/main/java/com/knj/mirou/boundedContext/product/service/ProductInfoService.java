@@ -1,7 +1,7 @@
-package com.knj.mirou.boundedContext.productinfo.service;
+package com.knj.mirou.boundedContext.product.service;
 
-import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
-import com.knj.mirou.boundedContext.productinfo.repository.ProductInfoRepository;
+import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
+import com.knj.mirou.boundedContext.product.repository.ProductInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

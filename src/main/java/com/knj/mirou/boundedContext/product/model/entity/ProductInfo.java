@@ -1,4 +1,4 @@
-package com.knj.mirou.boundedContext.productinfo.model.entity;
+package com.knj.mirou.boundedContext.product.model.entity;
 
 
 import jakarta.persistence.Entity;

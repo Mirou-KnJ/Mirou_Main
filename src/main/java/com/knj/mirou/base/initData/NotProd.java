@@ -8,7 +8,7 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.service.MemberService;
-import com.knj.mirou.boundedContext.productinfo.service.ProductInfoService;
+import com.knj.mirou.boundedContext.product.service.ProductInfoService;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

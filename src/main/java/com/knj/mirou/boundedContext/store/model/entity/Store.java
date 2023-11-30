@@ -1,7 +1,7 @@
 package com.knj.mirou.boundedContext.store.model.entity;
 
 
-import com.knj.mirou.boundedContext.productinfo.model.entity.ProductInfo;
+import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.store.model.enums.SaleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

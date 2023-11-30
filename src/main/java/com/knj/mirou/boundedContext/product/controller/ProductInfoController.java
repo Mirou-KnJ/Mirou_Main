@@ -1,9 +1,9 @@
-package com.knj.mirou.boundedContext.productinfo.controller;
+package com.knj.mirou.boundedContext.product.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
-import com.knj.mirou.boundedContext.productinfo.service.ProductInfoService;
+import com.knj.mirou.boundedContext.product.service.ProductInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ public class ProductInfoController {
     @GetMapping("/add")
     public String addForm() {
 
-        return "view/product/addForm";
+        return "view/product/infoAddForm";
     }
 
     @PostMapping("/add")
