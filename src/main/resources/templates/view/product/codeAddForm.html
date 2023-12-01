@@ -1,0 +1,115 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>물품 코드 등록 폼</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+
+            <div class="flex flex-col w-full justify-center">
+
+                <div class="flex justify-center my-3">
+                    <h1 class="text-lg">등록된 상품 정보 리스트</h1>
+                </div>
+
+                <div class="flex flex-col w-96 grid grid-cols-2 justify-center items-center gap-10">
+                    <div class="flex justify-center" th:if="${#lists.isEmpty(productInfos)}">
+                        <h1>아직 등록되어있는 상품이 존재하지 않습니다!</h1>
+                    </div>
+
+                    <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2"
+                         th:unless="${#lists.isEmpty(productInfos)}" th:each="productInfo, index : ${productInfos}">
+                        <div>
+                            <img class="w-12 h-12" th:src="${productInfo.imgUrl}" alt="productImg">
+                        </div>
+
+                        <div class="flex flex-col items-center py-3">
+                            <h1 th:text="${productInfo.name}"></h1>
+                            <h1 th:text="${productInfo.cost} + ' 코인'"></h1>
+                            <h1 th:text="${productInfo.brandName}"></h1>
+                            <h1 th:text="'보유 수량 : ' + ${counts.get(index.index)}"></h1>
+                        </div>
+
+                        <div class="flex flex-col gap-3">
+                            <button class="btn btn-sm" th:onclick="saleStart([[${productInfo.name}]], [[${productInfo.id}]])">판매 시작</button>
+                            <button class="btn btn-sm" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록</button>
+                        </div>
+
+                        <dialog th:id="'submitCode' + ${productInfo.id} " class="modal">
+                            <div class="flex flex-col modal-box">
+                                <form method="dialog">
+                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                </form>
+                                <h3 class="font-bold text-lg" th:text="${productInfo.name} + ' 코드 등록'"></h3>
+                                <label class="label-text mt-3">물품 코드를 입력해 주세요</label>
+                                <input th:id="code+${productInfo.id}" type="text" name="code"
+                                       class="input input-bordered w-full">
+
+                                <div class="flex justify-center mt-3">
+                                    <button th:onclick="addCode([[${productInfo.id}]])" class="btn btn-warning w-24">등록
+                                        완료
+                                    </button>
+                                </div>
+                            </div>
+                        </dialog>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+        function saleStart(name, id) {
+            var confirmRs = confirm(name + " 판매를 시작할까요?" + id);
+
+            if(confirmRs) {
+                const requestData = {
+                    id: id,
+                    _csrf: csrfToken
+                };
+
+                $.ajax({
+                    url: "/product/startSale",
+                    type: "POST",
+                    data: requestData,
+                    success: function (data) {
+                        const response = data;
+
+                        toastNotice(response.msg);
+                    }
+                })
+
+            } else {
+                toastWarning("판매가 취소되었습니다.");
+            }
+        }
+
+        function addCode(id) {
+            var couponCode = document.getElementById('code' + id);
+
+            const requestData = {
+                infoId: id,
+                code: couponCode.value,
+                _csrf: csrfToken
+            };
+
+            $.ajax({
+                url: "/product/addCode",
+                type: "POST",
+                data: requestData,
+                success: function (data) {
+                    const response = data;
+                    couponCode.value = "";
+
+                    toastNotice(response.msg);
+                }
+            })
+        }
+    </script>
+</th:block>
+</body>
+</html>

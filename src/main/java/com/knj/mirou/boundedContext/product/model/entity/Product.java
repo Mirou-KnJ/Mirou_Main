@@ -1,16 +1,13 @@
 package com.knj.mirou.boundedContext.product.model.entity;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.knj.mirou.base.entity.BaseEntity;
+import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
@@ -18,25 +15,17 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Product {
+public class Product extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProductInfo info;
 
-    private String name;
+    private String code;
 
-    private String brandName;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
-    private int cost;
-
-    private String content;
-
-    private String imgUrl;
-
-    private String usingWay;
-
-    private String usingCaution;
-
-
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
 }

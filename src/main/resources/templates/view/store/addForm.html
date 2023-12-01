@@ -11,24 +11,24 @@
             <div class="w-full justify-center">
                 <div class="flex flex-col grid grid-cols-3 justify-center items-center gap-10">
 
-                    <div class="flex justify-center" th:if="${#lists.isEmpty(products)}">
+                    <div class="flex justify-center" th:if="${#lists.isEmpty(productInfos)}">
                         <h1>아직 등록되어있는 상품이 존재하지 않습니다!</h1>
                     </div>
 
                     <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2"
-                         th:unless="${#lists.isEmpty(products)}" th:each="product : ${products}">
+                         th:unless="${#lists.isEmpty(productInfos)}" th:each="productInfo : ${productInfos}">
                         <div>
-                            <img class="w-12 h-12" th:src="${product.imgUrl}" alt="productImg">
+                            <img class="w-12 h-12" th:src="${productInfo.imgUrl}" alt="productImg">
                         </div>
 
                         <div class="flex flex-col items-center py-3">
-                            <h1 th:text="${product.name}"></h1>
-                            <h1 th:text="${product.cost} + ' 코인'"></h1>
-                            <h1 th:text="${product.brandName}"></h1>
+                            <h1 th:text="${productInfo.name}"></h1>
+                            <h1 th:text="${productInfo.cost} + ' 코인'"></h1>
+                            <h1 th:text="${productInfo.brandName}"></h1>
                         </div>
 
                         <div class="flex justify-center w-full pb-1">
-                            <input type="radio" name="productId" th:value="${product.id}" class="radio radio-error" />
+                            <input type="radio" name="productId" th:value="${productInfo.id}" class="radio radio-error" />
                         </div>
                     </div>
                 </div>
@@ -39,9 +39,6 @@
             <div class="w-full justify-center items-center">
                 <div class="flex flex-col justify-center">
                     <h1 class="flex font-bold text-lg justify-center mb-5">등록하기</h1>
-
-                    <label class="label-text">수량</label>
-                    <input type="text" placeholder="수량을 입력해 주세요" name="number" class="input input-bordered w-full max-w-xs" />
 
                     <label class="label-text mt-5">타입</label>
                     <label class="label cursor-pointer">

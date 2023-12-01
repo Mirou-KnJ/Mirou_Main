@@ -18,8 +18,6 @@
 <script th:inline="javascript">
     const params = /*[[ ${param} ]]*/ null;
 
-    console.log('params : ' + params);
-
     if (params.msg) {
         toastNotice(params.msg[0]);
     }
@@ -30,8 +28,6 @@
 
     $(window).bind("pageshow", function (event) {
         const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___" + location.href;
-
-        console.log("errorMsg : " + localStorageKeyAboutHistoryBackErrorMsg);
 
         if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
             toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));

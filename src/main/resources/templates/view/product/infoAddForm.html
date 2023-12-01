@@ -1,0 +1,44 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>물품 정보 등록 폼</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+            <!--            name, brandName, cost, content, usingWay, usingCaution, img-->
+            <div class="w-full justify-center">
+                <form method="POST" action="/productInfo/add" class="flex flex-col gap-3" enctype="multipart/form-data">
+                    <label class="label-text">이름</label>
+                    <input type="text" name="name" class="input input-bordered">
+
+                    <label class="label-text">브랜드 명</label>
+                    <input type="text" class="input input-bordered" name="brandName">
+
+                    <label class="label-text">가격</label>
+                    <input type="text" name="cost" class="input input-bordered">
+
+                    <label class="label-text">내용</label>
+                    <input type="text" name="content" class="input input-bordered">
+
+                    <label class="label-text">사용처</label>
+                    <input type="text" name="usingWay" class="input input-bordered">
+
+                    <label class="label-text">주의사항</label>
+                    <input type="text" name="usingCaution" class="input input-bordered">
+
+                    <label class="label-text">대표 이미지</label>
+                    <input type="file" name="img" class="file-input file-input-bordered file-input-primary w-full">
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <button type="submit" class="btn btn-success mt-5">등록하기</button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>
