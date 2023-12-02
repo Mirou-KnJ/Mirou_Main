@@ -2,9 +2,9 @@ package com.knj.mirou.boundedContext.challengefeed.service;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
-import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
@@ -14,7 +14,6 @@ import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
@@ -41,24 +40,12 @@ public class ChallengeFeedService {
     private final ChallengeMemberService challengeMemberService;
     private final PrivateRewardService privateRewardService;
     private final CoinService coinService;
-    private final MemberService memberService;
-    private final ChallengeService challengeService;
     private final ChallengeFeedRepository challengeFeedRepository;
 
-    public RsData<ChallengeMember> checkValidRequest(long challengeId, String loginId) {
-
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
-        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-
-        if(OMember.isEmpty() || OChallenge.isEmpty()) {
-            return RsData.of("F-1", "챌린지 참여 상태가 올바르지 않습니다.");
-        }
-
-        Challenge challenge = OChallenge.get();
-        Member loginMember = OMember.get();
+    public RsData<ChallengeMember> checkValidRequest(Challenge challenge, Member member) {
 
         Optional<ChallengeMember> OChallengeMember =
-                challengeMemberService.getByChallengeAndMember(challenge, loginMember);
+                challengeMemberService.getByChallengeAndMember(challenge, member);
         if(OChallengeMember.isEmpty()) {
             return RsData.of("F-2", "챌린지 참여 상태가 올바르지 않습니다.");
         }
@@ -117,6 +104,16 @@ public class ChallengeFeedService {
         }
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
+    }
+
+    public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {
+
+        detailDTO.setCanWrite(alreadyPostedToday(member, challenge));
+
+        List<ChallengeFeed> recently3Feed = getRecently3Feed(challenge);
+        detailDTO.setRecently3Feeds(recently3Feed);
+
+        return detailDTO;
     }
 
     public boolean alreadyPostedToday(Member member, Challenge challenge){

@@ -9,12 +9,12 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
-import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
-import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
+import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
-import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -33,38 +30,16 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ChallengeService {
 
-    private final MemberService memberService;
+    private final ImageDataService imageDataService;
+    private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
     private final ChallengeRepository challengeRepository;
 
-    public List<Challenge> getAllList() {
-
-        return challengeRepository.findAll();
-    }
-
-    public List<AuthenticationMethod> getAllMethods() {
-        return Arrays.asList(AuthenticationMethod.values());
-    }
-
-    public List<MapCategory> getAllCategories() {
-        return Arrays.asList(MapCategory.values());
-    }
-
-    public List<Challenge> getByStatus(ChallengeStatus status) {
-
-        return challengeRepository.findByStatus(status);
-    }
-
-    public Optional<Challenge> getById(long id) {
-
-        return challengeRepository.findById(id);
-    }
-
     @Transactional
-    public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
+    public RsData<Long> create(ChallengeCreateDTO createDTO, String imgUrl) {
 
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
-            return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
+            return RsData.of("F-1", "유효하지 않은 참여 기한 입니다.");
         }
 
         if(!checkUniqueName(createDTO.getName())) {
@@ -94,76 +69,118 @@ public class ChallengeService {
 
         Challenge challenge = challengeRepository.save(newChallenge);
 
-        return RsData.of("S-1", "챌린지가 성공적으로 생성되었습니다.", challenge);
+        return RsData.of("S-1", "챌린지가 성공적으로 생성되었습니다.", challenge.getId());
     }
 
-    public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, String loginId) {
-
-        Optional<Member> OLoginMember = memberService.getByLoginId(loginId);
-        if(OLoginMember.isEmpty()) {
-            return RsData.of("F-1", "회원의 정보를 찾을 수 없습니다. 다시 로그인 해주세요.");
-        }
+    public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, Member member) {
 
         Optional<Challenge> OChallenge = getById(challengeId);
         if(OChallenge.isEmpty()) {
-            return RsData.of("F-2", "유효한 챌린지가 아닙니다.");
+            return RsData.of("F-1", "챌린지 정보를 찾을 수 없습니다.");
         }
 
-        Member member = OLoginMember.get();
         Challenge challenge = OChallenge.get();
         ChallengeDetailDTO detailDTO = new ChallengeDetailDTO();
         detailDTO.setChallenge(challenge);
         detailDTO.setLoginMember(member);
 
-        Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
+        detailDTO = challengeMemberService.getDetailData(challenge, member, detailDTO);
+        detailDTO = challengeFeedService.getDetailData(challenge, member, detailDTO);
 
-        if(OChallengeMember.isPresent()) {
-            ChallengeMember challengeMember = OChallengeMember.get();
-            List<PrivateReward> privateReward = challengeMember.getPrivateReward();
-            detailDTO.setJoin(true);
-            detailDTO.setSuccessNum(challengeMember.getSuccessNumber());
-            detailDTO.setMaxNum(privateReward.get(privateReward.size()-1).getRound());
-            detailDTO.setLastDayNum(challengeMember.getLastDayNumber());
-        } else {
-            detailDTO.setJoin(false);
+        List<String> imgList = new ArrayList<>();
+        for (ChallengeFeed feed : detailDTO.getRecently3Feeds()) {
+            imgList.add(imageDataService.getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL));
         }
 
-        ChallengeMember challengeMember;
-        if(!detailDTO.isJoin()) {
-            detailDTO.setPublicRewards(challenge.getPublicReward());
-        } else {
-            challengeMember = OChallengeMember.get();
-            detailDTO.setPrivateRewards(challengeMember.getPrivateReward());
-        }
+        detailDTO.setDetailImg(imageDataService.getOptimizingUrl(
+                challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
 
-        detailDTO.setCanJoin(challengeMemberService.canJoin(member));
-        detailDTO.setMemberCount(challengeMemberService.getCountByLinkedChallenge(challenge));
+        detailDTO.setFeedOptimizedImages(imgList);
 
         return RsData.of("S-1", "디테일 정보가 성공적으로 수집되었습니다.", detailDTO);
+    }
+
+    public List<Challenge> getMyChallenges(Member member) {
+        return challengeMemberService.getInProgressChallenges(member);
+    }
+
+    public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myChallenges, String tag) {
+
+        List<Challenge> openedChallenges;
+
+        if(tag.equals("ALL")) {
+            openedChallenges = getAllByStatus(ChallengeStatus.OPEN);
+        } else {
+            openedChallenges = getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
+        }
+
+        List<Challenge> myCompletedChallenges = getMyCompletedChallenges(member);
+        if(!myChallenges.isEmpty()) {
+            myChallenges.addAll(myCompletedChallenges);
+        }
+
+        for(Challenge myChallenge : myChallenges) {
+            openedChallenges.remove(myChallenge);
+        }
+
+        sortChallengesByDate(openedChallenges);
+
+        return openedChallenges;
+    }
+
+    @Transactional
+    @Scheduled(cron= "3 0 0 * * ?")
+    public void getEndTargetList() {
+
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+        List<Challenge> endTargetChallenges =
+                challengeRepository.findByJoinDeadlineAndStatus(yesterDay, ChallengeStatus.OPEN);
+
+        if(!endTargetChallenges.isEmpty()) {
+            for(Challenge endTarget : endTargetChallenges) {
+                endTarget.closingChallenge();
+                log.info(endTarget.getName() + "챌린지가 종료 처리 되었습니다.");
+            }
+        }
+    }
+
+    public List<Challenge> getAllList() {
+        return challengeRepository.findAll();
+    }
+
+    public List<AuthenticationMethod> getAllMethods() {
+        return Arrays.asList(AuthenticationMethod.values());
+    }
+
+    public List<MapCategory> getAllCategories() {
+        return Arrays.asList(MapCategory.values());
+    }
+
+    public List<Challenge> getAllByStatus(ChallengeStatus status) {
+        return challengeRepository.findAllByStatus(status);
+    }
+
+    public Optional<Challenge> getById(long id) {
+        return challengeRepository.findById(id);
     }
 
     public boolean checkDeadLine(LocalDate deadLine) {
 
         LocalDate today = LocalDate.now();
-
         if (deadLine.isBefore(today) || deadLine.isEqual(today)) {
             return false;
         }
-
         return true;
     }
 
-    //열려있거나, 세팅 이전으로 생성되어 있는 챌린지와 이름이 같아선 안된다.
     public boolean checkUniqueName(String name) {
 
         if(challengeRepository.findByNameAndStatus(name, ChallengeStatus.OPEN).isPresent()) {
             return false;
         }
-
         if(challengeRepository.findByNameAndStatus(name, ChallengeStatus.BEFORE_SETTINGS).isPresent()) {
             return false;
         }
-
         return true;
     }
 
@@ -185,46 +202,18 @@ public class ChallengeService {
         return labelList;
     }
 
-    //초 분 시 일 월 요일 년도
-    //매일 0시 0분 3초에 어제까지가 기한이었던 챌린지들을 종료시킴.
-    @Transactional
-    @Scheduled(cron= "3 0 0 * * ?")
-    public void getEndTargetList() {
+    public List<Challenge> sortChallengesByDate(List<Challenge> challenges) {
 
-        LocalDate yesterDay = LocalDate.now().minusDays(1);
-        List<Challenge> endTargetChallenges =
-                challengeRepository.findByJoinDeadlineAndStatus(yesterDay, ChallengeStatus.OPEN);
+        challenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
 
-        if(!endTargetChallenges.isEmpty()) {
-            for(Challenge endTarget : endTargetChallenges) {
-                endTarget.closingChallenge();
-                log.info(endTarget.getName() + "챌린지가 종료 처리 되었습니다.");
-            }
-        }
-    }
-    public List<Challenge> getMyValidChallengeList(String loginId) {
-
-        return challengeMemberService.getMyValidChallengeList(loginId);
+        return challenges;
     }
 
-    public List<Challenge> getNotMineNotCompletedOpenedChallenge(List<Challenge> myChallenges, List<Challenge> myCompletedChallenges, List<Challenge> openedChallenge) {
-
-        for(Challenge myChallenge : myChallenges) {
-            openedChallenge.remove(myChallenge);
-        }
-        for(Challenge myCompleted : myCompletedChallenges){
-            openedChallenge.remove(myCompleted);
-        }
-        return openedChallenge;
-    }
-
-    public List<Challenge> getMyCompletedChallengeList(String loginId){
-        return challengeMemberService.getMyCompletedChallengeList(loginId);
+    public List<Challenge> getMyCompletedChallenges(Member member){
+        return challengeMemberService.getMyCompletedChallenges(member);
     }
 
     public List<Challenge> getOpenedChallengeByTag(ChallengeTag tag) {
-
         return challengeRepository.findByTagAndStatus(tag, ChallengeStatus.OPEN);
     }
-
 }

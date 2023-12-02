@@ -6,16 +6,10 @@ import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
-import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
-import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -39,9 +34,7 @@ public class ChallengeController {
 
     private final Rq rq;
     private final ChallengeService challengeService;
-    private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
-    private final MemberService memberService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
@@ -59,86 +52,69 @@ public class ChallengeController {
                          MultipartFile img) throws IOException {
 
         if(bindingResult.hasErrors()) {
-            log.error("[ERROR] : " + bindingResult.getAllErrors().get(0).getDefaultMessage());
             return rq.historyBack(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
-        RsData<String> tryUploadRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
-        if (tryUploadRs.isFail()) {
-            tryUploadRs.printResult();
-            return rq.historyBack(tryUploadRs);
+        RsData<String> uploadImgRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
+        if (uploadImgRs.isFail()) {
+            uploadImgRs.printResult();
+            return rq.historyBack(uploadImgRs);
         }
 
-        RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, tryUploadRs.getData());
-        if (createRsData.isFail()) {
-            createRsData.printResult();
-            return rq.historyBack(createRsData);
+        String imgUrl = uploadImgRs.getData();
+
+        RsData<Long> createRs = challengeService.create(createDTO, imgUrl);
+        if (createRs.isFail()) {
+            createRs.printResult();
+            return rq.historyBack(createRs);
         }
 
-        Challenge createdChallenge = createRsData.getData();
-        imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, createdChallenge.getImgUrl());
+        long challengeId = createRs.getData();
 
-        return "redirect:/reward/setting/" + createdChallenge.getId();
+        imageDataService.create(challengeId, ImageTarget.CHALLENGE_IMG, imgUrl);
+
+        return "redirect:/reward/setting/" + challengeId;
     }
 
 
-    @PreAuthorize("isAuthenticated()")      //FIXME: principal null 오류 임시 방지, 수정 필요
-    @GetMapping("/list")
-    public String openedChallengeList(Model model, Principal principal) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/list/{tag}")
+    public String openedChallengeList(@PathVariable(required = false) String tag, Model model) {
 
-        List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
-        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
-        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
-        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
-        String loginId = principal.getName();
-        Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
+        Member member = rq.getMember();
 
-        if(ObyLoginId.isPresent()) {
-            Member member = ObyLoginId.get();
-            model.addAttribute("member", member);
-        } else {
-            return null;
-        }
+        List<Challenge> myInProgressChallenges = challengeService.getMyChallenges(member);
 
-        model.addAttribute("openedAndValid",
-                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
-        model.addAttribute("myValidChallengeList", myValidChallengeList);
-        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
-        model.addAttribute("ImageDateService", imageDataService);
-        model.addAttribute("openedChallenges", openedChallenges);
+        List<Challenge> notMineChallenges = challengeService.getNotMineChallenges(member, myInProgressChallenges, tag);
+
+        Map<Long, String> challengeImages = imageDataService.getListImages(notMineChallenges);
+        Map<Long, String> myImages = imageDataService.getListImages(myInProgressChallenges);
+        challengeImages.putAll(myImages);
+
+        model.addAttribute("member", member);
+        model.addAttribute("myChallenges", myInProgressChallenges);
+        model.addAttribute("openedChallenges", notMineChallenges);
+        model.addAttribute("challengeImages", challengeImages);
 
         return "view/challenge/list";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
-    public String showDetail(@PathVariable(value = "id") long challengeId, Principal principal, Model model) {
+    public String showDetail(@PathVariable(value = "id") long challengeId, Model model) {
 
-        String loginId = principal.getName();
+        Member member = rq.getMember();
 
-        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
+        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, member);
         if (getDetailRs.isFail()) {
             getDetailRs.printResult();
             return rq.historyBack(getDetailRs);
         }
 
         ChallengeDetailDTO detailDTO = getDetailRs.getData();
-        Challenge challenge = detailDTO.getChallenge();
-        detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(detailDTO.getLoginMember(), challenge));
 
-        List<ChallengeFeed> recently3Feed = challengeFeedService.getRecently3Feed(challenge);
-        detailDTO.setRecently3Feeds(recently3Feed);
-
-        //FIXME: 임시코드. 리팩토링 필수
-        List<String> imgList = new ArrayList<>();
-        for (ChallengeFeed feed : recently3Feed) {
-            imgList.add(imageDataService.getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL));
-        }
-
-        detailDTO.setFeedOptimizedImages(imgList);
         model.addAttribute("detailDTO", detailDTO);
-        model.addAttribute("challengeImg",
-                imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
+        model.addAttribute("challengeImg", detailDTO.getDetailImg());
 
         return "view/challenge/detail";
     }
@@ -157,27 +133,6 @@ public class ChallengeController {
         result.put("labels", labels);
 
         return ResponseEntity.ok(result);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/list/{tag}")
-    public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
-
-        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
-        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
-        List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
-        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
-        Member member = rq.getMember();
-
-        model.addAttribute("openedAndValid",
-                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
-        model.addAttribute("member", member);
-        model.addAttribute("myValidChallengeList", myValidChallengeList);
-        model.addAttribute("openedChallenges", openedChallenges);
-        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
-        model.addAttribute("ImageDateService", imageDataService);
-
-        return "view/challenge/list";
     }
 
 }

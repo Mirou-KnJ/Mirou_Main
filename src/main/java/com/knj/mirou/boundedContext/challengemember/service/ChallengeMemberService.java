@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.base.enums.ChangeType;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengemember.config.CMemberConfigProperties;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
@@ -12,6 +13,7 @@ import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
+import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +46,7 @@ public class ChallengeMemberService {
         Point point = member.getPoint();
         int cost = challenge.getJoinCost();
 
-        if(cost > point.getCurrentPoint()) {
+        if (cost > point.getCurrentPoint()) {
             return RsData.of("F-2", "참가 비용이 부족합니다.");
         }
 
@@ -69,6 +71,30 @@ public class ChallengeMemberService {
         return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.");
     }
 
+    public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {
+
+        detailDTO.setCanJoin(canJoin(member));
+        detailDTO.setMemberCount(getCountByLinkedChallenge(challenge));
+
+        Optional<ChallengeMember> OChallengeMember = getByChallengeAndMember(challenge, member);
+        if (OChallengeMember.isEmpty()) {
+            detailDTO.setJoin(false);
+            detailDTO.setPublicRewards(challenge.getPublicReward());
+
+            return detailDTO;
+        }
+
+        ChallengeMember challengeMember = OChallengeMember.get();
+        List<PrivateReward> privateReward = challengeMember.getPrivateReward();
+        detailDTO.setJoin(true);
+        detailDTO.setSuccessNum(challengeMember.getSuccessNumber());
+        detailDTO.setMaxNum(privateReward.get(privateReward.size() - 1).getRound());
+        detailDTO.setLastDayNum(challengeMember.getLastDayNumber());
+        detailDTO.setPrivateRewards(challengeMember.getPrivateReward());
+
+        return detailDTO;
+    }
+
     public LocalDate calcEndDate(int challengePeriod) {
         return LocalDate.now().plusDays(challengePeriod);
     }
@@ -87,7 +113,7 @@ public class ChallengeMemberService {
 
         int count = challengeMemberRepository.countByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
 
-        if(count >= CMemberConfigProps.getJoinLimit()) {
+        if (count >= CMemberConfigProps.getJoinLimit()) {
             return false;
         }
         return true;
@@ -107,35 +133,26 @@ public class ChallengeMemberService {
         return challengeMemberRepository.countByLinkedChallenge(challenge);
     }
 
-    public List<Challenge> getMyValidChallengeList (String loginId){
+    public List<Challenge> getInProgressChallenges(Member linkedMember) {
 
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
-
-        //TODO 사용자가 로그인 했을 때 로그인 정보가 유효한지 검사
-
-        Member member = OMember.get();
-        List<ChallengeMember> membersAllList =
-                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
+        List<ChallengeMember> myInProgressInfos =
+                challengeMemberRepository.findAllByLinkedMemberAndProgress(linkedMember, Progress.IN_PROGRESS);
 
         List<Challenge> inProgressChallenges = new ArrayList<>();
-
-        for(ChallengeMember cm : membersAllList) {
+        for (ChallengeMember cm : myInProgressInfos) {
             inProgressChallenges.add(cm.getLinkedChallenge());
         }
-
         return inProgressChallenges;
     }
 
-    public List<Challenge> getMyCompletedChallengeList(String loginId){
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
+    public List<Challenge> getMyCompletedChallenges(Member linkedMember) {
 
-        Member member = OMember.get();
-        List<ChallengeMember> completedChallengeMembers =
-                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.PROGRESS_END);
+        List<ChallengeMember> completedInfos =
+                challengeMemberRepository.findAllByLinkedMemberAndProgress(linkedMember, Progress.PROGRESS_END);
 
         List<Challenge> completedChallenges = new ArrayList<>();
 
-        for (ChallengeMember cm : completedChallengeMembers){
+        for (ChallengeMember cm : completedInfos) {
             completedChallenges.add(cm.getLinkedChallenge());
         }
 
@@ -151,7 +168,7 @@ public class ChallengeMemberService {
         List<ChallengeMember> endTargetChallengeMembers =
                 challengeMemberRepository.findByEndDateAndProgress(yesterDay, Progress.IN_PROGRESS);
 
-        for(ChallengeMember target : endTargetChallengeMembers) {
+        for (ChallengeMember target : endTargetChallengeMembers) {
             target.finishChallenge();
             log.info(target.getLinkedMember().getLoginId() + "회원의 " + target.getLinkedChallenge().getName()
                     + "에 대한 참여내용이 종료되었습니다.");

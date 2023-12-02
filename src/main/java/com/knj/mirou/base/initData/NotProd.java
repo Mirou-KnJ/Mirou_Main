@@ -3,7 +3,6 @@ package com.knj.mirou.base.initData;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.config.LabelConfig;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
-import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
@@ -64,12 +63,10 @@ public class NotProd {
                             .build();
 
                     memberService.join("ETC", "TEST_USER_" + i, "테스트 유저" + i);
-                    RsData<Challenge> createRs = challengeService.tryCreate(createDto, DEFAULT_IMG_URL);
+                    RsData<Long> createRs = challengeService.create(createDto, DEFAULT_IMG_URL);
+                    long challengeId = createRs.getData();
 
-                    createRs.printResult();
-
-                    Challenge createdChallenge = createRs.getData();
-                    imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, DEFAULT_IMG_URL);
+                    imageDataService.create(challengeId, ImageTarget.CHALLENGE_IMG, DEFAULT_IMG_URL);
                 }
 
                 publicRewardService.create(1, 1, "COIN", "100");
@@ -87,9 +84,7 @@ public class NotProd {
                             "샘플 상품 내용 입니다.", DEFAULT_IMG_URL, "교환처에 문의하세요."
                             ,"기간 내에 사용하지 않으면 소멸됩니다.");
                 }
-
             }
         };
     }
-
 }

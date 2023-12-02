@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
-    List<Challenge> findByStatus(ChallengeStatus status);
+    List<Challenge> findAllByStatus(ChallengeStatus status);
 
     Optional<Challenge> findByNameAndStatus(String name, ChallengeStatus challengeStatus);
 
