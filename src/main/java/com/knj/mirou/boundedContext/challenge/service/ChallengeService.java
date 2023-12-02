@@ -208,9 +208,15 @@ public class ChallengeService {
         return inProgressChallenges;
     }
 
-    public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myChallenges) {
+    public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myChallenges, String tag) {
 
-        List<Challenge> openedChallenges = getAllByStatus(ChallengeStatus.OPEN);
+        List<Challenge> openedChallenges;
+
+        if(tag.equals("ALL")) {
+            openedChallenges = getAllByStatus(ChallengeStatus.OPEN);
+        } else {
+            openedChallenges = getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
+        }
 
         List<Challenge> myCompletedChallenges = getMyCompletedChallenges(member);
         if(!myChallenges.isEmpty()) {

@@ -85,14 +85,14 @@ public class ChallengeController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/list")
-    public String openedChallengeList(Model model) {
+    @GetMapping("/list/{tag}")
+    public String openedChallengeList(@PathVariable(required = false) String tag, Model model) {
 
         Member member = rq.getMember();
 
         List<Challenge> myInProgressChallenges = challengeService.getMyChallenges(member);
 
-        List<Challenge> notMineChallenges = challengeService.getNotMineChallenges(member, myInProgressChallenges);
+        List<Challenge> notMineChallenges = challengeService.getNotMineChallenges(member, myInProgressChallenges, tag);
 
         Map<Long, String> challengeImages = imageDataService.getListImages(notMineChallenges);
         Map<Long, String> myImages = imageDataService.getListImages(myInProgressChallenges);
@@ -105,27 +105,6 @@ public class ChallengeController {
 
         return "view/challenge/list";
     }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/list/{tag}")
-//    public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
-//
-//        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
-//        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
-//        List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
-//        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
-//        Member member = rq.getMember();
-//
-//        model.addAttribute("openedAndValid",
-//                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
-//        model.addAttribute("member", member);
-//        model.addAttribute("myValidChallengeList", myValidChallengeList);
-//        model.addAttribute("openedChallenges", openedChallenges);
-//        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
-//        model.addAttribute("ImageDateService", imageDataService);
-//
-//        return "view/challenge/list";
-//    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
