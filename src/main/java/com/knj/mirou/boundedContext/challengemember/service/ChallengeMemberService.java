@@ -136,21 +136,19 @@ public class ChallengeMemberService {
     public List<Challenge> getInProgressChallenges(Member linkedMember) {
 
         List<ChallengeMember> myInProgressInfos =
-                challengeMemberRepository.findByLinkedMemberAndProgress(linkedMember, Progress.IN_PROGRESS);
+                challengeMemberRepository.findAllByLinkedMemberAndProgress(linkedMember, Progress.IN_PROGRESS);
 
         List<Challenge> inProgressChallenges = new ArrayList<>();
-
         for (ChallengeMember cm : myInProgressInfos) {
             inProgressChallenges.add(cm.getLinkedChallenge());
         }
-
         return inProgressChallenges;
     }
 
     public List<Challenge> getMyCompletedChallenges(Member linkedMember) {
 
         List<ChallengeMember> completedInfos =
-                challengeMemberRepository.findByLinkedMemberAndProgress(linkedMember, Progress.PROGRESS_END);
+                challengeMemberRepository.findAllByLinkedMemberAndProgress(linkedMember, Progress.PROGRESS_END);
 
         List<Challenge> completedChallenges = new ArrayList<>();
 
