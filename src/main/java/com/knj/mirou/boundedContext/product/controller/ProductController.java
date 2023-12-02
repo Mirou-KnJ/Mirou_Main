@@ -1,7 +1,9 @@
 package com.knj.mirou.boundedContext.product.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
@@ -23,6 +25,7 @@ import java.util.Map;
 @RequestMapping("/product")
 public class ProductController {
 
+    private final Rq rq;
     private final ProductService productService;
 
     @GetMapping("/codeForm")
@@ -76,5 +79,17 @@ public class ProductController {
         model.addAttribute("counts", counts);
 
         return "view/product/store";
+    }
+
+    @ResponseBody
+    @PostMapping("/buy")
+    public ResponseEntity<RsData<String>> tryBuy(@RequestParam Map<String, Object> params) {
+
+        Member member = rq.getMember();
+        long infoId = Long.parseLong(params.get("id").toString());
+
+        RsData<String> buyRs = productService.tryBuy(infoId, member);
+
+        return ResponseEntity.ok(buyRs);
     }
 }

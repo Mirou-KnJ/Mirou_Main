@@ -1,6 +1,8 @@
 package com.knj.mirou.boundedContext.product.service;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.coin.service.CoinService;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
@@ -18,6 +20,7 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private final CoinService coinService;
     private final ProductInfoService productInfoService;
     private final ProductRepository productRepository;
 
@@ -113,6 +116,28 @@ public class ProductService {
         }
 
         return RsData.of("S-1", "판매가 시작되었습니다.");
+    }
+
+    @Transactional
+    public RsData<String> tryBuy(long infoId, Member member) {
+
+        Optional<ProductInfo> OInfo = productInfoService.getById(infoId);
+        if(OInfo.isEmpty()) {
+            return RsData.of("F-1", "상품 정보가 유효하지 않습니다.");
+        }
+        ProductInfo productInfo = OInfo.get();
+
+        int currentCoin = member.getCoin().getCurrentCoin();
+        if(productInfo.getCost() > currentCoin) {
+            return RsData.of("F-2", "코인이 부족합니다.");
+        }
+
+        coinService.buyProduct(productInfo, member);
+
+//        Product targetProduct = getAllByInfoAndStatus(productInfo, ProductStatus.SALE).get(0);
+
+
+        return RsData.of("S-1", "구매에 성공하였습니다.");
     }
 
 }
