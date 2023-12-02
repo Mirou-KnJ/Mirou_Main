@@ -1,6 +1,9 @@
 package com.knj.mirou.boundedContext.product.service;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.coin.service.CoinService;
+import com.knj.mirou.boundedContext.inventory.service.InventoryService;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
@@ -10,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -20,6 +21,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private final InventoryService inventoryService;
+    private final CoinService coinService;
     private final ProductInfoService productInfoService;
     private final ProductRepository productRepository;
 
@@ -56,6 +59,13 @@ public class ProductService {
         return productRepository.findDistinctProductIds();
     }
 
+    public List<ProductInfo> getAllRegisteredInfos() {
+
+        List<Long> registeredIds = getRegisteredIds();
+
+        return productInfoService.getAllRegisteredInfos(registeredIds);
+    }
+
     public List<Product> getAllByInfoAndStatus(ProductInfo info, ProductStatus status) {
 
         return productRepository.findAllByInfoAndStatus(info, status);
@@ -72,6 +82,20 @@ public class ProductService {
 
         for(ProductInfo info : productInfos) {
             counts.add(getCountByInfoAndStatus(info, ProductStatus.BEFORE_SALE));
+        }
+
+        return counts;
+    }
+
+    public Map<Long, Integer> getSalingCountMap(List<ProductInfo> productInfos) {
+
+        Map<Long, Integer> counts = new HashMap<>();
+
+        for(ProductInfo info : productInfos) {
+
+            int count = productRepository.countByInfoAndStatus(info, ProductStatus.SALE);
+
+            counts.put(info.getId(), count);
         }
 
         return counts;
@@ -96,36 +120,28 @@ public class ProductService {
         return RsData.of("S-1", "판매가 시작되었습니다.");
     }
 
-    public List<Product> getSalingProducts() {
+    @Transactional
+    public RsData<String> tryBuy(long infoId, Member member) {
 
-        List<Long> registeredIds = getRegisteredIds();
+        Optional<ProductInfo> OInfo = productInfoService.getById(infoId);
+        if(OInfo.isEmpty()) {
+            return RsData.of("F-1", "상품 정보가 유효하지 않습니다.");
+        }
+        ProductInfo productInfo = OInfo.get();
 
-        List<Product> SalingProducts = new ArrayList<>();
-
-        for(Long id : registeredIds) {
-            ProductInfo info = productInfoService.getById(id).get();
-
-            Optional<Product> OSaleProduct = productRepository.findDistinctByInfoAndStatus(info, ProductStatus.SALE);
-            if(OSaleProduct.isPresent()) {
-                SalingProducts.add(OSaleProduct.get());
-            }
+        int currentCoin = member.getCoin().getCurrentCoin();
+        if(productInfo.getCost() > currentCoin) {
+            return RsData.of("F-2", "코인이 부족합니다.");
         }
 
-        return SalingProducts;
-    }
+        coinService.buyProduct(productInfo, member);
 
-    public List<Integer> getSalingCounts() {
+        Product targetProduct = getAllByInfoAndStatus(productInfo, ProductStatus.SALE).get(0);
+        targetProduct.setStatus(ProductStatus.SOLD_OUT);
 
-        List<Integer> counts = new ArrayList<>();
-        List<Long> registeredIds = getRegisteredIds();
+        inventoryService.create(targetProduct, member);
 
-        for(Long id : registeredIds) {
-            ProductInfo info = productInfoService.getById(id).get();
-
-            counts.add(getCountByInfoAndStatus(info, ProductStatus.SALE));
-        }
-
-        return counts;
+        return RsData.of("S-1", "구매에 성공하였습니다.");
     }
 
 }

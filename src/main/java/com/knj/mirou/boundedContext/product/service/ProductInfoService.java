@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,17 @@ public class ProductInfoService {
     public List<ProductInfo> getAll() {
 
         return productInfoRepository.findAll();
+    }
+
+    public List<ProductInfo> getAllRegisteredInfos(List<Long> infoIds) {
+
+        List<ProductInfo> infos = new ArrayList<>();
+
+        for(Long id : infoIds) {
+            infos.add(getById(id).get());
+        }
+
+        return infos;
     }
 
     public Optional<ProductInfo> getById(long productId) {

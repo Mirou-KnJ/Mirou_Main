@@ -8,17 +8,70 @@
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
-            <div th:if="${#lists.isEmpty(products)}" th:each="product : ${products}">
-
-                <h1>없어요</h1>
+            <div th:if="${#lists.isEmpty(infos)}">
+                <h1>아직 상품 정보가 없습니다.</h1>
             </div>
 
-            <div th:unless="${#lists.isEmpty(products)}" th:each="product : ${products}">
-                <h1 th:text="${product.info.name}"></h1>
-                <h1 th:text="${product.info.cost}"></h1>
+            <div class="flex flex-col card bg-base-200 grid grid-cols-3 gap-10" th:unless="${#lists.isEmpty(infos)}" th:each="info : ${infos}">
+                <div class="w-24 h-24">
+                    <img th:src="${info.imgUrl}" alt="productImg">
+                </div>
+
+                <div>
+                    <h1 th:id="name + ${info.id}" th:text="${info.name}"></h1>
+                    <h1 th:id="cost + ${info.id}" th:text="${info.cost}"></h1>
+                    <h1 th:text="'보유 수량 : ' + ${counts.get(info.id)}"></h1>
+
+                    <button class="tooltip btn btn-sm btn-success" data-tip="수량이 모자라요!" th:if="${counts.get(info.id)} == 0" disabled>구매하기</button>
+                    <button th:onclick="buy([[${info.id}]])" class="btn btn-sm btn-success" th:if="${counts.get(info.id)} != 0">구매하기</button>
+                </div>
+
             </div>
         </div>
     </main>
+
+    <script>
+
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+        //FIXME : REST API로 하기 보다는 수량이 바로 고쳐질 수 있게 일반 호출이 나을 것 같음.
+        function buy(infoId) {
+
+            console.log(infoId);
+
+            var name = document.getElementById('name' + infoId).textContent;
+            var cost = document.getElementById('cost' + infoId).textContent;
+
+            var tryBuy = confirm(name + "를 " + cost + '코인에 구매하시겠습니까?');
+
+            if(tryBuy) {
+
+                const requestData = {
+                    id: infoId,
+                    _csrf: csrfToken
+                };
+
+                $.ajax({
+                    url: "/product/buy",
+                    type: "POST",
+                    data: requestData,
+                    success: function (data) {
+                        const response = data;
+
+                        if(response.resultCode.startsWith("F")) {
+                            toastWarning(response.msg);
+                        } else {
+                            toastNotice(response.msg);
+                        }
+
+                        window.location.href = "/product/store";
+                    }
+                })
+            } else {
+                toastWarning("구매가 취소되었습니다.");
+            }
+        }
+    </script>
 </th:block>
 </body>
 </html>
