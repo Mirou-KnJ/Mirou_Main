@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -41,17 +43,6 @@ public class ChallengeFeedService {
     private final PrivateRewardService privateRewardService;
     private final CoinService coinService;
     private final ChallengeFeedRepository challengeFeedRepository;
-
-    public RsData<ChallengeMember> isJoin(Challenge challenge, Member member) {
-
-        Optional<ChallengeMember> OChallengeMember =
-                challengeMemberService.getByChallengeAndMember(challenge, member);
-        if(OChallengeMember.isEmpty()) {
-            return RsData.of("F-2", "챌린지 참여 상태가 올바르지 않습니다.");
-        }
-
-        return RsData.of("S-1", "참여 정보가 확인되었습니다.", OChallengeMember.get());
-    }
 
     @Transactional
     public RsData<String> write(Challenge challenge, Member member, MultipartFile img,
@@ -169,6 +160,17 @@ public class ChallengeFeedService {
     @Transactional
     public void updateLikeCount(ChallengeFeed challengeFeed) {
         challengeFeed.updateLikeCount();
+    }
+
+    public Map<Long, String> getFeedListImages(FeedListDTO feedListDTO) {
+
+        List<ChallengeFeed> myFeeds = feedListDTO.getMyFeeds();
+        List<ChallengeFeed> notMineFeeds = feedListDTO.getNotMineFeeds();
+
+        Map<Long, String> feedListImages = imageDataService.getFeedListImages(myFeeds);
+        feedListImages.putAll(imageDataService.getFeedListImages(notMineFeeds));
+
+        return feedListImages;
     }
 
 }

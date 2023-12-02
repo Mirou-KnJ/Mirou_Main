@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -93,19 +94,14 @@ public class ChallengeFeedController {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()){
-
-            log.error("NONE CHALLENGE ERROR");
-
             return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
         }
 
         FeedListDTO feedListDto = challengeFeedService.getListDto(OChallenge.get());
+        Map<Long, String> feedListImages = challengeFeedService.getFeedListImages(feedListDto);
 
         model.addAttribute("feedListDto", feedListDto);
-
-        //FIXME: 임시
-        model.addAttribute("ImageDataService", imageDataService);
-        model.addAttribute("option", OptimizerOption.FEED_MODAL);
+        model.addAttribute("feedImages", feedListImages);
 
         return "view/challengeFeed/list";
     }
