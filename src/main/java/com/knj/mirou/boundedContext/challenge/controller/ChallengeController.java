@@ -84,33 +84,48 @@ public class ChallengeController {
     }
 
 
-    @PreAuthorize("isAuthenticated()")      //FIXME: principal null 오류 임시 방지, 수정 필요
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/list")
-    public String openedChallengeList(Model model, Principal principal) {
+    public String openedChallengeList(Model model) {
 
-        List<Challenge> openedChallenges = challengeService.getByStatus(ChallengeStatus.OPEN);
-        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
-        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
-        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
-        String loginId = principal.getName();
-        Optional<Member> ObyLoginId = memberService.getByLoginId(loginId);
+        Member member = rq.getMember();
 
-        if(ObyLoginId.isPresent()) {
-            Member member = ObyLoginId.get();
-            model.addAttribute("member", member);
-        } else {
-            return null;
-        }
+        List<Challenge> myInProgressChallenges = challengeService.getMyChallenges(member);
 
-        model.addAttribute("openedAndValid",
-                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
-        model.addAttribute("myValidChallengeList", myValidChallengeList);
-        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
-        model.addAttribute("ImageDateService", imageDataService);
-        model.addAttribute("openedChallenges", openedChallenges);
+        List<Challenge> notMineChallenges = challengeService.getNotMineChallenges(member, myInProgressChallenges);
+
+        Map<Long, String> challengeImages = imageDataService.getListImages(notMineChallenges);
+        Map<Long, String> myImages = imageDataService.getListImages(myInProgressChallenges);
+        challengeImages.putAll(myImages);
+
+        model.addAttribute("member", member);
+        model.addAttribute("myChallenges", myInProgressChallenges);
+        model.addAttribute("openedChallenges", notMineChallenges);
+        model.addAttribute("challengeImages", challengeImages);
 
         return "view/challenge/list";
     }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/list/{tag}")
+//    public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
+//
+//        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
+//        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
+//        List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
+//        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
+//        Member member = rq.getMember();
+//
+//        model.addAttribute("openedAndValid",
+//                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
+//        model.addAttribute("member", member);
+//        model.addAttribute("myValidChallengeList", myValidChallengeList);
+//        model.addAttribute("openedChallenges", openedChallenges);
+//        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
+//        model.addAttribute("ImageDateService", imageDataService);
+//
+//        return "view/challenge/list";
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
@@ -159,27 +174,6 @@ public class ChallengeController {
         result.put("labels", labels);
 
         return ResponseEntity.ok(result);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/list/{tag}")
-    public String filterChallenges(@PathVariable(value = "tag") String tag, Model model, Principal principal){
-
-        List<Challenge> myValidChallengeList = challengeService.getMyValidChallengeList(principal.getName());
-        List<Challenge> myCompletedChallengeList = challengeService.getMyCompletedChallengeList(principal.getName());
-        List<Challenge> openedChallenges = challengeService.getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
-        openedChallenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
-        Member member = rq.getMember();
-
-        model.addAttribute("openedAndValid",
-                challengeService.getNotMineNotCompletedOpenedChallenge(myValidChallengeList, myCompletedChallengeList, openedChallenges));
-        model.addAttribute("member", member);
-        model.addAttribute("myValidChallengeList", myValidChallengeList);
-        model.addAttribute("openedChallenges", openedChallenges);
-        model.addAttribute("ListOption", OptimizerOption.CHALLENGE_LIST);
-        model.addAttribute("ImageDateService", imageDataService);
-
-        return "view/challenge/list";
     }
 
 }

@@ -107,35 +107,28 @@ public class ChallengeMemberService {
         return challengeMemberRepository.countByLinkedChallenge(challenge);
     }
 
-    public List<Challenge> getMyValidChallengeList (String loginId){
+    public List<Challenge> getInProgressChallenges (Member linkedMember){
 
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
-
-        //TODO 사용자가 로그인 했을 때 로그인 정보가 유효한지 검사
-
-        Member member = OMember.get();
-        List<ChallengeMember> membersAllList =
-                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.IN_PROGRESS);
+        List<ChallengeMember> myInProgressInfos =
+                challengeMemberRepository.findByLinkedMemberAndProgress(linkedMember, Progress.IN_PROGRESS);
 
         List<Challenge> inProgressChallenges = new ArrayList<>();
 
-        for(ChallengeMember cm : membersAllList) {
+        for(ChallengeMember cm : myInProgressInfos) {
             inProgressChallenges.add(cm.getLinkedChallenge());
         }
 
         return inProgressChallenges;
     }
 
-    public List<Challenge> getMyCompletedChallengeList(String loginId){
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
+    public List<Challenge> getMyCompletedChallenges(Member linkedMember){
 
-        Member member = OMember.get();
-        List<ChallengeMember> completedChallengeMembers =
-                challengeMemberRepository.findByLinkedMemberAndProgress(member, Progress.PROGRESS_END);
+        List<ChallengeMember> completedInfos =
+                challengeMemberRepository.findByLinkedMemberAndProgress(linkedMember, Progress.PROGRESS_END);
 
         List<Challenge> completedChallenges = new ArrayList<>();
 
-        for (ChallengeMember cm : completedChallengeMembers){
+        for (ChallengeMember cm : completedInfos){
             completedChallenges.add(cm.getLinkedChallenge());
         }
 

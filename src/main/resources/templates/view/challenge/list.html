@@ -7,7 +7,7 @@
 <th:block layout:fragment="Content">
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
-            <div class="flex w-full justify-center items-center pt-2" th:unless="${#lists.isEmpty(openedChallenges)}">
+            <div class="flex w-full justify-center items-center pt-2">
                 <div class="flex stats shadow-lg border rounded">
                     <div>
                         <a href="/point/history" class="stat">
@@ -40,38 +40,42 @@
                 <h1 class="text-4xl">현재 진행중인 챌린지</h1>
             </div><br>
 
-            <div class="flex rounded-lg overflow-hidden grid grid-cols-3">
-                <a class="card card-side flex flex-row shadow-lg border rounded m-3" th:each="challenge : ${myValidChallengeList}"
-                   th:href="@{|/challenge/detail/${challenge.id}|}">
+            <div th:if="${#lists.isEmpty(myChallenges)}">
+                <h1 class="text-4xl mt-10">아직 참여중인 챌린지가 없습니다.</h1>
+            </div>
+
+            <div class="flex rounded-lg overflow-hidden grid grid-cols-3" th:unless="${#lists.isEmpty(myChallenges)}">
+                <a class="card card-side flex flex-row shadow-lg border rounded m-3" th:each="myChallenge : ${myChallenges}"
+                   th:href="@{|/challenge/detail/${myChallenge.id}|}">
                     <figure>
                         <img class="card-img border rounded-lg shadow-lg m-2"
-                             th:src="${ImageDateService.getOptimizingUrl(challenge.imgUrl, ListOption)}"
+                             th:src="${challengeImages.get(myChallenge.id)}"
                              alt="challengeImg">
                     </figure>
                     <div class="card-body flex text-center items-center p-2 m-2">
-                        <h2 class="title font-bold mb-3" th:text="${challenge.name}"></h2>
+                        <h2 class="title font-bold mb-3" th:text="${myChallenge.name}"></h2>
                         <div class="flex justify-center items-center">
                             <div class="flex items-center">
                                 <i class="fa-solid fa-money-bill-wave fa-lg mr-1" style="color: #3faa31;"></i>
-                                <span class="text-sm"  th:text="${challenge.joinCost}"></span>
+                                <span class="text-sm"  th:text="${myChallenge.joinCost}"></span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fa-solid fa-coins fa-lg mr-1 ml-2" style="color: #eac02a;"></i>
-                                <span class="text-sm" th:text="${challenge.joinCost}"></span>
+                                <span class="text-sm" th:text="${myChallenge.joinCost}"></span>
                             </div>
                         </div>
                         <div class="flex">
                             <i class="flex fa-solid fa-calendar-days fa-lg mr-2 mt-2" style="color: #6e95bf;"></i>
-                            <p class="text-sm" th:text="${challenge.getJoinDeadLineFormat()}"></p>
+                            <p class="text-sm" th:text="${myChallenge.getJoinDeadLineFormat()}"></p>
                         </div>
                         <div class="badge badge-sm badge-primary badge-outline rounded-md mt-1 px-3 py-3">
                             <i class="fa-solid fa-person-walking fa-lg mr-2"
-                               th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                               th:if="${myChallenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
                             <i class="fa-solid fa-tree fa-lg mr-2"
-                               th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                               th:if="${myChallenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
                             <i class="fa-solid fa-pen fa-lg mr-2"
-                               th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
-                            <p th:text="${challenge.tag.getChallengeTag()}"></p>
+                               th:if="${myChallenge.tag.getChallengeTag().equals('기타')}"></i>
+                            <p th:text="${myChallenge.tag.getChallengeTag()}"></p>
                         </div>
                     </div>
                 </a>
@@ -94,12 +98,12 @@
                 <h1 class="text-4xl mt-10">참여가능한 챌린지가 없습니다.</h1>
             </div>
 
-            <div class="flex rounded-lg overflow-hidden grid grid-cols-3" th:if="${openedAndValid}">
+            <div class="flex rounded-lg overflow-hidden grid grid-cols-3" th:unless="${#lists.isEmpty(openedChallenges)}">
                 <a class="card card-side flex flex-row shadow-lg border rounded m-3"
                    th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">
                     <figure>
                         <img class="card-img border rounded-lg shadow-lg m-2"
-                             th:src="${ImageDateService.getOptimizingUrl(challenge.imgUrl, ListOption)}"
+                             th:src="${challengeImages.get(challenge.id)}"
                              alt="challengeImg">
                     </figure>
                     <div class="card-body flex text-center items-center p-2 m-2">

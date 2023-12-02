@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -50,9 +47,9 @@ public class ChallengeService {
         return Arrays.asList(MapCategory.values());
     }
 
-    public List<Challenge> getByStatus(ChallengeStatus status) {
+    public List<Challenge> getAllByStatus(ChallengeStatus status) {
 
-        return challengeRepository.findByStatus(status);
+        return challengeRepository.findAllByStatus(status);
     }
 
     public Optional<Challenge> getById(long id) {
@@ -202,9 +199,38 @@ public class ChallengeService {
             }
         }
     }
-    public List<Challenge> getMyValidChallengeList(String loginId) {
+    public List<Challenge> getMyChallenges(Member member) {
 
-        return challengeMemberService.getMyValidChallengeList(loginId);
+        List<Challenge> inProgressChallenges = challengeMemberService.getInProgressChallenges(member);
+
+        sortChallengesByDate(inProgressChallenges);
+
+        return inProgressChallenges;
+    }
+
+    public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myChallenges) {
+
+        List<Challenge> openedChallenges = getAllByStatus(ChallengeStatus.OPEN);
+
+        List<Challenge> myCompletedChallenges = getMyCompletedChallenges(member);
+        if(!myChallenges.isEmpty()) {
+            myChallenges.addAll(myCompletedChallenges);
+        }
+
+        for(Challenge myChallenge : myChallenges) {
+            openedChallenges.remove(myChallenge);
+        }
+
+        sortChallengesByDate(openedChallenges);
+
+        return openedChallenges;
+    }
+
+    public List<Challenge> sortChallengesByDate(List<Challenge> challenges) {
+
+        challenges.sort(Comparator.comparing(Challenge::getCreateDate).reversed());
+
+        return challenges;
     }
 
     public List<Challenge> getNotMineNotCompletedOpenedChallenge(List<Challenge> myChallenges, List<Challenge> myCompletedChallenges, List<Challenge> openedChallenge) {
@@ -218,8 +244,8 @@ public class ChallengeService {
         return openedChallenge;
     }
 
-    public List<Challenge> getMyCompletedChallengeList(String loginId){
-        return challengeMemberService.getMyCompletedChallengeList(loginId);
+    public List<Challenge> getMyCompletedChallenges(Member member){
+        return challengeMemberService.getMyCompletedChallenges(member);
     }
 
     public List<Challenge> getOpenedChallengeByTag(ChallengeTag tag) {
