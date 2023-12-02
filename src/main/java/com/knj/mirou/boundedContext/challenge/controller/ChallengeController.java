@@ -73,7 +73,7 @@ public class ChallengeController {
 
         imageDataService.create(challengeId, ImageTarget.CHALLENGE_IMG, imgUrl);
 
-        return "redirect:/reward/setting/" + challengeId;
+        return rq.redirectWithMsg("/reward/setting/" + challengeId, createRs);
     }
 
 

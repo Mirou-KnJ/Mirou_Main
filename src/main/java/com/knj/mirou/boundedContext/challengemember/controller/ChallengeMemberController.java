@@ -28,7 +28,7 @@ public class ChallengeMemberController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/join/{id}")
-    public String join(@PathVariable(value = "id") long challengeId, Principal principal) {
+    public String join(@PathVariable(value = "id") long challengeId) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()) {

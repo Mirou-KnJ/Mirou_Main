@@ -42,12 +42,10 @@ public class ChallengeFeedController {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()) {
-            log.error("피드를 작성하려는 챌린지를 찾을 수 없습니다.");
-            return "redirect:/";        //FIXME
+            return rq.historyBack("챌린지 정보를 찾을 수 없습니다.");
         }
-        Challenge challenge = OChallenge.get();
 
-        //FIXME 챌린지 디테일이 아님.
+        Challenge challenge = OChallenge.get();
         String challengeImg = imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL);
 
         model.addAttribute("challenge", challenge);
@@ -76,20 +74,17 @@ public class ChallengeFeedController {
             return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
         }
 
-        RsData<ChallengeMember> checkValidRs = challengeFeedService.checkValidRequest(OChallenge.get(), member);
-        if(checkValidRs.isFail()) {
-            checkValidRs.printResult();
-            return "redirect:/";    //FIXME
-        }
+        Challenge challenge = OChallenge.get();
 
         RsData<String> writeRsData =
-                challengeFeedService.tryWrite(checkValidRs.getData(), img, contents);
+                challengeFeedService.write(challenge, member, img, contents);
         if (writeRsData.isFail()) {
-            writeRsData.printResult();
-            return "redirect:/feed/write/" + challengeId;
+            return rq.historyBack(writeRsData);
         }
 
-        return "redirect:/challenge/detail/" + challengeId;
+        challengeFeedService.checkReward(challenge, member);
+
+        return rq.redirectWithMsg("/challenge/detail/" + challengeId, writeRsData);
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -42,7 +42,7 @@ public class ChallengeFeedService {
     private final CoinService coinService;
     private final ChallengeFeedRepository challengeFeedRepository;
 
-    public RsData<ChallengeMember> checkValidRequest(Challenge challenge, Member member) {
+    public RsData<ChallengeMember> isJoin(Challenge challenge, Member member) {
 
         Optional<ChallengeMember> OChallengeMember =
                 challengeMemberService.getByChallengeAndMember(challenge, member);
@@ -54,11 +54,14 @@ public class ChallengeFeedService {
     }
 
     @Transactional
-    public RsData<String> tryWrite(ChallengeMember linkedChallengeMember, MultipartFile img,
-                                   String contents) throws IOException {
+    public RsData<String> write(Challenge challenge, Member member, MultipartFile img,
+                                String contents) throws IOException {
 
-        Member loginMember = linkedChallengeMember.getLinkedMember();
-        Challenge challenge = linkedChallengeMember.getLinkedChallenge();
+        Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
+        if(OChallengeMember.isEmpty()) {
+            return RsData.of("F-1", "챌린지 참여 정보가 올바르지 않습니다.");
+        }
+        ChallengeMember challengeMember = OChallengeMember.get();
 
         RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
         if(uploadRsData.isFail()) {
@@ -67,7 +70,6 @@ public class ChallengeFeedService {
 
         String imgUrl = uploadRsData.getData();
 
-        //라벨 검사는 인증샷 인증인 경우에만 수행
         if(challenge.getMethod().equals(AuthenticationMethod.PHOTO)) {
             RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, challenge.getLabels());
             if(labelRsData.isFail()) {
@@ -81,8 +83,8 @@ public class ChallengeFeedService {
         }
 
         ChallengeFeed feed = ChallengeFeed.builder()
-                .writer(linkedChallengeMember.getLinkedMember())
-                .linkedChallenge(linkedChallengeMember.getLinkedChallenge())
+                .writer(member)
+                .linkedChallenge(challenge)
                 .contents(contents)
                 .imgUrl(imgUrl)
                 .build();
@@ -90,20 +92,26 @@ public class ChallengeFeedService {
         ChallengeFeed saveFeed = challengeFeedRepository.save(feed);
         imageDataService.create(saveFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
 
-        int successNum = challengeMemberService.updateSuccess(linkedChallengeMember);
+        return RsData.of("S-1", "피드 작성에 성공했습니다.");
+    }
+
+    @Transactional
+    public void checkReward(Challenge challenge, Member member) {
+
+        ChallengeMember challengeMember = challengeMemberService.getByChallengeAndMember(challenge, member).get();
+
+        int successNum = challengeMemberService.updateSuccess(challengeMember);
 
         RsData<PrivateReward> validRewardRs =
-                privateRewardService.getValidReward(challenge, linkedChallengeMember, successNum);
+                privateRewardService.getValidReward(challenge, challengeMember, successNum);
 
         if(validRewardRs.isSuccess()) {
-            coinService.giveCoin(loginMember, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
+            coinService.giveCoin(member, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
         }
 
         if(validRewardRs.getResultCode().contains("S-2")) {
-            challengeMemberService.finishChallenge(linkedChallengeMember);
+            challengeMemberService.finishChallenge(challengeMember);
         }
-
-        return RsData.of("S-1", "피드 작성에 성공했습니다.");
     }
 
     public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {
