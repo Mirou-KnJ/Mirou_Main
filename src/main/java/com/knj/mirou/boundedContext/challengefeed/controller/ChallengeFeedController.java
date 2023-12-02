@@ -9,7 +9,6 @@ import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
-import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -32,10 +31,11 @@ import java.util.Optional;
 public class ChallengeFeedController {
 
     private final Rq rq;
-    private final ChallengeFeedService challengeFeedService;
+    private final MapConfigProperties mapConfigProps;
+
     private final ImageDataService imageDataService;
     private final ChallengeService challengeService;
-    private final MapConfigProperties mapConfigProps;
+    private final ChallengeFeedService challengeFeedService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
