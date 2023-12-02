@@ -8,14 +8,24 @@
     <main class="flex w-full">
         <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
 
-            <div th:if="${#lists.isEmpty(products)}" th:each="product : ${products}">
-
-                <h1>없어요</h1>
+            <div th:if="${#lists.isEmpty(infos)}">
+                <h1>아직 상품 정보가 없습니다.</h1>
             </div>
 
-            <div th:unless="${#lists.isEmpty(products)}" th:each="product : ${products}">
-                <h1 th:text="${product.info.name}"></h1>
-                <h1 th:text="${product.info.cost}"></h1>
+            <div class="flex flex-col card bg-base-200 grid grid-cols-3 gap-10" th:unless="${#lists.isEmpty(infos)}" th:each="info : ${infos}">
+                <div class="w-24 h-24">
+                    <img th:src="${info.imgUrl}" alt="productImg">
+                </div>
+
+                <div>
+                    <h1 th:text="${info.name}"></h1>
+                    <h1 th:text="${info.cost}"></h1>
+                    <h1 th:text="'보유 수량 : ' + ${counts.get(info.id)}"></h1>
+
+                    <button class="tooltip btn btn-sm btn-success" data-tip="수량이 모자라요!" th:if="${counts.get(info.id)} == 0" disabled>구매하기</button>
+                    <button class="btn btn-sm btn-success" th:if="${counts.get(info.id)} != 0">구매하기</button>
+                </div>
+
             </div>
         </div>
     </main>

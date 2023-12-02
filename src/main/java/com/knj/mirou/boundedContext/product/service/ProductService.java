@@ -10,9 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -56,6 +54,13 @@ public class ProductService {
         return productRepository.findDistinctProductIds();
     }
 
+    public List<ProductInfo> getAllRegisteredInfos() {
+
+        List<Long> registeredIds = getRegisteredIds();
+
+        return productInfoService.getAllRegisteredInfos(registeredIds);
+    }
+
     public List<Product> getAllByInfoAndStatus(ProductInfo info, ProductStatus status) {
 
         return productRepository.findAllByInfoAndStatus(info, status);
@@ -72,6 +77,20 @@ public class ProductService {
 
         for(ProductInfo info : productInfos) {
             counts.add(getCountByInfoAndStatus(info, ProductStatus.BEFORE_SALE));
+        }
+
+        return counts;
+    }
+
+    public Map<Long, Integer> getSalingCountMap(List<ProductInfo> productInfos) {
+
+        Map<Long, Integer> counts = new HashMap<>();
+
+        for(ProductInfo info : productInfos) {
+
+            int count = productRepository.countByInfoAndStatus(info, ProductStatus.SALE);
+
+            counts.put(info.getId(), count);
         }
 
         return counts;
@@ -94,38 +113,6 @@ public class ProductService {
         }
 
         return RsData.of("S-1", "판매가 시작되었습니다.");
-    }
-
-    public List<Product> getSalingProducts() {
-
-        List<Long> registeredIds = getRegisteredIds();
-
-        List<Product> SalingProducts = new ArrayList<>();
-
-        for(Long id : registeredIds) {
-            ProductInfo info = productInfoService.getById(id).get();
-
-            Optional<Product> OSaleProduct = productRepository.findDistinctByInfoAndStatus(info, ProductStatus.SALE);
-            if(OSaleProduct.isPresent()) {
-                SalingProducts.add(OSaleProduct.get());
-            }
-        }
-
-        return SalingProducts;
-    }
-
-    public List<Integer> getSalingCounts() {
-
-        List<Integer> counts = new ArrayList<>();
-        List<Long> registeredIds = getRegisteredIds();
-
-        for(Long id : registeredIds) {
-            ProductInfo info = productInfoService.getById(id).get();
-
-            counts.add(getCountByInfoAndStatus(info, ProductStatus.SALE));
-        }
-
-        return counts;
     }
 
 }
