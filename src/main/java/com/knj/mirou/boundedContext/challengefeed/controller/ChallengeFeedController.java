@@ -97,7 +97,9 @@ public class ChallengeFeedController {
             return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
         }
 
-        FeedListDTO feedListDto = challengeFeedService.getListDto(OChallenge.get());
+        Member member = rq.getMember();
+
+        FeedListDTO feedListDto = challengeFeedService.getListDto(OChallenge.get(), member);
         Map<Long, String> feedListImages = challengeFeedService.getFeedListImages(feedListDto);
 
         model.addAttribute("feedListDto", feedListDto);
@@ -119,8 +121,5 @@ public class ChallengeFeedController {
         ChallengeFeed challengeFeed = OFeed.get();
 
         challengeFeedService.updateLikeCount(challengeFeed);
-
-        log.info("좋아요 수 : " + challengeFeed.getLikeCount());
     }
-
 }

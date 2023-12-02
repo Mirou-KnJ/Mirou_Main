@@ -37,7 +37,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChallengeFeedService {
 
-    private final Rq rq;
     private final ImageDataService imageDataService;
     private final ChallengeMemberService challengeMemberService;
     private final PrivateRewardService privateRewardService;
@@ -115,6 +114,23 @@ public class ChallengeFeedService {
         return detailDTO;
     }
 
+    public FeedListDTO getListDto(Challenge linkedChallenge, Member writer) {
+
+        FeedListDTO feedListDto = new FeedListDTO();
+
+        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
+        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
+
+        for(ChallengeFeed myFeed : myFeeds) {
+            feeds.remove(myFeed);
+        }
+
+        feedListDto.setMyFeeds(myFeeds);
+        feedListDto.setNotMineFeeds(feeds);
+
+        return feedListDto;
+    }
+
     public boolean alreadyPostedToday(Member member, Challenge challenge){
 
         LocalDate today = LocalDate.now();
@@ -129,32 +145,11 @@ public class ChallengeFeedService {
     }
 
     public Optional<ChallengeFeed> getById(long feedId) {
-
         return challengeFeedRepository.findById(feedId);
     }
 
     public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
-
         return challengeFeedRepository.findTop3ByLinkedChallengeOrderByCreateDateAsc(linkedChallenge);
-    }
-
-    public FeedListDTO getListDto(Challenge linkedChallenge) {
-
-        FeedListDTO feedListDto = new FeedListDTO();
-
-        Member writer = rq.getMember();
-
-        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
-        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
-
-        for(ChallengeFeed myFeed : myFeeds) {
-            feeds.remove(myFeed);
-        }
-
-        feedListDto.setMyFeeds(myFeeds);
-        feedListDto.setNotMineFeeds(feeds);
-
-        return feedListDto;
     }
 
     @Transactional
@@ -172,5 +167,4 @@ public class ChallengeFeedService {
 
         return feedListImages;
     }
-
 }
