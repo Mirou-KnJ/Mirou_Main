@@ -134,8 +134,8 @@ public class ProductService {
 
         coinService.buyProduct(productInfo, member);
 
-//        Product targetProduct = getAllByInfoAndStatus(productInfo, ProductStatus.SALE).get(0);
-
+        Product targetProduct = getAllByInfoAndStatus(productInfo, ProductStatus.SALE).get(0);
+        targetProduct.setStatus(ProductStatus.SOLD_OUT);
 
         return RsData.of("S-1", "구매에 성공하였습니다.");
     }

@@ -34,6 +34,7 @@
 
         const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
 
+        //FIXME : REST API로 하기 보다는 수량이 바로 고쳐질 수 있게 일반 호출이 나을 것 같음.
         function buy(infoId) {
 
             console.log(infoId);
@@ -62,6 +63,8 @@
                         } else {
                             toastNotice(response.msg);
                         }
+
+                        window.location.href = "/product/store";
                     }
                 })
             } else {
