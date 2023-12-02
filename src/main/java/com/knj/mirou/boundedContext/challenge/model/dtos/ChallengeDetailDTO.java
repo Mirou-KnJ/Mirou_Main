@@ -24,6 +24,7 @@ public class ChallengeDetailDTO {
     private int memberCount;
     private Member loginMember;
     private Challenge challenge;
+    private String detailImg;
     private int successNum;
     private int maxNum;
     private int lastDayNum;

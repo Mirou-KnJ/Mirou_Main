@@ -39,9 +39,7 @@ public class ChallengeController {
 
     private final Rq rq;
     private final ChallengeService challengeService;
-    private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
-    private final MemberService memberService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/create")
@@ -108,33 +106,20 @@ public class ChallengeController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
-    public String showDetail(@PathVariable(value = "id") long challengeId, Principal principal, Model model) {
+    public String showDetail(@PathVariable(value = "id") long challengeId, Model model) {
 
-        String loginId = principal.getName();
+        Member member = rq.getMember();
 
-        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, loginId);
+        RsData<ChallengeDetailDTO> getDetailRs = challengeService.getDetailDTO(challengeId, member);
         if (getDetailRs.isFail()) {
             getDetailRs.printResult();
             return rq.historyBack(getDetailRs);
         }
 
         ChallengeDetailDTO detailDTO = getDetailRs.getData();
-        Challenge challenge = detailDTO.getChallenge();
-        detailDTO.setCanWrite(challengeFeedService.alreadyPostedToday(detailDTO.getLoginMember(), challenge));
 
-        List<ChallengeFeed> recently3Feed = challengeFeedService.getRecently3Feed(challenge);
-        detailDTO.setRecently3Feeds(recently3Feed);
-
-        //FIXME: 임시코드. 리팩토링 필수
-        List<String> imgList = new ArrayList<>();
-        for (ChallengeFeed feed : recently3Feed) {
-            imgList.add(imageDataService.getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL));
-        }
-
-        detailDTO.setFeedOptimizedImages(imgList);
         model.addAttribute("detailDTO", detailDTO);
-        model.addAttribute("challengeImg",
-                imageDataService.getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
+        model.addAttribute("challengeImg", detailDTO.getDetailImg());
 
         return "view/challenge/detail";
     }

@@ -12,6 +12,7 @@ import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,9 +32,9 @@ import java.util.Optional;
 public class ChallengeFeedController {
 
     private final Rq rq;
-    private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
     private final ImageDataService imageDataService;
+    private final ChallengeService challengeService;
     private final MapConfigProperties mapConfigProps;
 
     @PreAuthorize("isAuthenticated()")
@@ -68,10 +69,15 @@ public class ChallengeFeedController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write/{id}")
     public String write(@PathVariable(value = "id") long challengeId, MultipartFile img,
-                        String contents, Principal principal) throws IOException {
+                        String contents) throws IOException {
 
-        String loginId = principal.getName();
-        RsData<ChallengeMember> checkValidRs = challengeFeedService.checkValidRequest(challengeId, loginId);
+        Member member = rq.getMember();
+        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
+        if(OChallenge.isEmpty()) {
+            return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
+        }
+
+        RsData<ChallengeMember> checkValidRs = challengeFeedService.checkValidRequest(OChallenge.get(), member);
         if(checkValidRs.isFail()) {
             checkValidRs.printResult();
             return "redirect:/";    //FIXME

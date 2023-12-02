@@ -9,9 +9,13 @@ import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
+import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
@@ -30,7 +34,8 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class ChallengeService {
 
-    private final MemberService memberService;
+    private final ImageDataService imageDataService;
+    private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
     private final ChallengeRepository challengeRepository;
 
@@ -94,47 +99,30 @@ public class ChallengeService {
         return RsData.of("S-1", "챌린지가 성공적으로 생성되었습니다.", challenge.getId());
     }
 
-    public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, String loginId) {
-
-        Optional<Member> OLoginMember = memberService.getByLoginId(loginId);
-        if(OLoginMember.isEmpty()) {
-            return RsData.of("F-1", "회원의 정보를 찾을 수 없습니다. 다시 로그인 해주세요.");
-        }
+    public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, Member member) {
 
         Optional<Challenge> OChallenge = getById(challengeId);
         if(OChallenge.isEmpty()) {
-            return RsData.of("F-2", "유효한 챌린지가 아닙니다.");
+            return RsData.of("F-1", "챌린지 정보를 찾을 수 없습니다.");
         }
 
-        Member member = OLoginMember.get();
         Challenge challenge = OChallenge.get();
         ChallengeDetailDTO detailDTO = new ChallengeDetailDTO();
         detailDTO.setChallenge(challenge);
         detailDTO.setLoginMember(member);
 
-        Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
+        detailDTO = challengeMemberService.getDetailData(challenge, member, detailDTO);
+        detailDTO = challengeFeedService.getDetailData(challenge, member, detailDTO);
 
-        if(OChallengeMember.isPresent()) {
-            ChallengeMember challengeMember = OChallengeMember.get();
-            List<PrivateReward> privateReward = challengeMember.getPrivateReward();
-            detailDTO.setJoin(true);
-            detailDTO.setSuccessNum(challengeMember.getSuccessNumber());
-            detailDTO.setMaxNum(privateReward.get(privateReward.size()-1).getRound());
-            detailDTO.setLastDayNum(challengeMember.getLastDayNumber());
-        } else {
-            detailDTO.setJoin(false);
+        List<String> imgList = new ArrayList<>();
+        for (ChallengeFeed feed : detailDTO.getRecently3Feeds()) {
+            imgList.add(imageDataService.getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL));
         }
 
-        ChallengeMember challengeMember;
-        if(!detailDTO.isJoin()) {
-            detailDTO.setPublicRewards(challenge.getPublicReward());
-        } else {
-            challengeMember = OChallengeMember.get();
-            detailDTO.setPrivateRewards(challengeMember.getPrivateReward());
-        }
+        detailDTO.setDetailImg(imageDataService.getOptimizingUrl(
+                challenge.getImgUrl(), OptimizerOption.CHALLENGE_DETAIL));
 
-        detailDTO.setCanJoin(challengeMemberService.canJoin(member));
-        detailDTO.setMemberCount(challengeMemberService.getCountByLinkedChallenge(challenge));
+        detailDTO.setFeedOptimizedImages(imgList);
 
         return RsData.of("S-1", "디테일 정보가 성공적으로 수집되었습니다.", detailDTO);
     }
