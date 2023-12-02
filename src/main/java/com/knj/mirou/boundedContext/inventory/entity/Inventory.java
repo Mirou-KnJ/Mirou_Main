@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 public class Inventory extends BaseEntity {
 
     @ManyToOne
-    private Member member;
+    private Member owner;
 
     @ManyToOne
     private Product product;

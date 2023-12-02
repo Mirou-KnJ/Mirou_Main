@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.product.service;
 
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
+import com.knj.mirou.boundedContext.inventory.service.InventoryService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
@@ -20,6 +21,7 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private final InventoryService inventoryService;
     private final CoinService coinService;
     private final ProductInfoService productInfoService;
     private final ProductRepository productRepository;
@@ -136,6 +138,8 @@ public class ProductService {
 
         Product targetProduct = getAllByInfoAndStatus(productInfo, ProductStatus.SALE).get(0);
         targetProduct.setStatus(ProductStatus.SOLD_OUT);
+
+        inventoryService.create(targetProduct, member);
 
         return RsData.of("S-1", "구매에 성공하였습니다.");
     }
