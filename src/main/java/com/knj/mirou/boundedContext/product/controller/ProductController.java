@@ -2,11 +2,8 @@ package com.knj.mirou.boundedContext.product.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
-import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
 import com.knj.mirou.boundedContext.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
