@@ -61,7 +61,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public RsData<Challenge> tryCreate(ChallengeCreateDTO createDTO, String imgUrl) {
+    public RsData<Long> create(ChallengeCreateDTO createDTO, String imgUrl) {
 
         if(!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한(JoinDeadLine) 입니다.");
@@ -94,7 +94,7 @@ public class ChallengeService {
 
         Challenge challenge = challengeRepository.save(newChallenge);
 
-        return RsData.of("S-1", "챌린지가 성공적으로 생성되었습니다.", challenge);
+        return RsData.of("S-1", "챌린지가 성공적으로 생성되었습니다.", challenge.getId());
     }
 
     public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, String loginId) {

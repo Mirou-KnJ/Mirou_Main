@@ -59,26 +59,28 @@ public class ChallengeController {
                          MultipartFile img) throws IOException {
 
         if(bindingResult.hasErrors()) {
-            log.error("[ERROR] : " + bindingResult.getAllErrors().get(0).getDefaultMessage());
             return rq.historyBack(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
-        RsData<String> tryUploadRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
-        if (tryUploadRs.isFail()) {
-            tryUploadRs.printResult();
-            return rq.historyBack(tryUploadRs);
+        RsData<String> uploadImgRs = imageDataService.tryUploadImg(img, ImageTarget.CHALLENGE_IMG);
+        if (uploadImgRs.isFail()) {
+            uploadImgRs.printResult();
+            return rq.historyBack(uploadImgRs);
         }
 
-        RsData<Challenge> createRsData = challengeService.tryCreate(createDTO, tryUploadRs.getData());
-        if (createRsData.isFail()) {
-            createRsData.printResult();
-            return rq.historyBack(createRsData);
+        String imgUrl = uploadImgRs.getData();
+
+        RsData<Long> createRs = challengeService.create(createDTO, imgUrl);
+        if (createRs.isFail()) {
+            createRs.printResult();
+            return rq.historyBack(createRs);
         }
 
-        Challenge createdChallenge = createRsData.getData();
-        imageDataService.create(createdChallenge.getId(), ImageTarget.CHALLENGE_IMG, createdChallenge.getImgUrl());
+        long challengeId = createRs.getData();
 
-        return "redirect:/reward/setting/" + createdChallenge.getId();
+        imageDataService.create(challengeId, ImageTarget.CHALLENGE_IMG, imgUrl);
+
+        return "redirect:/reward/setting/" + challengeId;
     }
 
 
