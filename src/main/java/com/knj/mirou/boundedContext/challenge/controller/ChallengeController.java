@@ -33,6 +33,7 @@ import java.util.Map;
 public class ChallengeController {
 
     private final Rq rq;
+
     private final ChallengeService challengeService;
     private final ImageDataService imageDataService;
 

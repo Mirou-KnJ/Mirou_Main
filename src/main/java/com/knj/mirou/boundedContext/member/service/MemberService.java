@@ -16,7 +16,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,13 +26,14 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final PointService pointService;
     private final CoinService coinService;
+    private final PointService pointService;
+
     private final MemberConfigProperties memberConfigProps;
+
     private final MemberRepository memberRepository;
 
     public Optional<Member> getByLoginId(String loginId) {
-
         return memberRepository.findByLoginId(loginId);
     }
 
@@ -52,7 +52,7 @@ public class MemberService {
                 .nickname(nickname)
                 .socialCode(SocialCode.valueOf(socialCode))
                 .role(role)
-                .inviteCode("123456789")                      //FIXME: 중복되지 않는 난수 처리
+                .inviteCode("123456789")
                 .coin(coinService.createCoin())
                 .point(pointService.createPoint())
                 .build();
@@ -89,14 +89,11 @@ public class MemberService {
         return grantedAuthorities;
     }
 
-    //매주 월요일 0시 0분 3초에 포인트를 3000으로 리셋함.
     @Transactional
     @Scheduled(cron = "3 0 0 * * 1")
     public void resetPoint() {
 
-        log.info("현재시각 : " + LocalDateTime.now());
-
-        //FIXME: find 쿼리문 좀 더 섬세하게. (대상자만 가져올 수 있도록)
+        //FIXME: find 쿼리문 좀 더 섬세하게?
         List<Member> allMembers = memberRepository.findAll();
 
         pointService.resetPoint(allMembers);

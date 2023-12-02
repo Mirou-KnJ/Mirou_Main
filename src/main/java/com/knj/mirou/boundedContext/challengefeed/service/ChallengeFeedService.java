@@ -1,6 +1,5 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
-import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -26,7 +25,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,10 +35,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChallengeFeedService {
 
-    private final ImageDataService imageDataService;
-    private final ChallengeMemberService challengeMemberService;
-    private final PrivateRewardService privateRewardService;
     private final CoinService coinService;
+    private final ImageDataService imageDataService;
+    private final PrivateRewardService privateRewardService;
+    private final ChallengeMemberService challengeMemberService;
+
     private final ChallengeFeedRepository challengeFeedRepository;
 
     @Transactional

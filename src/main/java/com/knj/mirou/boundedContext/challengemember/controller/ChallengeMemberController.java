@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @Slf4j
@@ -23,6 +22,7 @@ import java.util.Optional;
 public class ChallengeMemberController {
 
     private final Rq rq;
+
     private final ChallengeService challengeService;
     private final ChallengeMemberService challengeMemberService;
 
@@ -32,19 +32,14 @@ public class ChallengeMemberController {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()) {
-            log.error("챌린지 정보가 유효하지 않습니다.");
-            return "redirect:/";        //FIXME
+            return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
         }
 
         RsData<String> joinRs = challengeMemberService.join(OChallenge.get(), rq.getMember());
-
         if(joinRs.isFail()) {
-            joinRs.printResult();
             return rq.historyBack(joinRs);
         }
 
-        return "redirect:/challenge/detail/" + challengeId;
+        return rq.redirectWithMsg("/challenge/detail/" + challengeId, joinRs);
     }
-
-
 }

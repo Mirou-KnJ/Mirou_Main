@@ -33,6 +33,7 @@ public class ChallengeService {
     private final ImageDataService imageDataService;
     private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
+
     private final ChallengeRepository challengeRepository;
 
     @Transactional

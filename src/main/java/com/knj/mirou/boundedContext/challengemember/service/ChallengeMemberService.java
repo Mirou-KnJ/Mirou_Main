@@ -9,7 +9,6 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.repository.ChallengeMemberRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
@@ -32,31 +31,27 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ChallengeMemberService {
 
-    private final CMemberConfigProperties CMemberConfigProps;
-    private final PrivateRewardService privateRewardService;
-    private final MemberService memberService;
-    private final ChallengeMemberRepository challengeMemberRepository;
     private final PointService pointService;
     private final PointHistoryService pointHistoryService;
+    private final PrivateRewardService privateRewardService;
+
+    private final CMemberConfigProperties CMemberConfigProps;
+
+    private final ChallengeMemberRepository challengeMemberRepository;
 
     @Transactional
     public RsData<String> join(Challenge challenge, Member member) {
 
-        //포인트가 있는지 검사
         Point point = member.getPoint();
         int cost = challenge.getJoinCost();
 
         if (cost > point.getCurrentPoint()) {
-            return RsData.of("F-2", "참가 비용이 부족합니다.");
+            return RsData.of("F-1", "참가 비용이 부족합니다.");
         }
 
         pointService.usedPoint(point, cost);
         pointHistoryService.create(member, ChangeType.USED, cost, challenge.getName() + " 사용",
                 challenge.getImgUrl());
-
-        //참여비용 만큼의 포인트를 가지고 있는지 검사
-        //1. 없으며 에러
-        //2. 있으면 포인트 차감 시도 + 차감하면 히스트리 생성과 연결.
 
         ChallengeMember challengeMember = ChallengeMember.builder()
                 .linkedChallenge(challenge)
@@ -69,6 +64,22 @@ public class ChallengeMemberService {
         privateRewardService.create(challenge, savedChallengeMember);
 
         return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.");
+    }
+
+    @Transactional
+    @Scheduled(cron = "3 0 0 * * ?")
+    public void setEndForTargetCM() {
+
+        LocalDate yesterDay = LocalDate.now().minusDays(1);
+
+        List<ChallengeMember> endTargetChallengeMembers =
+                challengeMemberRepository.findByEndDateAndProgress(yesterDay, Progress.IN_PROGRESS);
+
+        for (ChallengeMember target : endTargetChallengeMembers) {
+            target.finishChallenge();
+            log.info(target.getLinkedMember().getLoginId() + "회원의 " + target.getLinkedChallenge().getName()
+                    + "에 대한 참여내용이 종료되었습니다.");
+        }
     }
 
     public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {
@@ -100,12 +111,10 @@ public class ChallengeMemberService {
     }
 
     public int getCountByLinkedMemberAndProgress(Member member, Progress progress) {
-
         return challengeMemberRepository.countByLinkedMemberAndProgress(member, progress);
     }
 
     public Optional<ChallengeMember> getByChallengeAndMember(Challenge linkedChallenge, Member linkedMember) {
-
         return challengeMemberRepository.findByLinkedChallengeAndLinkedMember(linkedChallenge, linkedMember);
     }
 
@@ -157,21 +166,5 @@ public class ChallengeMemberService {
         }
 
         return completedChallenges;
-    }
-
-    @Transactional
-    @Scheduled(cron = "3 0 0 * * ?")
-    public void setEndForTargetCM() {
-
-        LocalDate yesterDay = LocalDate.now().minusDays(1);
-
-        List<ChallengeMember> endTargetChallengeMembers =
-                challengeMemberRepository.findByEndDateAndProgress(yesterDay, Progress.IN_PROGRESS);
-
-        for (ChallengeMember target : endTargetChallengeMembers) {
-            target.finishChallenge();
-            log.info(target.getLinkedMember().getLoginId() + "회원의 " + target.getLinkedChallenge().getName()
-                    + "에 대한 참여내용이 종료되었습니다.");
-        }
     }
 }
