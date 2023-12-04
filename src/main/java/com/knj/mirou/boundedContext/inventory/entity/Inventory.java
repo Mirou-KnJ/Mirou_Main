@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Entity
@@ -27,8 +27,6 @@ public class Inventory extends BaseEntity {
     @ManyToOne
     private Product product;
 
-    private LocalDateTime expDate;
-
-    private String couponNumber;
+    private LocalDate expDate;
 
 }

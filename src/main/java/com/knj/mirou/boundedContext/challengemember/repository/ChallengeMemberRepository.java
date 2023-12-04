@@ -18,7 +18,7 @@ public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember
 
     int countByLinkedChallenge(Challenge challenge);
 
-    List<ChallengeMember> findByLinkedMemberAndProgress(Member member, Progress progress);
+    List<ChallengeMember> findAllByLinkedMemberAndProgress(Member member, Progress progress);
 
     List<ChallengeMember> findByEndDateAndProgress(LocalDate endDate, Progress progress);
 }

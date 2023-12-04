@@ -1,0 +1,26 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+<head>
+    <title>인벤토리</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex w-full">
+        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+
+            <div th:if="${#lists.isEmpty(products)}">
+                <h1>아직 구매한 아이템이 없어요!</h1>
+            </div>
+
+            <div class="flex flex-col grid grid-cols-3" th:unless="${#lists.isEmpty(products)}">
+                <div class="card" th:each="product : ${products}">
+                    <h1 th:text="${product.info.name}"></h1>
+                    <h1 th:text="${product.info.cost}"></h1>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</th:block>
+</body>
+</html>

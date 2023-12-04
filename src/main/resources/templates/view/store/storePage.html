@@ -15,13 +15,12 @@
 
                 <div class="gap-10" th:unless="${#lists.isEmpty(storeProducts)}" th:each="store : ${storeProducts}">
                     <div>
-                        <img class="w-24 h-24" th:src="${store.product.imgUrl}" alt="productImg">
+                        <img class="w-24 h-24" th:src="${store.productInfo.imgUrl}" alt="productImg">
                     </div>
 
                     <div>
-                        <h1 th:text="'이름 : ' + ${store.product.name}"></h1>
-                        <h1 th:text="'가격 : ' + ${store.product.cost}"></h1>
-                        <h1 th:text="'수량 : ' + ${store.quantity}"></h1>
+                        <h1 th:text="'이름 : ' + ${store.productInfo.name}"></h1>
+                        <h1 th:text="'가격 : ' + ${store.productInfo.cost}"></h1>
                     </div>
                 </div>
             </div>

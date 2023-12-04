@@ -8,6 +8,8 @@ import com.amazonaws.util.IOUtils;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.imageData.config.S3ConfigProperties;
 import com.knj.mirou.boundedContext.imageData.model.entity.ImageData;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
@@ -212,5 +214,29 @@ public class ImageDataService {
         sb.append(option.getOption());
 
         return sb.toString();
+    }
+
+    public Map<Long, String> getListImages(List<Challenge> challenges) {
+
+        Map<Long, String> images = new HashMap<>();
+
+        for(Challenge challenge : challenges) {
+            String optimizedUrl = getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_LIST);
+            images.put(challenge.getId(), optimizedUrl);
+        }
+
+        return images;
+    }
+
+    public Map<Long, String> getFeedListImages(List<ChallengeFeed> challengeFeeds) {
+
+        Map<Long, String> images = new HashMap<>();
+
+        for(ChallengeFeed feed : challengeFeeds) {
+            String optimizedUrl = getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL);
+            images.put(feed.getId(), optimizedUrl);
+        }
+
+        return images;
     }
 }

@@ -37,6 +37,8 @@ public class ChallengeCreateDTO {
 
     private String labelList;
 
+    private String placeCategory;
+
     @NotEmpty(message = "챌린지 인증 방식은 반드시 설정 되어야 합니다.")
     private String method;
 

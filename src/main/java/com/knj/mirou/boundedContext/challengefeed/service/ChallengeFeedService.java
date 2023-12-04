@@ -1,10 +1,9 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
-import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
-import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
@@ -14,7 +13,6 @@ import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -36,42 +35,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChallengeFeedService {
 
-    private final Rq rq;
-    private final ImageDataService imageDataService;
-    private final ChallengeMemberService challengeMemberService;
-    private final PrivateRewardService privateRewardService;
     private final CoinService coinService;
-    private final MemberService memberService;
-    private final ChallengeService challengeService;
+    private final ImageDataService imageDataService;
+    private final PrivateRewardService privateRewardService;
+    private final ChallengeMemberService challengeMemberService;
+
     private final ChallengeFeedRepository challengeFeedRepository;
 
-    public RsData<ChallengeMember> checkValidRequest(long challengeId, String loginId) {
-
-        Optional<Member> OMember = memberService.getByLoginId(loginId);
-        Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-
-        if(OMember.isEmpty() || OChallenge.isEmpty()) {
-            return RsData.of("F-1", "챌린지 참여 상태가 올바르지 않습니다.");
-        }
-
-        Challenge challenge = OChallenge.get();
-        Member loginMember = OMember.get();
-
-        Optional<ChallengeMember> OChallengeMember =
-                challengeMemberService.getByChallengeAndMember(challenge, loginMember);
-        if(OChallengeMember.isEmpty()) {
-            return RsData.of("F-2", "챌린지 참여 상태가 올바르지 않습니다.");
-        }
-
-        return RsData.of("S-1", "참여 정보가 확인되었습니다.", OChallengeMember.get());
-    }
-
     @Transactional
-    public RsData<String> tryWrite(ChallengeMember linkedChallengeMember, MultipartFile img,
-                                   String contents) throws IOException {
+    public RsData<String> write(Challenge challenge, Member member, MultipartFile img,
+                                String contents) throws IOException {
 
-        Member loginMember = linkedChallengeMember.getLinkedMember();
-        Challenge challenge = linkedChallengeMember.getLinkedChallenge();
+        Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
+        if(OChallengeMember.isEmpty()) {
+            return RsData.of("F-1", "챌린지 참여 정보가 올바르지 않습니다.");
+        }
+        ChallengeMember challengeMember = OChallengeMember.get();
 
         RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
         if(uploadRsData.isFail()) {
@@ -80,7 +59,6 @@ public class ChallengeFeedService {
 
         String imgUrl = uploadRsData.getData();
 
-        //라벨 검사는 인증샷 인증인 경우에만 수행
         if(challenge.getMethod().equals(AuthenticationMethod.PHOTO)) {
             RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, challenge.getLabels());
             if(labelRsData.isFail()) {
@@ -94,8 +72,8 @@ public class ChallengeFeedService {
         }
 
         ChallengeFeed feed = ChallengeFeed.builder()
-                .writer(linkedChallengeMember.getLinkedMember())
-                .linkedChallenge(linkedChallengeMember.getLinkedChallenge())
+                .writer(member)
+                .linkedChallenge(challenge)
                 .contents(contents)
                 .imgUrl(imgUrl)
                 .build();
@@ -103,20 +81,53 @@ public class ChallengeFeedService {
         ChallengeFeed saveFeed = challengeFeedRepository.save(feed);
         imageDataService.create(saveFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
 
-        int successNum = challengeMemberService.updateSuccess(linkedChallengeMember);
+        return RsData.of("S-1", "피드 작성에 성공했습니다.");
+    }
+
+    @Transactional
+    public void checkReward(Challenge challenge, Member member) {
+
+        ChallengeMember challengeMember = challengeMemberService.getByChallengeAndMember(challenge, member).get();
+
+        int successNum = challengeMemberService.updateSuccess(challengeMember);
 
         RsData<PrivateReward> validRewardRs =
-                privateRewardService.getValidReward(challenge, linkedChallengeMember, successNum);
+                privateRewardService.getValidReward(challenge, challengeMember, successNum);
 
         if(validRewardRs.isSuccess()) {
-            coinService.giveCoin(loginMember, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
+            coinService.giveCoin(member, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
         }
 
         if(validRewardRs.getResultCode().contains("S-2")) {
-            challengeMemberService.finishChallenge(linkedChallengeMember);
+            challengeMemberService.finishChallenge(challengeMember);
+        }
+    }
+
+    public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {
+
+        detailDTO.setCanWrite(alreadyPostedToday(member, challenge));
+
+        List<ChallengeFeed> recently3Feed = getRecently3Feed(challenge);
+        detailDTO.setRecently3Feeds(recently3Feed);
+
+        return detailDTO;
+    }
+
+    public FeedListDTO getListDto(Challenge linkedChallenge, Member writer) {
+
+        FeedListDTO feedListDto = new FeedListDTO();
+
+        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
+        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
+
+        for(ChallengeFeed myFeed : myFeeds) {
+            feeds.remove(myFeed);
         }
 
-        return RsData.of("S-1", "피드 작성에 성공했습니다.");
+        feedListDto.setMyFeeds(myFeeds);
+        feedListDto.setNotMineFeeds(feeds);
+
+        return feedListDto;
     }
 
     public boolean alreadyPostedToday(Member member, Challenge challenge){
@@ -133,32 +144,11 @@ public class ChallengeFeedService {
     }
 
     public Optional<ChallengeFeed> getById(long feedId) {
-
         return challengeFeedRepository.findById(feedId);
     }
 
     public List<ChallengeFeed> getRecently3Feed(Challenge linkedChallenge) {
-
         return challengeFeedRepository.findTop3ByLinkedChallengeOrderByCreateDateAsc(linkedChallenge);
-    }
-
-    public FeedListDTO getListDto(Challenge linkedChallenge) {
-
-        FeedListDTO feedListDto = new FeedListDTO();
-
-        Member writer = rq.getMember();
-
-        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
-        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
-
-        for(ChallengeFeed myFeed : myFeeds) {
-            feeds.remove(myFeed);
-        }
-
-        feedListDto.setMyFeeds(myFeeds);
-        feedListDto.setNotMineFeeds(feeds);
-
-        return feedListDto;
     }
 
     @Transactional
@@ -166,4 +156,14 @@ public class ChallengeFeedService {
         challengeFeed.updateLikeCount();
     }
 
+    public Map<Long, String> getFeedListImages(FeedListDTO feedListDTO) {
+
+        List<ChallengeFeed> myFeeds = feedListDTO.getMyFeeds();
+        List<ChallengeFeed> notMineFeeds = feedListDTO.getNotMineFeeds();
+
+        Map<Long, String> feedListImages = imageDataService.getFeedListImages(myFeeds);
+        feedListImages.putAll(imageDataService.getFeedListImages(notMineFeeds));
+
+        return feedListImages;
+    }
 }

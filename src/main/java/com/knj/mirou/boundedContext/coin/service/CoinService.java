@@ -1,12 +1,12 @@
 package com.knj.mirou.boundedContext.coin.service;
 
 import com.knj.mirou.base.enums.ChangeType;
-import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.coin.config.CoinConfigProperties;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.coin.repository.CoinRepository;
 import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,6 +52,23 @@ public class CoinService {
         coinRepository.save(coin);
 
         coinHistoryService.create(member, ChangeType.GET, randomResult, contents + " 적립", imgUrl);
+    }
+
+    @Transactional
+    public void buyProduct(ProductInfo info, Member member) {
+
+        Coin coin = member.getCoin();
+        int cost = info.getCost();
+
+        coin = Coin.builder()
+                .id(coin.getId())
+                .currentCoin(coin.getCurrentCoin() - cost)
+                .totalUsedCoin(coin.getTotalUsedCoin() + cost)
+                .build();
+
+        coinRepository.save(coin);
+
+        coinHistoryService.create(member, ChangeType.USED, cost, info.getName() + " 구매", info.getImgUrl());
     }
 
     private double randomCoin(int baseReward) {

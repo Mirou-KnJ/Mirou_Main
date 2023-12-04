@@ -1,9 +1,9 @@
-package com.knj.mirou.boundedContext.store.model.entity;
+package com.knj.mirou.boundedContext.product.model.entity;
 
 
-import com.knj.mirou.boundedContext.product.model.entity.Product;
-import com.knj.mirou.boundedContext.store.model.enums.SaleType;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,18 +18,23 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class Store {
+public class ProductInfo {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
 
-    @ManyToOne
-    private Product product;
+    private String name;
 
-    private int quantity;
+    private String brandName;
 
-    @Enumerated(EnumType.STRING)
-    private SaleType saleType;
+    private int cost;
 
+    private String content;
+
+    private String imgUrl;
+
+    private String usingWay;
+
+    private String usingCaution;
 }
