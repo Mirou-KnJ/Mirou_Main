@@ -20,45 +20,47 @@ import java.util.Random;
 @Transactional(readOnly = true)
 public class CoinService {
 
-    private final CoinConfigProperties coinConfigProps;
     private final CoinHistoryService coinHistoryService;
+
+    private final CoinConfigProperties coinConfigProps;
+
     private final CoinRepository coinRepository;
 
     @Transactional
-    public Coin createCoin() {
+    public void createCoin() {
         Coin createCoin = Coin.builder()
                 .currentCoin(0)
                 .totalGetCoin(0)
                 .totalUsedCoin(0)
                 .build();
 
-        return coinRepository.save(createCoin);
+        coinRepository.save(createCoin);
     }
 
     @Transactional
     public void giveCoin(Member member, PrivateReward reward, String contents, String imgUrl) {
 
         Coin coin = member.getCoin();
-        int rewardCoin = Integer.parseInt(reward.getReward());
-        double randomCoin = randomCoin(rewardCoin);
-        int randomResult = (int) randomCoin;
+
+        int maxReward = Integer.parseInt(reward.getReward());
+        int randomCoin = (int) getRandomCoin(maxReward);
 
         coin = Coin.builder()
                 .id(coin.getId())
-                .currentCoin(coin.getCurrentCoin() + randomResult)
-                .totalGetCoin(coin.getTotalGetCoin() + randomResult)
+                .currentCoin(coin.getCurrentCoin() + randomCoin)
+                .totalGetCoin(coin.getTotalGetCoin() + randomCoin)
                 .build();
 
         coinRepository.save(coin);
 
-        coinHistoryService.create(member, ChangeType.GET, randomResult, contents + " 적립", imgUrl);
+        coinHistoryService.create(member, ChangeType.GET, randomCoin, contents + " 적립", imgUrl);
     }
 
     @Transactional
-    public void buyProduct(ProductInfo info, Member member) {
+    public void buyProduct(ProductInfo productInfo, Member member) {
 
         Coin coin = member.getCoin();
-        int cost = info.getCost();
+        int cost = productInfo.getCost();
 
         coin = Coin.builder()
                 .id(coin.getId())
@@ -68,15 +70,16 @@ public class CoinService {
 
         coinRepository.save(coin);
 
-        coinHistoryService.create(member, ChangeType.USED, cost, info.getName() + " 구매", info.getImgUrl());
+        coinHistoryService.create(member, ChangeType.USED, cost,
+                productInfo.getName() + " 구매", productInfo.getImgUrl());
     }
 
-    private double randomCoin(int baseReward) {
+    private double getRandomCoin(int maxReward) {
 
         Random random = new Random();
 
         double quarter = coinConfigProps.getQuarter();
-        double rewardCoin = baseReward * quarter;
+        double rewardCoin = maxReward * quarter;
 
         List<Double> standard = coinConfigProps.getStandard();
         double rand = random.nextDouble(0.0, 1.0);
@@ -89,7 +92,6 @@ public class CoinService {
             return random.nextDouble(rewardCoin * 3, rewardCoin * 4);
         }
     }
-
 }
 
 
