@@ -27,14 +27,14 @@ public class CoinService {
     private final CoinRepository coinRepository;
 
     @Transactional
-    public void createCoin() {
+    public Coin create() {
         Coin createCoin = Coin.builder()
                 .currentCoin(0)
                 .totalGetCoin(0)
                 .totalUsedCoin(0)
                 .build();
 
-        coinRepository.save(createCoin);
+        return coinRepository.save(createCoin);
     }
 
     @Transactional

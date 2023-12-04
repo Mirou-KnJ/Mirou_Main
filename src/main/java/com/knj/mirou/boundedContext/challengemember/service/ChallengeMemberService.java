@@ -40,18 +40,12 @@ public class ChallengeMemberService {
     private final ChallengeMemberRepository challengeMemberRepository;
 
     @Transactional
-    public RsData<String> join(Challenge challenge, Member member) {
+    public RsData<Long> join(Challenge challenge, Member member) {
 
-        Point point = member.getPoint();
-        int cost = challenge.getJoinCost();
-
-        if (cost > point.getCurrentPoint()) {
-            return RsData.of("F-1", "참가 비용이 부족합니다.");
+        RsData<Long> usingPointRs = pointService.usingJoinPoint(member, challenge);
+        if(usingPointRs.isFail()) {
+            return usingPointRs;
         }
-
-        pointService.usedPoint(point, cost);
-        pointHistoryService.create(member, ChangeType.USED, cost, challenge.getName() + " 사용",
-                challenge.getImgUrl());
 
         ChallengeMember challengeMember = ChallengeMember.builder()
                 .linkedChallenge(challenge)
@@ -63,7 +57,7 @@ public class ChallengeMemberService {
         ChallengeMember savedChallengeMember = challengeMemberRepository.save(challengeMember);
         privateRewardService.create(challenge, savedChallengeMember);
 
-        return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.");
+        return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.", savedChallengeMember.getId());
     }
 
     @Transactional
@@ -77,8 +71,6 @@ public class ChallengeMemberService {
 
         for (ChallengeMember target : endTargetChallengeMembers) {
             target.finishChallenge();
-            log.info(target.getLinkedMember().getLoginId() + "회원의 " + target.getLinkedChallenge().getName()
-                    + "에 대한 참여내용이 종료되었습니다.");
         }
     }
 

@@ -7,6 +7,8 @@ import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
+import com.knj.mirou.boundedContext.point.config.PointConfigProperties;
+import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class MemberService {
     private final CoinService coinService;
     private final PointService pointService;
 
+    private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
 
     private final MemberRepository memberRepository;
@@ -53,8 +56,8 @@ public class MemberService {
                 .socialCode(SocialCode.valueOf(socialCode))
                 .role(role)
                 .inviteCode("123456789")
-                .coin(coinService.createCoin())
-                .point(pointService.createPoint())
+                .coin(coinService.create())
+                .point(pointService.create())
                 .build();
 
         Member joinMember = memberRepository.save(member);
@@ -91,11 +94,11 @@ public class MemberService {
 
     @Transactional
     @Scheduled(cron = "3 0 0 * * 1")
-    public void resetPoint() {
+    public void resetPointOnMonday() {
+        int resetStandard = pointConfigProps.getResetStandard();
 
-        //FIXME: find 쿼리문 좀 더 섬세하게?
-        List<Member> allMembers = memberRepository.findAll();
+        List<Member> targetMembers = memberRepository.findByPointCurrentPointLessThan(resetStandard);
 
-        pointService.resetPoint(allMembers);
+        pointService.resetPoint(targetMembers);
     }
 }
