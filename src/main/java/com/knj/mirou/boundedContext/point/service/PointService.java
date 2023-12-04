@@ -69,17 +69,12 @@ public class PointService {
     public void resetPoint(List<Member> targetMembers) {
 
         for(Member targetMember : targetMembers) {
-
             Point point = targetMember.getPoint();
-
-            log.error("before : " + point.getCurrentPoint());
 
             point = Point.builder()
                     .id(point.getId())
                     .currentPoint(3000)
                     .build();
-
-            log.error("after : " + point.getCurrentPoint());
 
             pointRepository.save(point);
         }
