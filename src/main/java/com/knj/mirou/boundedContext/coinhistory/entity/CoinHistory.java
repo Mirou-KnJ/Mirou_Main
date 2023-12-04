@@ -33,7 +33,6 @@ public class CoinHistory extends BaseEntity {
     private String imgUrl;
 
     public String getCreateDateFormattedStr() {
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일");
         return formatter.format(getCreateDate());
     }
