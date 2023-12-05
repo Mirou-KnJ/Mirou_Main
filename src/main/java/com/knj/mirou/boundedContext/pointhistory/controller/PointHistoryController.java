@@ -27,17 +27,12 @@ public class PointHistoryController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/history")
     public String showPointHistory(Model model){
+
         Member loginedMember = rq.getMember();
-
         Point point = loginedMember.getPoint();
-
-        log.info("nickname : " + loginedMember.getNickname());
-        log.info("cur : " + point.getCurrentPoint());
-        log.info("used : " + point.getTotalUsedPoint());
-
         List<PointHistory> pointHistories = pointHistoryService.getAllOrderedDesc(loginedMember);
 
-        model.addAttribute("memberPoint", loginedMember.getPoint());
+        model.addAttribute("memberPoint", point);
         model.addAttribute("pointHistories", pointHistories);
 
         return "view/point/history";
