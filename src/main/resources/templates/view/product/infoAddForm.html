@@ -33,7 +33,11 @@
 
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-                    <button type="submit" class="btn btn-success mt-5">등록하기</button>
+                    <div class="flex justify-center mt-5 gap-6">
+                        <a href="/member/admin" class="btn btn-primary">돌아가기</a>
+                        <button type="submit" class="btn btn-success">등록하기</button>
+                    </div>
+
                 </form>
             </div>
 

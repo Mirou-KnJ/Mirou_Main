@@ -1,26 +1,101 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <title>인벤토리</title>
+    <title>상품 보관함</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center mx-auto py-20 bg-base-100">
 
-            <div th:if="${#lists.isEmpty(products)}">
-                <h1>아직 구매한 아이템이 없어요!</h1>
+            <div class="flex justify-center my-3">
+                <h1 class="text-2xl">상품 보관함</h1>
             </div>
 
-            <div class="flex flex-col grid grid-cols-3" th:unless="${#lists.isEmpty(products)}">
-                <div class="card" th:each="product : ${products}">
-                    <h1 th:text="${product.info.name}"></h1>
-                    <h1 th:text="${product.info.cost}"></h1>
+            <div class="flex flex-col w-full justify-center items-center">
+                <div class="flex flex-col w-full justify-center border rounded-lg card bg-base-200 pt-5">
+                    <div th:if="${#lists.isEmpty(inventories)}">
+                        <h1>아직 상품 정보가 없습니다.</h1>
+                    </div>
+
+                    <div class="flex flex-col" th:unless="${#lists.isEmpty(inventories)}"
+                         th:each="inventory : ${inventories}">
+
+                        <div class="flex w-full mx-auto items-center">
+                            <div class="flex flex-grow py-2 w-60">
+                                <div>
+                                    <img class="w-12 h-12 card rounded-full mx-5"
+                                         th:src="${inventory.product.info.imgUrl}"
+                                         alt="productImg">
+                                </div>
+                                <div class="mt-2">
+                                    <p class="text-xs" th:text="'<'+ ${inventory.product.info.brandName} + '>'"></p>
+                                    <p class="text-sm" th:text="${inventory.product.info.name}"></p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-grow w-32">
+                                <div class="flex gap-2 mt-2">
+                                    <p class="text-xs text-base-400" th:text="${inventory.expDate} + '까지'"></p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-grow-0 items-center mr-3">
+                                <div class="flex flex-col gap-3">
+                                    <button th:onclick="inventoryDetail[[${inventory.id}]].showModal()"
+                                            class="btn btn-sm btn-success">>>
+                                    </button>
+                                </div>
+
+                                <dialog th:id="inventoryDetail + ${inventory.id}" class="modal">
+                                    <div class="modal-box">
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕
+                                            </button>
+                                        </form>
+                                        <h3 class="font-bold text-lg"
+                                            th:text="'<' + ${inventory.product.info.brandName} + '>'
+                                            + ${inventory.product.info.name}"></h3>
+                                        <div class="py-4">
+                                            <p th:text="'사용 기한 : ' + ${inventory.expDate}"></p>
+                                            <p th:text="'교환 코드 : ' + ${inventory.product.code}"></p>
+                                        </div>
+                                        <div class="py-4">
+                                            <p th:text="'사용방법 : ' + ${inventory.product.info.usingWay}"></p>
+                                            <p th:text="'유의사항 : ' + ${inventory.product.info.usingCaution}"></p>
+                                        </div>
+
+                                        <div class="flex justify-center">
+                                            <button th:if="${inventory.status.getStatus().equals('사용 전')}"
+                                                    class="btn btn-success" th:onclick="use([[${inventory.id}]])">사용 하기</button>
+                                            <button th:if="${inventory.status.getStatus().equals('사용 후')}"
+                                                    class="btn btn-success" disabled>사용 완료</button>
+                                        </div>
+                                    </div>
+                                </dialog>
+                            </div>
+                        </div>
+
+                        <div class="divider w-full"></div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </main>
+
+    <script th:inline="javascript">
+
+        function use(inventoryId) {
+
+            var usingRs = confirm("사용 완료 처리 하시겠습니까?");
+
+            if(usingRs) {
+                window.location.href="/inventory/use/" + inventoryId;
+            } else {
+                toastWarning("사용이 취소되었습니다.");
+            }
+        }
+    </script>
 </th:block>
 </body>
 </html>

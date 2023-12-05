@@ -2,7 +2,7 @@ package com.knj.mirou.boundedContext.member.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
-import com.knj.mirou.boundedContext.inventory.entity.Inventory;
+import com.knj.mirou.boundedContext.inventory.model.entity.Inventory;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.point.entity.Point;

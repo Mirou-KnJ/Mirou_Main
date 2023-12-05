@@ -6,8 +6,8 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
-            <form class="flex flex-col w-full" method="post" action="/challenge/create" enctype="multipart/form-data">
+        <div class="flex flex-col justify-center mx-auto py-20 navbar bg-base-100">
+            <form class="flex flex-col" method="post" action="/challenge/create" enctype="multipart/form-data">
                 <div class="flex justify-center form-control w-full">
                     <label class="label">
                         <span class="label-text">챌린지 제목</span>
@@ -37,15 +37,15 @@
                 </div>
 
                 <div class="flex justify-around w-full">
-                    <select class="select select-bordered" name="tag">
+                    <select class="select select-bordered w-40" name="tag">
                         <option disabled selected>챌린지 종류</option>
                         <option value="ENVIRONMENT">환경 챌린지</option>
                         <option value="ROUTINE">습관 챌린지</option>
                         <option value="ETC">기타</option>
                     </select>
 
-                    <select class="select select-bordered max-w-xs" name="period">
-                        <option disabled selected>진행일수</option>
+                    <select class="select select-bordered w-40" name="period">
+                        <option disabled selected>진행 일수</option>
                         <option value="1">하루 챌린지</option>
                         <option value="3">3일 챌린지</option>
                         <option value="5">5일 챌린지</option>
@@ -56,14 +56,14 @@
                 </div>
 
                 <div class="mt-4 flex justify-around w-full">
-                    <select id="method" class="select select-bordered max-w-xs" name="method"
+                    <select id="method" class="select select-bordered w-40" name="method"
                             onchange="methodSelect()">
                         <option disabled selected>인증 방법</option>
                         <option th:each="method : ${methods}" th:value="${method.name}"
                                 th:text="${method.method}"></option>
                     </select>
 
-                    <select class="select select-bordered max-w-xs" name="joinCost">
+                    <select class="select select-bordered w-40" name="joinCost">
                         <option disabled selected>참여 비용</option>
                         <option value="500">500 포인트</option>
                         <option value="1000">1000 포인트</option>

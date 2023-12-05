@@ -1,6 +1,8 @@
 package com.knj.mirou.boundedContext.inventory.service;
 
-import com.knj.mirou.boundedContext.inventory.entity.Inventory;
+import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.inventory.model.entity.Inventory;
+import com.knj.mirou.boundedContext.inventory.model.enums.InventoryStatus;
 import com.knj.mirou.boundedContext.inventory.repository.InventoryRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 @Slf4j
@@ -25,9 +28,32 @@ public class InventoryService {
 
         LocalDate expDate = LocalDate.now().plusDays(90);
 
-        Inventory newItem = new Inventory(member, product, expDate);
+        Inventory inventory = Inventory.builder()
+                .owner(member)
+                .product(product)
+                .expDate(expDate)
+                .status(InventoryStatus.BEFORE_USED)
+                .build();
 
-        inventoryRepository.save(newItem);
+        inventoryRepository.save(inventory);
     }
 
+    @Transactional
+    public RsData<Long> usingProduct(long inventoryId, Member member) {
+
+        Optional<Inventory> OInventory = getByIdAndOwner(inventoryId, member);
+        if(OInventory.isEmpty()) {
+            return RsData.of("F-1", "보관 정보를 확인할 수 없습니다.");
+        }
+
+        Inventory inventory = OInventory.get();
+        inventory.usingProduct();
+
+        return RsData.of("S-1", "사용이 완료되었습니다.");
+    }
+
+    public Optional<Inventory> getByIdAndOwner(long inventoryId, Member owner) {
+
+        return inventoryRepository.findByIdAndOwner(inventoryId, owner);
+    }
 }

@@ -6,54 +6,80 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center mx-auto py-20 bg-base-100">
 
-            <div class="flex flex-col w-full justify-center">
+            <div class="flex justify-center my-3 gap-3">
+                <h1 class="text-lg mt-1">등록된 상품 정보 리스트</h1>
+                <button onclick="refresh()" class="bg-base-200 rounded-lg px-2 py-1">
+                    <i class="fa-solid fa-arrows-rotate fa-lg"></i>
+                </button>
+            </div>
 
-                <div class="flex justify-center my-3">
-                    <h1 class="text-lg">등록된 상품 정보 리스트</h1>
-                </div>
+            <div class="flex flex-col w-full justify-center items-center">
+                <div class="flex flex-col w-full justify-center ">
 
-                <div class="flex flex-col w-96 grid grid-cols-2 justify-center items-center gap-10">
                     <div class="flex justify-center" th:if="${#lists.isEmpty(productInfos)}">
                         <h1>아직 등록되어있는 상품이 존재하지 않습니다!</h1>
                     </div>
 
-                    <div class="flex flex-col card shadow-lg justify-center items-center px-4 py-2"
+                    <div class="flex w-full">
+                        <div class="divider w-full"></div>
+                    </div>
+
+                    <div class="flex flex-col w-full"
                          th:unless="${#lists.isEmpty(productInfos)}" th:each="productInfo, index : ${productInfos}">
-                        <div>
-                            <img class="w-12 h-12" th:src="${productInfo.imgUrl}" alt="productImg">
-                        </div>
 
-                        <div class="flex flex-col items-center py-3">
-                            <h1 th:text="${productInfo.name}"></h1>
-                            <h1 th:text="${productInfo.cost} + ' 코인'"></h1>
-                            <h1 th:text="${productInfo.brandName}"></h1>
-                            <h1 th:text="'보유 수량 : ' + ${counts.get(index.index)}"></h1>
-                        </div>
+                        <div class="flex w-full mx-auto items-center py-3">
+                            <div class="flex flex-grow mt-2 w-60">
+                                <div>
+                                    <img class="w-12 h-12 card rounded-full mx-5" th:src="${productInfo.imgUrl}" alt="productImg">
+                                </div>
 
-                        <div class="flex flex-col gap-3">
-                            <button class="btn btn-sm" th:onclick="saleStart([[${productInfo.name}]], [[${productInfo.id}]])">판매 시작</button>
-                            <button class="btn btn-sm" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록</button>
-                        </div>
+                                <div>
+                                    <p class="text-xs" th:text="'<'+ ${productInfo.brandName} + '>'"></p>
+                                    <p class="text-sm" th:text="${productInfo.name}"></p>
 
-                        <dialog th:id="'submitCode' + ${productInfo.id} " class="modal">
-                            <div class="flex flex-col modal-box">
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                </form>
-                                <h3 class="font-bold text-lg" th:text="${productInfo.name} + ' 코드 등록'"></h3>
-                                <label class="label-text mt-3">물품 코드를 입력해 주세요</label>
-                                <input th:id="code+${productInfo.id}" type="text" name="code"
-                                       class="input input-bordered w-full">
-
-                                <div class="flex justify-center mt-3">
-                                    <button th:onclick="addCode([[${productInfo.id}]])" class="btn btn-warning w-24">등록
-                                        완료
-                                    </button>
+                                    <div class="flex gap-2 mt-1">
+                                        <p class="text-sm text-yellow-400" th:text="${productInfo.getCost()}"></p>
+                                        <i class="fa-solid fa-coins fa-sm mt-2" style="color: #eac02a;"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </dialog>
+
+                            <div class="flex flex-col flex-grow mx-3 w-24">
+                                <h1 class="text-sm" th:text="'보유 수량 : ' + ${counts.get(index.index)}"></h1>
+                                <h1 class="text-sm" th:text="'등록 수량 : ' + ${counts.get(index.index)}"></h1>
+                            </div>
+
+                            <div class="flex flex-grow-0 items-center mr-3">
+                                <div class="flex flex-col gap-3">
+                                    <button class="btn btn-sm" th:onclick="saleStart([[${productInfo.name}]], [[${productInfo.id}]])">판매 시작</button>
+                                    <button class="btn btn-sm" th:onclick="'submitCode' + ${productInfo.id} + '.showModal()'">코드 등록</button>
+                                </div>
+
+                                <dialog th:id="'submitCode' + ${productInfo.id} " class="modal">
+                                    <div class="flex flex-col modal-box">
+                                        <form method="dialog">
+                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                        </form>
+                                        <h3 class="font-bold text-lg" th:text="${productInfo.name} + ' 코드 등록'"></h3>
+                                        <label class="label-text mt-3">물품 코드를 입력해 주세요</label>
+                                        <input th:id="code+${productInfo.id}" type="text" name="code"
+                                               class="input input-bordered w-full">
+
+                                        <div class="flex justify-center mt-3">
+                                            <button th:onclick="addCode([[${productInfo.id}]])" class="btn btn-warning w-24">등록
+                                                완료
+                                            </button>
+                                        </div>
+                                    </div>
+                                </dialog>
+                            </div>
+                        </div>
+
+                        <div class="flex w-full">
+                            <div class="divider mt-2 w-full"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,6 +134,10 @@
                     toastNotice(response.msg);
                 }
             })
+        }
+
+        function refresh() {
+            window.location.reload();
         }
     </script>
 </th:block>
