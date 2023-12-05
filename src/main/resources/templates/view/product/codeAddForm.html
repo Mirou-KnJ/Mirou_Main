@@ -8,8 +8,11 @@
     <main class="flex w-full">
         <div class="flex flex-col justify-center mx-auto py-20 bg-base-100">
 
-            <div class="flex justify-center my-3">
-                <h1 class="text-lg">등록된 상품 정보 리스트</h1>
+            <div class="flex justify-center my-3 gap-3">
+                <h1 class="text-lg mt-1">등록된 상품 정보 리스트</h1>
+                <button onclick="refresh()" class="bg-base-200 rounded-lg px-2 py-1">
+                    <i class="fa-solid fa-arrows-rotate fa-lg"></i>
+                </button>
             </div>
 
             <div class="flex flex-col w-full justify-center items-center">
@@ -131,6 +134,10 @@
                     toastNotice(response.msg);
                 }
             })
+        }
+
+        function refresh() {
+            window.location.reload();
         }
     </script>
 </th:block>
