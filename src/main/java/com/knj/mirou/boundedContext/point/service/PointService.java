@@ -1,8 +1,12 @@
 package com.knj.mirou.boundedContext.point.service;
 
+import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.repository.PointRepository;
+import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PointService {
 
+    private final PointHistoryService pointHistoryService;
+
     private final PointRepository pointRepository;
 
     @Transactional
-    public Point createPoint() {
+    public Point create() {
 
         Point createPoint = Point.builder()
                 .currentPoint(3000)
@@ -31,30 +37,44 @@ public class PointService {
     }
 
     @Transactional
-    public void usedPoint(Point point, int cost){
+    public RsData<Long> usingJoinPoint(Member member, Challenge challenge) {
 
-        point.usingPoint(cost);
+        Point point = member.getPoint();
+        int joinCost = challenge.getJoinCost();
 
-//        point = Point.builder()
-//                .id(point.getId())
-//                .currentPoint(point.getCurrentPoint() - cost)
-//                .totalUsedPoint(point.getTotalUsedPoint() + cost)
-//                .build();
-//
-//        pointRepository.save(point);
+        if (joinCost > point.getCurrentPoint()) {
+            return RsData.of("F-1", "참가 비용이 부족합니다.", point.getId());
+        }
+
+        usingPoint(point, joinCost);
+        pointHistoryService.create(member, ChangeType.USED, joinCost,
+                challenge.getName() + " 사용", challenge.getImgUrl());
+
+        return RsData.of("S-1", "포인트 사용이 완료되었습니다.", point.getId());
     }
 
     @Transactional
-    public void resetPoint(List<Member> members) {
+    public void usingPoint(Point point, int cost) {
 
-        for(Member targetMember : members) {
+        point = Point.builder()
+                .id(point.getId())
+                .currentPoint(point.getCurrentPoint() - cost)
+                .totalUsedPoint(point.getTotalUsedPoint() + cost)
+                .build();
+
+        pointRepository.save(point);
+    }
+
+    @Transactional
+    public void resetPoint(List<Member> targetMembers) {
+
+        for(Member targetMember : targetMembers) {
             Point point = targetMember.getPoint();
 
-            if(point.getCurrentPoint() != 3000) {
-                log.info("현재 포인트 : " + point.getCurrentPoint());
-                point.resetCurrentPoint();
-                log.info("초기화 후 포인트 : " + point.getCurrentPoint());
-            }
+            point = Point.builder()
+                    .id(point.getId())
+                    .currentPoint(3000)
+                    .build();
 
             pointRepository.save(point);
         }

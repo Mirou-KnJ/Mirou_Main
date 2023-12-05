@@ -18,15 +18,16 @@ import java.util.List;
 public class CoinHistoryService {
 
     private final ImageDataService imageDataService;
+
     private final CoinHistoryRepository coinHistoryRepository;
 
     @Transactional
-    public void create(Member linkedMember, ChangeType type, int changedCoin, String contents, String imgUrl) {
+    public void create(Member member, ChangeType type, int changedCoin, String contents, String imgUrl) {
 
         String historyImgUrl = imageDataService.getOptimizingUrl(imgUrl, OptimizerOption.HISTORY);
 
         CoinHistory coinHistory = CoinHistory.builder()
-                .linkedMember(linkedMember)
+                .linkedMember(member)
                 .changedCoin(changedCoin)
                 .changeType(type)
                 .contents(contents)
@@ -37,7 +38,6 @@ public class CoinHistoryService {
     }
 
     public List<CoinHistory> getAllOrderedDesc(Member member) {
-
         return coinHistoryRepository.findAllByLinkedMemberOrderByCreateDateDesc(member);
     }
 }

@@ -21,8 +21,8 @@ import java.util.List;
 public class CoinHistoryController {
 
     private final Rq rq;
-    private final CoinHistoryService coinHistoryService;
 
+    private final CoinHistoryService coinHistoryService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/history")
@@ -37,7 +37,4 @@ public class CoinHistoryController {
 
         return "view/coin/history";
     }
-
-
-
 }

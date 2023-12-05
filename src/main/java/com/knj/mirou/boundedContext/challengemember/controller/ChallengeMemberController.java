@@ -35,7 +35,7 @@ public class ChallengeMemberController {
             return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
         }
 
-        RsData<String> joinRs = challengeMemberService.join(OChallenge.get(), rq.getMember());
+        RsData<Long> joinRs = challengeMemberService.join(OChallenge.get(), rq.getMember());
         if(joinRs.isFail()) {
             return rq.historyBack(joinRs);
         }

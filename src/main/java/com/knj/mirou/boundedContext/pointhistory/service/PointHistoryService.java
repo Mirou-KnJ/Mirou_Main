@@ -18,6 +18,7 @@ import java.util.List;
 public class PointHistoryService {
 
     private final ImageDataService imageDataService;
+
     private final PointHistoryRepository pointHistoryRepository;
 
     @Transactional
