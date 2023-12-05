@@ -62,12 +62,6 @@ public class ProductController {
     @GetMapping("/store")
     public String storePage(Model model) {
 
-        //1. 모든 info를 가져온다
-        //2. 모든 info의 count도 가져온다.
-        // 주의할 것 : count의 리스트 인덱스와 info의 인덱스가 같을것이라는 보장이 없다.
-
-        // => 해결 방안 : info에 카운트도 저장? 혹은 본인의 카운트를 명확히 알 수 있는 방법? (맵으로 리턴?)
-
         List<ProductInfo> infos = productService.getAllRegisteredInfos();
         Map<Long, Integer> counts = productService.getSalingCountMap(infos);
 
@@ -77,15 +71,16 @@ public class ProductController {
         return "view/product/store";
     }
 
-    @ResponseBody
-    @PostMapping("/buy")
-    public ResponseEntity<RsData<String>> tryBuy(@RequestParam Map<String, Object> params) {
+    @GetMapping("/buy/{productId}")
+    public String tryBuy(@PathVariable long productId) {
 
         Member member = rq.getMember();
-        long infoId = Long.parseLong(params.get("id").toString());
 
-        RsData<String> buyRs = productService.tryBuy(infoId, member);
+        RsData<String> buyRs = productService.tryBuy(productId, member);
+        if(buyRs.isFail()) {
+            return rq.historyBack(buyRs);
+        }
 
-        return ResponseEntity.ok(buyRs);
+        return rq.redirectWithMsg("/product/store", buyRs);
     }
 }

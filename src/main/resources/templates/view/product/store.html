@@ -1,77 +1,67 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
 <head>
-    <title>사용할 페이지 명</title>
+    <title>상점 페이지</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
     <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+        <div class="flex flex-col justify-center mx-auto py-20 bg-base-100">
 
-            <div th:if="${#lists.isEmpty(infos)}">
-                <h1>아직 상품 정보가 없습니다.</h1>
+            <div class="flex justify-center my-3">
+                <h1 class="text-2xl">상점</h1>
             </div>
 
-            <div class="flex flex-col card bg-base-200 grid grid-cols-3 gap-10" th:unless="${#lists.isEmpty(infos)}" th:each="info : ${infos}">
-                <div class="w-24 h-24">
-                    <img th:src="${info.imgUrl}" alt="productImg">
+            <div class="flex flex-col w-full justify-center items-center">
+                <div class="flex flex-col w-full justify-center border rounded-lg">
+                    <div th:if="${#lists.isEmpty(infos)}">
+                        <h1>아직 상품 정보가 없습니다.</h1>
+                    </div>
+
+                    <div class="flex flex-col card bg-base-200" th:unless="${#lists.isEmpty(infos)}"
+                         th:each="productInfo : ${infos}">
+
+                        <div class="flex w-full mx-auto items-center py-3">
+                            <div class="flex flex-grow mt-2 w-60">
+                                <div>
+                                    <img class="w-12 h-12 card rounded-full mx-5" th:src="${productInfo.imgUrl}"
+                                         alt="productImg">
+                                </div>
+                                <div>
+                                    <p class="text-xs" th:text="'<'+ ${productInfo.brandName} + '>'"></p>
+                                    <p class="text-sm" th:text="${productInfo.name}"></p>
+
+                                    <div class="flex gap-2 mt-1">
+                                        <p class="text-sm text-yellow-400" th:text="${productInfo.getCost()}"></p>
+                                        <i class="fa-solid fa-coins fa-sm mt-2" style="color: #eac02a;"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col flex-grow mx-3 w-24">
+                                <h1 class="text-sm" th:text="'잔여 수량 : ' + ${counts.get(productInfo.id)}"></h1>
+                            </div>
+
+                            <div class="flex flex-grow-0 items-center mr-3">
+                                <div class="flex flex-col gap-3">
+                                    <button class="btn btn-sm btn-success"
+                                            th:if="${counts.get(productInfo.id)} == 0" disabled>품절상태
+                                    </button>
+                                    <a th:href="|/product/buy/${productInfo.id}|" class="btn btn-sm btn-success"
+                                            th:if="${counts.get(productInfo.id)} != 0">구매하기
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex w-full">
+                            <div class="divider mt-2 w-full"></div>
+                        </div>
+                    </div>
                 </div>
-
-                <div>
-                    <h1 th:id="name + ${info.id}" th:text="${info.name}"></h1>
-                    <h1 th:id="cost + ${info.id}" th:text="${info.cost}"></h1>
-                    <h1 th:text="'보유 수량 : ' + ${counts.get(info.id)}"></h1>
-
-                    <button class="tooltip btn btn-sm btn-success" data-tip="수량이 모자라요!" th:if="${counts.get(info.id)} == 0" disabled>구매하기</button>
-                    <button th:onclick="buy([[${info.id}]])" class="btn btn-sm btn-success" th:if="${counts.get(info.id)} != 0">구매하기</button>
-                </div>
-
             </div>
         </div>
     </main>
-
-    <script>
-
-        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
-
-        //FIXME : REST API로 하기 보다는 수량이 바로 고쳐질 수 있게 일반 호출이 나을 것 같음.
-        function buy(infoId) {
-
-            console.log(infoId);
-
-            var name = document.getElementById('name' + infoId).textContent;
-            var cost = document.getElementById('cost' + infoId).textContent;
-
-            var tryBuy = confirm(name + "를 " + cost + '코인에 구매하시겠습니까?');
-
-            if(tryBuy) {
-
-                const requestData = {
-                    id: infoId,
-                    _csrf: csrfToken
-                };
-
-                $.ajax({
-                    url: "/product/buy",
-                    type: "POST",
-                    data: requestData,
-                    success: function (data) {
-                        const response = data;
-
-                        if(response.resultCode.startsWith("F")) {
-                            toastWarning(response.msg);
-                        } else {
-                            toastNotice(response.msg);
-                        }
-
-                        window.location.href = "/product/store";
-                    }
-                })
-            } else {
-                toastWarning("구매가 취소되었습니다.");
-            }
-        }
-    </script>
 </th:block>
 </body>
 </html>
