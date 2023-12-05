@@ -5,10 +5,9 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
-import com.knj.mirou.boundedContext.inventory.entity.Inventory;
+import com.knj.mirou.boundedContext.inventory.model.entity.Inventory;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
-import com.knj.mirou.boundedContext.product.model.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -69,12 +67,8 @@ public class MemberController {
         Member member = rq.getMember();
 
         List<Inventory> inventories = member.getInventory();
-        List<Product> products = new ArrayList<>();
-        for(Inventory inventory : inventories) {
-            products.add(inventory.getProduct());
-        }
 
-        model.addAttribute("products", products);
+        model.addAttribute("inventories", inventories);
 
         return "view/member/inventory";
     }

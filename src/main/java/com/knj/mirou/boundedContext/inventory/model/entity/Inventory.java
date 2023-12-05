@@ -1,9 +1,12 @@
-package com.knj.mirou.boundedContext.inventory.entity;
+package com.knj.mirou.boundedContext.inventory.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
+import com.knj.mirou.boundedContext.inventory.model.enums.InventoryStatus;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +32,10 @@ public class Inventory extends BaseEntity {
 
     private LocalDate expDate;
 
+    @Enumerated(EnumType.STRING)
+    private InventoryStatus status;
+
+    private void usingProduct() {
+        this.status = InventoryStatus.AFTER_USED;
+    }
 }

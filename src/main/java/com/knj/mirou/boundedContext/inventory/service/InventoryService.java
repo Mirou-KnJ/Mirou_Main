@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.inventory.service;
 
-import com.knj.mirou.boundedContext.inventory.entity.Inventory;
+import com.knj.mirou.boundedContext.inventory.model.entity.Inventory;
+import com.knj.mirou.boundedContext.inventory.model.enums.InventoryStatus;
 import com.knj.mirou.boundedContext.inventory.repository.InventoryRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
@@ -25,9 +26,13 @@ public class InventoryService {
 
         LocalDate expDate = LocalDate.now().plusDays(90);
 
-        Inventory newItem = new Inventory(member, product, expDate);
+        Inventory inventory = Inventory.builder()
+                .owner(member)
+                .product(product)
+                .expDate(expDate)
+                .status(InventoryStatus.BEFORE_USED)
+                .build();
 
-        inventoryRepository.save(newItem);
+        inventoryRepository.save(inventory);
     }
-
 }
