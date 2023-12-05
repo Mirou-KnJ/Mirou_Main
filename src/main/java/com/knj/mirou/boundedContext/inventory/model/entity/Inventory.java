@@ -35,7 +35,7 @@ public class Inventory extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private InventoryStatus status;
 
-    private void usingProduct() {
+    public void usingProduct() {
         this.status = InventoryStatus.AFTER_USED;
     }
 }
