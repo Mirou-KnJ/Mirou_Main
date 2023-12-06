@@ -13,7 +13,7 @@
 
             <div class="flex flex-col">
 
-                <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
+                <h1 class="flex justify-center my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
                 <img th:if="${challengeImg}" class="rounded-lg" th:src="${challengeImg}" alt="challengeImg">
 
                 <div class="flex w-full items-center justify-center mt-3">
@@ -65,7 +65,7 @@
 
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                    <div class="flex justify-center w-full">
+                    <div class="flex justify-center w-full mt-6">
                         <button class="btn btn-outline btn-accent" type="submit">인증 완료</button>
                     </div>
                 </form>
