@@ -76,12 +76,23 @@ public class ProductService {
         return productRepository.countByInfoAndStatus(info, status);
     }
 
-    public List<Integer> getInfoCountList(List<ProductInfo> productInfos) {
+    public List<Integer> getRegisteredCounts(List<ProductInfo> productInfos) {
 
         List<Integer> counts = new ArrayList<>();
 
         for(ProductInfo info : productInfos) {
             counts.add(getCountByInfoAndStatus(info, ProductStatus.BEFORE_SALE));
+        }
+
+        return counts;
+    }
+
+    public List<Integer> getPossessionCounts(List<ProductInfo> productInfos) {
+
+        List<Integer> counts = new ArrayList<>();
+
+        for(ProductInfo info : productInfos) {
+            counts.add(getCountByInfoAndStatus(info, ProductStatus.SALE));
         }
 
         return counts;
