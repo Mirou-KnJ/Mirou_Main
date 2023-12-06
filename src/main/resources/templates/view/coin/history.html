@@ -12,7 +12,7 @@
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
             <div class="flex justify-center items-center">
-                <div class="flex rounded-lg bg-purple-200 w-full py-1 px-2">
+                <div class="flex rounded-lg bg-purple-200 items-center justify-center py-1 px-2">
                     <div class="flex flex-col justify-center items-center mx-3 my-2">
                         <p class="text-sm text-gray-500">보유 코인</p>
                         <p class="text-md" th:text="${#numbers.formatInteger(memberCoin.currentCoin, 1, 'COMMA')}"></p>
@@ -58,13 +58,13 @@
                             <div th:if="${history.changeType.changeType.equals('적립')}">
                                 <i class="fa-solid fa-plus fa-lg" style="color: #246deb;"></i>
                                 <span class="text-blue-300"
-                                      th:text="${#numbers.formatInteger(history.changedCoin, 1, 'COMMA') + ' 코인'}"></span>
+                                      th:text="${#numbers.formatInteger(history.changedCoin, 1, 'COMMA') + ' C'}"></span>
                             </div>
 
                             <div th:if="${history.changeType.changeType.equals('사용')}">
                                 <i class="fa-solid fa-minus fa-lg" style="color: #b53030;"></i>
                                 <span class="text-red-300"
-                                      th:text="${#numbers.formatInteger(history.changedCoin, 1, 'COMMA') + ' 코인'}"></span>
+                                      th:text="${#numbers.formatInteger(history.changedCoin, 1, 'COMMA') + ' C'}"></span>
                             </div>
                         </div>
                     </div>
