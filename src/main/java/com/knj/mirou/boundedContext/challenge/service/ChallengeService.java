@@ -102,10 +102,13 @@ public class ChallengeService {
     }
 
     public List<Challenge> getMyChallenges(Member member) {
-        return challengeMemberService.getInProgressChallenges(member);
+
+        List<Challenge> inProgressChallenges = challengeMemberService.getInProgressChallenges(member);
+
+        return inProgressChallenges;
     }
 
-    public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myChallenges, String tag) {
+    public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myProgressChallenges, String tag) {
 
         List<Challenge> openedChallenges;
 
@@ -114,6 +117,8 @@ public class ChallengeService {
         } else {
             openedChallenges = getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
         }
+
+        List<Challenge> myChallenges = new ArrayList<>(myProgressChallenges);
 
         List<Challenge> myCompletedChallenges = getMyCompletedChallenges(member);
         if(!myChallenges.isEmpty()) {
