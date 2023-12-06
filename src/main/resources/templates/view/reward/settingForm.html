@@ -1,12 +1,15 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>리워드 세팅</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
             <div class="flex flex-col mb-10">
                 <h1 class="text-lg" th:text="${challenge.name} + '에 대한 리워드 설정입니다.'"></h1>
 
@@ -19,20 +22,23 @@
                                 <label class="flex justify-center label">
                                     <span class="label-text">보상 회차 입력</span>
                                 </label>
-                                <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" name="round"/>
+                                <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs"
+                                       name="round"/>
                             </div>
 
                             <div class="flex w-full justify-center items-center">
                                 <div class="form-control">
                                     <label class="label cursor-pointer">
                                         <span class="label-text">코인</span>
-                                        <input type="radio" name="rewardType" value="COIN" class="radio checked:bg-yellow-500" checked/>
+                                        <input type="radio" name="rewardType" value="COIN"
+                                               class="radio checked:bg-yellow-500" checked/>
                                     </label>
                                 </div>
                                 <div class="form-control">
                                     <label class="label cursor-pointer">
                                         <span class="label-text">상품</span>
-                                        <input type="radio" name="rewardType" value="PRODUCT" class="radio checked:bg-blue-500 disabled"/>
+                                        <input type="radio" name="rewardType" value="PRODUCT"
+                                               class="radio checked:bg-blue-500 disabled"/>
                                     </label>
                                 </div>
                             </div>
@@ -49,7 +55,7 @@
                             <span>500</span>
                         </div>
 
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         <div class="flex justify-center w-full mt-5 gap-5">
                             <a href="/member/admin" class="btn btn-ghost btn-outline">돌아가기</a>
@@ -81,6 +87,7 @@
                 </div>
             </div>
         </div>
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 </th:block>
 </body>

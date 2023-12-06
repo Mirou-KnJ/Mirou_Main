@@ -1,5 +1,5 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>위치 기반 인증</title>
 
@@ -9,9 +9,11 @@
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
+    <main class="flex justify-center w-full">
 
-        <div class="flex flex-col justify-center w-full mx-auto min-h-screen py-20 navbar bg-base-100">
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
             <div class="flex flex-col">
 
                 <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
@@ -85,7 +87,7 @@
                         <input type="text" class="input input-bordered" id="contents" name="contents" readonly/>
                     </div>
 
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                     <div class="flex w-full justify-center items-center">
                         <button class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
@@ -93,8 +95,8 @@
 
                 </form>
             </div>
-
         </div>
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 
     <script>

@@ -1,12 +1,15 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>Coin History</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
             <div class="flex justify-center items-center">
                 <div class="flex rounded-lg bg-purple-200 w-full py-1 px-2">
@@ -42,7 +45,8 @@
 
                     <div class="flex w-full">
                         <div class="flex flex-grow-0 items-center">
-                            <img class="w-12 h-12 card rounded-full mx-5" th:src="${history.imgUrl}" alt="CoinHistoryImg">
+                            <img class="w-12 h-12 card rounded-full mx-5" th:src="${history.imgUrl}"
+                                 alt="CoinHistoryImg">
                         </div>
 
                         <div class="flex flex-col flex-grow mt-2">
@@ -73,6 +77,8 @@
             </div>
 
         </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 </th:block>
 </body>

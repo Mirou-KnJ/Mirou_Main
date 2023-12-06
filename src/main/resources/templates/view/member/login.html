@@ -1,12 +1,15 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>로그인 페이지</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center w-1/2 mx-auto py-20 navbar bg-base-100">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
             <div class="flex flex-col flex-grow justify-center items-center w-full min-h-screen">
                 <div class="flex justify-center items-center w-full mb-10">
@@ -25,8 +28,8 @@
                     </a>
                 </div>
             </div>
-
         </div>
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 </th:block>
 </body>

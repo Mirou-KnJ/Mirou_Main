@@ -1,12 +1,15 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>상점 페이지</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center mx-auto py-20 bg-base-100">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
             <div class="flex justify-center my-3">
                 <h1 class="text-2xl">상점</h1>
@@ -61,13 +64,14 @@
                 </div>
             </div>
         </div>
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 
     <script>
         function tryBuy(productId) {
             var buyRs = confirm("정말 구매하시겠습니까?");
 
-            if(buyRs) {
+            if (buyRs) {
                 window.location.href = "/product/buy/" + productId;
             } else {
                 toastWarning("구매가 취소되었습니다.");

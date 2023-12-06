@@ -1,12 +1,15 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate" xmlns="http://www.w3.org/1999/html">
+      layout:decorate="~{common/layout/defaultLayout}" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>챌린지 생성 페이지</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center mx-auto py-20 navbar bg-base-100">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
             <form class="flex flex-col" method="post" action="/challenge/create" enctype="multipart/form-data">
                 <div class="flex justify-center form-control w-full">
                     <label class="label">
@@ -111,7 +114,7 @@
                         <select class="select select-bordered max-w-xs" name="placeCategory">
                             <option value="NONE" selected>없음</option>
                             <option th:each="category : ${categories}"
-                            th:value="${category.name}" th:text="${category.placeName}"></option>
+                                    th:value="${category.name}" th:text="${category.placeName}"></option>
                         </select>
                     </div>
                 </div>
@@ -145,13 +148,15 @@
                               name="precaution"></textarea>
                 </div>
 
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                 <div class="mt-6">
                     <button class="btn btn-success" type="submit">챌린지 생성하기</button>
                 </div>
             </form>
         </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
 
         <script th:inline="javascript">
 
@@ -165,7 +170,7 @@
                 if (selectedValue === 'PHOTO') {
                     labelDiv.style.display = 'block';
                     getCategoryDiv.style.display = 'none';
-                } else if(selectedValue === 'LOCATION') {
+                } else if (selectedValue === 'LOCATION') {
                     getCategoryDiv.style.display = 'block';
                     labelDiv.style.display = 'none';
                     getLabelDiv.style.display = 'none';
