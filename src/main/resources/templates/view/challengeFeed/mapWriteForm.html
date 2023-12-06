@@ -16,7 +16,7 @@
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
             <div class="flex flex-col">
 
-                <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
+                <h1 class="flex justify-center my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
                 <img th:if="${challengeImg}" class="rounded-lg" th:src="${challengeImg}" alt="challengeImg">
 
                 <div class="flex w-full items-center justify-center mt-3">
@@ -47,15 +47,15 @@
                 </div>
             </div>
 
-            <div id="mapDiv" class="flex flex-col mt-5">
-                <div id="map" class="w-96 h-96"></div>
+            <div id="mapDiv" class="w-full flex flex-col mt-5 items-center">
+                <div id="map" class="flex justify-center w-96 h-96"></div>
 
                 <div class="flex mt-5">
                     <button th:onclick="searchPlace([[${category.code}]])" class="btn btn-neutral"
                             th:text="'주변 ' + ${category.placeName} + ' 조회하기'"></button>
                 </div>
 
-                <div class="w-full">
+                <div class="w-full mb-10">
                     <table id="menu_wrap" class="mt-5 table table-zebra">
                         <thead>
                         <tr>
@@ -71,7 +71,7 @@
             </div>
 
             <div>
-                <form id="submitForm" class="hidden flex flex-col justify-center w-full" enctype="multipart/form-data"
+                <form id="feedForm" class="hidden flex flex-col justify-center w-full" enctype="multipart/form-data"
                       method="POST" th:action="|/feed/write/${challenge.id}|">
 
                     <div class="flex flex-col w-full">
@@ -90,7 +90,7 @@
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                     <div class="flex w-full justify-center items-center">
-                        <button class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
+                        <button id="submitBtn" onclick="submitImg()" class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
                     </div>
 
                 </form>
@@ -113,7 +113,6 @@
         var infowindow = new kakao.maps.InfoWindow({zIndex: 1});
         var searchFlag = false;
 
-        //FIXME: 배포시 주석 해제
         getCurPosition();
         map.setDraggable(false);
         map.setZoomable(false);
@@ -280,16 +279,50 @@
             if (select) {
 
                 var mapDiv = document.getElementById("mapDiv");
-                var submitForm = document.getElementById("submitForm");
+                var feedForm = document.getElementById("feedForm");
                 var inputPlace = document.getElementById("contents");
 
                 mapDiv.style.display = 'none';
-                submitForm.style.display = 'block';
+                feedForm.style.display = 'block';
                 inputPlace.value = place;
 
             } else {
                 toastNotice("인증이 취소되었습니다.");
             }
+        }
+
+        $("#img").on("change", function (event) {
+
+            var file = event.target.files[0];
+
+            if (!isImageFile(file)) {
+                toastWarning("이미지 파일만 업로드 가능합니다");
+                $("#preview").attr("src", null);
+                $("#img").val("");
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#preview").attr("src", e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+        });
+
+        function isImageFile(file) {
+
+            var ext = file.name.split(".").pop().toLowerCase();
+
+            return ($.inArray(ext, ["jpg", "jpeg", "gif", "png"]) === -1) ? false : true;
+        }
+
+        function submitImg() {
+            let submitBtn = document.getElementById("submitBtn");
+            submitBtn.disabled = true;
+
+            let form = document.getElementById("feedForm");
+            form.submit();
         }
     </script>
 </th:block>

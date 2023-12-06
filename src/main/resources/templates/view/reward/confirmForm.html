@@ -2,6 +2,48 @@
       layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>리워드 세팅 완료 폼</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+            <div class="flex w-full flex-col justify-center items-center">
+
+                <h1 th:text="${challenge.name} + '에 대한 세팅 내용입니다.'"></h1>
+
+                <div class="divider"></div>
+
+                <div>
+                    <h1 th:text="'내용 : ' + ${challenge.contents}"></h1>
+                    <h1 th:text="'진행 일 수 : ' + ${challenge.period}"></h1>
+                </div>
+
+                <div class="flex flex-col justify-center w-full mt-5" th:unless="${#lists.isEmpty(challenge.publicReward)}">
+                    <h1 class="text-lg flex justify-center">현재 보상 상황</h1>
+                    <div class="flex flex-col justify-center items-center">
+                        <div class="flex gap-10">
+                            <p>회차</p>
+                            <p>보상 종류</p>
+                            <p>보상 내용</p>
+                        </div>
+                        <div th:each="reward, idx : ${challenge.publicReward}" class="flex gap-20">
+                            <p th:id="'round'+${idx.index}" th:text="${reward.round}"></p>
+                            <p th:id="'type'+${idx.index}" th:text="${reward.rewardType}"></p>
+                            <p th:id="'reward'+${idx.index}" th:text="${reward.reward}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gap-5 mt-5">
+                    <a href="/member/admin" class="btn btn-sm btn-ghost btn-outline">돌아가기</a>
+                    <button id="confirm" class="btn btn-sm btn-success" onclick="checkSettings()">세팅 완료</button>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
 
     <script th:inline="javascript">
 
@@ -53,48 +95,6 @@
             }
         }
     </script>
-</head>
-<body>
-<th:block layout:fragment="Content">
-    <main class="flex justify-center w-full">
-
-        <div class="flex flex-grow bg-purple-50"></div>
-
-        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
-            <div class="flex w-full flex-col justify-center">
-
-                <h1 th:text="${challenge.name} + '에 대한 세팅 내용입니다.'"></h1>
-
-                <div class="divider"></div>
-
-                <div>
-                    <h1 th:text="'내용 : ' + ${challenge.contents}"></h1>
-                    <h1 th:text="'진행 일 수 : ' + ${challenge.period}"></h1>
-                </div>
-
-                <div class="flex flex-col justify-center w-full" th:unless="${#lists.isEmpty(challenge.publicReward)}">
-                    <h1 class="text-lg flex justify-center">현재 보상 상황</h1>
-                    <div class="flex flex-col justify-center items-center">
-                        <div class="flex gap-10">
-                            <p>회차</p>
-                            <p>보상 종류</p>
-                            <p>보상 내용</p>
-                        </div>
-                        <div th:each="reward, idx : ${challenge.publicReward}" class="flex gap-20">
-                            <p th:id="'round'+${idx.index}" th:text="${reward.round}"></p>
-                            <p th:id="'type'+${idx.index}" th:text="${reward.rewardType}"></p>
-                            <p th:id="'reward'+${idx.index}" th:text="${reward.reward}"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="gap-5">
-                    <a href="/member/admin" class="btn btn-sm btn-ghost btn-outline">돌아가기</a>
-                    <button id="confirm" class="btn btn-sm btn-success" onclick="checkSettings()">세팅 완료</button>
-                </div>
-            </div>
-        </div>
-        <div class="flex flex-grow bg-purple-50"></div>
-    </main>
 </th:block>
 </body>
 </html>

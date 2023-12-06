@@ -11,18 +11,17 @@
 
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
-            <div id="my" class=" w-full flex justify-center items-center">
+            <div id="my" class="flex justify-center items-center">
                 <span class="text-3xl font-extrabold text-black mb-5">마이페이지</span>
             </div>
 
-            <!-- FIXME absolute 재설정 필요 -->
-            <div class="avatar">
-                <div class="w-24 mask mask-squircle">
+            <div class="flex avatar justify-center">
+                <div class="flex justify-center items-center w-24 mask mask-squircle">
                     <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"/>
                 </div>
             </div>
-            <br>
-            <button class="btn btn-sm rounded-full mb-5">내 정보 수정</button>
+
+            <button class="btn btn-sm rounded-full mb-5 mt-5">내 정보 수정</button>
 
             <div class="flex shadow-lg border rounded mt-15">
                 <table class="table table-lg">
@@ -57,7 +56,7 @@
             <div class="flex flex-col justify-center items-center mt-10">
 
                 <div class="flex items-center mb-5">
-                    <div class="flex stats shadow-lg border rounded">
+                    <div class="flex stats shadow-lg border rounded w-[28rem] mx-auto">
                         <div>
                             <a href="#" class="stat">
                                 <div class="stat-title mb-1">아이템 보관함</div>
@@ -84,8 +83,8 @@
                 </div>
 
                 <div class="flex items-center mb-5">
-                    <div class="flex stats shadow-lg border rounded">
-                        <div>
+                    <div class="flex stats shadow-lg border rounded w-[28rem]">
+                        <div class="mx-auto">
                             <a href="#" class="stat">
                                 <div class="stat-title mb-1">진행중인 챌린지</div>
                                 <div class="stat-figure mt-5">
@@ -96,7 +95,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div>
+                        <div class="mx-auto">
                             <a href="#" class="stat">
                                 <div class="stat-title mb-1">완료한 챌린지</div>
                                 <div class="stat-figure mt-5">
@@ -111,7 +110,7 @@
                 </div>
 
                 <div class="flex items-center mb-5">
-                    <div class="flex stats shadow-lg border rounded">
+                    <div class="flex stats shadow-lg border rounded w-[28rem] mx-auto">
                         <div>
                             <a href="/point/history" class="stat">
                                 <div class="stat-title mb-1">나의 일상지원금</div>

@@ -1,6 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="HeaderFragment">
-    <header class="flex w-full fixed top-0 ">
+    <header class="flex w-full fixed top-0 z-50">
         <nav class="flex justify-center mx-auto navbar bg-base-100 border-b-2">
             <div class="navbar-start">
                 <div class="dropdown">
@@ -20,9 +20,13 @@
                 </div>
             </div>
             <div class="navbar-center">
-                <a class="btn btn-ghost normal-case text-xl text-purple-800" th:href="@{/}">Mirou</a>
+                <a class="btn btn-ghost normal-case text-xl font-extrabold text-purple-800" th:href="@{/}">Mirou</a>
             </div>
             <div class="navbar-end">
+
+                <div class="mr-2" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a href="/member/admin" class="text-sm badge badge-outline badge-neutral py-1">관리자</a>
+                </div>
 
                 <!-- login or myPage -->
                 <a sec:authorize="!isAuthenticated()" href="/member/login" class="btn btn-ghost btn-circle">

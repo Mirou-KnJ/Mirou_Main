@@ -7,9 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ChallengeTag {
 
-    ENVIRONMENT("환경 챌린지"),
-    ROUTINE("습관 챌린지"),
-    ETC("기타");
+    ENVIRONMENT("환경 챌린지", "환경"),
+    ROUTINE("습관 챌린지", "습관"),
+    ETC("기타", "기타");
 
     public final String challengeTag;
+    private final String frontStr;
 }
