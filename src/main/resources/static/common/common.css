@@ -1,12 +1,12 @@
 @font-face {
-    font-family: 'JalnanGothic';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
-    font-weight: normal;
+    font-family: 'NPSfontBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontBold.woff2') format('woff2');
+    font-weight: 800;
     font-style: normal;
 }
 
 html > body {
-    font-family: 'JalnanGothic';
+    font-family: 'NPSfontBold';
     text-underline-position: under;
     word-break: keep-all;
 }
