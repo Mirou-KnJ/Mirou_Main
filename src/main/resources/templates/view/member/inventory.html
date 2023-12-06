@@ -31,9 +31,15 @@
                                          th:src="${inventory.product.info.imgUrl}"
                                          alt="productImg">
                                 </div>
-                                <div class="mt-2">
+
+                                <div class="mt-2" th:if="${inventory.status.getStatus().equals('사용 전')}">
                                     <p class="text-xs" th:text="'<'+ ${inventory.product.info.brandName} + '>'"></p>
                                     <p class="text-sm" th:text="${inventory.product.info.name}"></p>
+                                </div>
+
+                                <div class="mt-2" th:if="${inventory.status.getStatus().equals('사용 후')}">
+                                    <p class="text-xs line-through text-gray-300" th:text="'<'+ ${inventory.product.info.brandName} + '>'"></p>
+                                    <p class="text-sm line-through text-gray-300" th:text="${inventory.product.info.name}"></p>
                                 </div>
                             </div>
 
