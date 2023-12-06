@@ -35,7 +35,7 @@
 
                 <img class="rounded-lg" th:src="${challengeImg}" alt="challengeImg">
 
-                <h1 class="my-3 text-2xl font-bold" th:text="${detailDTO.challenge.name}"></h1>
+                <h1 class="flex justify-center my-3 text-2xl font-bold" th:text="${detailDTO.challenge.name}"></h1>
 
                 <div class="flex justify-center inline-block">
                     <i class="mt-2 flex fa-solid fa-star fa-lg" style="color: #f9c406;"></i>
@@ -57,20 +57,21 @@
                                    th:if="${detailDTO.challenge.method.getMethod().equals('인증샷 인증')}"></i>
                                 <i class="fa-solid fa-font fa-lg mr-2"
                                    th:if="${detailDTO.challenge.method.getMethod().equals('텍스트 인증')}"></i>
+                                <i class="fa-solid fa-map-location-dot fa-lg mr-2"
+                                   th:if="${detailDTO.challenge.method.getMethod().equals('위치 기반 인증')}"></i>
                                 <i class="fa-solid fa-star-of-life fa-lg mr-2"
                                    th:if="${detailDTO.challenge.method.getMethod().equals('기타')}"></i>
 
                                 <p class="md:text-xs lg:text-sm"
-                                   th:text="${detailDTO.challenge.method.getMethod()}"></p>
+                                   th:text="${detailDTO.challenge.method.frontStr}"></p>
                             </div>
                             <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
                                  th:data-tip="'참여 당일부터 ' + ${detailDTO.challenge.period} + '일 간 진행되요!'">
                                 <i class="fa-regular fa-calendar fa-lg mr-2"></i>
-                                <p class="md:text-xs lg:text-sm" th:text="${detailDTO.challenge.period} + '일 챌린지'"></p>
+                                <p class="md:text-xs lg:text-sm" th:text="${detailDTO.challenge.period} + '일'"></p>
                             </div>
 
                             <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
-
                                 <i class="fa-solid fa-person-walking fa-lg mr-2"
                                    th:if="${detailDTO.challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
                                 <i class="fa-solid fa-tree fa-lg mr-2"
@@ -79,7 +80,7 @@
                                    th:if="${detailDTO.challenge.tag.getChallengeTag().equals('기타')}"></i>
 
                                 <p class="md:text-xs lg:text-sm"
-                                   th:text="${detailDTO.challenge.tag.getChallengeTag()}"></p>
+                                   th:text="${detailDTO.challenge.tag.frontStr}"></p>
                             </div>
                         </div>
                     </div>
@@ -158,7 +159,7 @@
                             </div>
                         </div>
 
-                        <div class="w-1/2 h-full">
+                        <div class="w-1/2 h-full flex justify-center">
                             <h1 th:text="'종료까지 ' + ${detailDTO.getLastDayNum()} + '일 남았습니다.'"></h1>
                         </div>
                     </div>
