@@ -45,7 +45,7 @@
             </div>
 
             <div class="flex flex-col justify-center">
-                <form class="flex flex-col justify-center w-full" enctype="multipart/form-data"
+                <form id="feedForm" class="flex flex-col justify-center w-full" enctype="multipart/form-data"
                       method="POST" th:action="|/feed/write/${challenge.id}|">
 
                     <div class="flex flex-col w-full">
@@ -66,7 +66,7 @@
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                     <div class="flex justify-center w-full mt-6">
-                        <button class="btn btn-outline btn-accent" type="submit">인증 완료</button>
+                        <button id="submitBtn" onclick="submitImg()" class="btn btn-outline btn-accent" type="submit">인증 완료</button>
                     </div>
                 </form>
             </div>
@@ -75,6 +75,15 @@
     </main>
 
     <script>
+
+        function submitImg() {
+            let submitBtn = document.getElementById("submitBtn");
+            submitBtn.disabled = true;
+
+            let form = document.getElementById("feedForm");
+            form.submit();
+        }
+
         $("#img").on("change", function (event) {
 
             var file = event.target.files[0];

@@ -71,7 +71,7 @@
             </div>
 
             <div>
-                <form id="submitForm" class="hidden flex flex-col justify-center w-full" enctype="multipart/form-data"
+                <form id="feedForm" class="hidden flex flex-col justify-center w-full" enctype="multipart/form-data"
                       method="POST" th:action="|/feed/write/${challenge.id}|">
 
                     <div class="flex flex-col w-full">
@@ -90,7 +90,7 @@
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                     <div class="flex w-full justify-center items-center">
-                        <button class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
+                        <button id="submitBtn" onclick="submitImg()" class="mt-10 btn btn-outline btn-accent" type="submit">인증 완료</button>
                     </div>
 
                 </form>
@@ -279,11 +279,11 @@
             if (select) {
 
                 var mapDiv = document.getElementById("mapDiv");
-                var submitForm = document.getElementById("submitForm");
+                var feedForm = document.getElementById("feedForm");
                 var inputPlace = document.getElementById("contents");
 
                 mapDiv.style.display = 'none';
-                submitForm.style.display = 'block';
+                feedForm.style.display = 'block';
                 inputPlace.value = place;
 
             } else {
@@ -315,6 +315,14 @@
             var ext = file.name.split(".").pop().toLowerCase();
 
             return ($.inArray(ext, ["jpg", "jpeg", "gif", "png"]) === -1) ? false : true;
+        }
+
+        function submitImg() {
+            let submitBtn = document.getElementById("submitBtn");
+            submitBtn.disabled = true;
+
+            let form = document.getElementById("feedForm");
+            form.submit();
         }
     </script>
 </th:block>
