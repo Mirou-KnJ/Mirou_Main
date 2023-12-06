@@ -11,6 +11,7 @@ import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
@@ -101,11 +102,19 @@ public class ChallengeService {
         return RsData.of("S-1", "디테일 정보가 성공적으로 수집되었습니다.", detailDTO);
     }
 
-    public List<Challenge> getMyChallenges(Member member) {
+    public List<ChallengeMember> getMyChallengeInfos(Member member) {
+        return challengeMemberService.getInProgressInfos(member);
+    }
 
-        List<Challenge> inProgressChallenges = challengeMemberService.getInProgressChallenges(member);
+    public List<Challenge >getChallengesByInfos(List<ChallengeMember> infos) {
 
-        return inProgressChallenges;
+        List<Challenge> challenges = new ArrayList<>();
+
+        for(ChallengeMember info : infos) {
+            challenges.add(info.getLinkedChallenge());
+        }
+
+        return challenges;
     }
 
     public List<Challenge> getNotMineChallenges(Member member, List<Challenge> myProgressChallenges, String tag) {

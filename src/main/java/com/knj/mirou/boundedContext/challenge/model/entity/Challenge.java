@@ -71,4 +71,14 @@ public class Challenge extends BaseEntity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd(E) 마감");
         return formatter.format(joinDeadline);
     }
+
+    public int getRewardSum() {
+
+        int sum = 0;
+        for(PublicReward reward : publicReward) {
+            sum += Integer.parseInt(reward.getReward());
+        }
+
+        return sum;
+    }
 }

@@ -28,10 +28,12 @@ public class ProductController {
     public String codeForm(Model model) {
 
         List<ProductInfo> productInfos = productService.getAllProductInfo();
-        List<Integer> counts = productService.getInfoCountList(productInfos);
+        List<Integer> registeredCounts = productService.getRegisteredCounts(productInfos);
+        List<Integer> possessionCounts = productService.getPossessionCounts(productInfos);
 
         model.addAttribute("productInfos", productInfos);
-        model.addAttribute("counts", counts);
+        model.addAttribute("possessionCounts", possessionCounts);
+        model.addAttribute("registeredCounts", registeredCounts);
 
         return "view/product/codeAddForm";
     }
