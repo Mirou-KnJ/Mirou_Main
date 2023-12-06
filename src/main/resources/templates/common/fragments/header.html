@@ -24,6 +24,10 @@
             </div>
             <div class="navbar-end">
 
+                <div class="mr-2" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a href="/member/admin" class="text-sm badge badge-outline badge-neutral py-1">관리자</a>
+                </div>
+
                 <!-- login or myPage -->
                 <a sec:authorize="!isAuthenticated()" href="/member/login" class="btn btn-ghost btn-circle">
                     <i class="fa-solid fa-key"></i>
