@@ -1,5 +1,5 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>인증글 보기</title>
 </head>
@@ -123,7 +123,7 @@
             const csrfToken = /*[[${_csrf.token}]]*/'';
             const contents = prompt("신고 사유를 작성해 주세요.");
 
-            if(contents === null) {
+            if (contents === null) {
                 toastNotice("신고가 취소되었습니다.")
                 return;
             }
@@ -144,7 +144,7 @@
                     const code = response.resultCode;
                     const msg = response.msg;
 
-                    if(code.toString().startsWith('F')) {
+                    if (code.toString().startsWith('F')) {
                         toastWarning(code + ': ' + msg);
                     } else {
                         toastNotice(code + ': ' + msg);

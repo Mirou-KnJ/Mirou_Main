@@ -1,5 +1,5 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>상점 페이지</title>
 </head>
@@ -67,7 +67,7 @@
         function tryBuy(productId) {
             var buyRs = confirm("정말 구매하시겠습니까?");
 
-            if(buyRs) {
+            if (buyRs) {
                 window.location.href = "/product/buy/" + productId;
             } else {
                 toastWarning("구매가 취소되었습니다.");

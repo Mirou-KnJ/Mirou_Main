@@ -1,5 +1,5 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}" data-theme="corporate">
+      layout:decorate="~{common/layout/defaultLayout}">
 <head>
     <title>리워드 세팅 완료 폼</title>
 
@@ -26,7 +26,7 @@
 
             if (result) {
                 let challengeId = /*[[${challenge.id}]]*/'';
-                let url = '/reward/confirmSettings/'+challengeId;
+                let url = '/reward/confirmSettings/' + challengeId;
 
                 const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
                 const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
@@ -35,11 +35,11 @@
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
-                        [headerName] : tokenValue
+                        [headerName]: tokenValue
                     }
                 })
                     .then(response => {
-                        if(response.ok) {
+                        if (response.ok) {
                             window.location.href = "/member/admin";
                         } else {
                             console.log('Error:', response.status);
