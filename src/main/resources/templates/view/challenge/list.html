@@ -68,13 +68,9 @@
                         </div>
 
                         <div>
-                            <div class="flex justify-center items-center content-end">
-                                <div class="flex items-center">
-                                    <i class="fa-solid fa-money-bill-wave fa-lg mr-1" style="color: #3faa31;"></i>
-                                    <span class="text-sm" th:text="${myChallenge.joinCost}"></span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fa-solid fa-coins fa-lg mr-1 ml-2" style="color: #eac02a;"></i>
+                            <div class="flex content-end">
+                                <div class="flex justify-center items-center">
+                                    <i class="fa-solid fa-coins fa-lg mr-1" style="color: #eac02a;"></i>
                                     <span class="text-sm" th:text="${myChallenge.joinCost}"></span>
                                 </div>
                             </div>
@@ -113,9 +109,9 @@
                 <h1 class="text-2xl mt-10">참여가능한 챌린지가 없습니다.</h1>
             </div>
 
-            <div class="flex rounded-lg mt-3 flex-wrap grid lg:grid-cols-2 sm:grid-cols-1"
+            <div class="flex rounded-lg mt-3 flex-wrap grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1"
                  th:unless="${#lists.isEmpty(openedChallenges)}">
-                <a class="card card-side flex flex-row shadow-lg rounded-xl m-3 bg-purple-100 h-48"
+                <a class="card card-side flex flex-row shadow-lg rounded-xl m-3 bg-purple-100 w-68 h-48"
                    th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">
                     <figure class="ml-3">
                         <img class="card-img rounded-lg shadow-lg m-2"
@@ -135,11 +131,11 @@
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fa-solid fa-coins fa-lg mr-1 ml-2" style="color: #eac02a;"></i>
-                                    <span class="text-sm" th:text="${challenge.joinCost}"></span>
+                                    <span class="text-sm" th:text="${challenge.getRewardSum()}"></span>
                                 </div>
                             </div>
-                            <div class="flex mt-3">
-                                <i class="flex fa-solid fa-calendar-days fa-lg mr-2 mt-2" style="color: #6e95bf;"></i>
+                            <div class="flex mt-3 w-full">
+                                <i class="flex fa-solid fa-calendar-days fa-lg mr-1 mt-2" style="color: #6e95bf;"></i>
                                 <p class="text-sm" th:text="${challenge.getJoinDeadLineFormat()}"></p>
                             </div>
                             <div class="badge badge-sm badge-outline rounded-md mt-1 px-3 py-3 mt-2">
@@ -160,7 +156,7 @@
         <div class="flex flex-grow bg-purple-50"></div>
     </main>
 
-    <script>
+    <script th:inline="javascript">
 
         let href = window.location.href;
         let tag = href.split("list/")[1];
