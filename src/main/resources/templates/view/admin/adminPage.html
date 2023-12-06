@@ -5,9 +5,12 @@
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="mx-auto w-full py-20">
-            <div class="flex flex-col mx-auto justify-center">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 rounded-lg mx-10">
+            <div class="flex flex-col min-w-32rem justify-center">
                 <div th:if="${#lists.isEmpty(challengeList)}">
                     <p>챌린지가 생성되지 않았습니다!</p>
                 </div>
@@ -51,8 +54,9 @@
                     </table>
                 </div>
             </div>
-
         </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 </th:block>
 </body>

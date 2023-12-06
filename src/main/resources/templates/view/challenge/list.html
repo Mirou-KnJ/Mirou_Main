@@ -102,7 +102,7 @@
                 <h1 class="text-4xl mt-10">참여가능한 챌린지가 없습니다.</h1>
             </div>
 
-            <div class="flex rounded-lg overflow-hidden grid grid-cols-3"
+            <div class="flex rounded-lg overflow-hidden grid grid-cols-2"
                  th:unless="${#lists.isEmpty(openedChallenges)}">
                 <a class="card card-side flex flex-row shadow-lg border rounded m-3"
                    th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">

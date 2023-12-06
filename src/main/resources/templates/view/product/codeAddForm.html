@@ -5,8 +5,11 @@
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center mx-auto py-20 bg-base-100">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
             <div class="flex justify-center my-3 gap-3">
                 <h1 class="text-lg mt-1">등록된 상품 정보 리스트</h1>
@@ -30,7 +33,7 @@
                          th:unless="${#lists.isEmpty(productInfos)}" th:each="productInfo, index : ${productInfos}">
 
                         <div class="flex w-full mx-auto items-center py-3">
-                            <div class="flex flex-grow mt-2 w-60">
+                            <div class="flex flex-grow mt-2 w-3/6">
                                 <div>
                                     <img class="w-12 h-12 card rounded-full mx-5" th:src="${productInfo.imgUrl}"
                                          alt="productImg">
@@ -47,12 +50,12 @@
                                 </div>
                             </div>
 
-                            <div class="flex flex-col flex-grow mx-3 w-24">
+                            <div class="flex flex-col flex-grow mx-3 w-2/6">
                                 <h1 class="text-sm" th:text="'보유 수량 : ' + ${counts.get(index.index)}"></h1>
                                 <h1 class="text-sm" th:text="'등록 수량 : ' + ${counts.get(index.index)}"></h1>
                             </div>
 
-                            <div class="flex flex-grow-0 items-center mr-3">
+                            <div class="flex flex-grow-0 items-center mr-3 w-1/6">
                                 <div class="flex flex-col gap-3">
                                     <button class="btn btn-sm"
                                             th:onclick="saleStart([[${productInfo.name}]], [[${productInfo.id}]])">판매 시작
@@ -91,6 +94,8 @@
                 </div>
             </div>
         </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 
     <script>
