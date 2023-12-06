@@ -9,9 +9,11 @@
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
+    <main class="flex justify-center w-full">
 
-        <div class="flex flex-col justify-center w-full mx-auto min-h-screen py-20 navbar bg-base-100">
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
             <div class="flex flex-col">
 
                 <h1 class="my-3 text-2xl font-bold" th:text="${challenge.name}"></h1>
@@ -93,8 +95,8 @@
 
                 </form>
             </div>
-
         </div>
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 
     <script>

@@ -5,144 +5,146 @@
 </head>
 <body>
 <th:block layout:fragment="Content">
-    <main class="flex w-full">
-        <div class="flex flex-col justify-center w-full mx-auto py-20 navbar bg-base-100">
-            <div class="flex flex-col justify-center items-center w-full h-full mb-30">
+    <main class="flex justify-center w-full">
 
-                <div id="my" class=" w-full flex justify-center items-center">
-                    <span class="text-3xl font-extrabold text-black mb-5">마이페이지</span>
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+
+            <div id="my" class=" w-full flex justify-center items-center">
+                <span class="text-3xl font-extrabold text-black mb-5">마이페이지</span>
+            </div>
+
+            <!-- FIXME absolute 재설정 필요 -->
+            <div class="avatar">
+                <div class="w-24 mask mask-squircle">
+                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"/>
                 </div>
+            </div>
+            <br>
+            <button class="btn btn-sm rounded-full mb-5">내 정보 수정</button>
 
-                <!-- FIXME absolute 재설정 필요 -->
-                <div class="avatar">
-                    <div class="w-24 mask mask-squircle">
-                        <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"/>
-                    </div>
-                </div>
-                <br>
-                <button class="btn btn-sm rounded-full mb-5">내 정보 수정</button>
+            <div class="flex shadow-lg border rounded mt-15">
+                <table class="table table-lg">
+                    <tr>
+                        <td class="item-center">닉네임</td>
+                        <td class="item-right"><span th:text="${member.getNickname()}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>이름</td>
+                        <td>이름</td>
+                    </tr>
+                    <tr>
+                        <td>생년월일</td>
+                        <td>생년월일</td>
+                    </tr>
+                    <tr>
+                        <td>성별</td>
+                        <td>남</td>
+                    </tr>
+                    <tr>
+                        <td>휴대폰번호</td>
+                        <td>휴대폰번호</td>
+                    </tr>
+                    <tr>
+                        <td>이메일</td>
+                        <td>이메일</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="divider"></div>
 
-                <div class="flex shadow-lg border rounded mt-15">
-                    <table class="table table-lg">
-                        <tr>
-                            <td class="item-center">닉네임</td>
-                            <td class="item-right"><span th:text="${member.getNickname()}"></span></td>
-                        </tr>
-                        <tr>
-                            <td>이름</td>
-                            <td>이름</td>
-                        </tr>
-                        <tr>
-                            <td>생년월일</td>
-                            <td>생년월일</td>
-                        </tr>
-                        <tr>
-                            <td>성별</td>
-                            <td>남</td>
-                        </tr>
-                        <tr>
-                            <td>휴대폰번호</td>
-                            <td>휴대폰번호</td>
-                        </tr>
-                        <tr>
-                            <td>이메일</td>
-                            <td>이메일</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="divider"></div>
+            <div class="flex flex-col justify-center items-center mt-10">
 
-                <div class="flex flex-col justify-center items-center mt-10">
-
-                    <div class="flex items-center mb-5">
-                        <div class="flex stats shadow-lg border rounded">
-                            <div>
-                                <a href="#" class="stat">
-                                    <div class="stat-title mb-1">아이템 보관함</div>
-                                    <div class="stat-figure mt-5">
-                                        <i class="fa-solid fa-spinner inline-block fa-lg" style="color: #3faa31;"></i>
-                                    </div>
-                                    <div class="stat-value">
-                                        <p class="text-center" th:text="${inProgressNum} + '개'"></p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div>
-                                <a href="#" class="stat">
-                                    <div class="stat-title mb-1">사용한 아이템</div>
-                                    <div class="stat-figure mt-5">
-                                        <i class="fa-solid fa-check inline-block fa-lg" style="color: #eac02a;"></i>
-                                    </div>
-                                    <div class="stat-value text-accent">
-                                        <p class="text-center" th:text="${member.point.currentPoint}"></p>
-                                    </div>
-                                </a>
-                            </div>
+                <div class="flex items-center mb-5">
+                    <div class="flex stats shadow-lg border rounded">
+                        <div>
+                            <a href="#" class="stat">
+                                <div class="stat-title mb-1">아이템 보관함</div>
+                                <div class="stat-figure mt-5">
+                                    <i class="fa-solid fa-spinner inline-block fa-lg" style="color: #3faa31;"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <p class="text-center" th:text="${inProgressNum} + '개'"></p>
+                                </div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#" class="stat">
+                                <div class="stat-title mb-1">사용한 아이템</div>
+                                <div class="stat-figure mt-5">
+                                    <i class="fa-solid fa-check inline-block fa-lg" style="color: #eac02a;"></i>
+                                </div>
+                                <div class="stat-value text-accent">
+                                    <p class="text-center" th:text="${member.point.currentPoint}"></p>
+                                </div>
+                            </a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex items-center mb-5">
-                        <div class="flex stats shadow-lg border rounded">
-                            <div>
-                                <a href="#" class="stat">
-                                    <div class="stat-title mb-1">진행중인 챌린지</div>
-                                    <div class="stat-figure mt-5">
-                                        <i class="fa-solid fa-spinner inline-block fa-lg" style="color: #3faa31;"></i>
-                                    </div>
-                                    <div class="stat-value">
-                                        <p class="text-center" th:text="${inProgressNum} + '개'"></p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div>
-                                <a href="#" class="stat">
-                                    <div class="stat-title mb-1">완료한 챌린지</div>
-                                    <div class="stat-figure mt-5">
-                                        <i class="fa-solid fa-check inline-block fa-lg" style="color: #eac02a;"></i>
-                                    </div>
-                                    <div class="stat-value text-accent">
-                                        <p class="text-center" th:text="${endProgressNum} + '개'"></p>
-                                    </div>
-                                </a>
-                            </div>
+                <div class="flex items-center mb-5">
+                    <div class="flex stats shadow-lg border rounded">
+                        <div>
+                            <a href="#" class="stat">
+                                <div class="stat-title mb-1">진행중인 챌린지</div>
+                                <div class="stat-figure mt-5">
+                                    <i class="fa-solid fa-spinner inline-block fa-lg" style="color: #3faa31;"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <p class="text-center" th:text="${inProgressNum} + '개'"></p>
+                                </div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#" class="stat">
+                                <div class="stat-title mb-1">완료한 챌린지</div>
+                                <div class="stat-figure mt-5">
+                                    <i class="fa-solid fa-check inline-block fa-lg" style="color: #eac02a;"></i>
+                                </div>
+                                <div class="stat-value text-accent">
+                                    <p class="text-center" th:text="${endProgressNum} + '개'"></p>
+                                </div>
+                            </a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex items-center mb-5">
-                        <div class="flex stats shadow-lg border rounded">
-                            <div>
-                                <a href="/point/history" class="stat">
-                                    <div class="stat-title mb-1">나의 일상지원금</div>
-                                    <div class="stat-figure mt-5">
-                                        <i class="fa-solid fa-money-bill-wave fa-2xl" style="color: #3faa31;"></i>
-                                    </div>
-                                    <div class="stat-value">
-                                        <p class="text-center" th:text="${member.point.currentPoint}"></p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div>
-                                <a href="/coin/history" class="stat">
-                                    <div class="stat-title mb-1">나의 코인</div>
-                                    <div class="stat-figure mt-5">
-                                        <i class="fa-solid fa-coins fa-2xl" style="color: #eac02a;"></i>
-                                    </div>
-                                    <div class="stat-value">
-                                        <p class="text-center" th:text="${member.coin.currentCoin}"></p>
-                                    </div>
-                                </a>
-                            </div>
+                <div class="flex items-center mb-5">
+                    <div class="flex stats shadow-lg border rounded">
+                        <div>
+                            <a href="/point/history" class="stat">
+                                <div class="stat-title mb-1">나의 일상지원금</div>
+                                <div class="stat-figure mt-5">
+                                    <i class="fa-solid fa-money-bill-wave fa-2xl" style="color: #3faa31;"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <p class="text-center" th:text="${member.point.currentPoint}"></p>
+                                </div>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="/coin/history" class="stat">
+                                <div class="stat-title mb-1">나의 코인</div>
+                                <div class="stat-figure mt-5">
+                                    <i class="fa-solid fa-coins fa-2xl" style="color: #eac02a;"></i>
+                                </div>
+                                <div class="stat-value">
+                                    <p class="text-center" th:text="${member.coin.currentCoin}"></p>
+                                </div>
+                            </a>
                         </div>
                     </div>
+                </div>
 
-                    <div>
-                        <a class="btn btn-success" href="/member/inventory">물품 보관함</a>
-                    </div>
-
+                <div>
+                    <a class="btn btn-success" href="/member/inventory">물품 보관함</a>
                 </div>
 
             </div>
+
         </div>
+        <div class="flex flex-grow bg-purple-50"></div>
     </main>
 </th:block>
 </body>
