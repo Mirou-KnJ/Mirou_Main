@@ -143,6 +143,7 @@ public class ChallengeMemberService {
         for (ChallengeMember cm : myInProgressInfos) {
             inProgressChallenges.add(cm.getLinkedChallenge());
         }
+
         return inProgressChallenges;
     }
 
