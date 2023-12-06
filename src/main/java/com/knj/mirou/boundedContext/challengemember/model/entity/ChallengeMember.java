@@ -13,6 +13,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -51,10 +52,33 @@ public class ChallengeMember extends BaseEntity {
     public int getLastDayNumber() {
 
         LocalDate today = LocalDate.now();
-        int todayValue = (today.getYear() * 365) + (today.getMonthValue() * 12) + today.getDayOfMonth();
+        int todayValue = (today.getYear() * 365) + (today.getMonthValue() * 12) + today.getDayOfMonth() + 1;
         int endDateValue = (endDate.getYear() * 365) + (endDate.getMonthValue() * 12) + endDate.getDayOfMonth();
 
         return endDateValue - todayValue;
     }
 
+    public int getPrivateRewardSum() {
+
+        int sum = 0;
+        for(PrivateReward reward : privateReward) {
+            sum += Integer.parseInt(reward.getReward());
+        }
+
+        return sum;
+    }
+
+//    public String getDeadLineRemaining() {
+//
+//        LocalDate
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd일 남음");
+//        return formatter.format(deadlineRemaining);
+//
+//    }
+//
+//    public String getJoinDeadLineFormat() {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd(E) 마감");
+//        return formatter.format(joinDeadline);
+//    }
 }

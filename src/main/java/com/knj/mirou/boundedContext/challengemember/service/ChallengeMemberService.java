@@ -32,7 +32,6 @@ import java.util.Optional;
 public class ChallengeMemberService {
 
     private final PointService pointService;
-    private final PointHistoryService pointHistoryService;
     private final PrivateRewardService privateRewardService;
 
     private final CMemberConfigProperties CMemberConfigProps;
@@ -134,17 +133,12 @@ public class ChallengeMemberService {
         return challengeMemberRepository.countByLinkedChallenge(challenge);
     }
 
-    public List<Challenge> getInProgressChallenges(Member linkedMember) {
+    public List<ChallengeMember> getInProgressInfos(Member linkedMember) {
 
         List<ChallengeMember> myInProgressInfos =
                 challengeMemberRepository.findAllByLinkedMemberAndProgress(linkedMember, Progress.IN_PROGRESS);
 
-        List<Challenge> inProgressChallenges = new ArrayList<>();
-        for (ChallengeMember cm : myInProgressInfos) {
-            inProgressChallenges.add(cm.getLinkedChallenge());
-        }
-
-        return inProgressChallenges;
+        return myInProgressInfos;
     }
 
     public List<Challenge> getMyCompletedChallenges(Member linkedMember) {

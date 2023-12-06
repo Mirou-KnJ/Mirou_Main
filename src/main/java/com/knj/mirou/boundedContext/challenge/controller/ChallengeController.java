@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -85,16 +86,16 @@ public class ChallengeController {
 
         Member member = rq.getMember();
 
-        List<Challenge> myInProgressChallenges = challengeService.getMyChallenges(member);
-
-        List<Challenge> notMineChallenges = challengeService.getNotMineChallenges(member, myInProgressChallenges, tag);
+        List<ChallengeMember> myChallengeInfos = challengeService.getMyChallengeInfos(member);
+        List<Challenge> myChallenges = challengeService.getChallengesByInfos(myChallengeInfos);
+        List<Challenge> notMineChallenges = challengeService.getNotMineChallenges(member, myChallenges, tag);
 
         Map<Long, String> challengeImages = imageDataService.getListImages(notMineChallenges);
-        Map<Long, String> myImages = imageDataService.getListImages(myInProgressChallenges);
+        Map<Long, String> myImages = imageDataService.getListImages(myChallenges);
         challengeImages.putAll(myImages);
 
         model.addAttribute("member", member);
-        model.addAttribute("myChallenges", myInProgressChallenges);
+        model.addAttribute("myChallengeInfos", myChallengeInfos);
         model.addAttribute("openedChallenges", notMineChallenges);
         model.addAttribute("challengeImages", challengeImages);
 
