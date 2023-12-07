@@ -40,6 +40,11 @@ public class ChallengeFeed extends BaseEntity {
         return formatter.format(getCreateDate());
     }
 
+    public String getCreateDateShortsStr() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시 인증");
+        return formatter.format(getCreateDate());
+    }
+
     public void updateLikeCount() {
         this.likeCount = likeCount + 1;
     }
