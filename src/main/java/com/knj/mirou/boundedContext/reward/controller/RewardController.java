@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.reward.controller;
 
+import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
@@ -7,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -21,6 +19,7 @@ import java.util.Optional;
 @RequestMapping("/reward")
 public class RewardController {
 
+    private final Rq rq;
     private final PublicRewardService publicRewardService;
     private final ChallengeService challengeService;
 
@@ -67,12 +66,11 @@ public class RewardController {
         //TODO: 유효성 검사 (진행 일수에 적절한 보상 설정인지 등)
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
         if(OChallenge.isEmpty()) {
-            log.info("세팅 대상 챌린지를 찾을 수 없습니다.");
-            return "redirect:/confirmSettings/" + challengeId;
+            return rq.historyBack("세팅 대상 챌린지를 찾을 수 없습니다.");
         }
 
         challengeService.opening(OChallenge.get());
 
-        return "redirect:/member/admin";
+        return rq.redirectWithMsg("/member/admin", "세팅이 완료되었습니다.");
     }
 }
