@@ -165,8 +165,8 @@ public class ChallengeFeedService {
         List<ChallengeFeed> myFeeds = feedListDTO.getMyFeeds();
         List<ChallengeFeed> notMineFeeds = feedListDTO.getNotMineFeeds();
 
-        Map<Long, String> feedListImages = imageDataService.getFeedListImages(myFeeds);
-        feedListImages.putAll(imageDataService.getFeedListImages(notMineFeeds));
+        Map<Long, String> feedListImages = imageDataService.getMyFeedListImages(myFeeds);
+        feedListImages.putAll(imageDataService.getNotMineFeedListImages(notMineFeeds));
 
         return feedListImages;
     }

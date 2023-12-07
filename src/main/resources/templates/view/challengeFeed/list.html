@@ -13,7 +13,8 @@
 
             <div class="flex flex-col">
 
-                <h1 class="flex justify-center my-3 text-2xl font-bold" th:text="${feedListDto.linkedChallenge.name}"></h1>
+                <h1 class="flex justify-center my-3 text-2xl font-bold"
+                    th:text="${feedListDto.linkedChallenge.name}"></h1>
                 <img th:if="${feedListDto.challengeImg}" class="rounded-lg"
                      th:src="${feedListDto.challengeImg}" alt="challengeImg">
 
@@ -23,12 +24,12 @@
                             <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
                                  th:data-tip="${feedListDto.linkedChallenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
                                 <i class="fa-solid fa-camera-retro fa-lg mr-2"></i>
-                                <p th:text="${feedListDto.linkedChallenge.method.getMethod()}"></p>
+                                <p th:text="${feedListDto.linkedChallenge.method.frontStr}"></p>
                             </div>
                             <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
                                  th:data-tip="'참여 당일부터 ' + ${feedListDto.linkedChallenge.period} + '일 간 진행되요!'">
                                 <i class="fa-regular fa-calendar fa-lg mr-2"></i>
-                                <p th:text="${feedListDto.linkedChallenge.period} + '일 챌린지'"></p>
+                                <p th:text="${feedListDto.linkedChallenge.period} + '일'"></p>
                             </div>
 
                             <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
@@ -38,7 +39,7 @@
                                    th:if="${feedListDto.linkedChallenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
                                 <i class="fa-solid fa-pen fa-lg mr-2"
                                    th:if="${feedListDto.linkedChallenge.tag.getChallengeTag().equals('기타')}"></i>
-                                <p th:text="${feedListDto.linkedChallenge.tag.getChallengeTag()}"></p>
+                                <p th:text="${feedListDto.linkedChallenge.tag.frontStr}"></p>
                             </div>
                         </div>
                     </div>
@@ -62,11 +63,12 @@
                     <div class="flex items-center w-full">
                         <div class="flex flex-grow items-center">
 
-                            <img class="w-12 h-12 card rounded-full mx-5" th:src="${feedImages.get(myFeed.id)}" alt="feedPreView">
+                            <img class="w-12 h-12 card rounded-full mx-5" th:src="${feedImages.get(myFeed.id)}"
+                                 alt="feedPreView">
 
                             <div class="flex flex-col ml-3">
                                 <p th:text="${myFeed.contents}"></p>
-                                <p class="text-sm text-gray-500" th:text="${myFeed.getCreateDateFormatStr()}"></p>
+                                <p class="text-sm text-gray-500" th:text="${myFeed.getCreateDateShortsStr()}"></p>
                             </div>
                         </div>
 
@@ -111,39 +113,35 @@
                 </div>
             </div>
 
-            <div class="flex flex-col w-full"
-                 th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
-                <div class="w-auto grid grid-cols-3 gap-6">
-                    <div class="flex flex-col bg-base-100 shadow-xl mb-3 w-full"
-                         th:each="feed : ${feedListDto.notMineFeeds}"
-                         th:onclick="'feedModal' + ${feed.id} + '.showModal()'">
-                        <img th:src="${feedImages.get(feed.id)}" alt="feedPreView">
+            <div class="flex w-full" th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
+                <div class="flex-wrap flex bg-base-100 mb-3 rounded-lg"
+                     th:each="feed : ${feedListDto.notMineFeeds}"
+                     th:onclick="'feedModal' + ${feed.id} + '.showModal()'">
+                    <img class="rounded-lg" th:src="${feedImages.get(feed.id)}" alt="feedPreView">
 
-                        <dialog th:id="'feedModal' + ${feed.id}" class="modal">
-                            <div class="flex flex-col justify-center modal-box">
-                                <form method="dialog">
-                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                </form>
-                                <h3 class="flex justify-center font-bold mb-2"
-                                    th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
-                                <img th:src="${feed.imgUrl}" alt="feedImg">
-                                <p class="pt-2 text-sm text-gray-500" th:text="${feed.getCreateDateFormatStr()}"></p>
-                                <p class="pt-1 pb-6" th:text="${feed.contents}"></p>
-                                <div class="flex justify-center mb-5">
-                                    <a th:onclick="|tryLike(${feed.id}, this)|">
-                                        <i class="fa-regular fa-heart fa-shake fa-2xl" style="color: #f72b2b;"></i>
-                                    </a>
-                                    <span class="text-xs inline-block" th:text="${feed.likeCount}"
-                                          style="color: #f72b2b"></span>
-                                    <a th:onclick="|tryReport(${feed.id})|" class="ml-6 tooltip"
-                                       data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요.">
-                                        <i class="fa-solid fa-ban fa-2xl" style="color: #f72b2b;"></i>
-                                    </a>
-
-                                </div>
+                    <dialog th:id="'feedModal' + ${feed.id}" class="modal">
+                        <div class="flex flex-col justify-center modal-box">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <h3 class="flex justify-center font-bold mb-2"
+                                th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                            <img th:src="${feed.imgUrl}" alt="feedImg">
+                            <p class="pt-2 text-sm text-gray-500" th:text="${feed.getCreateDateFormatStr()}"></p>
+                            <p class="pt-1 pb-6" th:text="${feed.contents}"></p>
+                            <div class="flex justify-center mb-5">
+                                <a th:onclick="|tryLike(${feed.id}, this)|">
+                                    <i class="fa-regular fa-heart fa-2xl" style="color: #8041D9;"></i>
+                                </a>
+                                <span class="text-xs inline-block" th:text="${feed.likeCount}"
+                                      style="color: #8041D9;"></span>
+                                <a th:onclick="|tryReport(${feed.id})|" class="ml-6 tooltip"
+                                   data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요.">
+                                    <i class="fa-solid fa-ban fa-2xl" style="color: #8041D9;"></i>
+                                </a>
                             </div>
-                        </dialog>
-                    </div>
+                        </div>
+                    </dialog>
                 </div>
             </div>
         </div>
