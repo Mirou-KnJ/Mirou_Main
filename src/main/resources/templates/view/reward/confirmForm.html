@@ -21,7 +21,8 @@
                     <h1 th:text="'진행 일 수 : ' + ${challenge.period}"></h1>
                 </div>
 
-                <div class="flex flex-col justify-center w-full mt-5" th:unless="${#lists.isEmpty(challenge.publicReward)}">
+                <div class="flex flex-col justify-center w-full mt-5"
+                     th:unless="${#lists.isEmpty(challenge.publicReward)}">
                     <h1 class="text-lg flex justify-center">현재 보상 상황</h1>
                     <div class="flex flex-col justify-center items-center">
                         <div class="flex gap-10">
@@ -36,10 +37,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="gap-5 mt-5">
+                <form id="confirmForm" th:action="|/reward/confirmSettings/${challenge.id}|" method="POST" class="gap-5 mt-5">
                     <a href="/member/admin" class="btn btn-sm btn-ghost btn-outline">돌아가기</a>
-                    <button id="confirm" class="btn btn-sm btn-success" onclick="checkSettings()">세팅 완료</button>
-                </div>
+                    <button id="confirm" class="btn btn-sm btn-success" onclick="checkSettings()" type="submit">세팅 완료</button>
+                </form>
             </div>
         </div>
         <div class="flex flex-grow bg-purple-50"></div>
@@ -49,6 +50,7 @@
 
         let period = /*[[${challenge.period}]]*/'';
         let size = /*[[${challenge.publicReward.size()}]]*/'';
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
 
         function checkSettings() {
 
@@ -67,29 +69,7 @@
             var result = confirm(confirmMsg);
 
             if (result) {
-                let challengeId = /*[[${challenge.id}]]*/'';
-                let url = '/reward/confirmSettings/' + challengeId;
-
-                const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
-                const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        [headerName]: tokenValue
-                    }
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = "/member/admin";
-                        } else {
-                            console.log('Error:', response.status);
-                        }
-                    })
-                    .catch((error) => {
-                        console.log('Error:', error);
-                    })
+                document.getElementById('confirmForm').form.submit();
             } else {
                 toastNotice("세팅이 취소되었습니다.");
             }
