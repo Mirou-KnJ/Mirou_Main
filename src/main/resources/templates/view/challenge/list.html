@@ -7,7 +7,7 @@
 <th:block layout:fragment="Content">
     <main class="flex justify-center w-full">
 
-        <div class="flex flex-grow bg-purple-50"></div>
+        <div class="flex flex-grow bg-purple-50 border"></div>
 
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
@@ -39,8 +39,6 @@
                         </a>
                     </div>
                 </div>
-
-
             </div>
 
             <div class="flex mt-10 justify-center">
@@ -48,7 +46,7 @@
             </div>
 
             <div th:if="${#lists.isEmpty(myChallengeInfos)}" class="mt-3">
-                <h1 class="text-4xl mt-10">아직 참여중인 챌린지가 없습니다.</h1>
+                <h1 class="text-2xl mt-10">아직 참여중인 챌린지가 없습니다.</h1>
             </div>
 
             <div class="flex rounded-lg justify-center mt-3 flex-wrap" th:unless="${#lists.isEmpty(myChallengeInfos)}">
@@ -153,7 +151,7 @@
             </div>
         </div>
 
-        <div class="flex flex-grow bg-purple-50"></div>
+        <div class="flex flex-grow bg-purple-50 border"></div>
     </main>
 
     <script th:inline="javascript">
