@@ -11,6 +11,40 @@
 
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
+            <div class="flex flex-col">
+
+                <h1 class="flex justify-center my-3 text-2xl font-bold" th:text="${feedListDto.linkedChallenge.name}"></h1>
+                <img th:if="${feedListDto.challengeImg}" class="rounded-lg"
+                     th:src="${feedListDto.challengeImg}" alt="challengeImg">
+
+                <div class="flex w-full items-center justify-center mt-3">
+                    <div class="flex flex-col">
+                        <div class="flex mt-2 gap-2">
+                            <div class="flex badge badge-primary badge-outline rounded-md px-3 py-4 tooltip"
+                                 th:data-tip="${feedListDto.linkedChallenge.method.getMethod()} + '으로 참여하는 챌린지에요!'">
+                                <i class="fa-solid fa-camera-retro fa-lg mr-2"></i>
+                                <p th:text="${feedListDto.linkedChallenge.method.getMethod()}"></p>
+                            </div>
+                            <div class="flex badge badge-accent badge-outline rounded-md px-3 py-4 tooltip"
+                                 th:data-tip="'참여 당일부터 ' + ${feedListDto.linkedChallenge.period} + '일 간 진행되요!'">
+                                <i class="fa-regular fa-calendar fa-lg mr-2"></i>
+                                <p th:text="${feedListDto.linkedChallenge.period} + '일 챌린지'"></p>
+                            </div>
+
+                            <div class="badge badge-primary badge-outline rounded-md px-3 py-4">
+                                <i class="fa-solid fa-person-walking fa-lg mr-2"
+                                   th:if="${feedListDto.linkedChallenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                                <i class="fa-solid fa-tree fa-lg mr-2"
+                                   th:if="${feedListDto.linkedChallenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                <i class="fa-solid fa-pen fa-lg mr-2"
+                                   th:if="${feedListDto.linkedChallenge.tag.getChallengeTag().equals('기타')}"></i>
+                                <p th:text="${feedListDto.linkedChallenge.tag.getChallengeTag()}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="flex justify-center w-full my-3">
                 <h1>나의 최근 인증</h1>
             </div>

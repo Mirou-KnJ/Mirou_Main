@@ -11,6 +11,7 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
@@ -117,6 +118,9 @@ public class ChallengeFeedService {
 
         FeedListDTO feedListDto = new FeedListDTO();
 
+        feedListDto.setLinkedChallenge(linkedChallenge);
+        feedListDto.setChallengeImg(imageDataService.getOptimizingUrl(linkedChallenge.getImgUrl(),
+                OptimizerOption.CHALLENGE_DETAIL));
         List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
         List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
 
