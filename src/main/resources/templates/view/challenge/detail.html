@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="flex mb-2" th:if="${detailDTO.isJoin}">
-                        <div class="flex shadow-xl ml-3">
+                        <div class="flex ml-3">
                             <div class="flex flex-col rounded-md bg-white py-3 px-2">
                                 <a class="btn m-3 rounded-md bg-yellow-300"
                                    th:href="|/feed/write/${detailDTO.challenge.id}|"
@@ -177,7 +177,7 @@
                     <div class="flex gap-3" th:unless="${#lists.isEmpty(detailDTO.recently3Feeds)}">
                         <div class="flex flex-col w-full" th:each="feed, iterStat : ${detailDTO.recently3Feeds}">
                             <div class="flex justify-center">
-                                <div class="card grid w-28 h-28 bg-gray-200 rounded-lg shadow-xl">
+                                <div class="card grid w-28 h-28 bg-purple-100 rounded-lg border">
                                     <img th:src="${detailDTO.getFeedOptimizedImages().get(iterStat.index)}"
                                          alt="feedFreeView" th:onclick="'feedModal' + ${feed.id} + '.showModal()'"
                                          class="place-items-center rounded-lg">

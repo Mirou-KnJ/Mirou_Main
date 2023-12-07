@@ -50,7 +50,7 @@
             </div>
 
             <div class="flex rounded-lg justify-center mt-3 flex-wrap" th:unless="${#lists.isEmpty(myChallengeInfos)}">
-                <a class="card flex flex-col shadow-lg rounded m-3 bg-purple-100 w-40 mx-auto"
+                <a class="card flex flex-col shadow-lg rounded m-3 bg-purple-100 w-40 mx-auto border"
                    th:each="myChallengeInfo : ${myChallengeInfos}"
                    th:href="@{|/challenge/detail/${myChallengeInfo.linkedChallenge.id}|}">
 
@@ -109,7 +109,7 @@
 
             <div class="flex rounded-lg mt-3 flex-wrap grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1"
                  th:unless="${#lists.isEmpty(openedChallenges)}">
-                <a class="card card-side flex flex-row shadow-lg rounded-xl m-3 bg-purple-100 w-68 h-48"
+                <a class="card card-side flex flex-row shadow-lg rounded-xl m-3 bg-purple-100 w-68 h-48 border"
                    th:each="challenge : ${openedChallenges}" th:href="|/challenge/detail/${challenge.id}|">
                     <figure class="ml-3">
                         <img class="card-img rounded-lg shadow-lg m-2"

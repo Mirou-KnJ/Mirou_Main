@@ -228,7 +228,19 @@ public class ImageDataService {
         return images;
     }
 
-    public Map<Long, String> getFeedListImages(List<ChallengeFeed> challengeFeeds) {
+    public Map<Long, String> getMyFeedListImages(List<ChallengeFeed> challengeFeeds) {
+
+        Map<Long, String> images = new HashMap<>();
+
+        for(ChallengeFeed feed : challengeFeeds) {
+            String optimizedUrl = getOptimizingUrl(feed.getImgUrl(), OptimizerOption.HISTORY);
+            images.put(feed.getId(), optimizedUrl);
+        }
+
+        return images;
+    }
+
+    public Map<Long, String> getNotMineFeedListImages(List<ChallengeFeed> challengeFeeds) {
 
         Map<Long, String> images = new HashMap<>();
 
