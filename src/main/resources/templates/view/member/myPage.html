@@ -21,81 +21,61 @@
             </div>
 
             <div class="flex justify-center mt-8 mb-5">
-                <span th:text="${member.getNickname()}"></span>
+                <span class="underline underline-offset-8" th:text="${member.getNickname()}"></span>
             </div>
 
-            <div class="flex flex-col w-full bg-purple-200 py-3 rounded-2xl mt-5">
-                <div class="flex">
-                    <div class="grid flex-grow rounded-box">
-                        <a href="/point/history" class="flex justify-around">
-                            <div>
-                                <span class="text-sm mt-2">일상지원금</span>
-                            </div>
-
-                            <div>
-                                <span class="text-sm" th:text="${#numbers.formatInteger(member.point.currentPoint, 1, 'COMMA')}"></span>
-                                <i class="fa-solid fa-money-bill-wave ml-2" style="color: #3faa31;"></i>
-                            </div>
-                        </a>
+            <div class="flex bg-purple-200 rounded-2xl mt-5 h-24 mx-auto items-center w-96 border">
+                <div class="flex w-full justify-center items-center mt-2">
+                    <div class="flex flex-col items-center mr-4">
+                        <i class="fa-solid fa-money-bill-wave fa-xl" style="color: #3faa31;"></i>
+                        <p class="text-sm mt-6">일상지원금</p>
                     </div>
 
                     <div class="divider divider-horizontal"></div>
-                    <div class="grid flex-grow rounded-box">
-                        <a href="/coin/history" class="flex justify-around">
-                            <div>
-                                <span class="text-sm mt-2">코인</span>
-                            </div>
 
-                            <div>
-                                <span class="text-sm" th:text="${#numbers.formatInteger(member.coin.currentCoin, 1, 'COMMA')}"></span>
-                                <i class="fa-solid fa-coins ml-2" style="color: #eac02a;"></i>
-                            </div>
-                        </a>
+                    <div class="flex flex-col mx-6 items-center">
+                        <i class="fa-solid fa-coins fa-xl" style="color: #eac02a;"></i>
+                        <p class="text-sm mt-6">코인</p>
                     </div>
 
                     <div class="divider divider-horizontal"></div>
-                    <div class="grid flex-grow rounded-box">
-                        <a href="/member/inventory" class="flex justify-around">
-                            <div>
-                                <span class="text-sm mt-2">보관함</span>
-                                <i class="fa-solid fa-bag-shopping ml-2" style="color: #c098f0;"></i>
-                            </div>
-                        </a>
+
+                    <div class="flex flex-col items-center ml-4">
+                        <i class="fa-solid fa-bag-shopping fa-xl" style="color: #c098f0;"></i>
+                        <p class="text-sm mt-6">보관함</p>
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-col shadow-lg w-full border py-3 rounded-2xl mt-5 mb-9">
-                <div class="flex">
-                    <div class="grid flex-grow rounded-box">
-                        <a class="flex justify-around">
-                            <div>
-                                <span class="text-sm mt-2">진행중인 챌린지</span>
-                            </div>
-                            <div>
-                                <span th:text="${inProgressNum} + '개'"></span>
-                                <i class="fa-solid fa-star ml-2" style="color: #f0dc00;"></i>
-                            </div>
-                        </a>
-                    </div>
 
-                    <div class="divider divider-horizontal"></div>
-                    <div class="grid flex-grow rounded-box">
-                        <a class="flex justify-around">
-                            <div>
-                                <span class="text-sm mt-2">완료한 챌린지</span>
-                            </div>
-                            <div>
-                                <span th:text="${endProgressNum} + '개'"></span>
-                                <i class="fa-solid fa-circle-check ml-2" style="color: #005eff;"></i>
-                            </div>
-                        </a>
-                    </div>
+            <div class="flex flex-col shadow-lg border rounded-2xl my-5 w-80 mx-auto">
+                <div class="rounded-box items-center">
+                    <a class="flex justify-around mt-3">
+                        <div>
+                            <span class="text-sm">진행중인 챌린지</span>
+                        </div>
+                        <div>
+                            <span th:text="${inProgressNum} + '개'"></span>
+                            <i class="fa-solid fa-star ml-2" style="color: #f0dc00;"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="divider h-1"></div>
+                <div class="rounded-box items-center">
+                    <a class="flex justify-around mb-2">
+                        <div>
+                            <span class="text-sm">완료한 챌린지</span>
+                        </div>
+                        <div>
+                            <span th:text="${endProgressNum} + '개'"></span>
+                            <i class="fa-solid fa-circle-check ml-2" style="color: #005eff;"></i>
+                        </div>
+                    </a>
                 </div>
             </div>
 
             <div class="flex justify-center">
-                <button class="w-1/4 btn btn-sm rounded-full mt-5 mb-5">내 정보 수정</button>
+                <button class="btn btn-outline btn-neutral w-36 btn-sm rounded-full mt-5 mb-5">내 정보 수정</button>
             </div>
 
             <div class="flex shadow-lg border rounded mt-15">
