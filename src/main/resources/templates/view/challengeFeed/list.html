@@ -113,11 +113,15 @@
                 </div>
             </div>
 
-            <div class="flex w-full" th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
-                <div class="flex-wrap flex bg-base-100 mb-3 rounded-lg"
+            <div class="flex w-full flex-wrap gap-5 justify-center items-center" th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
+                <div class="flex bg-base-100 mb-3 rounded-lg shadow-lg border bg-purple-100"
                      th:each="feed : ${feedListDto.notMineFeeds}"
                      th:onclick="'feedModal' + ${feed.id} + '.showModal()'">
-                    <img class="rounded-lg" th:src="${feedImages.get(feed.id)}" alt="feedPreView">
+
+                    <div class="flex flex-col items-center">
+                        <img class="rounded-lg" th:src="${feedImages.get(feed.id)}" alt="feedPreView">
+                        <span class="text-sm my-2" th:text="${#strings.substring(feed.writer.nickname, 0, 8) + '...'}"></span>
+                    </div>
 
                     <dialog th:id="'feedModal' + ${feed.id}" class="modal">
                         <div class="flex flex-col justify-center modal-box">
