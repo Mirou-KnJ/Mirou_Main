@@ -2,6 +2,8 @@ package com.knj.mirou.boundedContext.product.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.service.ProductService;
@@ -64,9 +66,12 @@ public class ProductController {
     @GetMapping("/store")
     public String storePage(Model model) {
 
+        Member member = rq.getMember();
+
         List<ProductInfo> infos = productService.getAllRegisteredInfos();
         Map<Long, Integer> counts = productService.getSalingCountMap(infos);
 
+        model.addAttribute("member", member);
         model.addAttribute("infos", infos);
         model.addAttribute("counts", counts);
 
