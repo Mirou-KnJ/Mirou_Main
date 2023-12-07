@@ -47,5 +47,4 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "owner")
     private List<Inventory> inventory;
-
 }
