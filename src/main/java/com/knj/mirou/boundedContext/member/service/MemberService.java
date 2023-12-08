@@ -40,6 +40,10 @@ public class MemberService {
         return memberRepository.findByLoginId(loginId);
     }
 
+    public Optional<Member> getById(Long id) {
+        return memberRepository.findById(id);
+    }
+
     @Transactional
     public RsData<Member> join(String socialCode, String loginId, String nickname) {
 

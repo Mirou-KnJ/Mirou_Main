@@ -170,4 +170,15 @@ public class ChallengeFeedService {
 
         return feedListImages;
     }
+
+    @Transactional
+    public void updateReportCount(ChallengeFeed feed) {
+
+        feed.updateReportCount();
+        int reportCount = feed.getReportCount();
+
+        if(reportCount >= 5) {
+            feed.updatePrivate();
+        }
+    }
 }
