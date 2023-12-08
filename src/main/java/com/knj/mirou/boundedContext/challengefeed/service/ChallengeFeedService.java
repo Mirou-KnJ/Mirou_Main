@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
+import com.knj.mirou.base.event.EventAfterWriteFeed;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -18,6 +19,7 @@ import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +42,7 @@ public class ChallengeFeedService {
     private final ImageDataService imageDataService;
     private final PrivateRewardService privateRewardService;
     private final ChallengeMemberService challengeMemberService;
+    private final ApplicationEventPublisher publisher;
 
     private final ChallengeFeedRepository challengeFeedRepository;
 
@@ -79,8 +82,10 @@ public class ChallengeFeedService {
                 .imgUrl(imgUrl)
                 .build();
 
-        ChallengeFeed saveFeed = challengeFeedRepository.save(feed);
-        imageDataService.create(saveFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
+        ChallengeFeed savedFeed = challengeFeedRepository.save(feed);
+        imageDataService.create(savedFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
+
+        publisher.publishEvent(new EventAfterWriteFeed(this, savedFeed));
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
     }
