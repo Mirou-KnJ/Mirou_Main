@@ -182,6 +182,11 @@ public class ChallengeFeedService {
 
         if(reportCount >= 5) {
             feed.updatePrivate();
+
+            Member writer = feed.getWriter();
+            Challenge linkedChallenge = feed.getLinkedChallenge();
+
+            coinService.givePenalty(writer, linkedChallenge);
         }
     }
 }

@@ -15,4 +15,5 @@ public class CoinConfigProperties {
 
     private double quarter;
     private List<Double> standard;
+    private int penalty;
 }

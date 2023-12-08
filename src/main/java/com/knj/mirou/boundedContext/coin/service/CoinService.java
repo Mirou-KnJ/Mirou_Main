@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.coin.service;
 
 import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.coin.config.CoinConfigProperties;
 import com.knj.mirou.boundedContext.coin.entity.Coin;
 import com.knj.mirou.boundedContext.coin.repository.CoinRepository;
@@ -49,6 +50,7 @@ public class CoinService {
                 .id(coin.getId())
                 .currentCoin(coin.getCurrentCoin() + randomCoin)
                 .totalGetCoin(coin.getTotalGetCoin() + randomCoin)
+                .totalUsedCoin(coin.getTotalUsedCoin())
                 .build();
 
         coinRepository.save(coin);
@@ -65,6 +67,7 @@ public class CoinService {
         coin = Coin.builder()
                 .id(coin.getId())
                 .currentCoin(coin.getCurrentCoin() - cost)
+                .totalGetCoin(coin.getTotalGetCoin())
                 .totalUsedCoin(coin.getTotalUsedCoin() + cost)
                 .build();
 
@@ -91,6 +94,25 @@ public class CoinService {
         } else {
             return random.nextDouble(rewardCoin * 3, rewardCoin * 4);
         }
+    }
+
+    @Transactional
+    public void givePenalty(Member member, Challenge challenge) {
+
+        Coin coin = member.getCoin();
+        int penalty = coinConfigProps.getPenalty();
+
+        coin = Coin.builder()
+                .id(coin.getId())
+                .currentCoin(coin.getCurrentCoin() - penalty)
+                .totalGetCoin(coin.getTotalGetCoin())
+                .totalUsedCoin(coin.getTotalUsedCoin() + penalty)
+                .build();
+
+        coinRepository.save(coin);
+
+        coinHistoryService.create(member, ChangeType.USED, penalty,
+                challenge.getName() + " 신고 패널티", challenge.getImgUrl());
     }
 }
 
