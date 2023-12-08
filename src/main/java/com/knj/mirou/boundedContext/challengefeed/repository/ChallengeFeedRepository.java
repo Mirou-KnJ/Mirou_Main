@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challengefeed.repository;
 
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.enums.FeedStatus;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public interface ChallengeFeedRepository extends JpaRepository<ChallengeFeed, Long> {
 
-    List<ChallengeFeed> findByLinkedChallenge(Challenge linkedChallenge);
+    List<ChallengeFeed> findByLinkedChallengeAndStatus(Challenge linkedChallenge, FeedStatus status);
 
     @Query("SELECT cf FROM ChallengeFeed cf " +
             "WHERE cf.linkedChallenge = :challenge " +
