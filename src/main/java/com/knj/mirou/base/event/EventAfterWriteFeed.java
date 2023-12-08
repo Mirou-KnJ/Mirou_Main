@@ -1,16 +1,16 @@
 package com.knj.mirou.base.event;
 
-import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class EventAfterWriteFeed extends ApplicationEvent {
 
-    private final ChallengeFeed challengeFeed;
+    private final ChallengeMember challengeMember;
 
-    public EventAfterWriteFeed(Object source, ChallengeFeed challengeFeed) {
+    public EventAfterWriteFeed(Object source, ChallengeMember challengeMember) {
         super(source);
-        this.challengeFeed = challengeFeed;
+        this.challengeMember = challengeMember;
     }
 }
