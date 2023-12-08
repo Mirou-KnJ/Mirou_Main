@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.coin.service;
 
 import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.base.event.EventAfterGiveCoin;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
@@ -14,6 +15,7 @@ import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class CoinService {
     private final PrivateRewardService privateRewardService;
 
     private final CoinConfigProperties coinConfigProps;
+    private final ApplicationEventPublisher publisher;
 
     private final CoinRepository coinRepository;
 
