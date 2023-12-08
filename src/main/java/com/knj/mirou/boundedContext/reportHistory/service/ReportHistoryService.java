@@ -22,7 +22,7 @@ public class ReportHistoryService {
     private final ReportHistoryRepository reportHistoryRepository;
 
     @Transactional
-    public RsData<String> tryReport(long feedId, long reporterId, String contents) {
+    public RsData<Long> tryReport(long feedId, long reporterId, String contents) {
 
         Optional<ReportHistory> OHistory = reportHistoryRepository.findByTargetFeedIdAndReporterId(feedId, reporterId);
         if(OHistory.isPresent()){
@@ -42,7 +42,7 @@ public class ReportHistoryService {
         ReportHistory report = new ReportHistory(feedId, reporterId, contents);
         reportHistoryRepository.save(report);
 
-        return RsData.of("S-1", "신고가 완료되었습니다.");
+        return RsData.of("S-1", "신고가 완료되었습니다.", report.getId());
     }
 
 }
