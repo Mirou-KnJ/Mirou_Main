@@ -23,6 +23,15 @@ public class NotificationEventListener {
 
     @EventListener
     @Transactional
+    public void listen(EventAfterJoin event) {
+
+        Member member = event.getMember();
+
+        notificationService.create(member, member.getNickname(), SYSTEM_IMG, NotiType.JOIN);
+    }
+
+    @EventListener
+    @Transactional
     public void listen(EventAfterGiveCoin event) {
 
         Member member = event.getMember();
