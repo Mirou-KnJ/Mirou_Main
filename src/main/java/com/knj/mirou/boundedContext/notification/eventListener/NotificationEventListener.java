@@ -30,7 +30,7 @@ public class NotificationEventListener {
 
         log.info("알림을 생성할게요 !! :  " + contents);
 
-         notificationService.create(member, contents, imgUrl, NotiType.GET_POINT);
+         notificationService.create(member, contents, imgUrl, NotiType.GET_COIN);
     }
 
 }
