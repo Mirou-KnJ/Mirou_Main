@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.product.service;
 
+import com.knj.mirou.base.event.EventAfterBuyProduct;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.inventory.service.InventoryService;
@@ -10,6 +11,7 @@ import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
 import com.knj.mirou.boundedContext.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,9 @@ public class ProductService {
     private final InventoryService inventoryService;
     private final CoinService coinService;
     private final ProductInfoService productInfoService;
+
+    private final ApplicationEventPublisher publisher;
+
     private final ProductRepository productRepository;
 
     public RsData<Long> create(long infoId, String code) {
@@ -151,6 +156,8 @@ public class ProductService {
         targetProduct.setStatus(ProductStatus.SOLD_OUT);
 
         inventoryService.create(targetProduct, member);
+
+        publisher.publishEvent(new EventAfterBuyProduct(this, member, productInfo));
 
         return RsData.of("S-1", "구매에 성공하였습니다.");
     }

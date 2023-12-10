@@ -48,7 +48,7 @@ public class NotificationService {
             case END_PROGRESS -> processingContents = contents.concat(" 참여가 종료되었습니다");
             case GET_COIN -> processingContents = contents.concat("으로 코인을 획득하였습니다");
             case RESET_POINT -> processingContents = contents.concat("님, 이번주 일상지원금이 지급되었어요!");
-            case GET_PRODUCT -> processingContents = contents.concat("을 구매하였습니다");
+            case BUY_PRODUCT -> processingContents = contents.concat("을 구매하였습니다");
             case REPORT_COUNT -> processingContents = contents.concat("개의 신고를 지난주에 받았어요.");
             case LIKE_COUNT -> processingContents = contents.concat("개의 좋아요를 지난주에 받았어요.");
             default -> processingContents = contents.concat("NONE_TYPE");

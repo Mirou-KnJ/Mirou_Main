@@ -13,8 +13,7 @@ public enum NotiType {
     GET_COIN("코인 획득"),
     RESET_POINT("이번 주 일상지원금 지급"),
     GET_PRODUCT("상품 구매"),
-    USE_PRODUCT("상품 사용"),
-    GET_REPORT("신고 당함"),
+    BUY_PRODUCT("상품 사용"),
     REPORT_COUNT("지난 주 받은 신고 수"),
     LIKE_COUNT("지난 주 받은 좋아요 수");
 

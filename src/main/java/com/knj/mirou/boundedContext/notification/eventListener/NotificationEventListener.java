@@ -6,6 +6,7 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.notification.model.enums.NotiType;
 import com.knj.mirou.boundedContext.notification.service.NotificationService;
+import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -62,5 +63,13 @@ public class NotificationEventListener {
         notificationService.create(member, member.getNickname(), SYSTEM_IMG, NotiType.RESET_POINT);
     }
 
+    @EventListener
+    @Transactional
+    public void listen(EventAfterBuyProduct event) {
 
+        Member member = event.getMember();
+        ProductInfo productInfo = event.getProductInfo();
+
+        notificationService.create(member, productInfo.getName(), productInfo.getImgUrl(), NotiType.BUY_PRODUCT);
+    }
 }
