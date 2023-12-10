@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.notification.eventListener;
 
+import com.knj.mirou.base.event.EventAfterEndProgress;
 import com.knj.mirou.base.event.EventAfterGiveCoin;
 import com.knj.mirou.base.event.EventAfterJoinChallenge;
 import com.knj.mirou.base.event.EventAfterWriteFeed;
@@ -43,5 +44,17 @@ public class NotificationEventListener {
 
         notificationService.create(member, challenge.getName(), challenge.getImgUrl(), NotiType.JOIN_CHALLENGE);
     }
+
+    @EventListener
+    @Transactional
+    public void listen(EventAfterEndProgress event) {
+
+        ChallengeMember challengeMember = event.getChallengeMember();
+        Challenge challenge = challengeMember.getLinkedChallenge();
+        Member member = challengeMember.getLinkedMember();
+
+        notificationService.create(member, challenge.getName(), challenge.getImgUrl(), NotiType.END_PROGRESS);
+    }
+
 
 }

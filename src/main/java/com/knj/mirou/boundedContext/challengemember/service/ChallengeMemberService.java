@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.base.event.EventAfterEndProgress;
 import com.knj.mirou.base.event.EventAfterJoinChallenge;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
@@ -75,6 +76,7 @@ public class ChallengeMemberService {
 
         for (ChallengeMember target : endTargetChallengeMembers) {
             target.finishChallenge();
+            publisher.publishEvent(new EventAfterEndProgress(this, target));
         }
     }
 
@@ -132,6 +134,7 @@ public class ChallengeMemberService {
     @Transactional
     public void finishChallenge(ChallengeMember challengeMember) {
         challengeMember.finishChallenge();
+        publisher.publishEvent(new EventAfterEndProgress(this, challengeMember));
     }
 
     public int getCountByLinkedChallenge(Challenge challenge) {
