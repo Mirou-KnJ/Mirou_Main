@@ -1,7 +1,9 @@
 package com.knj.mirou.boundedContext.notification.eventListener;
 
 import com.knj.mirou.base.event.EventAfterGiveCoin;
+import com.knj.mirou.base.event.EventAfterJoinChallenge;
 import com.knj.mirou.base.event.EventAfterWriteFeed;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.notification.model.enums.NotiType;
@@ -25,12 +27,21 @@ public class NotificationEventListener {
     public void listen(EventAfterGiveCoin event) {
 
         Member member = event.getMember();
-        String contents = event.getContents() + "으로 인해";
+        String contents = event.getContents();
         String imgUrl = event.getImgUrl();
 
-        log.info("알림을 생성할게요 !! :  " + contents);
+        notificationService.create(member, contents, imgUrl, NotiType.GET_COIN);
+    }
 
-         notificationService.create(member, contents, imgUrl, NotiType.GET_COIN);
+    @EventListener
+    @Transactional
+    public void listen(EventAfterJoinChallenge event) {
+
+        ChallengeMember challengeMember = event.getChallengeMember();
+        Challenge challenge = challengeMember.getLinkedChallenge();
+        Member member = challengeMember.getLinkedMember();
+
+        notificationService.create(member, challenge.getName(), challenge.getImgUrl(), NotiType.JOIN_CHALLENGE);
     }
 
 }
