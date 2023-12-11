@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberServi
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.CoinReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
@@ -129,4 +130,14 @@ public class MemberService {
 
         return reportDTO;
     }
+
+    public CoinReportDTO getCoinReportDto() {
+
+        CoinReportDTO reportDTO = new CoinReportDTO();
+
+
+        return reportDTO;
+    }
+
+
 }
