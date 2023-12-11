@@ -20,6 +20,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class NotificationService {
 
+    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/speaker.png";
+
     private final MemberService memberService;
     private final ImageDataService imageDataService;
     private final ReportHistoryService reportHistoryService;
@@ -67,12 +69,14 @@ public class NotificationService {
     }
 
     @Transactional
-    @Scheduled(cron = "3 * * * * ?")
+    @Scheduled(cron = "3 0 0 * * 1")
     public void sendWeeklyNotification() {
 
-        //FIXME
-        Member member = memberService.getById(4L).get();
+        List<Member> members = memberService.getAll();
 
-        reportHistoryService.getWeeklyReportedCounts(member);
+        for(Member member : members) {
+            int count = reportHistoryService.getWeeklyReportedCounts(member);
+            create(member, String.valueOf(count), SYSTEM_IMG, NotiType.REPORT_COUNT);
+        }
     }
 }
