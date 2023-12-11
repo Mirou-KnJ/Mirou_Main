@@ -31,12 +31,19 @@
                             <p class="text-sm" th:text="${notification.contents}"></p>
                             <p class="text-xs text-gray-400" th:text="${notification.getCreateDateFormattedStr()}"></p>
                         </div>
+
+                        <div class="flex flex-grow-0 items-center mr-2">
+                            <i class="fa-solid fa-fire fa-lg" style="color: #df1125;" th:if="${notification.isHot()}"></i>
+                        </div>
                     </div>
 
                     <div class="flex w-full">
                         <div class="divider mt-2 w-full"></div>
                     </div>
+                </div>
 
+                <div class="flex justify-center">
+                    <p class="text-sm text-gray-400">알림은 최신순으로 20개 까지만 보여집니다.</p>
                 </div>
             </div>
 

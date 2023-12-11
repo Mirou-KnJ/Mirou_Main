@@ -40,4 +40,16 @@ public class Notification extends BaseEntity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시 mm분");
         return formatter.format(getCreateDate());
     }
+
+    public boolean isRead() {
+        return readDate != null;
+    }
+
+    public void readNotifiaction() {
+        this.readDate = LocalDateTime.now();
+    }
+
+    public boolean isHot() {
+        return getCreateDate().isAfter(LocalDateTime.now().minusMinutes(120));
+    }
 }

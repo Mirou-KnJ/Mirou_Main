@@ -10,12 +10,14 @@ import com.knj.mirou.boundedContext.notification.model.enums.NotiType;
 import com.knj.mirou.boundedContext.notification.repository.NotificationRepository;
 import com.knj.mirou.boundedContext.reportHistory.service.ReportHistoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -66,8 +68,8 @@ public class NotificationService {
         return processingContents;
     }
 
-    public List<Notification> getMyNotifications(Member member) {
-        return notificationRepository.findAllByMember(member);
+    public List<Notification> getMy20Notifications(Member member) {
+        return notificationRepository.findTop20ByMemberOrderByCreateDateDesc(member);
     }
 
     @Transactional
@@ -81,6 +83,15 @@ public class NotificationService {
             int likeCount = challengeFeedService.getWeeklyLikeCounts(member);
             create(member, String.valueOf(reportCount), SYSTEM_IMG, NotiType.REPORT_COUNT);
             create(member, String.valueOf(likeCount), SYSTEM_IMG, NotiType.LIKE_COUNT);
+        }
+    }
+
+    @Transactional
+    public void updateRead(List<Notification> notifications) {
+        for(Notification noti : notifications) {
+            if(!noti.isRead()) {
+                noti.readNotifiaction();
+            }
         }
     }
 }
