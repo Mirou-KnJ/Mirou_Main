@@ -3,10 +3,13 @@ package com.knj.mirou.boundedContext.notification.service;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.notification.model.entity.Notification;
 import com.knj.mirou.boundedContext.notification.model.enums.NotiType;
 import com.knj.mirou.boundedContext.notification.repository.NotificationRepository;
+import com.knj.mirou.boundedContext.reportHistory.service.ReportHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +20,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class NotificationService {
 
+    private final MemberService memberService;
     private final ImageDataService imageDataService;
+    private final ReportHistoryService reportHistoryService;
 
     private final NotificationRepository notificationRepository;
 
@@ -59,5 +64,15 @@ public class NotificationService {
 
     public List<Notification> getMyNotifications(Member member) {
         return notificationRepository.findAllByMember(member);
+    }
+
+    @Transactional
+    @Scheduled(cron = "3 * * * * ?")
+    public void sendWeeklyNotification() {
+
+        //FIXME
+        Member member = memberService.getById(4L).get();
+
+        reportHistoryService.getWeeklyReportedCounts(member);
     }
 }

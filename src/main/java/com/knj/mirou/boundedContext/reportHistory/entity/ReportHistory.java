@@ -26,5 +26,8 @@ public class ReportHistory extends BaseEntity {
     @ManyToOne
     private Member reporter;
 
+    @ManyToOne
+    private Member reportedMember;
+
     private String contents;
 }
