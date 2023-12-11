@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Setter
@@ -15,5 +16,6 @@ import java.util.List;
 public class ChallengeReportDTO {
 
     public List<Challenge> openedChallenges;
+    public Map<Long, Integer> writeCounts;
 
 }

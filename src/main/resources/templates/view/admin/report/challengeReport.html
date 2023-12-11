@@ -29,7 +29,7 @@
                     <tr class="w-full" th:each="challenge : ${reportDTO.openedChallenges}">
                         <td th:text="${challenge.name}"></td>
                         <td>
-                            <a th:href="|/reward/setting/${challenge.id}|" class="btn btn-sm btn-accent">보상 설정</a>
+                            <h1 th:text="${reportDTO.writeCounts.get(challenge.id)}"></h1>
                         </td>
                         <td class="flex justify-center">
                             <p th:text="${challenge.publicReward.size()} + '/'+ ${challenge.period}"></p>
