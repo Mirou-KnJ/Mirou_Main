@@ -40,6 +40,7 @@ public class ChallengeFeedService {
 
     private final ImageDataService imageDataService;
     private final ChallengeMemberService challengeMemberService;
+    private final CoinService coinService;
     private final ApplicationEventPublisher publisher;
 
     private final ChallengeFeedRepository challengeFeedRepository;

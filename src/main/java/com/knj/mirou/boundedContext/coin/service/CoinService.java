@@ -116,13 +116,14 @@ public class CoinService {
         RsData<PrivateReward> validRewardRs =
                 privateRewardService.getValidReward(linkedChallenge, challengeMember, successNum);
 
-        if(validRewardRs.isSuccess()) {
+        if (validRewardRs.isSuccess()) {
             giveCoin(linkedMember, validRewardRs.getData(), linkedChallenge.getName(), linkedChallenge.getImgUrl());
         }
 
-        if(validRewardRs.getResultCode().contains("S-2")) {
+        if (validRewardRs.getResultCode().contains("S-2")) {
             challengeMemberService.finishChallenge(challengeMember);
         }
+    }
 
     public void givePenalty(Member member, Challenge challenge) {
 
