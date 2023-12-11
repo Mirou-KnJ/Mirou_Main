@@ -21,9 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -158,5 +158,26 @@ public class ChallengeMemberService {
         }
 
         return completedChallenges;
+    }
+
+    public Map<Long, Integer> getWeeklyJoinCounts(List<Challenge> challenges) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDayOfWeek = now.minus(7,
+                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+
+        LocalDateTime endDayOfWeek = now.minus(1,
+                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
+
+        Map<Long, Integer> joinCounts = new HashMap<>();
+
+        for(Challenge challenge : challenges) {
+            int count = challengeMemberRepository
+                    .countByLinkedChallengeAndCreateDateBetween(challenge, startDayOfWeek, endDayOfWeek);
+            joinCounts.put(challenge.getId(), count);
+        }
+
+        return joinCounts;
     }
 }

@@ -1,7 +1,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}">
 <head>
-    <title>물품 코드 등록 폼</title>
+    <title>관리자 리포트(챌린지)</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
@@ -29,10 +29,10 @@
                     <tr class="w-full" th:each="challenge : ${reportDTO.openedChallenges}">
                         <td th:text="${challenge.name}"></td>
                         <td>
-                            <h1 th:text="${reportDTO.writeCounts.get(challenge.id)}"></h1>
+                            <h1 class="w-full badge badge-accent px-2 py-2" th:text="${reportDTO.writeCounts.get(challenge.id)}"></h1>
                         </td>
                         <td class="flex justify-center">
-                            <p th:text="${challenge.publicReward.size()} + '/'+ ${challenge.period}"></p>
+                            <h1 class="w-full badge badge-neutral px-2 py-2" th:text="${reportDTO.joinCounts.get(challenge.id)}"></h1>
                         </td>
                         <td>
                             <h1 th:text="${challenge.getJoinDeadLineFormat()}"></h1>

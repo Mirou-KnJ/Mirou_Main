@@ -6,6 +6,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
@@ -38,6 +39,7 @@ public class MemberService {
     private final PointService pointService;
     private final ChallengeService challengeService;
     private final ChallengeFeedService challengeFeedService;
+    private final ChallengeMemberService challengeMemberService;
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
@@ -123,6 +125,7 @@ public class MemberService {
         List<Challenge> openedChallenges = challengeService.getAllByStatus(ChallengeStatus.OPEN);
         reportDTO.setOpenedChallenges(openedChallenges);
         reportDTO.setWriteCounts(challengeFeedService.getWeeklyWriteCounts(openedChallenges));
+        reportDTO.setJoinCounts(challengeMemberService.getWeeklyJoinCounts(openedChallenges));
 
         return reportDTO;
     }

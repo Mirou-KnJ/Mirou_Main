@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.member.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,4 +22,7 @@ public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember
     List<ChallengeMember> findAllByLinkedMemberAndProgress(Member member, Progress progress);
 
     List<ChallengeMember> findByEndDateAndProgress(LocalDate endDate, Progress progress);
+
+    int countByLinkedChallengeAndCreateDateBetween(Challenge linkedChallenge,
+                                                   LocalDateTime startOfWeek, LocalDateTime endOfWeek);
 }
