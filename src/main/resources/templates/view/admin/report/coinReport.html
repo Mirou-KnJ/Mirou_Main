@@ -12,9 +12,18 @@
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
 
             <h1>최근 1주일 동안 지급된 코인 양</h1>
+            <h1 th:text="${reportDTO.weeklyGivenCoinSum}"></h1>
+
             <h1>최근 1주일 동안 사용된 코인 양</h1>
+            <h1 th:text="${reportDTO.weeklyUsedCoinSum}"></h1>
+
             <h1>활동 인원 대비 평균 지급 코인 양</h1>
+            <h1 th:text="${reportDTO.weeklyGivenCoinAverage}"></h1>
+
             <h1>활동 인원 대비 평균 사용 코인 양</h1>
+            <h1 th:text="${reportDTO.weeklyUsedCoinAverage}"></h1>
+
+
             <h1>가장 많은 코인을 보유하고 있는 사람의 양</h1>
 
         </div>
