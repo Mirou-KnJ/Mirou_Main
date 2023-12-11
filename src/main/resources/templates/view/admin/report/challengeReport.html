@@ -1,0 +1,51 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>물품 코드 등록 폼</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+
+            <div th:if="${#lists.isEmpty(reportDTO.openedChallenges)}">
+                <h1>현재 열려있는 챌린지가 없습니다.</h1>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(reportDTO.openedChallenges)}">
+                <table class="w-full table table-zebra border">
+                    <thead>
+                    <tr>
+                        <th class="mr-5">이름</th>
+                        <th class="mr-8">주간 인증 수</th>
+                        <th class="mr-5">신규 참여자 수</th>
+                        <th class="mr-5">종료 예정일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="w-full" th:each="challenge : ${reportDTO.openedChallenges}">
+                        <td th:text="${challenge.name}"></td>
+                        <td>
+                            <a th:href="|/reward/setting/${challenge.id}|" class="btn btn-sm btn-accent">보상 설정</a>
+                        </td>
+                        <td class="flex justify-center">
+                            <p th:text="${challenge.publicReward.size()} + '/'+ ${challenge.period}"></p>
+                        </td>
+                        <td>
+                            <h1 th:text="${challenge.getJoinDeadLineFormat()}"></h1>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+</th:block>
+</body>
+</html>

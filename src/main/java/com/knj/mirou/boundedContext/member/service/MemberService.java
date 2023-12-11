@@ -2,8 +2,11 @@ package com.knj.mirou.boundedContext.member.service;
 
 import com.knj.mirou.base.event.EventAfterJoin;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
+import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
@@ -31,6 +34,7 @@ public class MemberService {
 
     private final CoinService coinService;
     private final PointService pointService;
+    private final ChallengeService challengeService;
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
@@ -108,5 +112,14 @@ public class MemberService {
         List<Member> targetMembers = memberRepository.findByPointCurrentPointLessThan(resetStandard);
 
         pointService.resetPoint(targetMembers);
+    }
+
+    public ChallengeReportDTO getChallengeReportDto() {
+
+        ChallengeReportDTO reportDTO = new ChallengeReportDTO();
+
+        reportDTO.setOpenedChallenges(challengeService.getAllByStatus(ChallengeStatus.OPEN));
+
+        return reportDTO;
     }
 }
