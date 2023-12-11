@@ -13,8 +13,8 @@ public class CoinReportDTO {
     public int weeklyGivenCoinSum;
     public int weeklyUsedCoinSum;
 
-    public int weeklyGivenCoinAverage;
-    public int weeklyUsedCoinAverage;
+    public long weeklyGivenCoinAverage;
+    public long weeklyUsedCoinAverage;
 
     public int topCoinUserAmount;
 }

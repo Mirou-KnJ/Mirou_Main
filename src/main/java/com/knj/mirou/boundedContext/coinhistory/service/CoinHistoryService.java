@@ -6,12 +6,15 @@ import com.knj.mirou.boundedContext.coinhistory.entity.CoinHistory;
 import com.knj.mirou.boundedContext.coinhistory.repository.CoinHistoryRepository;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
+import com.knj.mirou.boundedContext.member.model.dtos.CoinReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -45,5 +48,53 @@ public class CoinHistoryService {
 
     public List<CoinHistory> getAllOrderedDesc(Member member) {
         return coinHistoryRepository.findAllByLinkedMemberOrderByCreateDateDesc(member);
+    }
+
+    public List<CoinHistory> getWeeklyHistoryByType(ChangeType changeType) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDayOfWeek = now.minus(7,
+                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+
+        LocalDateTime endDayOfWeek = now.minus(1,
+                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
+
+        List<CoinHistory> coinHistories = coinHistoryRepository
+                .findAllByChangeTypeAndCreateDateBetween(changeType, startDayOfWeek, endDayOfWeek);
+
+        return coinHistories;
+    }
+
+    public int getSumByHistories(List<CoinHistory> histories) {
+
+        int sum = 0;
+        for(CoinHistory history : histories) {
+            sum += history.getChangedCoin();
+        }
+
+        return sum;
+    }
+
+    public long getAverageByHistoriesAndSum(List<CoinHistory> histories, int sum) {
+
+        return sum / histories.size();
+    }
+
+    public CoinReportDTO getCoinReportDTO() {
+
+        CoinReportDTO coinReportDTO = new CoinReportDTO();
+
+        List<CoinHistory> weeklyGivenHistories = getWeeklyHistoryByType(ChangeType.GET);
+        int weeklyGivenCoinSum = getSumByHistories(weeklyGivenHistories);
+        coinReportDTO.setWeeklyGivenCoinSum(weeklyGivenCoinSum);
+        coinReportDTO.setWeeklyGivenCoinAverage(getAverageByHistoriesAndSum(weeklyGivenHistories, weeklyGivenCoinSum));
+
+        List<CoinHistory> weeklyUsedHistories = getWeeklyHistoryByType(ChangeType.USED);
+        int weeklyUsedCoinSum = getSumByHistories(weeklyUsedHistories);
+        coinReportDTO.setWeeklyUsedCoinSum(weeklyUsedCoinSum);
+        coinReportDTO.setWeeklyUsedCoinAverage(getAverageByHistoriesAndSum(weeklyUsedHistories, weeklyUsedCoinSum));
+
+        return coinReportDTO;
     }
 }
