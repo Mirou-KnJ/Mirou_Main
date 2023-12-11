@@ -1,7 +1,6 @@
 package com.knj.mirou.boundedContext.coin.service;
 
 import com.knj.mirou.base.enums.ChangeType;
-
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;

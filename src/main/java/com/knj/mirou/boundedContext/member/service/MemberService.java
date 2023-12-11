@@ -9,7 +9,6 @@ import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.config.PointConfigProperties;
-import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

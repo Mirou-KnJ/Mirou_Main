@@ -2,8 +2,6 @@ package com.knj.mirou.boundedContext.product.controller;
 
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.base.rsData.RsData;
-import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
-import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.service.ProductService;

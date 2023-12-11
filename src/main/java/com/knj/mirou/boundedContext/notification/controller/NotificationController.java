@@ -5,7 +5,6 @@ import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.notification.model.entity.Notification;
 import com.knj.mirou.boundedContext.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

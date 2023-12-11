@@ -1,6 +1,5 @@
 package com.knj.mirou.base.event;
 
-import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import lombok.Getter;

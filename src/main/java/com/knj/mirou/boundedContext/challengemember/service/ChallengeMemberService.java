@@ -1,6 +1,5 @@
 package com.knj.mirou.boundedContext.challengemember.service;
 
-import com.knj.mirou.base.enums.ChangeType;
 import com.knj.mirou.base.event.EventAfterEndProgress;
 import com.knj.mirou.base.event.EventAfterJoinChallenge;
 import com.knj.mirou.base.rsData.RsData;
@@ -11,9 +10,7 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
 import com.knj.mirou.boundedContext.challengemember.repository.ChallengeMemberRepository;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.service.PointService;
-import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;

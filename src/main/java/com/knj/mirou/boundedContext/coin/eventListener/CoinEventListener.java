@@ -1,7 +1,6 @@
 package com.knj.mirou.boundedContext.coin.eventListener;
 
 import com.knj.mirou.base.event.EventAfterWriteFeed;
-import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import lombok.RequiredArgsConstructor;
