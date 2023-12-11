@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.member.service;
 
+import com.knj.mirou.base.event.EventAfterJoin;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
@@ -8,10 +9,10 @@ import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.config.PointConfigProperties;
-import com.knj.mirou.boundedContext.point.entity.Point;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,11 +34,16 @@ public class MemberService {
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
+    private final ApplicationEventPublisher publisher;
 
     private final MemberRepository memberRepository;
 
     public Optional<Member> getByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId);
+    }
+
+    public Optional<Member> getById(Long id) {
+        return memberRepository.findById(id);
     }
 
     @Transactional
@@ -61,6 +67,8 @@ public class MemberService {
                 .build();
 
         Member joinMember = memberRepository.save(member);
+
+        publisher.publishEvent(new EventAfterJoin(this, joinMember));
 
         return RsData.of("S-1", "회원가입이 완료되었습니다.", joinMember);
     }

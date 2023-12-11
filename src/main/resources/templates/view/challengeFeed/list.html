@@ -207,9 +207,9 @@
                     const msg = response.msg;
 
                     if (code.toString().startsWith('F')) {
-                        toastWarning(code + ': ' + msg);
+                        toastWarning(msg);
                     } else {
-                        toastNotice(code + ': ' + msg);
+                        toastNotice(msg);
                     }
                 }
             })

@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.point.service;
 
 import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.base.event.EventAfterResetPoint;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -9,6 +10,7 @@ import com.knj.mirou.boundedContext.point.repository.PointRepository;
 import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,8 @@ import java.util.List;
 public class PointService {
 
     private final PointHistoryService pointHistoryService;
+
+    private final ApplicationEventPublisher publisher;
 
     private final PointRepository pointRepository;
 
@@ -60,6 +64,7 @@ public class PointService {
                 .id(point.getId())
                 .currentPoint(point.getCurrentPoint() - cost)
                 .totalUsedPoint(point.getTotalUsedPoint() + cost)
+                .totalGetPoint(point.getTotalGetPoint())
                 .build();
 
         pointRepository.save(point);
@@ -74,9 +79,12 @@ public class PointService {
             point = Point.builder()
                     .id(point.getId())
                     .currentPoint(3000)
+                    .totalGetPoint(point.getTotalGetPoint())
+                    .totalUsedPoint(point.getTotalUsedPoint())
                     .build();
 
             pointRepository.save(point);
+            publisher.publishEvent(new EventAfterResetPoint(this, targetMember));
         }
     }
 }

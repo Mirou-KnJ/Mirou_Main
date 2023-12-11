@@ -1,0 +1,31 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>나의 알림</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+
+            <div th:if="${#lists.isEmpty(notifications)}">
+                <h1>아직 생성된 알림이 없어요!</h1>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(notifications)}">
+                <div class="flex" th:each="noti : ${notifications}">
+                    <img th:src="${noti.imgUrl}" alt="notiImg">
+                    <h1 th:text="${noti.contents}"></h1>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+</th:block>
+</body>
+</html>

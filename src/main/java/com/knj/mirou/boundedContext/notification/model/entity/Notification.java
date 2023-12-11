@@ -23,13 +23,15 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 public class Notification extends BaseEntity {
 
+    @ManyToOne
+    private Member member;
+
     private String contents;
+
+    private String imgUrl;
 
     @Enumerated(EnumType.STRING)
     private NotiType notiType;
-
-    @ManyToOne
-    private Member member;
 
     private LocalDateTime readDate;
 

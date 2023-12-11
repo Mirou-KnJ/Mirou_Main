@@ -1,11 +1,13 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
+import com.knj.mirou.base.event.EventAfterWriteFeed;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.enums.FeedStatus;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
@@ -14,10 +16,9 @@ import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
-import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,10 +37,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChallengeFeedService {
 
-    private final CoinService coinService;
     private final ImageDataService imageDataService;
-    private final PrivateRewardService privateRewardService;
     private final ChallengeMemberService challengeMemberService;
+    private final CoinService coinService;
+    private final ApplicationEventPublisher publisher;
 
     private final ChallengeFeedRepository challengeFeedRepository;
 
@@ -79,29 +80,12 @@ public class ChallengeFeedService {
                 .imgUrl(imgUrl)
                 .build();
 
-        ChallengeFeed saveFeed = challengeFeedRepository.save(feed);
-        imageDataService.create(saveFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
+        ChallengeFeed savedFeed = challengeFeedRepository.save(feed);
+        imageDataService.create(savedFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
+
+        publisher.publishEvent(new EventAfterWriteFeed(this, challengeMember));
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
-    }
-
-    @Transactional
-    public void checkReward(Challenge challenge, Member member) {
-
-        ChallengeMember challengeMember = challengeMemberService.getByChallengeAndMember(challenge, member).get();
-
-        int successNum = challengeMemberService.updateSuccess(challengeMember);
-
-        RsData<PrivateReward> validRewardRs =
-                privateRewardService.getValidReward(challenge, challengeMember, successNum);
-
-        if(validRewardRs.isSuccess()) {
-            coinService.giveCoin(member, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
-        }
-
-        if(validRewardRs.getResultCode().contains("S-2")) {
-            challengeMemberService.finishChallenge(challengeMember);
-        }
     }
 
     public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {
@@ -121,8 +105,10 @@ public class ChallengeFeedService {
         feedListDto.setLinkedChallenge(linkedChallenge);
         feedListDto.setChallengeImg(imageDataService.getOptimizingUrl(linkedChallenge.getImgUrl(),
                 OptimizerOption.CHALLENGE_DETAIL));
-        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
-        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
+        List<ChallengeFeed> feeds =
+                challengeFeedRepository.findByLinkedChallengeAndStatus(linkedChallenge, FeedStatus.PUBLIC);
+        List<ChallengeFeed> myFeeds =
+                challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
 
         for(ChallengeFeed myFeed : myFeeds) {
             feeds.remove(myFeed);
@@ -169,5 +155,21 @@ public class ChallengeFeedService {
         feedListImages.putAll(imageDataService.getNotMineFeedListImages(notMineFeeds));
 
         return feedListImages;
+    }
+
+    @Transactional
+    public void updateReportCount(ChallengeFeed feed) {
+
+        feed.updateReportCount();
+        int reportCount = feed.getReportCount();
+
+        if(reportCount >= 5) {
+            feed.updatePrivate();
+
+            Member writer = feed.getWriter();
+            Challenge linkedChallenge = feed.getLinkedChallenge();
+
+            coinService.givePenalty(writer, linkedChallenge);
+        }
     }
 }
