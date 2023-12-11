@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.challengefeed.service;
 
+import com.knj.mirou.base.event.EventAfterWriteFeed;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -15,10 +16,10 @@ import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,10 +38,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChallengeFeedService {
 
-    private final CoinService coinService;
     private final ImageDataService imageDataService;
-    private final PrivateRewardService privateRewardService;
     private final ChallengeMemberService challengeMemberService;
+    private final ApplicationEventPublisher publisher;
 
     private final ChallengeFeedRepository challengeFeedRepository;
 
@@ -80,29 +80,12 @@ public class ChallengeFeedService {
                 .imgUrl(imgUrl)
                 .build();
 
-        ChallengeFeed saveFeed = challengeFeedRepository.save(feed);
-        imageDataService.create(saveFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
+        ChallengeFeed savedFeed = challengeFeedRepository.save(feed);
+        imageDataService.create(savedFeed.getId(), ImageTarget.FEED_IMG, imgUrl);
+
+        publisher.publishEvent(new EventAfterWriteFeed(this, challengeMember));
 
         return RsData.of("S-1", "피드 작성에 성공했습니다.");
-    }
-
-    @Transactional
-    public void checkReward(Challenge challenge, Member member) {
-
-        ChallengeMember challengeMember = challengeMemberService.getByChallengeAndMember(challenge, member).get();
-
-        int successNum = challengeMemberService.updateSuccess(challengeMember);
-
-        RsData<PrivateReward> validRewardRs =
-                privateRewardService.getValidReward(challenge, challengeMember, successNum);
-
-        if(validRewardRs.isSuccess()) {
-            coinService.giveCoin(member, validRewardRs.getData(), challenge.getName(), challenge.getImgUrl());
-        }
-
-        if(validRewardRs.getResultCode().contains("S-2")) {
-            challengeMemberService.finishChallenge(challengeMember);
-        }
     }
 
     public ChallengeDetailDTO getDetailData(Challenge challenge, Member member, ChallengeDetailDTO detailDTO) {

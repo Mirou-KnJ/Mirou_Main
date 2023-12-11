@@ -83,8 +83,6 @@ public class ChallengeFeedController {
             return rq.historyBack(writeRsData);
         }
 
-        challengeFeedService.checkReward(challenge, member);
-
         return rq.redirectWithMsg("/challenge/detail/" + challengeId, writeRsData);
     }
 

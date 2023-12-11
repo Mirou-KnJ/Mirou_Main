@@ -1,6 +1,8 @@
 package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.base.enums.ChangeType;
+import com.knj.mirou.base.event.EventAfterEndProgress;
+import com.knj.mirou.base.event.EventAfterJoinChallenge;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -16,6 +18,7 @@ import com.knj.mirou.boundedContext.reward.model.entity.PrivateReward;
 import com.knj.mirou.boundedContext.reward.service.PrivateRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,7 @@ public class ChallengeMemberService {
     private final PrivateRewardService privateRewardService;
 
     private final CMemberConfigProperties CMemberConfigProps;
+    private final ApplicationEventPublisher publisher;
 
     private final ChallengeMemberRepository challengeMemberRepository;
 
@@ -56,6 +60,8 @@ public class ChallengeMemberService {
         ChallengeMember savedChallengeMember = challengeMemberRepository.save(challengeMember);
         privateRewardService.create(challenge, savedChallengeMember);
 
+        publisher.publishEvent(new EventAfterJoinChallenge(this, savedChallengeMember));
+
         return RsData.of("S-1", "챌린지에 성공적으로 참여하였습니다.", savedChallengeMember.getId());
     }
 
@@ -70,6 +76,7 @@ public class ChallengeMemberService {
 
         for (ChallengeMember target : endTargetChallengeMembers) {
             target.finishChallenge();
+            publisher.publishEvent(new EventAfterEndProgress(this, target));
         }
     }
 
@@ -127,6 +134,7 @@ public class ChallengeMemberService {
     @Transactional
     public void finishChallenge(ChallengeMember challengeMember) {
         challengeMember.finishChallenge();
+        publisher.publishEvent(new EventAfterEndProgress(this, challengeMember));
     }
 
     public int getCountByLinkedChallenge(Challenge challenge) {
