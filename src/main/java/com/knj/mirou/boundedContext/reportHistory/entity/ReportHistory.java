@@ -1,7 +1,10 @@
 package com.knj.mirou.boundedContext.reportHistory.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
+import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.member.model.entity.Member;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +20,11 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class ReportHistory extends BaseEntity {
 
-    private long targetFeedId;
-    private long reporterId;
-    private String contents;
+    @ManyToOne
+    private ChallengeFeed targetFeed;
 
+    @ManyToOne
+    private Member reporter;
+
+    private String contents;
 }

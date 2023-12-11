@@ -7,6 +7,7 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
+import com.knj.mirou.boundedContext.challengefeed.model.enums.FeedStatus;
 import com.knj.mirou.boundedContext.challengefeed.repository.ChallengeFeedRepository;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
@@ -104,8 +105,10 @@ public class ChallengeFeedService {
         feedListDto.setLinkedChallenge(linkedChallenge);
         feedListDto.setChallengeImg(imageDataService.getOptimizingUrl(linkedChallenge.getImgUrl(),
                 OptimizerOption.CHALLENGE_DETAIL));
-        List<ChallengeFeed> feeds = challengeFeedRepository.findByLinkedChallenge(linkedChallenge);
-        List<ChallengeFeed> myFeeds = challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
+        List<ChallengeFeed> feeds =
+                challengeFeedRepository.findByLinkedChallengeAndStatus(linkedChallenge, FeedStatus.PUBLIC);
+        List<ChallengeFeed> myFeeds =
+                challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
 
         for(ChallengeFeed myFeed : myFeeds) {
             feeds.remove(myFeed);
@@ -152,5 +155,21 @@ public class ChallengeFeedService {
         feedListImages.putAll(imageDataService.getNotMineFeedListImages(notMineFeeds));
 
         return feedListImages;
+    }
+
+    @Transactional
+    public void updateReportCount(ChallengeFeed feed) {
+
+        feed.updateReportCount();
+        int reportCount = feed.getReportCount();
+
+        if(reportCount >= 5) {
+            feed.updatePrivate();
+
+            Member writer = feed.getWriter();
+            Challenge linkedChallenge = feed.getLinkedChallenge();
+
+            coinService.givePenalty(writer, linkedChallenge);
+        }
     }
 }

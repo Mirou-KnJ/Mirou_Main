@@ -64,6 +64,7 @@ public class PointService {
                 .id(point.getId())
                 .currentPoint(point.getCurrentPoint() - cost)
                 .totalUsedPoint(point.getTotalUsedPoint() + cost)
+                .totalGetPoint(point.getTotalGetPoint())
                 .build();
 
         pointRepository.save(point);
@@ -78,6 +79,8 @@ public class PointService {
             point = Point.builder()
                     .id(point.getId())
                     .currentPoint(3000)
+                    .totalGetPoint(point.getTotalGetPoint())
+                    .totalUsedPoint(point.getTotalUsedPoint())
                     .build();
 
             pointRepository.save(point);

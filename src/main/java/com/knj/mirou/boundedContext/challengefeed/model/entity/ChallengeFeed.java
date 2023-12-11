@@ -2,10 +2,9 @@ package com.knj.mirou.boundedContext.challengefeed.model.entity;
 
 import com.knj.mirou.base.entity.BaseEntity;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challengefeed.model.enums.FeedStatus;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -33,6 +32,10 @@ public class ChallengeFeed extends BaseEntity {
     @Builder.Default
     private int reportCount = 0;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private FeedStatus status = FeedStatus.PUBLIC;
+
     private String imgUrl;
 
     public String getCreateDateFormatStr() {
@@ -51,5 +54,9 @@ public class ChallengeFeed extends BaseEntity {
 
     public void updateReportCount() {
         this.reportCount = reportCount + 1;
+    }
+
+    public void updatePrivate() {
+        this.status = FeedStatus.PRIVATE;
     }
 }
