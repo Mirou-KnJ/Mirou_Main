@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.notification.service;
 
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
@@ -25,6 +26,7 @@ public class NotificationService {
     private final MemberService memberService;
     private final ImageDataService imageDataService;
     private final ReportHistoryService reportHistoryService;
+    private final ChallengeFeedService challengeFeedService;
 
     private final NotificationRepository notificationRepository;
 
@@ -69,14 +71,16 @@ public class NotificationService {
     }
 
     @Transactional
-    @Scheduled(cron = "3 0 0 * * 1")
+    @Scheduled(cron = "3 0 0 * * ?")
     public void sendWeeklyNotification() {
 
         List<Member> members = memberService.getAll();
 
         for(Member member : members) {
-            int count = reportHistoryService.getWeeklyReportedCounts(member);
-            create(member, String.valueOf(count), SYSTEM_IMG, NotiType.REPORT_COUNT);
+            int reportCount = reportHistoryService.getWeeklyReportedCounts(member);
+            int likeCount = challengeFeedService.getWeeklyLikeCounts(member);
+            create(member, String.valueOf(reportCount), SYSTEM_IMG, NotiType.REPORT_COUNT);
+            create(member, String.valueOf(likeCount), SYSTEM_IMG, NotiType.LIKE_COUNT);
         }
     }
 }

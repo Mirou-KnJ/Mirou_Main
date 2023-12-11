@@ -64,20 +64,13 @@ public class ReportHistoryService {
         LocalDateTime startDayOfWeek = now.minus(7,
                 ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
 
-        log.info("start : " + startDayOfWeek.toString());
-
         LocalDateTime endDayOfWeek = now.minus(1,
-                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
 
-        log.info("end : " + endDayOfWeek.toString());
-
-
-        int count = reportHistoryRepository
+        int reportCount = reportHistoryRepository
                 .countByReportedMemberAndCreateDateBetween(member, startDayOfWeek, endDayOfWeek);
 
-        log.error("count : " + count);
-
-        return count;
+        return reportCount;
     }
 
 }

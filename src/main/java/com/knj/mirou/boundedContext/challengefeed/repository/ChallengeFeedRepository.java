@@ -32,4 +32,7 @@ public interface ChallengeFeedRepository extends JpaRepository<ChallengeFeed, Lo
 
     List<ChallengeFeed> findByLinkedChallengeAndWriter(Challenge linkedChallenge, Member writer);
 
+    List<ChallengeFeed> findAllByWriterAndCreateDateBetween
+            (Member writer, LocalDateTime startDayOfWeek, LocalDateTime endDayOfWeek);
+
 }
