@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.member.controller;
 
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +38,7 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/report/currency")
-    public String coinReport(Model model) {
+    public String currencyReport(Model model) {
 
         CurrencyReportDTO coinReportDTO = memberService.getCoinReportDto();
         CurrencyReportDTO pointReportDTO = memberService.getPointReportDto();
@@ -46,6 +47,17 @@ public class AdminController {
         model.addAttribute("pointReportDTO", pointReportDTO);
 
         return "view/admin/report/currencyReport";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/report/product")
+    public String productReport(Model model) {
+
+        ProductReportDTO productReportDTO = memberService.getProductReportDto();
+
+        model.addAttribute("productReportDTO", productReportDTO);
+
+        return "view/admin/report/productReport";
     }
 
 }

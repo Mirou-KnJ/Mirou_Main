@@ -12,6 +12,7 @@ import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
@@ -151,6 +152,13 @@ public class MemberService {
         CurrencyReportDTO currencyReportDTO = pointHistoryService.getPointReportDTO();
 
         return currencyReportDTO;
+    }
+
+    public ProductReportDTO getProductReportDto() {
+
+        ProductReportDTO productReportDTO = new ProductReportDTO();
+
+        return productReportDTO;
     }
 
 
