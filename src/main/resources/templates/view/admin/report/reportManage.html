@@ -48,7 +48,7 @@
                         </td>
                         <td th:text="${report.getCreateDateFormattedStr()}"></td>
                         <td class="w-full">
-                            <button class="btn btn-primary btn-sm">추방</button>
+                            <button th:onclick="kickUser([[${report.targetFeed.id}]])" class="btn btn-primary btn-sm">추방</button>
                         </td>
 
                         <dialog th:id="'reportedFeed' + ${report.targetFeed.id}" class="modal">
@@ -72,6 +72,14 @@
 
         <div class="flex flex-grow bg-purple-50"></div>
     </main>
+
+    <script th:inline="javascript">
+
+        function kickUser(targetFeedId) {
+            alert(targetFeedId);
+        }
+
+    </script>
 </th:block>
 </body>
 </html>
