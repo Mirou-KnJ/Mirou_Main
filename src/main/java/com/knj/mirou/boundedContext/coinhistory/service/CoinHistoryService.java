@@ -45,7 +45,9 @@ public class CoinHistoryService {
 
         coinHistoryRepository.save(coinHistory);
 
-        publisher.publishEvent(new EventAfterGiveCoin(this, member, contents, imgUrl));
+        if(type.equals(ChangeType.GET)) {
+            publisher.publishEvent(new EventAfterGiveCoin(this, member, contents, imgUrl));
+        }
     }
 
     public List<CoinHistory> getAllOrderedDesc(Member member) {
