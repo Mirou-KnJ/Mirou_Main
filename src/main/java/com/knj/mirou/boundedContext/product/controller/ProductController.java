@@ -8,6 +8,7 @@ import com.knj.mirou.boundedContext.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +62,7 @@ public class ProductController {
         return ResponseEntity.ok(startSaleRs);
     }
 
-
+    @PreAuthorize("isAuthenticated()")  //FIXME: 상점 접근 불가 오류 임시 처리
     @GetMapping("/store")
     public String storePage(Model model) {
 
