@@ -8,27 +8,31 @@
     <main class="flex justify-center w-full">
         <div class="flex flex-grow bg-purple-50 border"></div>
 
-        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0">
+            <img src="https://kr.object.ncloudstorage.com/mirou/etc/%EA%B8%80%EC%94%A8x-001.png" alt="main">
 
-            <div class="flex flex-col flex-grow justify-center items-center w-full min-h-screen">
-                <div class="flex justify-center items-center w-full mb-10">
+            <div class="flex flex-col flex-grow justify-center items-center w-full min-h-screen
+absolute top-[36rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div class="flex justify-center items-center w-full">
                     <p class="text-center text-black">
-                        <span class="text-[15px] text-center text-black">나의 습관이 </span>
-                        <span class="text-xl text-center text-yellow-300">소득</span>
-                        <span class="text-[15px] text-center text-black">이되는</span><br/><br/>
-                        <span class="text-3xl text-center text-black">Miracle Routine</span>
+                        <span class="text-[25px] text-center text-black">나의 습관이 </span>
+                        <span class="text-3xl text-center text-yellow-300">소득</span>
+                        <span class="text-[25px] text-center text-black">이되는</span><br/><br/>
+                        <span class="text-5xl text-center text-black">Miracle Routine</span>
                     </p>
                 </div>
 
-                <div class="flex flex-col w-72 bg-base-200 py-3 rounded-lg mt-3 mb-10">
+                <div class="flex flex-col w-72 bg-base-200 py-3 rounded-lg mt-10 mb-10">
                     <div class="flex grid flex-grow rounded-box">
                         <div>
                             <span class="text-sm ml-7 mt-2">[필독] Mirou 서비스 이용약관</span>
-                            <button class="btn ml-5" onclick="modal.showModal()"><i class="fa-solid fa-chevron-down"></i></button>
+                            <button class="btn ml-5" onclick="modal.showModal()"><i
+                                    class="fa-solid fa-chevron-down"></i></button>
                             <dialog id="modal" class="modal">
                                 <div class="modal-box">
                                     <h3 class="font-bold text-lg">Mirou 서비스 이용약관</h3>
-                                    <p class="py-4">- Mirou 서비스는 카카오 정보제공동의 화면을 통해 사용자로부터 서비스 가입에 필요한 이용약관에 대해 동의를 받을 수 있습니다.</p>
+                                    <p class="py-4">- Mirou 서비스는 카카오 정보제공동의 화면을 통해 사용자로부터 서비스 가입에 필요한 이용약관에 대해 동의를
+                                        받을 수 있습니다.</p>
                                     <p class="py-4">- Mirou 서비스는 '인증' 시 사용자가 제출한 사진을 받게되며 정당한 사진만 업로드 됩니다.</p>
                                     <p class="py-4">- Mirou 서비스는 '인증' 시 사용자에게 사진을 받게되며 업로드 동의로 간주합니다.</p>
                                     <p class="py-4">- 이용약관에 맞지않는 부적절한 활동을 한 사용자는 서비스 이용을 제제 당할 수 있습니다.</p>
@@ -45,12 +49,11 @@
                 </div>
 
                 <div class="flex">
-                    <a href="/oauth2/authorization/kakao" class="btn btn-warning" >
+                    <a href="/oauth2/authorization/kakao" class="btn btn-warning">
                         <i class="fa-solid fa-comment"></i>
                         카카오톡으로 시작하기
                     </a>
                 </div>
-
             </div>
         </div>
 
