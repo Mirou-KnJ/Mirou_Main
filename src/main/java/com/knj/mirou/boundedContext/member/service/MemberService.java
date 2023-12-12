@@ -11,13 +11,14 @@ import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
-import com.knj.mirou.boundedContext.member.model.dtos.CoinReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.config.PointConfigProperties;
 import com.knj.mirou.boundedContext.point.service.PointService;
+import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -43,6 +44,7 @@ public class MemberService {
     private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
     private final CoinHistoryService coinHistoryService;
+    private final PointHistoryService pointHistoryService;
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
@@ -137,12 +139,18 @@ public class MemberService {
         return reportDTO;
     }
 
-    public CoinReportDTO getCoinReportDto() {
+    public CurrencyReportDTO getCoinReportDto() {
 
-        CoinReportDTO coinReportDTO = coinHistoryService.getCoinReportDTO();
+        CurrencyReportDTO currencyReportDTO = coinHistoryService.getCoinReportDTO();
 
+        return currencyReportDTO;
+    }
 
-        return coinReportDTO;
+    public CurrencyReportDTO getPointReportDto() {
+
+        CurrencyReportDTO currencyReportDTO = pointHistoryService.getPointReportDTO();
+
+        return currencyReportDTO;
     }
 
 

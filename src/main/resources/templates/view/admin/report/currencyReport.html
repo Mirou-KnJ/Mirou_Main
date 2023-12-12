@@ -23,29 +23,29 @@
                     <div class="flex flex-col justify-center gap-10 w-full">
                         <div class="mx-5">
                             <h1 class="text-lg text-gray-500">주간 총 지급 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinSum}"></p>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyGivenCurrencySum}"></p>
                         </div>
 
                         <div class="mx-5">
                             <h1 class="text-lg text-gray-500">주간 총 사용 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinSum}"></p>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyUsedCurrencySum}"></p>
                         </div>
 
                         <div class="mx-5">
                             <h1 class="text-lg text-gray-500">주간 평균 지급 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinAverage}"></p>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyGivenCurrencyAverage}"></p>
 
                             <progress class="progress progress-warning w-36"
-                                      th:value="${reportDTO.weeklyGivenCoinAverage}"
-                                      th:max="${reportDTO.weeklyGivenCoinSum}"></progress>
+                                      th:value="${coinReportDTO.weeklyGivenCurrencyAverage}"
+                                      th:max="${coinReportDTO.weeklyGivenCurrencySum}"></progress>
                         </div>
 
                         <div class="mx-5">
                             <h1 class="text-lg text-gray-500">주간 평균 사용 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinAverage}"></p>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyUsedCurrencyAverage}"></p>
                             <progress class="progress progress-warning w-36"
-                                      th:value="${reportDTO.weeklyUsedCoinAverage}"
-                                      th:max="${reportDTO.weeklyUsedCoinSum}"></progress>
+                                      th:value="${coinReportDTO.weeklyUsedCurrencyAverage}"
+                                      th:max="${coinReportDTO.weeklyUsedCurrencySum}"></progress>
                         </div>
                     </div>
 
@@ -65,35 +65,33 @@
                     <div class="flex flex-col justify-center gap-10">
 
                         <div class="mx-5">
-                            <h1 class="text-lg text-gray-500">주간 총 지급 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinSum}"></p>
+                            <h1 class="text-lg text-gray-500">주간 총 지급 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyGivenCurrencySum}"></p>
                         </div>
 
                         <div class="mx-5">
-                            <h1 class="text-lg text-gray-500">주간 총 사용 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinSum}"></p>
+                            <h1 class="text-lg text-gray-500">주간 총 사용 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyUsedCurrencySum}"></p>
                         </div>
 
                         <div class="mx-5">
-                            <h1 class="text-lg text-gray-500">주간 평균 지급 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinAverage}"></p>
+                            <h1 class="text-lg text-gray-500">주간 평균 지급 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyGivenCurrencyAverage}"></p>
 
                             <progress class="progress progress-info w-36"
-                                      th:value="${reportDTO.weeklyGivenCoinAverage}"
-                                      th:max="${reportDTO.weeklyGivenCoinSum}"></progress>
+                                      th:value="${pointReportDTO.weeklyGivenCurrencyAverage}"
+                                      th:max="${pointReportDTO.weeklyGivenCurrencySum}"></progress>
                         </div>
 
                         <div class="mx-5">
-                            <h1 class="text-lg text-gray-500">주간 평균 사용 코인</h1>
-                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinAverage}"></p>
+                            <h1 class="text-lg text-gray-500">주간 평균 사용 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyUsedCurrencyAverage}"></p>
 
                             <progress class="progress progress-info w-36"
-                                      th:value="${reportDTO.weeklyGivenCoinAverage}"
-                                      th:max="${reportDTO.weeklyGivenCoinSum}"></progress>
+                                      th:value="${pointReportDTO.weeklyUsedCurrencyAverage}"
+                                      th:max="${pointReportDTO.weeklyUsedCurrencySum}"></progress>
                         </div>
                     </div>
-
-
                 </div>
             </div>
 

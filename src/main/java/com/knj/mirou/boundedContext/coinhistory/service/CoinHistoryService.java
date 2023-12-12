@@ -6,7 +6,7 @@ import com.knj.mirou.boundedContext.coinhistory.entity.CoinHistory;
 import com.knj.mirou.boundedContext.coinhistory.repository.CoinHistoryRepository;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
-import com.knj.mirou.boundedContext.member.model.dtos.CoinReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,20 +87,20 @@ public class CoinHistoryService {
         return sum / distinctMemberIds.size();
     }
 
-    public CoinReportDTO getCoinReportDTO() {
+    public CurrencyReportDTO getCoinReportDTO() {
 
-        CoinReportDTO coinReportDTO = new CoinReportDTO();
+        CurrencyReportDTO currencyReportDTO = new CurrencyReportDTO();
 
         List<CoinHistory> weeklyGivenHistories = getWeeklyHistoryByType(ChangeType.GET);
         int weeklyGivenCoinSum = getSumByHistories(weeklyGivenHistories);
-        coinReportDTO.setWeeklyGivenCoinSum(weeklyGivenCoinSum);
-        coinReportDTO.setWeeklyGivenCoinAverage(getAverageBySum(weeklyGivenCoinSum));
+        currencyReportDTO.setWeeklyGivenCurrencySum(weeklyGivenCoinSum);
+        currencyReportDTO.setWeeklyGivenCurrencyAverage(getAverageBySum(weeklyGivenCoinSum));
 
         List<CoinHistory> weeklyUsedHistories = getWeeklyHistoryByType(ChangeType.USED);
         int weeklyUsedCoinSum = getSumByHistories(weeklyUsedHistories);
-        coinReportDTO.setWeeklyUsedCoinSum(weeklyUsedCoinSum);
-        coinReportDTO.setWeeklyUsedCoinAverage(getAverageBySum(weeklyUsedCoinSum));
+        currencyReportDTO.setWeeklyUsedCurrencySum(weeklyUsedCoinSum);
+        currencyReportDTO.setWeeklyUsedCurrencyAverage(getAverageBySum(weeklyUsedCoinSum));
 
-        return coinReportDTO;
+        return currencyReportDTO;
     }
 }
