@@ -6,7 +6,6 @@
 <body>
 <th:block layout:fragment="Content">
     <main class="flex justify-center w-full">
-
         <div class="flex flex-grow bg-purple-50 border"></div>
 
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
@@ -21,14 +20,41 @@
                     </p>
                 </div>
 
+                <div class="flex flex-col justify-center items-center mb-10">
+                    <label class="label cursor-pointer">
+                        <input type="checkbox" class="checkbox mr-2" id="kakaoCheckbox1" onchange="ButtonAction()"/>
+                        <span>[필수] 카카오 개인정보 수집 및 이용</span>
+                    </label>
+                    <label class="label cursor-pointer">
+                        <input type="checkbox" class="checkbox mr-2" id="kakaoCheckbox2" onchange="ButtonAction()"/>
+                        <span>[필수] 개인정보 수집 및 이용</span>
+                    </label>
+                </div>
+
                 <div class="flex">
-                    <a href="/oauth2/authorization/kakao" class="btn btn-warning">
+                    <a href="/oauth2/authorization/kakao" class="btn btn-warning" id="kakaoButton" disabled>
                         <i class="fa-solid fa-comment"></i>
                         카카오톡으로 시작하기
                     </a>
                 </div>
+
             </div>
+
         </div>
+
+        <script>
+            function ButtonAction() {
+                const kakaoCheckbox1 = document.getElementById('kakaoCheckbox1');
+                const kakaoCheckbox2 = document.getElementById('kakaoCheckbox2');
+                const kakaoButton = document.getElementById('kakaoButton');
+
+                if (kakaoCheckbox1.checked && kakaoCheckbox2.checked) {
+                    kakaoButton.removeAttribute('disabled');
+                } else {
+                    kakaoButton.setAttribute('disabled', 'disabled');
+                }
+            }
+        </script>
         <div class="flex flex-grow bg-purple-50 border"></div>
     </main>
 </th:block>
