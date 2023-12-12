@@ -3,7 +3,9 @@ package com.knj.mirou.boundedContext.member.controller;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.ReportManageDTO;
 import com.knj.mirou.boundedContext.member.service.MemberService;
+import com.knj.mirou.boundedContext.reportHistory.service.ReportHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final MemberService memberService;
+    private final ReportHistoryService reportHistoryService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/report")
@@ -58,6 +61,17 @@ public class AdminController {
         model.addAttribute("productReportDTO", productReportDTO);
 
         return "view/admin/report/productReport";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/report/reportManage")
+    public String reportManagement(Model model) {
+
+        ReportManageDTO reportManageDto = reportHistoryService.getReportManageDto();
+
+        model.addAttribute("reportManageDto", reportManageDto);
+
+        return "view/admin/report/reportManage";
     }
 
 }

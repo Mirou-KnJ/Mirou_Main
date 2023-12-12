@@ -1,0 +1,61 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>관리자 리포트(신고)</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+
+            <div th:if="${#lists.isEmpty(reportManageDto.weeklyReportHistories)}" class="flex flex-col">
+                <h1>아직 주간 신고내역이 존재하지 않습니다!</h1>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(reportManageDto.weeklyReportHistories)}" class="flex flex-col">
+
+                <table class="w-full table table-zebra border mt-5 border rounded-lg"
+                       th:each="report : ${reportManageDto.weeklyReportHistories}">
+                    <thead>
+                    <tr>
+                        <th class="mr-5">신고자</th>
+                        <th class="mr-8">대상자</th>
+                        <th class="mr-5">신고 내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${report.reporter.nickname}"></td>
+                        <td th:text="${report.reportedMember.nickname}"></td>
+                        <td th:text="${report.contents}"></td>
+                    </tr>
+                    </tbody>
+                    <thead>
+                    <tr>
+                        <th class="mr-5">피드 내용</th>
+                        <th class="mr-5">신고일</th>
+                        <th class="mr-5">버튼</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${report.targetFeed.contents}"></td>
+                        <td th:text="${report.getCreateDateFormattedStr()}"></td>
+                        <td class="w-full">
+                            <button class="btn btn-primary">추방</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+</th:block>
+</body>
+</html>
