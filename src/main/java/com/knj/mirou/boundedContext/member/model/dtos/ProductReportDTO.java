@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Data
 @Setter
 @Getter
@@ -18,5 +16,4 @@ public class ProductReportDTO {
     public int weeklyBestProductSalesCount;
     public int weeklyAllSalesCount;
     public int weeklyAllUsedCount;
-    public List<ProductInfo> outOfStockProducts;
 }

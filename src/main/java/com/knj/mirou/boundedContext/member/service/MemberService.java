@@ -9,6 +9,7 @@ import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
+import com.knj.mirou.boundedContext.inventory.service.InventoryService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
@@ -46,6 +47,7 @@ public class MemberService {
     private final ChallengeMemberService challengeMemberService;
     private final CoinHistoryService coinHistoryService;
     private final PointHistoryService pointHistoryService;
+    private final InventoryService inventoryService;
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
@@ -156,9 +158,9 @@ public class MemberService {
 
     public ProductReportDTO getProductReportDto() {
 
-        ProductReportDTO productReportDTO = new ProductReportDTO();
+        ProductReportDTO productReportDto = inventoryService.getProductReportDto();
 
-        return productReportDTO;
+        return productReportDto;
     }
 
 
