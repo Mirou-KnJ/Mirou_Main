@@ -30,16 +30,16 @@
             </div>
             <div class="navbar-end">
 
-                <a sec:authorize="isAuthenticated()" href="/noti/list" class="btn btn-ghost btn-circle">
-                    <i class="fa-regular fa-bell fa-lg"></i>
-                </a>
-
                 <a sec:authorize="!isAuthenticated()" href="/member/login" class="btn btn-ghost btn-circle">
                     <i class="fa-solid fa-key fa-lg"></i>
                 </a>
 
                 <a sec:authorize="isAuthenticated()" href="/member/myPage" class="btn btn-ghost btn-circle">
                     <i class="fa-regular fa-user fa-lg" style="color: #000000;"></i>
+                </a>
+
+                <a sec:authorize="isAuthenticated()" href="/noti/list" class="btn btn-ghost btn-circle">
+                    <i class="fa-regular fa-bell fa-lg"></i>
                 </a>
 
                 <a sec:authorize="isAuthenticated()" href="/member/logout" class="btn btn-ghost btn-circle">
