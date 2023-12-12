@@ -12,7 +12,7 @@
         <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10 gap-3">
 
             <div class="flex w-full">
-                <div class="flex card bg-yellow-100 rounded-box gap-10 py-5 w-1/2">
+                <div class="flex flex-grow card bg-yellow-100 rounded-box gap-10 py-5">
                     <div class="flex justify-center">
                         <h1 class="text-xl">
                             코인
@@ -20,30 +20,40 @@
                         </h1>
                     </div>
 
-                    <div class="stat">
-                        <div class="stat-title">최근 1주일 동안 지급된 코인</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinSum}"></div>
+                    <div class="flex flex-col justify-center gap-10 w-full">
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 지급 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinSum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 사용 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinSum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 지급 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinAverage}"></p>
+
+                            <progress class="progress progress-warning w-36"
+                                      th:value="${reportDTO.weeklyGivenCoinAverage}"
+                                      th:max="${reportDTO.weeklyGivenCoinSum}"></progress>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 사용 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinAverage}"></p>
+                            <progress class="progress progress-warning w-36"
+                                      th:value="${reportDTO.weeklyUsedCoinAverage}"
+                                      th:max="${reportDTO.weeklyUsedCoinSum}"></progress>
+                        </div>
                     </div>
 
-                    <div class="stat">
-                        <div class="stat-title">최근 1주일 동안 사용된 코인</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinSum}"></div>
-                    </div>
-
-                    <div class="stat">
-                        <div class="stat-title">활동 인원 대비 평균 지급 코인</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinAverage}"></div>
-                    </div>
-
-                    <div class="stat">
-                        <div class="stat-title">활동 인원 대비 평균 사용 코인</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinAverage}"></div>
-                    </div>
                 </div>
 
                 <div class="divider divider-horizontal"></div>
 
-                <div class="flex card bg-blue-100 rounded-box gap-10 py-5 w-1/2">
+                <div class="flex flex-grow card bg-blue-100 rounded-box gap-10 py-5">
 
                     <div class="flex justify-center">
                         <h1 class="text-lg">
@@ -52,25 +62,38 @@
                         </h1>
                     </div>
 
-                    <div class="stat">
-                        <div class="stat-title">최근 1주일 동안 지급된 포인트</div>
-                        <div class="stat-value justify-center" th:text="${reportDTO.weeklyGivenCoinSum}"></div>
+                    <div class="flex flex-col justify-center gap-10">
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 지급 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinSum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 사용 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinSum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 지급 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyGivenCoinAverage}"></p>
+
+                            <progress class="progress progress-info w-36"
+                                      th:value="${reportDTO.weeklyGivenCoinAverage}"
+                                      th:max="${reportDTO.weeklyGivenCoinSum}"></progress>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 사용 코인</h1>
+                            <p class="text-3xl" th:text="${reportDTO.weeklyUsedCoinAverage}"></p>
+
+                            <progress class="progress progress-info w-36"
+                                      th:value="${reportDTO.weeklyGivenCoinAverage}"
+                                      th:max="${reportDTO.weeklyGivenCoinSum}"></progress>
+                        </div>
                     </div>
 
-                    <div class="stat">
-                        <div class="stat-title">최근 1주일 동안 사용된 포인트</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinSum}"></div>
-                    </div>
 
-                    <div class="stat">
-                        <div class="stat-title">활동 인원 대비 평균 지급 포인트</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinAverage}"></div>
-                    </div>
-
-                    <div class="stat">
-                        <div class="stat-title">활동 인원 대비 평균 사용 포인트</div>
-                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinAverage}"></div>
-                    </div>
                 </div>
             </div>
 
