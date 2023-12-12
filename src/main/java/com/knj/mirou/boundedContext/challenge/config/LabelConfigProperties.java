@@ -16,4 +16,14 @@ public class LabelConfigProperties {
     public List<String> labelingList;
     public List<String> WATER;
     public List<String> BOOKS;
+    public List<String> MUSIC;
+    public List<String> VITAMIN;
+    public List<String> MORNING;
+    public List<String> BRUSH;
+    public List<String> PLAN;
+    public List<String> RECEIPT;
+    public List<String> WEATHER;
+    public List<String> TEMPERATURE;
+    public List<String> PLANT;
+    public List<String> MOVIE;
 }
