@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.base.event.EventAfterEndProgress;
 import com.knj.mirou.base.event.EventAfterJoinChallenge;
+import com.knj.mirou.base.event.EventAfterKickedChallenge;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -186,6 +187,8 @@ public class ChallengeMemberService {
         }
 
         challengeMember.finishChallenge();
+
+        publisher.publishEvent(new EventAfterKickedChallenge(this, challengeMember));
 
         return RsData.of("S-1", "추방 처리가 완료되었습니다.");
     }

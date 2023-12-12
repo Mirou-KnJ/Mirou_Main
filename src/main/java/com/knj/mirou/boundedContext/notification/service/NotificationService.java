@@ -57,6 +57,7 @@ public class NotificationService {
             case JOIN -> processingContents = contents.concat("님의 회원가입을 환영합니다");
             case JOIN_CHALLENGE -> processingContents = contents.concat(" 참여를 시작하였습니다");
             case END_PROGRESS -> processingContents = contents.concat(" 참여가 종료되었습니다");
+            case KICKED_CHALLENGE -> processingContents = contents.concat(" 에서 강퇴처리 되었습니다.");
             case GET_COIN -> processingContents = contents.concat("으로 코인을 획득하였습니다");
             case RESET_POINT -> processingContents = contents.concat("님, 이번주 일상지원금이 지급되었어요!");
             case BUY_PRODUCT -> processingContents = contents.concat("을 구매하였습니다");
