@@ -20,19 +20,34 @@
                     </p>
                 </div>
 
-                <div class="flex flex-col justify-center items-center mb-10">
-                    <label class="label cursor-pointer">
-                        <input type="checkbox" class="checkbox mr-2" id="kakaoCheckbox1" onchange="ButtonAction()"/>
-                        <span>[필수] 카카오 개인정보 수집 및 이용</span>
-                    </label>
-                    <label class="label cursor-pointer">
-                        <input type="checkbox" class="checkbox mr-2" id="kakaoCheckbox2" onchange="ButtonAction()"/>
-                        <span>[필수] 카카오 개인정보 제3자 제공 동의</span>
-                    </label>
+                <div class="flex flex-col w-72 bg-base-200 py-3 rounded-lg mt-3 mb-10">
+                    <div class="flex grid flex-grow rounded-box">
+                        <div>
+                            <span class="text-sm ml-5 mt-2">[필독] Mirou 서비스 이용약관</span>
+                            <button class="btn ml-5" onclick="modal.showModal()"><i class="fa-solid fa-chevron-down"></i></button>
+                            <dialog id="modal" class="modal">
+                                <div class="modal-box">
+                                    <h3 class="font-bold text-lg">Mirou 서비스 이용약관</h3>
+                                    <p class="py-4">- Mirou 서비스는 카카오 정보제공동의 화면을 통해 사용자로부터 서비스 가입에 필요한 이용약관에 대해 동의를 받을 수 있습니다.</p>
+                                    <p class="py-4">- Mirou 서비스는 '인증' 시 사용자가 제출한 사진을 받게되며 정당한 사진만 업로드 됩니다.</p>
+                                    <p class="py-4">- Mirou 서비스는 '인증' 시 사용자에게 사진을 받게되며 업로드 동의로 간주합니다.</p>
+                                    <p class="py-4">- 이용약관에 맞지않는 부적절한 활동을 한 사용자는 서비스 이용을 제제 당할 수 있습니다.</p>
+
+                                    <div class="modal-action">
+                                        <form method="dialog">
+                                            <button class="btn">돌아가기</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </dialog>
+                        </div>
+                    </div>
                 </div>
 
+
+
                 <div class="flex">
-                    <a href="/oauth2/authorization/kakao" class="btn btn-warning" id="kakaoButton" disabled>
+                    <a href="/oauth2/authorization/kakao" class="btn btn-warning" >
                         <i class="fa-solid fa-comment"></i>
                         카카오톡으로 시작하기
                     </a>
@@ -41,19 +56,6 @@
             </div>
         </div>
 
-        <script>
-            function ButtonAction() {
-                const kakaoCheckbox1 = document.getElementById('kakaoCheckbox1');
-                const kakaoCheckbox2 = document.getElementById('kakaoCheckbox2');
-                const kakaoButton = document.getElementById('kakaoButton');
-
-                if (kakaoCheckbox1.checked && kakaoCheckbox2.checked) {
-                    kakaoButton.removeAttribute('disabled');
-                } else {
-                    kakaoButton.setAttribute('disabled', 'disabled');
-                }
-            }
-        </script>
         <div class="flex flex-grow bg-purple-50 border"></div>
     </main>
 </th:block>
