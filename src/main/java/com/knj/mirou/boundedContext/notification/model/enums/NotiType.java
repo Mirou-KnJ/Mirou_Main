@@ -10,6 +10,7 @@ public enum NotiType {
     JOIN("회원가입 완료"),
     JOIN_CHALLENGE("챌린지 참여"),
     END_PROGRESS("참여 종료"),
+    KICKED_CHALLENGE("챌린지 강퇴"),
     GET_COIN("코인 획득"),
     RESET_POINT("이번 주 일상지원금 지급"),
     GET_PRODUCT("상품 구매"),

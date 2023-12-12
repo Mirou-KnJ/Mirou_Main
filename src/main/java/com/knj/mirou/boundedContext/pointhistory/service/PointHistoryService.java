@@ -48,14 +48,11 @@ public class PointHistoryService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime startDayOfWeek = now.minus(7,
+        LocalDateTime startDayOfWeek = now.minus(6,
                 ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
 
-        LocalDateTime endDayOfWeek = now.minus(1,
-                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
-
         List<PointHistory> pointHistories = pointHistoryRepository
-                .findAllByChangeTypeAndCreateDateBetween(changeType, startDayOfWeek, endDayOfWeek);
+                .findAllByChangeTypeAndCreateDateBetween(changeType, startDayOfWeek, now);
 
         return pointHistories;
     }
