@@ -1,0 +1,65 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>물품 코드 등록 폼</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+
+            <div class="flex card bg-base-300 rounded-box gap-10 py-5">
+
+                <div class="stat">
+                    <div class="stat-title">최근 1주일 동안 지급된 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinSum}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">최근 1주일 동안 사용된 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinSum}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">활동 인원 대비 평균 지급 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinAverage}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">활동 인원 대비 평균 사용 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinAverage}"></div>
+                </div>
+            </div>
+
+            <div class="flex card bg-blue-200 rounded-box gap-10 py-5">
+                <div class="stat">
+                    <div class="stat-title">최근 1주일 동안 지급된 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinSum}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">최근 1주일 동안 사용된 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinSum}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">활동 인원 대비 평균 지급 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinAverage}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">활동 인원 대비 평균 사용 코인</div>
+                    <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinAverage}"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+</th:block>
+</body>
+</html>

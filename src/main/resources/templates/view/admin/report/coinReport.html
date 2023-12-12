@@ -1,7 +1,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}">
 <head>
-    <title>관리자 리포트(코인)</title>
+    <title>물품 코드 등록 폼</title>
 </head>
 <body>
 <th:block layout:fragment="Content">
@@ -9,23 +9,74 @@
 
         <div class="flex flex-grow bg-purple-50"></div>
 
-        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10 gap-3">
 
-            <h1>최근 1주일 동안 지급된 코인 양</h1>
-            <h1 th:text="${reportDTO.weeklyGivenCoinSum}"></h1>
+            <div class="flex w-full">
+                <div class="flex card bg-yellow-100 rounded-box gap-10 py-5 w-1/2">
+                    <div class="flex justify-center">
+                        <h1 class="text-xl">
+                            코인
+                            <i class="fa-solid fa-coins ml-2" style="color: #eac02a;"></i>
+                        </h1>
+                    </div>
 
-            <h1>최근 1주일 동안 사용된 코인 양</h1>
-            <h1 th:text="${reportDTO.weeklyUsedCoinSum}"></h1>
+                    <div class="stat">
+                        <div class="stat-title">최근 1주일 동안 지급된 코인</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinSum}"></div>
+                    </div>
 
-            <h1>활동 인원 대비 평균 지급 코인 양</h1>
-            <h1 th:text="${reportDTO.weeklyGivenCoinAverage}"></h1>
+                    <div class="stat">
+                        <div class="stat-title">최근 1주일 동안 사용된 코인</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinSum}"></div>
+                    </div>
 
-            <h1>활동 인원 대비 평균 사용 코인 양</h1>
-            <h1 th:text="${reportDTO.weeklyUsedCoinAverage}"></h1>
+                    <div class="stat">
+                        <div class="stat-title">활동 인원 대비 평균 지급 코인</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinAverage}"></div>
+                    </div>
 
+                    <div class="stat">
+                        <div class="stat-title">활동 인원 대비 평균 사용 코인</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinAverage}"></div>
+                    </div>
+                </div>
 
-            <h1>가장 많은 코인을 보유하고 있는 사람의 양</h1>
+                <div class="divider divider-horizontal"></div>
 
+                <div class="flex card bg-blue-100 rounded-box gap-10 py-5 w-1/2">
+
+                    <div class="flex justify-center">
+                        <h1 class="text-lg">
+                            포인트
+                            <i class="fa-solid fa-money-bill-wave ml-2" style="color: #3faa31;"></i>
+                        </h1>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-title">최근 1주일 동안 지급된 포인트</div>
+                        <div class="stat-value justify-center" th:text="${reportDTO.weeklyGivenCoinSum}"></div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-title">최근 1주일 동안 사용된 포인트</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinSum}"></div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-title">활동 인원 대비 평균 지급 포인트</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyGivenCoinAverage}"></div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-title">활동 인원 대비 평균 사용 포인트</div>
+                        <div class="stat-value" th:text="${reportDTO.weeklyUsedCoinAverage}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-3">
+                <a href="/admin/report" class="btn btn-primary">돌아가기</a>
+            </div>
         </div>
 
         <div class="flex flex-grow bg-purple-50"></div>
