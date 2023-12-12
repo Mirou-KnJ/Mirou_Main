@@ -9,4 +9,6 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     List<Notification> findAllByMember(Member member);
+
+    List<Notification> findTop20ByMemberOrderByCreateDateDesc(Member member);
 }

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -171,5 +172,27 @@ public class ChallengeFeedService {
 
             coinService.givePenalty(writer, linkedChallenge);
         }
+    }
+
+    public int getWeeklyLikeCounts(Member member) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDayOfWeek = now.minus(7,
+                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+
+        LocalDateTime endDayOfWeek = now.minus(1,
+                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
+
+        List<ChallengeFeed> weeklyFeeds = challengeFeedRepository
+                .findAllByWriterAndCreateDateBetween(member, startDayOfWeek, endDayOfWeek);
+
+        int likeCount = 0;
+
+        for(ChallengeFeed feed : weeklyFeeds) {
+            likeCount += feed.getLikeCount();
+        }
+
+        return likeCount;
     }
 }
