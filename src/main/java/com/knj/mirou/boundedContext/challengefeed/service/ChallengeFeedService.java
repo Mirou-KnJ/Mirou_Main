@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -194,5 +195,26 @@ public class ChallengeFeedService {
         }
 
         return likeCount;
+    }
+
+    public Map<Long, Integer> getWeeklyWriteCounts(List<Challenge> challenges) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDayOfWeek = now.minus(7,
+                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+
+        LocalDateTime endDayOfWeek = now.minus(1,
+                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
+
+        Map<Long, Integer> writeCounts = new HashMap<>();
+
+        for(Challenge challenge : challenges) {
+            int count = challengeFeedRepository
+                    .countByLinkedChallengeAndCreateDateBetween(challenge, startDayOfWeek, endDayOfWeek);
+            writeCounts.put(challenge.getId(), count);
+        }
+
+        return writeCounts;
     }
 }
