@@ -2,14 +2,25 @@ package com.knj.mirou.boundedContext.member.service;
 
 import com.knj.mirou.base.event.EventAfterJoin;
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
+import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
+import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
+import com.knj.mirou.boundedContext.inventory.service.InventoryService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
+import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
+import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
 import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.config.PointConfigProperties;
 import com.knj.mirou.boundedContext.point.service.PointService;
+import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,6 +42,12 @@ public class MemberService {
 
     private final CoinService coinService;
     private final PointService pointService;
+    private final ChallengeService challengeService;
+    private final ChallengeFeedService challengeFeedService;
+    private final ChallengeMemberService challengeMemberService;
+    private final CoinHistoryService coinHistoryService;
+    private final PointHistoryService pointHistoryService;
+    private final InventoryService inventoryService;
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
@@ -113,4 +130,38 @@ public class MemberService {
 
         pointService.resetPoint(targetMembers);
     }
+
+    public ChallengeReportDTO getChallengeReportDto() {
+
+        ChallengeReportDTO reportDTO = new ChallengeReportDTO();
+        List<Challenge> openedChallenges = challengeService.getAllByStatus(ChallengeStatus.OPEN);
+        reportDTO.setOpenedChallenges(openedChallenges);
+        reportDTO.setWriteCounts(challengeFeedService.getWeeklyWriteCounts(openedChallenges));
+        reportDTO.setJoinCounts(challengeMemberService.getWeeklyJoinCounts(openedChallenges));
+
+        return reportDTO;
+    }
+
+    public CurrencyReportDTO getCoinReportDto() {
+
+        CurrencyReportDTO currencyReportDTO = coinHistoryService.getCoinReportDTO();
+
+        return currencyReportDTO;
+    }
+
+    public CurrencyReportDTO getPointReportDto() {
+
+        CurrencyReportDTO currencyReportDTO = pointHistoryService.getPointReportDTO();
+
+        return currencyReportDTO;
+    }
+
+    public ProductReportDTO getProductReportDto() {
+
+        ProductReportDTO productReportDto = inventoryService.getProductReportDto();
+
+        return productReportDto;
+    }
+
+
 }

@@ -77,10 +77,14 @@
                                 <p class="text-sm" th:text="${myChallengeInfo.getLastDayNumber()} + '일 뒤 종료'"></p>
                             </div>
                             <div class="badge badge-sm badge-outline rounded-md mt-1 px-3 py-3  mt-2">
-                                <i class="fa-solid fa-person-walking fa-lg mr-2"
-                                   th:if="${myChallengeInfo.linkedChallenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
                                 <i class="fa-solid fa-tree fa-lg mr-2"
                                    th:if="${myChallengeInfo.linkedChallenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                <i class="fa-solid fa-person-walking fa-lg mr-2"
+                                   th:if="${myChallengeInfo.linkedChallenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
+                                <i class="fa-solid fa-palette fa-lg mr-2"
+                                   th:if="${myChallengeInfo.linkedChallenge.tag.getChallengeTag().equals('문화 챌린지')}"></i>
+                                <i class="fa-solid fa-heart fa-lg mr-2"
+                                   th:if="${myChallengeInfo.linkedChallenge.tag.getChallengeTag().equals('건강 챌린지')}"></i>
                                 <i class="fa-solid fa-pen fa-lg mr-2"
                                    th:if="${myChallengeInfo.linkedChallenge.tag.getChallengeTag().equals('기타')}"></i>
                                 <p th:text="${myChallengeInfo.linkedChallenge.tag.getChallengeTag()}"></p>
@@ -100,6 +104,8 @@
                 <a id="ALL" href="/challenge/list/ALL" class="btn rounded-full shadow-lg border mr-4">전체</a>
                 <a id="ENVIRONMENT" href="/challenge/list/ENVIRONMENT" class="btn rounded-full shadow-lg border mr-4">환경</a>
                 <a id="ROUTINE" href="/challenge/list/ROUTINE" class="btn rounded-full shadow-lg border mr-4">습관</a>
+                <a id="CULTURE" href="/challenge/list/CULTURE" class="btn rounded-full shadow-lg border mr-4">문화</a>
+                <a id="HEALTH" href="/challenge/list/HEALTH" class="btn rounded-full shadow-lg border mr-4">건강</a>
                 <a id="ETC" href="/challenge/list/ETC" class="btn rounded-full shadow-lg border mr-4">기타</a>
             </div>
 
@@ -141,6 +147,10 @@
                                    th:if="${challenge.tag.getChallengeTag().equals('습관 챌린지')}"></i>
                                 <i class="fa-solid fa-tree fa-lg mr-2"
                                    th:if="${challenge.tag.getChallengeTag().equals('환경 챌린지')}"></i>
+                                <i class="fa-solid fa-palette fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('문화 챌린지')}"></i>
+                                <i class="fa-solid fa-heart fa-lg mr-2"
+                                   th:if="${challenge.tag.getChallengeTag().equals('건강 챌린지')}"></i>
                                 <i class="fa-solid fa-pen fa-lg mr-2"
                                    th:if="${challenge.tag.getChallengeTag().equals('기타')}"></i>
                                 <p th:text="${challenge.tag.getChallengeTag()}"></p>

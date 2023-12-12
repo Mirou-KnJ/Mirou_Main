@@ -1,0 +1,107 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>관리자 리포트(화폐)</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10 gap-3">
+
+            <div class="flex w-full">
+                <div class="flex flex-grow card bg-yellow-100 rounded-box gap-10 py-5">
+                    <div class="flex justify-center">
+                        <h1 class="text-xl">
+                            코인
+                            <i class="fa-solid fa-coins ml-2" style="color: #eac02a;"></i>
+                        </h1>
+                    </div>
+
+                    <div class="flex flex-col justify-center gap-10 w-full">
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 지급 코인</h1>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyGivenCurrencySum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 사용 코인</h1>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyUsedCurrencySum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 지급 코인</h1>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyGivenCurrencyAverage}"></p>
+
+                            <progress class="progress progress-warning w-36"
+                                      th:value="${coinReportDTO.weeklyGivenCurrencyAverage}"
+                                      th:max="${coinReportDTO.weeklyGivenCurrencySum}"></progress>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 사용 코인</h1>
+                            <p class="text-3xl" th:text="${coinReportDTO.weeklyUsedCurrencyAverage}"></p>
+                            <progress class="progress progress-warning w-36"
+                                      th:value="${coinReportDTO.weeklyUsedCurrencyAverage}"
+                                      th:max="${coinReportDTO.weeklyUsedCurrencySum}"></progress>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="divider divider-horizontal"></div>
+
+                <div class="flex flex-grow card bg-blue-100 rounded-box gap-10 py-5">
+
+                    <div class="flex justify-center">
+                        <h1 class="text-lg">
+                            포인트
+                            <i class="fa-solid fa-money-bill-wave ml-2" style="color: #3faa31;"></i>
+                        </h1>
+                    </div>
+
+                    <div class="flex flex-col justify-center gap-10">
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 지급 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyGivenCurrencySum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 총 사용 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyUsedCurrencySum}"></p>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 지급 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyGivenCurrencyAverage}"></p>
+
+                            <progress class="progress progress-info w-36"
+                                      th:value="${pointReportDTO.weeklyGivenCurrencyAverage}"
+                                      th:max="${pointReportDTO.weeklyGivenCurrencySum}"></progress>
+                        </div>
+
+                        <div class="mx-5">
+                            <h1 class="text-lg text-gray-500">주간 평균 사용 포인트</h1>
+                            <p class="text-3xl" th:text="${pointReportDTO.weeklyUsedCurrencyAverage}"></p>
+
+                            <progress class="progress progress-info w-36"
+                                      th:value="${pointReportDTO.weeklyUsedCurrencyAverage}"
+                                      th:max="${pointReportDTO.weeklyUsedCurrencySum}"></progress>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-3">
+                <a href="/admin/report" class="btn btn-primary">돌아가기</a>
+            </div>
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+</th:block>
+</body>
+</html>
