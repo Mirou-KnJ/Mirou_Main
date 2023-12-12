@@ -58,6 +58,10 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
+    public List<Member> getAll() {
+        return memberRepository.findAll();
+    }
+
     @Transactional
     public RsData<Member> join(String socialCode, String loginId, String nickname) {
 

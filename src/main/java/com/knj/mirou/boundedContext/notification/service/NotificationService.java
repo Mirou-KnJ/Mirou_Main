@@ -1,23 +1,34 @@
 package com.knj.mirou.boundedContext.notification.service;
 
+import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
+import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.notification.model.entity.Notification;
 import com.knj.mirou.boundedContext.notification.model.enums.NotiType;
 import com.knj.mirou.boundedContext.notification.repository.NotificationRepository;
+import com.knj.mirou.boundedContext.reportHistory.service.ReportHistoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class NotificationService {
 
+    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/speaker.png";
+
+    private final MemberService memberService;
     private final ImageDataService imageDataService;
+    private final ReportHistoryService reportHistoryService;
+    private final ChallengeFeedService challengeFeedService;
 
     private final NotificationRepository notificationRepository;
 
@@ -57,7 +68,30 @@ public class NotificationService {
         return processingContents;
     }
 
-    public List<Notification> getMyNotifications(Member member) {
-        return notificationRepository.findAllByMember(member);
+    public List<Notification> getMy20Notifications(Member member) {
+        return notificationRepository.findTop20ByMemberOrderByCreateDateDesc(member);
+    }
+
+    @Transactional
+    @Scheduled(cron = "3 0 0 * * ?")
+    public void sendWeeklyNotification() {
+
+        List<Member> members = memberService.getAll();
+
+        for(Member member : members) {
+            int reportCount = reportHistoryService.getWeeklyReportedCounts(member);
+            int likeCount = challengeFeedService.getWeeklyLikeCounts(member);
+            create(member, String.valueOf(reportCount), SYSTEM_IMG, NotiType.REPORT_COUNT);
+            create(member, String.valueOf(likeCount), SYSTEM_IMG, NotiType.LIKE_COUNT);
+        }
+    }
+
+    @Transactional
+    public void updateRead(List<Notification> notifications) {
+        for(Notification noti : notifications) {
+            if(!noti.isRead()) {
+                noti.readNotifiaction();
+            }
+        }
     }
 }

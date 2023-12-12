@@ -14,6 +14,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Entity
@@ -35,4 +36,20 @@ public class Notification extends BaseEntity {
 
     private LocalDateTime readDate;
 
+    public String getCreateDateFormattedStr() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시 mm분");
+        return formatter.format(getCreateDate());
+    }
+
+    public boolean isRead() {
+        return readDate != null;
+    }
+
+    public void readNotifiaction() {
+        this.readDate = LocalDateTime.now();
+    }
+
+    public boolean isHot() {
+        return getCreateDate().isAfter(LocalDateTime.now().minusMinutes(120));
+    }
 }

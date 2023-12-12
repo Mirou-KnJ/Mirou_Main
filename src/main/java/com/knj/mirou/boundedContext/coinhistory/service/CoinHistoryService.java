@@ -9,6 +9,7 @@ import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.dtos.CoinReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -76,9 +78,11 @@ public class CoinHistoryService {
         return sum;
     }
 
-    public long getAverageByHistoriesAndSum(List<CoinHistory> histories, int sum) {
+    public long getAverageBySum(int sum) {
 
-        return sum / histories.size();
+        List<Long> distinctMemberIds = coinHistoryRepository.findDistinctMemberIds();
+
+        return sum / distinctMemberIds.size();
     }
 
     public CoinReportDTO getCoinReportDTO() {
@@ -88,12 +92,12 @@ public class CoinHistoryService {
         List<CoinHistory> weeklyGivenHistories = getWeeklyHistoryByType(ChangeType.GET);
         int weeklyGivenCoinSum = getSumByHistories(weeklyGivenHistories);
         coinReportDTO.setWeeklyGivenCoinSum(weeklyGivenCoinSum);
-        coinReportDTO.setWeeklyGivenCoinAverage(getAverageByHistoriesAndSum(weeklyGivenHistories, weeklyGivenCoinSum));
+        coinReportDTO.setWeeklyGivenCoinAverage(getAverageBySum(weeklyGivenCoinSum));
 
         List<CoinHistory> weeklyUsedHistories = getWeeklyHistoryByType(ChangeType.USED);
         int weeklyUsedCoinSum = getSumByHistories(weeklyUsedHistories);
         coinReportDTO.setWeeklyUsedCoinSum(weeklyUsedCoinSum);
-        coinReportDTO.setWeeklyUsedCoinAverage(getAverageByHistoriesAndSum(weeklyUsedHistories, weeklyUsedCoinSum));
+        coinReportDTO.setWeeklyUsedCoinAverage(getAverageBySum(weeklyUsedCoinSum));
 
         return coinReportDTO;
     }

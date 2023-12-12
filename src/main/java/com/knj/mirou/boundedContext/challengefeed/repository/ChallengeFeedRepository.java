@@ -35,4 +35,7 @@ public interface ChallengeFeedRepository extends JpaRepository<ChallengeFeed, Lo
     int countByLinkedChallengeAndCreateDateBetween(Challenge linkedChallenge,
                                                    LocalDateTime startOfWeek, LocalDateTime endOfWeek);
 
+    List<ChallengeFeed> findAllByWriterAndCreateDateBetween
+            (Member writer, LocalDateTime startDayOfWeek, LocalDateTime endDayOfWeek);
+
 }

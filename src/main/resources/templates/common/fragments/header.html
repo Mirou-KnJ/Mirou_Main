@@ -20,19 +20,22 @@
                         <li><a class="text-base" th:href="@{/member/inventory}">아이템 보관함</a></li>
                     </ul>
                 </div>
+
+                <div class="mr-2" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a href="/member/admin" class="text-sm badge badge-outline badge-neutral py-1">관리자</a>
+                </div>
             </div>
             <div class="navbar-center">
                 <a class="btn btn-ghost normal-case text-xl font-extrabold text-purple-800" th:href="@{/}">Mirou</a>
             </div>
             <div class="navbar-end">
 
-                <div class="mr-2" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                    <a href="/member/admin" class="text-sm badge badge-outline badge-neutral py-1">관리자</a>
-                </div>
+                <a sec:authorize="isAuthenticated()" href="/noti/list" class="btn btn-ghost btn-circle">
+                    <i class="fa-regular fa-bell fa-lg"></i>
+                </a>
 
-                <!-- login or myPage -->
                 <a sec:authorize="!isAuthenticated()" href="/member/login" class="btn btn-ghost btn-circle">
-                    <i class="fa-solid fa-key"></i>
+                    <i class="fa-solid fa-key fa-lg"></i>
                 </a>
 
                 <a sec:authorize="isAuthenticated()" href="/member/myPage" class="btn btn-ghost btn-circle">
@@ -40,7 +43,7 @@
                 </a>
 
                 <a sec:authorize="isAuthenticated()" href="/member/logout" class="btn btn-ghost btn-circle">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <i class="fa-solid fa-right-from-bracket fa-lg"></i>
                 </a>
 
             </div>
