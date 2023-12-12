@@ -177,4 +177,16 @@ public class ChallengeMemberService {
 
         return joinCounts;
     }
+
+    @Transactional
+    public RsData<String> kickUser(ChallengeMember challengeMember) {
+
+        if(challengeMember.getProgress().equals(Progress.PROGRESS_END)) {
+            return RsData.of("F-3", "이미 참여가 종료된 사용자입니다.");
+        }
+
+        challengeMember.finishChallenge();
+
+        return RsData.of("S-1", "추방 처리가 완료되었습니다.");
+    }
 }

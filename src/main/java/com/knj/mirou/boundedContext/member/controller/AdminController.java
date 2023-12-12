@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.member.controller;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
@@ -7,11 +8,13 @@ import com.knj.mirou.boundedContext.member.model.dtos.ReportManageDTO;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reportHistory.service.ReportHistoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,6 +75,17 @@ public class AdminController {
         model.addAttribute("reportManageDto", reportManageDto);
 
         return "view/admin/report/reportManage";
+    }
+
+    @ResponseBody
+    @PostMapping("/kickUser")
+    public ResponseEntity<RsData<String>> kickUser(@RequestParam Map<String, Object> params) {
+
+        long targetFeedId = Long.parseLong(params.get("targetFeedId").toString());
+
+        RsData<String> tryKickRs = memberService.tryKickUser(targetFeedId);
+
+        return ResponseEntity.ok(tryKickRs);
     }
 
 }

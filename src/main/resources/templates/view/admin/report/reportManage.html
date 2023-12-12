@@ -74,11 +74,38 @@
     </main>
 
     <script th:inline="javascript">
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
 
         function kickUser(targetFeedId) {
-            alert(targetFeedId);
-        }
 
+            var confirmRs = confirm("정말로 추방하시겠습니까?");
+
+            if (confirmRs) {
+                const requestData = {
+                    targetFeedId: targetFeedId,
+                    _csrf: csrfToken
+                };
+
+                $.ajax({
+                    url: "/admin/kickUser",
+                    type: "POST",
+                    data: requestData,
+                    success: function (data) {
+                        const response = data;
+                        const code = response.resultCode;
+                        const msg = response.msg;
+
+                        if (code.toString().startsWith('F')) {
+                            toastWarning(msg);
+                        } else {
+                            toastNotice(msg);
+                        }
+                    }
+                })
+            } else {
+                toastWarning("추방이 취소되었습니다.");
+            }
+        }
     </script>
 </th:block>
 </body>
