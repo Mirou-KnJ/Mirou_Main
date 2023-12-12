@@ -55,7 +55,6 @@ public class ReportHistoryService {
         return RsData.of("S-1", "신고가 완료되었습니다.", report.getId());
     }
 
-
     public int getWeeklyReportedCounts(Member member) {
 
         LocalDateTime now = LocalDateTime.now();
@@ -68,5 +67,4 @@ public class ReportHistoryService {
 
         return reportCount;
     }
-
 }
