@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Slf4j
@@ -45,12 +47,29 @@ public class ReportHistoryService {
         ChallengeFeed targetFeed = OFeed.get();
         Member reporter = OMember.get();
 
-        ReportHistory report = new ReportHistory(targetFeed, reporter, contents);
+        ReportHistory report = new ReportHistory(targetFeed, reporter, targetFeed.getWriter(), contents);
         reportHistoryRepository.save(report);
 
         challengeFeedService.updateReportCount(targetFeed);
 
         return RsData.of("S-1", "신고가 완료되었습니다.", report.getId());
+    }
+
+
+    public int getWeeklyReportedCounts(Member member) {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDayOfWeek = now.minus(7,
+                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+
+        LocalDateTime endDayOfWeek = now.minus(1,
+                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
+
+        int reportCount = reportHistoryRepository
+                .countByReportedMemberAndCreateDateBetween(member, startDayOfWeek, endDayOfWeek);
+
+        return reportCount;
     }
 
 }

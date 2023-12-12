@@ -25,7 +25,8 @@ public class NotificationController {
 
         Member member = rq.getMember();
 
-        List<Notification> notifications = notificationService.getMyNotifications(member);
+        List<Notification> notifications = notificationService.getMy20Notifications(member);
+        notificationService.updateRead(notifications);
 
         model.addAttribute("notifications", notifications);
 
