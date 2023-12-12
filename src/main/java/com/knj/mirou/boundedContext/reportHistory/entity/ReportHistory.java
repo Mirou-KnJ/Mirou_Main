@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.time.format.DateTimeFormatter;
+
 
 @Getter
 @Entity
@@ -30,4 +32,9 @@ public class ReportHistory extends BaseEntity {
     private Member reportedMember;
 
     private String contents;
+
+    public String getCreateDateFormattedStr() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일 HH시 mm분");
+        return formatter.format(getCreateDate());
+    }
 }
