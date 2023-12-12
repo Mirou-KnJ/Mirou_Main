@@ -90,14 +90,11 @@ public class InventoryService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime startDayOfWeek = now.minus(7,
+        LocalDateTime startDayOfWeek = now.minus(6,
                 ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
 
-        LocalDateTime endDayOfWeek = now.minus(1,
-                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
-
         List<Inventory> weeklySalesHistories =
-                inventoryRepository.findAllByCreateDateBetween(startDayOfWeek, endDayOfWeek);
+                inventoryRepository.findAllByCreateDateBetween(startDayOfWeek, now);
 
         return weeklySalesHistories;
     }

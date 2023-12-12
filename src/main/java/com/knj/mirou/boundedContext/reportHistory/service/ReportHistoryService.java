@@ -60,14 +60,11 @@ public class ReportHistoryService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime startDayOfWeek = now.minus(7,
+        LocalDateTime startDayOfWeek = now.minus(6,
                 ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
 
-        LocalDateTime endDayOfWeek = now.minus(1,
-                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
-
         int reportCount = reportHistoryRepository
-                .countByReportedMemberAndCreateDateBetween(member, startDayOfWeek, endDayOfWeek);
+                .countByReportedMemberAndCreateDateBetween(member, startDayOfWeek, now);
 
         return reportCount;
     }
