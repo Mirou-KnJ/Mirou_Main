@@ -81,4 +81,15 @@ public class NotificationEventListener {
 
         notificationService.create(member, productInfo.getName(), productInfo.getImgUrl(), NotiType.BUY_PRODUCT);
     }
+
+    @EventListener
+    @Transactional
+    public void listen(EventAfterKickedChallenge event) {
+
+        ChallengeMember challengeMember = event.getChallengeMember();
+        Member member = challengeMember.getLinkedMember();
+        Challenge challenge = challengeMember.getLinkedChallenge();
+
+        notificationService.create(member, challenge.getName(), challenge.getImgUrl(), NotiType.KICKED_CHALLENGE);
+    }
 }

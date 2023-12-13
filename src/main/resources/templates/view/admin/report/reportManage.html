@@ -1,0 +1,112 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>관리자 리포트(신고)</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+
+            <div th:if="${#lists.isEmpty(reportManageDto.weeklyReportHistories)}" class="flex flex-col">
+                <h1>아직 주간 신고내역이 존재하지 않습니다!</h1>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(reportManageDto.weeklyReportHistories)}" class="flex flex-col">
+
+                <table class="w-full table table-zebra border mt-5 border rounded-lg"
+                       th:each="report : ${reportManageDto.weeklyReportHistories}">
+                    <thead>
+                    <tr>
+                        <th class="mr-5">신고자</th>
+                        <th class="mr-8">대상자</th>
+                        <th class="mr-5">신고 내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${report.reporter.nickname}"></td>
+                        <td th:text="${report.reportedMember.nickname}"></td>
+                        <td th:text="${report.contents}"></td>
+                    </tr>
+                    </tbody>
+                    <thead>
+                    <tr>
+                        <th class="mr-5">피드 내용</th>
+                        <th class="mr-5">신고일</th>
+                        <th class="mr-5">버튼</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="flex">
+                            <p th:text="${report.targetFeed.contents}"></p>
+                            <button class="btn btn-neutral btn-xs ml-2" th:onclick="'reportedFeed' + ${report.targetFeed.id} + '.showModal()'"> > </button>
+                        </td>
+                        <td th:text="${report.getCreateDateFormattedStr()}"></td>
+                        <td class="w-full">
+                            <button th:onclick="kickUser([[${report.targetFeed.id}]])" class="btn btn-primary btn-sm">추방</button>
+                        </td>
+
+                        <dialog th:id="'reportedFeed' + ${report.targetFeed.id}" class="modal">
+                            <div class="flex flex-col justify-center modal-box">
+                                <form method="dialog">
+                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                </form>
+                                <h3 class="flex justify-center font-bold mb-2"
+                                    th:text="${report.targetFeed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                                <img th:src="${report.targetFeed.imgUrl}" alt="feedImg">
+                                <p class="pt-2 text-sm text-gray-500" th:text="${report.targetFeed.getCreateDateFormatStr()}"></p>
+                                <p class="pt-1 pb-6" th:text="${report.targetFeed.contents}"></p>
+                            </div>
+                        </dialog>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+
+    <script th:inline="javascript">
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+        function kickUser(targetFeedId) {
+
+            var confirmRs = confirm("정말로 추방하시겠습니까?");
+
+            if (confirmRs) {
+                const requestData = {
+                    targetFeedId: targetFeedId,
+                    _csrf: csrfToken
+                };
+
+                $.ajax({
+                    url: "/admin/kickUser",
+                    type: "POST",
+                    data: requestData,
+                    success: function (data) {
+                        const response = data;
+                        const code = response.resultCode;
+                        const msg = response.msg;
+
+                        if (code.toString().startsWith('F')) {
+                            toastWarning(msg);
+                        } else {
+                            toastNotice(msg);
+                        }
+                    }
+                })
+            } else {
+                toastWarning("추방이 취소되었습니다.");
+            }
+        }
+    </script>
+</th:block>
+</body>
+</html>

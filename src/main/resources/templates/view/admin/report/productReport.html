@@ -16,18 +16,30 @@
                 <h1>아직 이번 주 판매 기록이 존재하지 않아요!</h1>
             </div>
 
-            <div th:if="${productReportDTO.weeklyBestProduct}">
+            <div class="bg-base-300 rounded-lg" th:if="${productReportDTO.weeklyBestProduct}">
                 <div class="stat">
-                    <div class="stat-title">가장 많이 팔린 상품</div>
-                    <div class="stat-value" th:text="${productReportDTO.weeklyBestProduct.name}"></div>
+                    <div class="stat-figure">
+                        <img th:src="${productReportDTO.weeklyBestProduct.imgUrl}" alt="bestProduct">
+                    </div>
+                    <div class="stat-title sm:text-md md:text-md">가장 많이 팔린 상품</div>
+                    <div class="stat-value sm:text-md md:text-md" th:text="${productReportDTO.weeklyBestProduct.name}"></div>
+                    <div class="stat-desc text-lg" th:text="'총 판매량 : ' + ${productReportDTO.weeklyBestProductSalesCount}"></div>
                 </div>
 
-                <h1 th:text="${productReportDTO.weeklyBestProductSalesCount}"></h1>
-                <h1 th:text="${productReportDTO.weeklyAllSalesCount}"></h1>
-                <h1 th:text="${productReportDTO.weeklyAllUsedCount}"></h1>
+                <div class="stat mt-10">
+                    <div class="stat-title">이번 주 전 상품 누적 판매량</div>
+                    <div class="stat-value" th:text="${productReportDTO.weeklyAllSalesCount}"></div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">구매 대비 사용 비율</div>
+                    <div class="stat-value">
+                        <progress class="progress progress-success w-56"
+                                  th:value="${productReportDTO.weeklyAllUsedCount}"
+                                  th:max="${productReportDTO.weeklyAllSalesCount}"></progress>
+                    </div>
+                </div>
             </div>
-
-
         </div>
 
         <div class="flex flex-grow bg-purple-50"></div>

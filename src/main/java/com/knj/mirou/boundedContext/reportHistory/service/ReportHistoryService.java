@@ -3,6 +3,7 @@ package com.knj.mirou.boundedContext.reportHistory.service;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
+import com.knj.mirou.boundedContext.member.model.dtos.ReportManageDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import com.knj.mirou.boundedContext.reportHistory.entity.ReportHistory;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -55,21 +57,37 @@ public class ReportHistoryService {
         return RsData.of("S-1", "신고가 완료되었습니다.", report.getId());
     }
 
-
     public int getWeeklyReportedCounts(Member member) {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime startDayOfWeek = now.minus(7,
+        LocalDateTime startDayOfWeek = now.minus(6,
                 ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
 
-        LocalDateTime endDayOfWeek = now.minus(1,
-                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
-
         int reportCount = reportHistoryRepository
-                .countByReportedMemberAndCreateDateBetween(member, startDayOfWeek, endDayOfWeek);
+                .countByReportedMemberAndCreateDateBetween(member, startDayOfWeek, now);
 
         return reportCount;
     }
 
+    public ReportManageDTO getReportManageDto() {
+
+        ReportManageDTO reportDTO = new ReportManageDTO();
+
+        reportDTO.setWeeklyReportHistories(getWeeklyReportHistories());
+
+        return reportDTO;
+    }
+
+    public List<ReportHistory> getWeeklyReportHistories() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDayOfWeek = now.minus(6,
+                ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
+
+        List<ReportHistory> reportHistories = reportHistoryRepository.findAllByCreateDateBetween(startDayOfWeek, now);
+
+        return reportHistories;
+    }
 }

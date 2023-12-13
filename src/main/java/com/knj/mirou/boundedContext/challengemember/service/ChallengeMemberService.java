@@ -2,6 +2,7 @@ package com.knj.mirou.boundedContext.challengemember.service;
 
 import com.knj.mirou.base.event.EventAfterEndProgress;
 import com.knj.mirou.base.event.EventAfterJoinChallenge;
+import com.knj.mirou.base.event.EventAfterKickedChallenge;
 import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -164,20 +165,31 @@ public class ChallengeMemberService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        LocalDateTime startDayOfWeek = now.minus(7,
+        LocalDateTime startDayOfWeek = now.minus(6,
                 ChronoUnit.DAYS).withHour(0).withMinute(0).withSecond(0);
-
-        LocalDateTime endDayOfWeek = now.minus(1,
-                ChronoUnit.DAYS).withHour(23).withMinute(59).withSecond(59);
 
         Map<Long, Integer> joinCounts = new HashMap<>();
 
         for(Challenge challenge : challenges) {
             int count = challengeMemberRepository
-                    .countByLinkedChallengeAndCreateDateBetween(challenge, startDayOfWeek, endDayOfWeek);
+                    .countByLinkedChallengeAndCreateDateBetween(challenge, startDayOfWeek, now);
             joinCounts.put(challenge.getId(), count);
         }
 
         return joinCounts;
+    }
+
+    @Transactional
+    public RsData<String> kickUser(ChallengeMember challengeMember) {
+
+        if(challengeMember.getProgress().equals(Progress.PROGRESS_END)) {
+            return RsData.of("F-3", "이미 참여가 종료된 사용자입니다.");
+        }
+
+        challengeMember.finishChallenge();
+
+        publisher.publishEvent(new EventAfterKickedChallenge(this, challengeMember));
+
+        return RsData.of("S-1", "추방 처리가 완료되었습니다.");
     }
 }
