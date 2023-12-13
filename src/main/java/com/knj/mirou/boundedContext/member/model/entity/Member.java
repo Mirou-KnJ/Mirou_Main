@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
 
     private String inviteCode;
 
+    private String imgUrl;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(referencedColumnName = "id")
     private Coin coin;
@@ -47,4 +49,12 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "owner")
     private List<Inventory> inventory;
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateProfileImg(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 }

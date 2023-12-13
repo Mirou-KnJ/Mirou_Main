@@ -11,4 +11,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByLoginId(String loginId);
 
     List<Member> findByPointCurrentPointLessThan(int resetStandard);
+
+    Optional<Member> findByNickname(String nickName);
 }

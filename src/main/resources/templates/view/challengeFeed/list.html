@@ -84,8 +84,12 @@
                                 <form method="dialog">
                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                 </form>
-                                <h3 class="flex justify-center font-bold mb-2"
-                                    th:text="${myFeed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                                <div class="flex justify-center mb-3">
+                                    <img class="w-8 h-8 rounded-full mr-2" th:if="${myFeed.writer.imgUrl}"
+                                         th:src="${myFeed.writer.imgUrl}" alt="profile_img"/>
+                                    <h3 class="flex justify-center font-bold pt-1"
+                                        th:text="${myFeed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                                </div>
                                 <img th:src="${myFeed.imgUrl}" alt="feedImg">
                                 <p class="pt-2 text-sm text-gray-500" th:text="${myFeed.getCreateDateFormatStr()}"></p>
                                 <p class="pt-1 pb-6" th:text="${myFeed.contents}"></p>
@@ -113,14 +117,18 @@
                 </div>
             </div>
 
-            <div class="flex w-full flex-wrap gap-5 justify-center items-center" th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
+            <div class="flex w-full flex-wrap gap-5 justify-center items-center"
+                 th:unless="${#lists.isEmpty(feedListDto.notMineFeeds)}">
                 <div class="flex bg-base-100 mb-3 rounded-lg shadow-lg border bg-purple-100"
                      th:each="feed : ${feedListDto.notMineFeeds}"
                      th:onclick="'feedModal' + ${feed.id} + '.showModal()'">
 
                     <div class="flex flex-col items-center">
                         <img class="rounded-lg" th:src="${feedImages.get(feed.id)}" alt="feedPreView">
-                        <span class="text-sm my-2" th:text="${#strings.substring(feed.writer.nickname, 0, 8) + '...'}"></span>
+                        <span class="text-sm py-2"
+                              th:text="${#strings.length(feed.writer.nickname) > 10
+                                      ? #strings.substring(feed.writer.nickname, 0, 10) + '...' : feed.writer.nickname}">
+                        </span>
                     </div>
 
                     <dialog th:id="'feedModal' + ${feed.id}" class="modal">
@@ -128,8 +136,13 @@
                             <form method="dialog">
                                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                             </form>
-                            <h3 class="flex justify-center font-bold mb-2"
-                                th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                            <div class="flex justify-center mb-3">
+                                <img class="w-8 h-8 rounded-full mr-2" th:if="${feed.writer.imgUrl}"
+                                     th:src="${feed.writer.imgUrl}" alt="profile_img"/>
+                                <h3 class="flex justify-center font-bold pt-1"
+                                    th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                            </div>
+
                             <img th:src="${feed.imgUrl}" alt="feedImg">
                             <p class="pt-2 text-sm text-gray-500" th:text="${feed.getCreateDateFormatStr()}"></p>
                             <p class="pt-1 pb-6" th:text="${feed.contents}"></p>
