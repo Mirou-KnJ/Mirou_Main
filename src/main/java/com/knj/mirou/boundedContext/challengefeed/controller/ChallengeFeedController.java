@@ -14,6 +14,7 @@ import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,5 +120,17 @@ public class ChallengeFeedController {
         ChallengeFeed challengeFeed = OFeed.get();
 
         challengeFeedService.updateLikeCount(challengeFeed);
+    }
+
+    @ResponseBody
+    @PostMapping("/hide")
+    public ResponseEntity<RsData<String>> hide(@RequestParam Map<String, Object> params) {
+
+        Member member = rq.getMember();
+        long feedId = Long.parseLong(params.get("feedId").toString());
+
+        RsData<String> hideRs = challengeFeedService.hideFeed(member, feedId);
+
+        return ResponseEntity.ok(hideRs);
     }
 }

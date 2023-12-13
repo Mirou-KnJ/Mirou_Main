@@ -71,7 +71,8 @@
                                         </div>
                                         <div class="py-4">
                                             <p th:text="'사용방법 : ' + ${inventory.product.info.usingWay}"></p>
-                                            <p th:text="'유의사항 : ' + ${inventory.product.info.usingCaution}"></p>
+                                            <p>유의사항 : </p>
+                                            <p th:utext="${inventory.product.info.usingCaution}"></p>
                                         </div>
 
                                         <div class="flex justify-center">

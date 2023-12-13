@@ -17,8 +17,9 @@
                 <div class="divider"></div>
 
                 <div>
-                    <h1 th:text="'내용 : ' + ${challenge.contents}"></h1>
-                    <h1 th:text="'진행 일 수 : ' + ${challenge.period}"></h1>
+                    <h1>내용 : </h1>
+                    <h1 th:utext="${challenge.contents}"></h1>
+                    <h1 th:text="'진행 일 수 : ' + ${challenge.period} + '일 챌린지'"></h1>
                 </div>
 
                 <div class="flex flex-col justify-center w-full mt-5"

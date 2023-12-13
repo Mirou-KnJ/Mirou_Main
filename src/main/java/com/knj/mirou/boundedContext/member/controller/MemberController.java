@@ -10,6 +10,7 @@ import com.knj.mirou.boundedContext.inventory.model.entity.Inventory;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -73,6 +75,8 @@ public class MemberController {
         List<Inventory> inventories = member.getInventory();
 
         model.addAttribute("inventories", inventories);
+
+        log.info(inventories.get(1).getProduct().getInfo().getUsingCaution());
 
         return "view/member/inventory";
     }

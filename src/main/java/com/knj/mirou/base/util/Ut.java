@@ -1,8 +1,11 @@
 package com.knj.mirou.base.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+@Component
 public class Ut {
 
     public static class url {
@@ -49,5 +52,9 @@ public class Ut {
 
             return url.substring(0, startPoint) + urlAfter;
         }
+    }
+
+    public String strLineProcessing(String longText) {
+        return longText.replaceAll("\n", "<br>");
     }
 }
