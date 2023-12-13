@@ -42,6 +42,9 @@ public class ChallengeController {
     @GetMapping("/create")
     public String createForm(Model model) {
 
+        List<ChallengeLabel> labelInfos = List.of(ChallengeLabel.values());
+
+        model.addAttribute("labelInfos", labelInfos);
         model.addAttribute("categories", challengeService.getAllCategories());
         model.addAttribute("methods", challengeService.getAllMethods());
 
