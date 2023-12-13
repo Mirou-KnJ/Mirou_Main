@@ -46,7 +46,7 @@
                             <p th:text="${report.targetFeed.contents}"></p>
                             <button class="btn btn-neutral btn-xs ml-2" th:onclick="'reportedFeed' + ${report.targetFeed.id} + '.showModal()'"> > </button>
                         </td>
-                        <td th:text="${report.getCreateDateFormattedStr()}"></td>
+                        <td class="w-full" th:text="${report.getCreateDateFormattedStr()}"></td>
                         <td class="w-full">
                             <button th:onclick="kickUser([[${report.targetFeed.id}]])" class="btn btn-primary btn-sm">추방</button>
                         </td>

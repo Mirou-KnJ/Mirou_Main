@@ -49,4 +49,8 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "owner")
     private List<Inventory> inventory;
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -192,4 +192,26 @@ public class MemberService {
 
         return kickRs;
     }
+
+    public Optional<Member> getByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
+
+    @Transactional
+    public RsData<Long> changeNickname(Member member, String nickname) {
+
+        Optional<Member> OMember = getByNickname(nickname);
+        if(OMember.isPresent()) {
+            return RsData.of("F-1", "이미 사용중인 닉네임 입니다.");
+        }
+
+        //FIXME
+        if(nickname.length() > 20) {
+            return RsData.of("F-2", "닉네임은 20자 이하만 가능합니다.");
+        }
+
+        member.updateNickname(nickname);
+
+        return RsData.of("S-1", "닉네임 변경이 완료되었습니다.", member.getId());
+    }
 }

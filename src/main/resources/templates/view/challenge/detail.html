@@ -203,7 +203,9 @@
                             </div>
                             <div class="flex justify-center mt-2">
                                 <span class="text-sm"
-                                      th:text="${#strings.substring(feed.writer.nickname, 0, 10) + '...'}"></span>
+                                      th:text="${#strings.length(feed.writer.nickname) > 10
+                                      ? #strings.substring(feed.writer.nickname, 0, 10) + '...' : feed.writer.nickname}">
+                                </span>
                             </div>
                         </div>
 

@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.member.controller;
 
 import com.knj.mirou.base.rq.Rq;
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.model.enums.Progress;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -71,5 +73,19 @@ public class MemberController {
         model.addAttribute("inventories", inventories);
 
         return "view/member/inventory";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/changeNickname")
+    public String changeNickname(String nickname) {
+
+        Member member = rq.getMember();
+
+        RsData<Long> changeRs = memberService.changeNickname(member, nickname);
+        if(changeRs.isFail()) {
+            rq.historyBack(changeRs);
+        }
+
+        return rq.redirectWithMsg("/member/myPage", changeRs);
     }
 }

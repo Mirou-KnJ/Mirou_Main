@@ -78,7 +78,28 @@
             </div>
 
             <div class="flex justify-center">
-                <button class="btn btn-outline btn-neutral w-36 btn-sm rounded-full mt-5 mb-5">내 정보 수정</button>
+                <button class="btn btn-outline btn-neutral w-36 btn-sm rounded-full mt-5 mb-5"
+                        onclick="change_info.showModal()">내 정보 수정</button>
+                <dialog id="change_info" class="modal">
+                    <div class="modal-box">
+                        <form method="dialog">
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h3 class="font-bold text-lg">내 정보 수정하기</h3>
+                        <form class="py-4" action="/member/changeNickname" method="POST">
+                            <label class="label-text">닉네임 변경</label>
+                            <input type="text" class="input input-bordered w-56 mx-3" name="nickname">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-sm btn-primary">닉네임 변경</button>
+                        </form>
+                        <form class="py-4" action="/member/changeProfile" method="POST" enctype="multipart/form-data">
+                            <label class="label-text">프로필 변경</label>
+                            <input type="file" class="file-input w-56 mx-3" name="profileImg">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-sm btn-primary">프로필 변경</button>
+                        </form>
+                    </div>
+                </dialog>
             </div>
 
             <div class="flex shadow-lg border rounded mt-15">
