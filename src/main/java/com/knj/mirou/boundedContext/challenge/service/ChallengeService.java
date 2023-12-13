@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.challenge.service;
 
 import com.knj.mirou.base.rsData.RsData;
+import com.knj.mirou.base.util.Ut;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
@@ -28,6 +29,7 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class ChallengeService {
 
+    private final Ut ut;
     private final ImageDataService imageDataService;
     private final ChallengeFeedService challengeFeedService;
     private final ChallengeMemberService challengeMemberService;
@@ -50,9 +52,12 @@ public class ChallengeService {
             labels = labelProcessing(createDTO.getLabelList());
         }
 
+        String processedContents = ut.strLineProcessing(createDTO.getContents());
+        String processedCaution = ut.strLineProcessing(createDTO.getPrecaution());
+
         Challenge newChallenge = Challenge.builder()
                 .name(createDTO.getName())
-                .contents(createDTO.getContents())
+                .contents(processedContents)
                 .joinCost(createDTO.getJoinCost())
                 .joinDeadline(createDTO.getJoinDeadLine())
                 .period(createDTO.getPeriod())
@@ -62,7 +67,7 @@ public class ChallengeService {
                 .mapCategory(MapCategory.valueOf(createDTO.getPlaceCategory()))
                 .level(createDTO.getLevel())
                 .status(ChallengeStatus.BEFORE_SETTINGS)
-                .precautions(createDTO.getPrecaution())
+                .precautions(processedCaution)
                 .imgUrl(imgUrl)
                 .build();
 

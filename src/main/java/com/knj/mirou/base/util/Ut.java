@@ -1,8 +1,11 @@
 package com.knj.mirou.base.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+@Component
 public class Ut {
 
     public static class url {

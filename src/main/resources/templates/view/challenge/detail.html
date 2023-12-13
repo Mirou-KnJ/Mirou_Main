@@ -145,7 +145,7 @@
                             <i class="pl-2 pt-2 fa-solid fa-money-bill-wave fa-lg" style="color: #3faa31;"></i>
                         </div>
                     </div>
-                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${detailDTO.challenge.contents}"></p>
+                    <p class="my-2 text-sm font-thin text-gray-500" th:utext="${detailDTO.challenge.contents}"></p>
                 </div>
 
                 <div class="w-full" th:if="${detailDTO.isJoin}">
@@ -272,7 +272,7 @@
                 <div class="flex flex-col w-full justify-start">
                     <h1 class="text-lg font-bold">유의사항</h1>
 
-                    <p class="my-2 text-sm font-thin text-gray-500" th:text="${detailDTO.challenge.precautions}"></p>
+                    <p class="my-2 text-sm font-thin text-gray-500" th:utext="${detailDTO.challenge.precautions}"></p>
                 </div>
 
                 <div class="divider"></div>
