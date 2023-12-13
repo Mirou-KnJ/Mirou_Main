@@ -9,7 +9,7 @@
 
         <div class="flex flex-grow bg-purple-50 border"></div>
 
-        <div class="flex flex-col justify-center w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10">
+        <div class="flex flex-col w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10 min-h-screen">
 
             <div class="flex justify-center my-3">
                 <h1 class="text-2xl">상품 보관함</h1>
@@ -17,7 +17,7 @@
 
             <div class="flex flex-col w-full justify-center items-center">
                 <div class="flex flex-col w-full justify-center border rounded-lg card bg-base-200 pt-5">
-                    <div th:if="${#lists.isEmpty(inventories)}">
+                    <div class="flex justify-center" th:if="${#lists.isEmpty(inventories)}">
                         <h1>아직 상품 정보가 없습니다.</h1>
                     </div>
 

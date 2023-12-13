@@ -65,7 +65,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    private static final String DEFAULT_PROFILE = "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg";
+    private static final String DEFAULT_PROFILE =
+            "https://kr.object.ncloudstorage.com/mirou/profile_img/%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84.jpg";
 
     public Optional<Member> getByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId);

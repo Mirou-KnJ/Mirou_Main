@@ -76,8 +76,6 @@ public class MemberController {
 
         model.addAttribute("inventories", inventories);
 
-        log.info(inventories.get(1).getProduct().getInfo().getUsingCaution());
-
         return "view/member/inventory";
     }
 
