@@ -42,11 +42,8 @@
                 <div class="flex justify-around w-full">
                     <select class="select select-bordered w-40" name="tag">
                         <option disabled selected>챌린지 종류</option>
-                        <option value="ENVIRONMENT">환경 챌린지</option>
-                        <option value="ROUTINE">습관 챌린지</option>
-                        <option value="CULTURE">문화 챌린지</option>
-                        <option value="HEALTH">건강 챌린지</option>
-                        <option value="ETC">기타</option>
+                        <option th:each="tagInfo : ${tagInfos}"
+                                th:value="${tagInfo.name()}" th:text="${tagInfo.challengeTag}"></option>
                     </select>
 
                     <select class="select select-bordered w-40" name="period">
