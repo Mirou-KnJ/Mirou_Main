@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.product.service;
 
+import com.knj.mirou.base.util.Ut;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
 import com.knj.mirou.boundedContext.product.repository.ProductInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,13 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ProductInfoService {
 
+    private final Ut ut;
     private final ProductInfoRepository productInfoRepository;
 
     @Transactional
     public void create(String name, String brandName, int cost, String content, String imgUrl, String usingWay, String usingCaution) {
 
-        String processedUsingCaution = usingCautionProcessing(usingCaution);
+        String processedUsingCaution = ut.strLineProcessing(usingCaution);
 
         ProductInfo productInfo = ProductInfo.builder()
                 .name(name)
@@ -57,12 +59,5 @@ public class ProductInfoService {
     public Optional<ProductInfo> getById(long productId) {
 
         return productInfoRepository.findById(productId);
-    }
-
-    public String usingCautionProcessing(String usingCaution) {
-
-        String result = usingCaution.replaceAll("\n", "<br>");
-
-        return result;
     }
 }

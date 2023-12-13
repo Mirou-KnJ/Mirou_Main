@@ -50,4 +50,8 @@ public class Ut {
             return url.substring(0, startPoint) + urlAfter;
         }
     }
+
+    public String strLineProcessing(String longText) {
+        return longText.replaceAll("\n", "<br>");
+    }
 }
