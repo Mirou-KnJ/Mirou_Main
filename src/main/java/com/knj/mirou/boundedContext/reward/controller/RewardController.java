@@ -3,9 +3,11 @@ package com.knj.mirou.boundedContext.reward.controller;
 import com.knj.mirou.base.rq.Rq;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
+import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,5 +77,13 @@ public class RewardController {
         challengeService.opening(OChallenge.get());
 
         return rq.redirectWithMsg("/member/admin", "세팅이 완료되었습니다.");
+    }
+
+    @PostMapping("/deleteReward/{rewardId}")
+    public String deleteReward(@PathVariable(value = "rewardId") long rewardId){
+        PublicReward publicReward = publicRewardService.getById(rewardId);
+        Long challengeId = publicReward.getLinkedChallenge().getId();
+        publicRewardService.deleteReward(rewardId);
+        return "redirect:/reward/setting/" + challengeId;
     }
 }

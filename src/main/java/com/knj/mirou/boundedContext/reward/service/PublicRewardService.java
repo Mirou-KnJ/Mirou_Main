@@ -41,10 +41,24 @@ public class PublicRewardService {
 
         publicRewardRepository.save(newReward);
     }
+    @Transactional
+    public void deleteReward(long rewardId){
+        Optional<PublicReward> rewardToDelete = publicRewardRepository.findById(rewardId);
+        if(rewardToDelete.isPresent()){
+            publicRewardRepository.delete(rewardToDelete.get());
+        }else{
+            log.error("보상을 찾을 수 없습니다.");
+        }
+    }
 
     public List<PublicReward> getAllReward() {
 
         return publicRewardRepository.findAll();
+    }
+
+    public PublicReward getById(long publicRewardId) {
+
+        return publicRewardRepository.findById(publicRewardId).get();
     }
 
 }
