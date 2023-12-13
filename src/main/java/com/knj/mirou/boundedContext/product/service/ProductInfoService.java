@@ -23,6 +23,8 @@ public class ProductInfoService {
     @Transactional
     public void create(String name, String brandName, int cost, String content, String imgUrl, String usingWay, String usingCaution) {
 
+        String processedUsingCaution = usingCautionProcessing(usingCaution);
+
         ProductInfo productInfo = ProductInfo.builder()
                 .name(name)
                 .brandName(brandName)
@@ -30,7 +32,7 @@ public class ProductInfoService {
                 .content(content)
                 .imgUrl(imgUrl)
                 .usingWay(usingWay)
-                .usingCaution(usingCaution)
+                .usingCaution(processedUsingCaution)
                 .build();
 
         productInfoRepository.save(productInfo);
@@ -55,5 +57,12 @@ public class ProductInfoService {
     public Optional<ProductInfo> getById(long productId) {
 
         return productInfoRepository.findById(productId);
+    }
+
+    public String usingCautionProcessing(String usingCaution) {
+
+        String result = usingCaution.replaceAll("\n", "<br>");
+
+        return result;
     }
 }
