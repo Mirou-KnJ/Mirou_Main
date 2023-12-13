@@ -81,6 +81,7 @@ public class RewardController {
 
     @PostMapping("/deleteReward/{rewardId}")
     public String deleteReward(@PathVariable(value = "rewardId") long rewardId){
+
         PublicReward publicReward = publicRewardService.getById(rewardId);
         Long challengeId = publicReward.getLinkedChallenge().getId();
         publicRewardService.deleteReward(rewardId);

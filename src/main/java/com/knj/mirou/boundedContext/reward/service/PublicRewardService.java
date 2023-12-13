@@ -41,6 +41,7 @@ public class PublicRewardService {
 
         publicRewardRepository.save(newReward);
     }
+
     @Transactional
     public void deleteReward(long rewardId){
         Optional<PublicReward> rewardToDelete = publicRewardRepository.findById(rewardId);

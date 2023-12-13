@@ -42,11 +42,8 @@
                 <div class="flex justify-around w-full">
                     <select class="select select-bordered w-40" name="tag">
                         <option disabled selected>챌린지 종류</option>
-                        <option value="ENVIRONMENT">환경 챌린지</option>
-                        <option value="ROUTINE">습관 챌린지</option>
-                        <option value="CULTURE">문화 챌린지</option>
-                        <option value="HEALTH">건강 챌린지</option>
-                        <option value="ETC">기타</option>
+                        <option th:each="tagInfo : ${tagInfos}"
+                                th:value="${tagInfo.name()}" th:text="${tagInfo.challengeTag}"></option>
                     </select>
 
                     <select class="select select-bordered w-40" name="period">
@@ -72,6 +69,7 @@
                         <option disabled selected>참여 비용</option>
                         <option value="500">500 포인트</option>
                         <option value="1000">1000 포인트</option>
+                        <option value="1500">1500 포인트</option>
                         <option value="2000">2000 포인트</option>
                     </select>
                 </div>
@@ -83,19 +81,8 @@
                     <div class="flex justify-center gap-3">
                         <select name="labels" class="select select-bordered">
                             <option value="NONE" selected>없음</option>
-                            <option value="WATER">물 마시기</option>
-                            <option value="BOOKS">책 읽기</option>
-                            <option value="MUSIC">음악 듣기</option>
-                            <option value="VITAMIN">비타민</option>
-                            <option value="MORNING">기상 인증</option>
-                            <option value="BRUSH">양치하기</option>
-                            <option value="PLAN">TODO</option>
-                            <option value="RECEIPT">지출 확인</option>
-                            <option value="WEATHER">날씨 확인</option>
-                            <option value="TEMPERATURE">적정온도</option>
-                            <option value="PLANT">화분</option>
-                            <option value="MOVIE">영화 인증</option>
-                            <option value="ETC">기타</option>
+                            <option th:each="labelInfo : ${labelInfos}"
+                                    th:value="${labelInfo.name()}" th:text="${labelInfo.getName()}"></option>
                         </select>
                     </div>
                 </div>
@@ -218,7 +205,6 @@
                     }
                 })
             })
-
         </script>
     </main>
 </th:block>

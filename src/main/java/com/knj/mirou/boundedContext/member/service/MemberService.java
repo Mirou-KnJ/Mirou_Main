@@ -11,6 +11,9 @@ import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember
 import com.knj.mirou.boundedContext.challengemember.service.ChallengeMemberService;
 import com.knj.mirou.boundedContext.coin.service.CoinService;
 import com.knj.mirou.boundedContext.coinhistory.service.CoinHistoryService;
+import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
+import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
+import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
 import com.knj.mirou.boundedContext.inventory.service.InventoryService;
 import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
@@ -33,7 +36,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,12 +57,15 @@ public class MemberService {
     private final CoinHistoryService coinHistoryService;
     private final PointHistoryService pointHistoryService;
     private final InventoryService inventoryService;
+    private final ImageDataService imageDataService;
 
     private final PointConfigProperties pointConfigProps;
     private final MemberConfigProperties memberConfigProps;
     private final ApplicationEventPublisher publisher;
 
     private final MemberRepository memberRepository;
+
+    private static final String DEFAULT_PROFILE = "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg";
 
     public Optional<Member> getByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId);
@@ -89,6 +97,7 @@ public class MemberService {
                 .inviteCode("123456789")
                 .coin(coinService.create())
                 .point(pointService.create())
+                .imgUrl(DEFAULT_PROFILE)
                 .build();
 
         Member joinMember = memberRepository.save(member);
@@ -191,5 +200,49 @@ public class MemberService {
         RsData<String> kickRs = challengeMemberService.kickUser(challengeMember);
 
         return kickRs;
+    }
+
+    public Optional<Member> getByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
+
+    @Transactional
+    public RsData<Long> changeNickname(Member member, String nickname) {
+
+        Optional<Member> OMember = getByNickname(nickname);
+        if(OMember.isPresent()) {
+            return RsData.of("F-1", "이미 사용중인 닉네임 입니다.");
+        }
+
+        //FIXME
+        if(nickname.length() > 20) {
+            return RsData.of("F-2", "닉네임은 20자 이하만 가능합니다.");
+        }
+
+        member.updateNickname(nickname);
+
+        return RsData.of("S-1", "닉네임 변경이 완료되었습니다.", member.getId());
+    }
+
+    @Transactional
+    public RsData<String> changeProfile(Member member, MultipartFile profileImg) throws IOException {
+
+        RsData<String> tryUploadRs = imageDataService.tryUploadImg(profileImg, ImageTarget.MEMBER_IMG);
+        if(tryUploadRs.isFail()){
+            return tryUploadRs;
+        }
+
+        String imgUrl = tryUploadRs.getData();
+        RsData<String> safeSearchRs = imageDataService.safeSearchByGcs(imgUrl);
+        if(safeSearchRs.isFail()) {
+            return safeSearchRs;
+        }
+
+        String optimizingUrl = imageDataService.getOptimizingUrl(imgUrl, OptimizerOption.MY_PAGE_PROFILE);
+        member.updateProfileImg(optimizingUrl);
+
+        imageDataService.create(member.getId(), ImageTarget.MEMBER_IMG, optimizingUrl);
+
+        return RsData.of("S-1", "프로필 변경이 완료되었습니다.");
     }
 }
