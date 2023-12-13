@@ -214,4 +214,26 @@ public class ChallengeFeedService {
 
         return writeCounts;
     }
+
+    @Transactional
+    public RsData<String> hideFeed(Member member, long feedId) {
+
+        Optional<ChallengeFeed> OFeed = getById(feedId);
+        if(OFeed.isEmpty()) {
+            return RsData.of("F-1", "피드 정보가 유효하지 않습니다.");
+        }
+
+        ChallengeFeed challengeFeed = OFeed.get();
+        if(!challengeFeed.getWriter().equals(member)) {
+            return RsData.of("F-2", "내 피드만 숨김처리 할 수 있습니다.");
+        }
+
+        if(challengeFeed.getStatus().equals(FeedStatus.PRIVATE)) {
+            return RsData.of("F-3", "이미 숨김처리된 피드입니다.");
+        }
+
+        challengeFeed.updatePrivate();
+
+        return RsData.of("S-1", "숨김 처리가 완료되었습니다.");
+    }
 }

@@ -67,7 +67,8 @@
                                  alt="feedPreView">
 
                             <div class="flex flex-col ml-3">
-                                <p th:text="${myFeed.contents}"></p>
+                                <p th:if="${myFeed.status.getStatus().equals('공개')}" th:text="${myFeed.contents}"></p>
+                                <p class="text-gray-300 line-through" th:if="${myFeed.status.getStatus().equals('비공개')}" th:text="${myFeed.contents}"></p>
                                 <p class="text-sm text-gray-500" th:text="${myFeed.getCreateDateShortsStr()}"></p>
                             </div>
                         </div>
@@ -95,7 +96,7 @@
                                 <p class="pt-1 pb-6" th:text="${myFeed.contents}"></p>
 
                                 <div class="flex justify-center">
-                                    <button class="btn btn-warning">삭제하기</button>
+                                    <button th:onclick="|hideFeed(${myFeed.id})|" class="btn btn-warning">숨기기</button>
                                 </div>
                             </div>
                         </dialog>
@@ -226,6 +227,38 @@
                     }
                 }
             })
+        }
+
+        function hideFeed(feedId) {
+
+            console.log(feedId);
+            var confirmRs = confirm("숨기기를 하면 다른 회원들에게서 게시글이 숨겨지고, \n불이익이 발생할 수 있어요, 정말로 숨길까요?");
+
+            if(confirmRs) {
+                const csrfToken = /*[[${_csrf.token}]]*/'';
+
+                const requestData = {
+                    feedId: feedId,
+                    _csrf: csrfToken
+                };
+
+                $.ajax({
+                    url: "/feed/hide",
+                    type: "POST",
+                    data: requestData,
+                    success: function (data) {
+                        const response = data;
+                        const code = response.resultCode;
+                        const msg = response.msg;
+
+                        if (code.toString().startsWith('F')) {
+                            toastWarning(msg);
+                        } else {
+                            toastNotice(msg);
+                        }
+                    }
+                })
+            }
         }
     </script>
 </th:block>
