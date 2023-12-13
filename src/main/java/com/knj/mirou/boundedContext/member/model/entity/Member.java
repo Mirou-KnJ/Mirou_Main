@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
 
     private String inviteCode;
 
+    private String imgUrl;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(referencedColumnName = "id")
     private Coin coin;

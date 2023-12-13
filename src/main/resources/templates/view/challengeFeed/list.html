@@ -84,8 +84,14 @@
                                 <form method="dialog">
                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                 </form>
-                                <h3 class="flex justify-center font-bold mb-2"
-                                    th:text="${myFeed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                                <div class="flex justify-center">
+                                    <img class="w-8 h-8 rounded-full mr-2 mb-3" th:unless="${myFeed.writer.imgUrl}"
+                                         src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="profile_img"/>
+                                    <img class="w-8 h-8 rounded-full mr-2 mb-3" th:if="${myFeed.writer.imgUrl}"
+                                         th:src="${myFeed.writer.imgUrl}" alt="profile_img"/>
+                                    <h3 class="flex justify-center font-bold mb-2"
+                                        th:text="${myFeed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                                </div>
                                 <img th:src="${myFeed.imgUrl}" alt="feedImg">
                                 <p class="pt-2 text-sm text-gray-500" th:text="${myFeed.getCreateDateFormatStr()}"></p>
                                 <p class="pt-1 pb-6" th:text="${myFeed.contents}"></p>
@@ -128,8 +134,15 @@
                             <form method="dialog">
                                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                             </form>
-                            <h3 class="flex justify-center font-bold mb-2"
-                                th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                            <div class="flex justify-center">
+                                <img class="w-8 h-8 rounded-full mr-2 mb-3" th:unless="${feed.writer.imgUrl}"
+                                     src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="profile_img"/>
+                                <img class="w-8 h-8 rounded-full mr-2 mb-3" th:if="${feed.writer.imgUrl}"
+                                     th:src="${feed.writer.imgUrl}" alt="profile_img"/>
+                                <h3 class="flex justify-center font-bold mb-2"
+                                    th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                            </div>
+
                             <img th:src="${feed.imgUrl}" alt="feedImg">
                             <p class="pt-2 text-sm text-gray-500" th:text="${feed.getCreateDateFormatStr()}"></p>
                             <p class="pt-1 pb-6" th:text="${feed.contents}"></p>

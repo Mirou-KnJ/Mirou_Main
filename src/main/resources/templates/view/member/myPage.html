@@ -15,8 +15,11 @@
             </div>
 
             <div class="flex avatar justify-center">
-                <div class="flex justify-center items-center w-24 mask mask-squircle">
-                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"/>
+                <div class="flex justify-center items-center w-24 rounded-full">
+                    <img th:unless="${member.imgUrl}"
+                         src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="profile_img"/>
+                    <img th:if="${member.imgUrl}"
+                         th:src="${member.imgUrl}" alt="profile_img"/>
                 </div>
             </div>
 
