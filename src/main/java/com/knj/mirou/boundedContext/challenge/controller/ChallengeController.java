@@ -6,6 +6,7 @@ import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeLabel;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengemember.model.entity.ChallengeMember;
 import com.knj.mirou.boundedContext.imageData.model.enums.ImageTarget;
@@ -42,6 +43,11 @@ public class ChallengeController {
     @GetMapping("/create")
     public String createForm(Model model) {
 
+        List<ChallengeTag> tagInfos = List.of(ChallengeTag.values());
+        List<ChallengeLabel> labelInfos = List.of(ChallengeLabel.values());
+
+        model.addAttribute("tagInfos", tagInfos);
+        model.addAttribute("labelInfos", labelInfos);
         model.addAttribute("categories", challengeService.getAllCategories());
         model.addAttribute("methods", challengeService.getAllMethods());
 
