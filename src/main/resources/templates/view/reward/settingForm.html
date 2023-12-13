@@ -71,18 +71,31 @@
                 </div>
 
                 <div class="flex flex-col justify-center w-full " th:unless="${#lists.isEmpty(challenge.publicReward)}">
-                    <h1 class="text-lg flex justify-center">현재 보상 상황</h1>
-                    <div class="flex flex-col justify-center items-center">
-                        <div class="flex gap-10">
-                            <p>회차</p>
-                            <p>보상 종류</p>
-                            <p>보상 내용</p>
-                        </div>
-                        <div th:each="reward : ${challenge.publicReward}" class="flex gap-20">
-                            <p th:text="${reward.round}"></p>
-                            <p th:text="${reward.rewardType}"></p>
-                            <p th:text="${reward.reward}"></p>
-                        </div>
+                    <h1 class="text-lg flex justify-center mb-5">현재 보상 상황</h1>
+                    <div class="flex mx-auto">
+                        <table class="w-full table table-zebra border">
+                            <thead>
+                            <tr>
+                                <th class="mr-5">회차</th>
+                                <th class="mr-8">보상 종류</th>
+                                <th class="mr-5">보상 내용</th>
+                                <th class="mr-5">옵션</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="w-full" th:each="reward : ${challenge.publicReward}" >
+                                <td><p th:text="${reward.round}"></p></td>
+                                <td><p th:text="${reward.rewardType}"></p></td>
+                                <td><p th:text="${reward.reward}"></p></td>
+                                <td>
+                                    <form th:action="@{'/reward/deleteReward/' + ${reward.getId()}}" method="post"
+                                          onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                                        <button type="submit" class="btn btn-sm btn-error">삭제</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
