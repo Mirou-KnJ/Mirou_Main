@@ -190,12 +190,17 @@
                                 </div>
 
                                 <dialog th:id="'feedModal' + ${feed.id}" class="modal">
-                                    <div class="modal-box">
+                                    <div class="flex modal-box justify-center items-center flex-col">
                                         <form method="dialog">
                                             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕
                                             </button>
                                         </form>
-                                        <h3 class="font-bold" th:text="${feed.writer.getNickname()}"></h3>
+                                        <div class="flex justify-center inline-block mb-3">
+                                            <img class="w-8 h-8 rounded-full mr-2" th:if="${feed.writer.imgUrl}"
+                                                 th:src="${feed.writer.imgUrl}" alt="profile_img"/>
+                                            <h3 class="flex justify-center font-bold pt-1"
+                                                th:text="${feed.writer.getNickname()} + ' 님의 인증글'"></h3>
+                                        </div>
                                         <img th:src="${feed.imgUrl}" alt="feedImg">
                                         <p class="py-4" th:text="${feed.contents}"></p>
                                     </div>
