@@ -81,18 +81,22 @@
                         <span class="label-text">라벨 종류</span>
                     </label>
                     <div class="flex justify-center gap-3">
-                        <label class="label">
-                            <span class="label-text">물 마시기</span>
-                            <input type="radio" name="labels" class="radio radio-primary" value="WATER"/>
-                        </label>
-                        <label class="label">
-                            <span class="label-text">책 읽기</span>
-                            <input type="radio" name="labels" class="radio radio-primary" value="BOOKS"/>
-                        </label>
-                        <label class="label">
-                            <span class="label-text">기타</span>
-                            <input type="radio" name="labels" class="radio radio-primary" value="ETC"/>
-                        </label>
+                        <select name="labels" class="select select-bordered">
+                            <option value="NONE" selected>없음</option>
+                            <option value="WATER">물 마시기</option>
+                            <option value="BOOKS">책 읽기</option>
+                            <option value="MUSIC">음악 듣기</option>
+                            <option value="VITAMIN">비타민</option>
+                            <option value="MORNING">기상 인증</option>
+                            <option value="BRUSH">양치하기</option>
+                            <option value="PLAN">TODO</option>
+                            <option value="RECEIPT">지출 확인</option>
+                            <option value="WEATHER">날씨 확인</option>
+                            <option value="TEMPERATURE">적정온도</option>
+                            <option value="PLANT">화분</option>
+                            <option value="MOVIE">영화 인증</option>
+                            <option value="ETC">기타</option>
+                        </select>
                     </div>
                 </div>
 
@@ -108,7 +112,7 @@
                     </div>
                 </div>
 
-                <div id="getCategoryDiv" class="hidden">
+                <div id="getCategoryDiv" class="hidden mt-4">
                     <label class="label">
                         <span class="label-text">장소 카테고리</span>
                     </label>
@@ -183,11 +187,11 @@
                 }
             }
 
-            const radioButtons = document.getElementsByName("labels");
-            radioButtons.forEach(function (radioButton) {
-                radioButton.addEventListener("change", function () {
+            document.addEventListener("DOMContentLoaded", function (){
+                const selectElement = document.querySelector('select[name="labels"]');
+                selectElement.addEventListener("change", function (){
 
-                    const selectedValue = document.querySelector('input[name="labels"]:checked').value;
+                    const selectedValue = selectElement.value;
                     const getLabelDiv = document.getElementById("getLabelDiv");
                     const labelArea = document.getElementById("labelArea");
                     const csrfToken = /*[[${_csrf.token}]]*/'';
@@ -214,6 +218,7 @@
                     }
                 })
             })
+
         </script>
     </main>
 </th:block>
