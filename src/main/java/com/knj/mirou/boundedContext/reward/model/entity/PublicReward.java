@@ -28,4 +28,7 @@ public class PublicReward extends BaseEntity {
 
     private String reward;
 
+    public void changeReward(String reward) {
+        this.reward = reward;
+    }
 }

@@ -1,6 +1,7 @@
 package com.knj.mirou.boundedContext.reward.controller;
 
 import com.knj.mirou.base.rq.Rq;
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
@@ -44,12 +45,16 @@ public class RewardController {
     }
 
     @PostMapping("/setting")
-    public String setPublicReward(long id, int round, String rewardType, String reward) {
+    public String createReward(long id, int round, String rewardType, String reward) {
 
-        publicRewardService.create(id, round, rewardType, reward);
+        RsData<Long> createRs = publicRewardService.create(id, round, rewardType, reward);
+        if(createRs.isFail()) {
+            return rq.historyBack(createRs);
+        }
 
-        return "redirect:/reward/setting/" + id;
+        return rq.redirectWithMsg("/reward/setting/" + id, createRs);
     }
+
 
     @GetMapping("/confirmSettings/{id}")
     public String getConfirmForm(@PathVariable(value = "id") long challengeId, Model model) {

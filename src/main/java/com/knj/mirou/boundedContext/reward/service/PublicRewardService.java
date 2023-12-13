@@ -1,5 +1,6 @@
 package com.knj.mirou.boundedContext.reward.service;
 
+import com.knj.mirou.base.rsData.RsData;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
@@ -23,13 +24,17 @@ public class PublicRewardService {
     private final ChallengeService challengeService;
 
     @Transactional
-    public void create(long challengeId, int round, String rewardType, String reward) {
+    public RsData<Long> create(long challengeId, int round, String rewardType, String reward) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-
         if(OChallenge.isEmpty()) {
-            log.error("챌린지를 찾을 수 없습니다");
-            return;
+            return RsData.of("F-1", "챌린지를 찾을 수 없습니다.");
+        }
+        Challenge challenge = OChallenge.get();
+
+        Optional<PublicReward> OPublicReward = publicRewardRepository.findByLinkedChallengeAndRound(challenge, round);
+        if(OPublicReward.isPresent()) {
+            return update(OPublicReward.get(), reward);
         }
 
         PublicReward newReward = PublicReward.builder()
@@ -40,6 +45,15 @@ public class PublicRewardService {
                 .build();
 
         publicRewardRepository.save(newReward);
+
+        return RsData.of("S-1", "새로운 보상이 설정되었습니다.");
+    }
+
+    @Transactional
+    public RsData<Long> update(PublicReward publicReward, String reward){
+        publicReward.changeReward(reward);
+
+        return RsData.of("S-2", "기존 보상이 수정되었습니다.", publicReward.getId());
     }
 
     @Transactional
