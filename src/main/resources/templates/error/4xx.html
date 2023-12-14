@@ -13,11 +13,13 @@
 
             <div class="contents-wrapper flex justify-center items-center flex-col h-full">
 
-                <div class="error-title flex text-7xl">
-                    X_X [[ ${status} ]]
+                <div class="error-title flex ">
+                    <span class="text-7xl">X_X</span>
+                    <h1 class="text-7xl">[[ ${status} ]]</h1>
                 </div>
 
-                <div class="error-msg flex mt-8">
+                <div class="error-msg flex mt-8 flex-col items-center">
+                    <h1 id="errorMsg"></h1>
                     올바르지 않은 접근입니다. 다시 돌아가 시도해 주세요.
                 </div>
 
@@ -31,6 +33,26 @@
 
         <div class="flex flex-grow bg-purple-50"></div>
     </main>
+
+    <script th:inline="javascript">
+
+        const status = [[ ${status} ]];
+        const errorCode = document.getElementById("errorMsg");
+
+        console.log(errorCode);
+        if(status === 404) {
+            errorCode.innerText = status + "(페이지를 찾을 수 없습니다)";
+        } else if (status === 403) {
+            errorCode.innerText = status + "(권한 없음)";
+        } else if (status === 408) {
+            errorCode.innerText = status + "(시간 초과)";
+        } else if (status === 400) {
+            errorCode.innerText = status + "(올바르지 않은 요청)";
+        } else if (status === 401) {
+            errorCode.innerText = status + "(로그인 정보 만료)";
+        }
+
+    </script>
 </th:block>
 </body>
 </html>
