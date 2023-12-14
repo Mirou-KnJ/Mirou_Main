@@ -24,24 +24,6 @@ public class ChallengeServiceTest {
 
     private static final String TEST_CHALLENGE_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/system_noti.png";
 
-    @BeforeEach
-    void setUp() {
-
-        ChallengeCreateDTO creteDTO = ChallengeCreateDTO.builder()
-                .name("테스트 챌린지 1")
-                .contents("테스트 챌린지 내용 1")
-                .joinCost(1000)
-                .joinDeadLine(LocalDate.now().plusDays(7))
-                .period(7)
-                .tag("ETC")
-                .method("PHOTO")
-                .level(3)
-                .precaution("테스트 주의사항 1")
-                .build();
-
-        challengeService.create(creteDTO, TEST_CHALLENGE_IMG);
-    }
-
     @Test
     @DisplayName("챌린지 생성시 종료 기한이 적합하지 않으면 생성 불가")
     void t001() {
@@ -66,6 +48,4 @@ public class ChallengeServiceTest {
         assertThat(createRs.isFail()).isTrue();
         assertThat(createRs.getResultCode()).isEqualTo("F-2");
     }
-
-
 }
