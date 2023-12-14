@@ -148,7 +148,7 @@ public class ChallengeFeedService {
 
         Optional<ChallengeFeed> OFeed = getById(feedId);
         if (OFeed.isEmpty()) {
-            return RsData.of("F-1", "챌린지 정보를 확인할 수 없습니다.");
+            return RsData.of("F-1", "피드 정보를 확인할 수 없습니다.");
         }
 
         ChallengeFeed challengeFeed = OFeed.get();
