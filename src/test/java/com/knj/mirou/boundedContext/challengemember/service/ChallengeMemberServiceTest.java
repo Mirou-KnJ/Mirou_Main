@@ -40,6 +40,7 @@ class ChallengeMemberServiceTest {
     private Member testMember2;
     private Challenge testChallenge1;
     private Challenge testChallenge2;
+    private Challenge testChallenge3;
 
     @BeforeEach
     void setUp() {
@@ -63,6 +64,11 @@ class ChallengeMemberServiceTest {
         if(OChallenge2.isPresent()) {
             testChallenge2 = OChallenge2.get();
         }
+
+        Optional<Challenge> OChallenge3 = challengeService.getById(3L);
+        if(OChallenge3.isPresent()) {
+            testChallenge3 = OChallenge3.get();
+        }
     }
 
     @Test
@@ -79,6 +85,21 @@ class ChallengeMemberServiceTest {
         RsData<Long> challengeJoinRs2 = challengeMemberService.join(testChallenge1, testMember2);
         assertThat(challengeJoinRs2.isSuccess()).isTrue();
         assertThat(challengeJoinRs2.getResultCode()).startsWith("S");
+    }
+
+    @Test
+    @DisplayName("내부 설정에 따라 최대 참여 갯수 제한(3개)")
+    void t002() {
+
+        challengeMemberService.join(testChallenge1, testMember1);
+        challengeMemberService.join(testChallenge2, testMember1);
+        challengeMemberService.join(testChallenge3, testMember1);
+
+        boolean canJoin1 = challengeMemberService.canJoin(testMember1);
+        boolean canJoin2 = challengeMemberService.canJoin(testMember2);
+
+        assertThat(canJoin1).isFalse();
+        assertThat(canJoin2).isTrue();
     }
 
 }
