@@ -142,7 +142,7 @@ public class MemberService {
 
         List<Member> targetMembers = memberRepository.findByPointCurrentPointLessThan(resetStandard);
 
-        pointService.resetPoint(targetMembers);
+        pointService.resetPoint(targetMembers, resetStandard);
     }
 
     public ChallengeReportDTO getChallengeReportDto() {
