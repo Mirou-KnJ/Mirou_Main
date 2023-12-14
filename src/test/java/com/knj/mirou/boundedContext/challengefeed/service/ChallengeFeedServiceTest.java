@@ -42,6 +42,7 @@ class ChallengeFeedServiceTest {
     private ChallengeMemberService challengeMemberService;
 
     private Member testMember1;
+    private Member testMember2;
     private Challenge testChallenge1;
     private Challenge testChallenge2;
 
@@ -52,9 +53,14 @@ class ChallengeFeedServiceTest {
     @BeforeEach
     void setUp() {
 
-        Optional<Member> OMember = memberService.getById(1L);
-        if(OMember.isPresent()) {
-            testMember1 = OMember.get();
+        Optional<Member> OMember1 = memberService.getById(1L);
+        if(OMember1.isPresent()) {
+            testMember1 = OMember1.get();
+        }
+
+        Optional<Member> OMember2 = memberService.getById(2L);
+        if(OMember2.isPresent()) {
+            testMember2 = OMember2.get();
         }
 
         Optional<Challenge> OChallenge1 = challengeService.getById(3L);
@@ -194,6 +200,19 @@ class ChallengeFeedServiceTest {
 
         assertThat(likeRs.isFail()).isTrue();
         assertThat(likeRs.getResultCode()).startsWith("F");
+    }
+
+    @Test
+    @DisplayName("숨김 처리는 자신의 글만 가능")
+    public void t006() throws IOException {
+
+        challengeMemberService.join(testChallenge1, testMember1);
+        challengeFeedService.write(testChallenge1, testMember1, notWaterImgFile, "물 마시기 인증");
+
+        RsData<String> hideRs = challengeFeedService.hideFeed(testMember2, 1L);
+
+        assertThat(hideRs.isFail()).isTrue();
+        assertThat(hideRs.getResultCode()).startsWith("F");
     }
 
 }
