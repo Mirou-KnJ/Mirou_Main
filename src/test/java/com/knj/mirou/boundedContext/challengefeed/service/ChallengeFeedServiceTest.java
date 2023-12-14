@@ -107,4 +107,17 @@ class ChallengeFeedServiceTest {
         assertThat(writeRs2.isSuccess()).isTrue();
         assertThat(writeRs2.getResultCode()).startsWith("S");
     }
+
+    @Test
+    @DisplayName("이미지 파일이 아닌 경우 인증글 작성 불가")
+    void t002() throws IOException {
+
+        challengeMemberService.join(testChallenge1, testMember1);
+
+        RsData<String> writeRs =
+                challengeFeedService.write(testChallenge1, testMember1, txtFile, "물 마시기 인증");
+
+        assertThat(writeRs.isFail()).isTrue();
+        assertThat(writeRs.getResultCode()).startsWith("F");
+    }
 }
