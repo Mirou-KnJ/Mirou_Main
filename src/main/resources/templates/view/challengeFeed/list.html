@@ -151,7 +151,7 @@
                                 <a th:onclick="|tryLike(${feed.id}, this)|">
                                     <i class="fa-regular fa-heart fa-2xl" style="color: #8041D9;"></i>
                                 </a>
-                                <span class="text-xs inline-block" th:text="${feed.likeCount}"
+                                <span th:id="likeCount + ${feed.id}" class="text-xs inline-block" th:text="${feed.likeCount}"
                                       style="color: #8041D9;"></span>
                                 <a th:onclick="|tryReport(${feed.id})|" class="ml-6 tooltip"
                                    data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요.">
@@ -173,24 +173,32 @@
 
             element.onclick = null;
 
-            let url = "/feed/like/" + feedId;
+            const csrfToken = /*[[${_csrf.token}]]*/'';
 
-            const headerName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
-            const tokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
+            const requestData = {
+                feedId: feedId,
+                _csrf: csrfToken
+            };
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    [headerName]: tokenValue
+            $.ajax({
+                url: "/feed/like",
+                type: "POST",
+                data: requestData,
+                success: function (data) {
+                    const response = data;
+                    const code = response.resultCode;
+                    const msg = response.msg;
+                    const count = response.data;
+
+                    if (code.toString().startsWith('F')) {
+                        toastWarning(msg);
+                    } else {
+                        toastNotice(msg);
+                        const countElement = document.getElementById("likeCount"+feedId);
+                        countElement.innerText = count;
+                    }
                 }
             })
-                .catch((error) => {
-                    console.log('Error:', error);
-                    return;
-                })
-
-            toastNotice("좋아요가 반영되었습니다.");
         }
 
         function tryReport(targetFeedId) {

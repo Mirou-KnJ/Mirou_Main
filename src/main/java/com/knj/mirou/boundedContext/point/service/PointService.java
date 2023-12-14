@@ -28,6 +28,8 @@ public class PointService {
 
     private final PointRepository pointRepository;
 
+    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/system_noti.png";
+
     @Transactional
     public Point create() {
 
@@ -71,19 +73,27 @@ public class PointService {
     }
 
     @Transactional
-    public void resetPoint(List<Member> targetMembers) {
+    public void resetPoint(List<Member> targetMembers, int resetStandard) {
 
         for(Member targetMember : targetMembers) {
             Point point = targetMember.getPoint();
 
+            int gavePoint = resetStandard - point.getCurrentPoint();
+
             point = Point.builder()
                     .id(point.getId())
-                    .currentPoint(3000)
-                    .totalGetPoint(point.getTotalGetPoint())
+                    .currentPoint(resetStandard)
+                    .totalGetPoint(point.getTotalGetPoint() + gavePoint)
                     .totalUsedPoint(point.getTotalUsedPoint())
                     .build();
 
             pointRepository.save(point);
+
+            pointHistoryService.create(targetMember, ChangeType.GET, gavePoint,
+                    "이번 주 일상지원금 지급", SYSTEM_IMG);
+
+            log.info("지급액 : " + gavePoint);
+
             publisher.publishEvent(new EventAfterResetPoint(this, targetMember));
         }
     }

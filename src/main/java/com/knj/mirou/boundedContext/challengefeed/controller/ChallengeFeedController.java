@@ -108,18 +108,15 @@ public class ChallengeFeedController {
     }
 
     @ResponseBody
-    @PostMapping("/like/{id}")
-    public void like(@PathVariable(value = "id") long feedId) {
+    @PostMapping("/like")
+    public ResponseEntity<RsData<Integer>> like(@RequestParam Map<String, Object> params) {
 
-        Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
-        if(OFeed.isEmpty()) {
-            return;
-        }
+        long feedId = Long.parseLong(params.get("feedId").toString());
 
-        //FIXME: 새로고침만 된다면 좋아요는 몇번이고 누를 수 있으며, 좋아한 내용이 저장되지 않는 단순한 상황.
-        ChallengeFeed challengeFeed = OFeed.get();
+        Member member = rq.getMember();
+        RsData<Integer> likeRs = challengeFeedService.updateLikeCount(feedId, member);
 
-        challengeFeedService.updateLikeCount(challengeFeed);
+        return ResponseEntity.ok(likeRs);
     }
 
     @ResponseBody

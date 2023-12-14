@@ -144,8 +144,21 @@ public class ChallengeFeedService {
     }
 
     @Transactional
-    public void updateLikeCount(ChallengeFeed challengeFeed) {
+    public RsData<Integer> updateLikeCount(long feedId, Member member) {
+
+        Optional<ChallengeFeed> OFeed = getById(feedId);
+        if(OFeed.isEmpty()) {
+            return RsData.of("F-1", "챌린지 정보를 확인할 수 없습니다.");
+        }
+
+        ChallengeFeed challengeFeed = OFeed.get();
+        if(challengeFeed.getWriter().equals(member)) {
+            return RsData.of("F-2", "자신의 글은 좋아요를 누를 수 없습니다.");
+        }
+
         challengeFeed.updateLikeCount();
+
+        return RsData.of("S-1", "좋아요가 반영되었습니다.", challengeFeed.getLikeCount());
     }
 
     public Map<Long, String> getFeedListImages(FeedListDTO feedListDTO) {
