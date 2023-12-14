@@ -13,5 +13,4 @@ public class PersistentTokenConfig {
     public PersistentTokenRepository persistentTokenRepository(final PersistentLoginRepository repository) {
         return new JpaPersistentTokenRepository(repository);
     }
-
 }

@@ -32,5 +32,4 @@ public class NotificationController {
 
         return "view/notification/list";
     }
-
 }

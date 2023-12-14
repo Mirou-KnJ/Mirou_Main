@@ -13,7 +13,7 @@ public interface ReportHistoryRepository extends JpaRepository<ReportHistory, Lo
     Optional<ReportHistory> findByTargetFeedIdAndReporterId(long targetFeedId, long reporterId);
 
     int countByReportedMemberAndCreateDateBetween(Member reportedMember,
-                                                    LocalDateTime startDayOfWeek, LocalDateTime endDayOfWeek);
+                                                  LocalDateTime startDayOfWeek, LocalDateTime endDayOfWeek);
 
     List<ReportHistory> findAllByCreateDateBetween(LocalDateTime startOfWeek, LocalDateTime endOfWeek);
 }

@@ -35,13 +35,13 @@ public class MemberController {
     private final ChallengeMemberService challengeMemberService;
 
     @GetMapping("/login")
-    public String showLoginPage(){
+    public String showLoginPage() {
         return "view/member/login";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage")
-    public String showMyPage(Model model){
+    public String showMyPage(Model model) {
 
         Member member = rq.getMember();
         int inProgressNum = challengeMemberService
@@ -86,7 +86,7 @@ public class MemberController {
         Member member = rq.getMember();
 
         RsData<Long> changeRs = memberService.changeNickname(member, nickname);
-        if(changeRs.isFail()) {
+        if (changeRs.isFail()) {
             rq.historyBack(changeRs);
         }
 
@@ -100,7 +100,7 @@ public class MemberController {
         Member member = rq.getMember();
 
         RsData<String> changeRs = memberService.changeProfile(member, profileImg);
-        if(changeRs.isFail()) {
+        if (changeRs.isFail()) {
             rq.historyBack(changeRs);
         }
 

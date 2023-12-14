@@ -34,7 +34,7 @@ public class ProductService {
     public RsData<Long> create(long infoId, String code) {
 
         Optional<ProductInfo> OInfo = productInfoService.getById(infoId);
-        if(OInfo.isEmpty()) {
+        if (OInfo.isEmpty()) {
             return RsData.of("F-1", "물품 정보가 유효하지 않습니다.");
         }
 
@@ -42,7 +42,7 @@ public class ProductService {
 
         ProductStatus status = null;
         //해당 정보로 등록된 판매중인 상품이 이미 존재하다면 판매중으로 바로 투입, 아니면 판매 전으로 세팅
-        if(getAllByInfoAndStatus(productInfo, ProductStatus.SALE).isEmpty()) {
+        if (getAllByInfoAndStatus(productInfo, ProductStatus.SALE).isEmpty()) {
             status = ProductStatus.BEFORE_SALE;
         } else {
             status = ProductStatus.SALE;
@@ -85,7 +85,7 @@ public class ProductService {
 
         List<Integer> counts = new ArrayList<>();
 
-        for(ProductInfo info : productInfos) {
+        for (ProductInfo info : productInfos) {
             counts.add(getCountByInfoAndStatus(info, ProductStatus.BEFORE_SALE));
         }
 
@@ -96,7 +96,7 @@ public class ProductService {
 
         List<Integer> counts = new ArrayList<>();
 
-        for(ProductInfo info : productInfos) {
+        for (ProductInfo info : productInfos) {
             counts.add(getCountByInfoAndStatus(info, ProductStatus.SALE));
         }
 
@@ -107,7 +107,7 @@ public class ProductService {
 
         Map<Long, Integer> counts = new HashMap<>();
 
-        for(ProductInfo info : productInfos) {
+        for (ProductInfo info : productInfos) {
 
             int count = productRepository.countByInfoAndStatus(info, ProductStatus.SALE);
 
@@ -121,7 +121,7 @@ public class ProductService {
     public RsData<String> startSale(long infoId) {
 
         Optional<ProductInfo> OInfo = productInfoService.getById(infoId);
-        if(OInfo.isEmpty()) {
+        if (OInfo.isEmpty()) {
             return RsData.of("F-1", "상품 정보가 잘못되었습니다.");
         }
 
@@ -129,7 +129,7 @@ public class ProductService {
 
         List<Product> beforeProducts = getAllByInfoAndStatus(productInfo, ProductStatus.BEFORE_SALE);
 
-        for(Product product : beforeProducts) {
+        for (Product product : beforeProducts) {
             product.setStatus(ProductStatus.SALE);
         }
 
@@ -140,13 +140,13 @@ public class ProductService {
     public RsData<String> tryBuy(long infoId, Member member) {
 
         Optional<ProductInfo> OInfo = productInfoService.getById(infoId);
-        if(OInfo.isEmpty()) {
+        if (OInfo.isEmpty()) {
             return RsData.of("F-1", "상품 정보가 유효하지 않습니다.");
         }
         ProductInfo productInfo = OInfo.get();
 
         int currentCoin = member.getCoin().getCurrentCoin();
-        if(productInfo.getCost() > currentCoin) {
+        if (productInfo.getCost() > currentCoin) {
             return RsData.of("F-2", "코인이 부족합니다.");
         }
 
@@ -161,5 +161,4 @@ public class ProductService {
 
         return RsData.of("S-1", "구매에 성공하였습니다.");
     }
-
 }

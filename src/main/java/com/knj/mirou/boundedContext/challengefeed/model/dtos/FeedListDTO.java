@@ -15,5 +15,4 @@ public class FeedListDTO {
     private String challengeImg;
     private List<ChallengeFeed> myFeeds;
     private List<ChallengeFeed> notMineFeeds;
-
 }

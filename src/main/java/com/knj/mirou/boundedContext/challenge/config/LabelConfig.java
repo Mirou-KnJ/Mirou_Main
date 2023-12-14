@@ -21,7 +21,7 @@ public class LabelConfig {
 
         List<String> labelingTargets = labelConfigProps.getLabelingList();
 
-        for(String target : labelingTargets) {
+        for (String target : labelingTargets) {
             try {
                 Field field = configClass.getDeclaredField(target);
                 field.setAccessible(true);
@@ -34,5 +34,4 @@ public class LabelConfig {
             }
         }
     }
-
 }

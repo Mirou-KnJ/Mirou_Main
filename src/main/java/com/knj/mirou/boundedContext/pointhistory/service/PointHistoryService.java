@@ -25,7 +25,7 @@ public class PointHistoryService {
     private final PointHistoryRepository pointHistoryRepository;
 
     @Transactional
-    public void create(Member linkedMember, ChangeType type, int changedPoint, String contents, String imgUrl){
+    public void create(Member linkedMember, ChangeType type, int changedPoint, String contents, String imgUrl) {
 
         String historyImgUrl = imageDataService.getOptimizingUrl(imgUrl, OptimizerOption.HISTORY);
 
@@ -40,7 +40,7 @@ public class PointHistoryService {
         pointHistoryRepository.save(pointHistory);
     }
 
-    public List<PointHistory> getAllOrderedDesc(Member member){
+    public List<PointHistory> getAllOrderedDesc(Member member) {
         return pointHistoryRepository.findAllByLinkedMemberOrderByCreateDateDesc(member);
     }
 
@@ -60,7 +60,7 @@ public class PointHistoryService {
     public int getSumByHistories(List<PointHistory> histories) {
 
         int sum = 0;
-        for(PointHistory history : histories) {
+        for (PointHistory history : histories) {
             sum += history.getChangedPoint();
         }
 

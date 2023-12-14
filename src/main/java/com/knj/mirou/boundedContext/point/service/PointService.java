@@ -75,7 +75,7 @@ public class PointService {
     @Transactional
     public void resetPoint(List<Member> targetMembers, int resetStandard) {
 
-        for(Member targetMember : targetMembers) {
+        for (Member targetMember : targetMembers) {
             Point point = targetMember.getPoint();
 
             int gavePoint = resetStandard - point.getCurrentPoint();

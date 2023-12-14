@@ -75,7 +75,7 @@ public class Challenge extends BaseEntity {
     public int getRewardSum() {
 
         int sum = 0;
-        for(PublicReward reward : publicReward) {
+        for (PublicReward reward : publicReward) {
             sum += Integer.parseInt(reward.getReward());
         }
 

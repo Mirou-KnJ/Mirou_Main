@@ -18,5 +18,4 @@ public class ChallengeReportDTO {
     public List<Challenge> openedChallenges;
     public Map<Long, Integer> writeCounts;
     public Map<Long, Integer> joinCounts;
-
 }

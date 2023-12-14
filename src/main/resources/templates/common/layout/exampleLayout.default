@@ -1,7 +1,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}">
 <head>
-    <title>물품 코드 등록 폼</title>
+    <title>사용할 페이지 명</title>
 </head>
 <body>
 <th:block layout:fragment="Content">

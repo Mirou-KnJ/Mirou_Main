@@ -45,7 +45,7 @@ public class CoinHistoryService {
 
         coinHistoryRepository.save(coinHistory);
 
-        if(type.equals(ChangeType.GET)) {
+        if (type.equals(ChangeType.GET)) {
             publisher.publishEvent(new EventAfterGiveCoin(this, member, contents, imgUrl));
         }
     }
@@ -70,7 +70,7 @@ public class CoinHistoryService {
     public int getSumByHistories(List<CoinHistory> histories) {
 
         int sum = 0;
-        for(CoinHistory history : histories) {
+        for (CoinHistory history : histories) {
             sum += history.getChangedCoin();
         }
 

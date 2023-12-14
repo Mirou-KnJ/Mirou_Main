@@ -53,7 +53,7 @@ public class NotificationService {
 
         String processingContents = "";
 
-        switch(notiType) {
+        switch (notiType) {
             case JOIN -> processingContents = contents.concat("님의 회원가입을 환영합니다");
             case JOIN_CHALLENGE -> processingContents = contents.concat(" 참여를 시작하였습니다");
             case END_PROGRESS -> processingContents = contents.concat(" 참여가 종료되었습니다");
@@ -79,7 +79,7 @@ public class NotificationService {
 
         List<Member> members = memberService.getAll();
 
-        for(Member member : members) {
+        for (Member member : members) {
             int reportCount = reportHistoryService.getWeeklyReportedCounts(member);
             int likeCount = challengeFeedService.getWeeklyLikeCounts(member);
             create(member, String.valueOf(reportCount), SYSTEM_IMG, NotiType.REPORT_COUNT);
@@ -89,8 +89,8 @@ public class NotificationService {
 
     @Transactional
     public void updateRead(List<Notification> notifications) {
-        for(Notification noti : notifications) {
-            if(!noti.isRead()) {
+        for (Notification noti : notifications) {
+            if (!noti.isRead()) {
                 noti.readNotifiaction();
             }
         }

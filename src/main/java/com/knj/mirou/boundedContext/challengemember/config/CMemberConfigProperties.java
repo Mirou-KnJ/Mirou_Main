@@ -12,5 +12,4 @@ import org.springframework.context.annotation.Configuration;
 public class CMemberConfigProperties {
 
     private int joinLimit;
-
 }

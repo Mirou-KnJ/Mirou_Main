@@ -20,7 +20,8 @@
                             </div>
 
                             <div>
-                                <span class="text-sm" th:text="${#numbers.formatInteger(member.point.currentPoint, 1, 'COMMA')}"></span>
+                                <span class="text-sm"
+                                      th:text="${#numbers.formatInteger(member.point.currentPoint, 1, 'COMMA')}"></span>
                                 <i class="fa-solid fa-money-bill-wave ml-2" style="color: #3faa31;"></i>
                             </div>
                         </a>
@@ -33,7 +34,8 @@
                             </div>
 
                             <div>
-                                <span class="text-sm" th:text="${#numbers.formatInteger(member.coin.currentCoin, 1, 'COMMA')}"></span>
+                                <span class="text-sm"
+                                      th:text="${#numbers.formatInteger(member.coin.currentCoin, 1, 'COMMA')}"></span>
                                 <i class="fa-solid fa-coins ml-2" style="color: #eac02a;"></i>
                             </div>
                         </a>

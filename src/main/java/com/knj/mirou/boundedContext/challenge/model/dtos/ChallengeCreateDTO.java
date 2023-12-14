@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class ChallengeCreateDTO {
 
     @NotEmpty(message = "제목은 반드시 입력 되어야 합니다.")
-    @Size(min=5, max = 20, message = "제목은 5자 이상 20자 이하로 구성 되어야 합니다.")
+    @Size(min = 5, max = 20, message = "제목은 5자 이상 20자 이하로 구성 되어야 합니다.")
     private String name;
 
     @NotEmpty(message = "내용은 반드시 입력 되어야 합니다.")

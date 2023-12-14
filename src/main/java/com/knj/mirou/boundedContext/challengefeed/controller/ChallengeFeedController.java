@@ -42,7 +42,7 @@ public class ChallengeFeedController {
     public String writeForm(@PathVariable(value = "id") long challengeId, Model model) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("챌린지 정보를 찾을 수 없습니다.");
         }
 
@@ -52,7 +52,7 @@ public class ChallengeFeedController {
         model.addAttribute("challenge", challenge);
         model.addAttribute("challengeImg", challengeImg);
 
-        if(challenge.getMethod().equals(AuthenticationMethod.LOCATION)) {
+        if (challenge.getMethod().equals(AuthenticationMethod.LOCATION)) {
 
             String mapKey = mapConfigProps.getKey();
             model.addAttribute("mapKey", mapKey);
@@ -71,7 +71,7 @@ public class ChallengeFeedController {
 
         Member member = rq.getMember();
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
         }
 
@@ -91,7 +91,7 @@ public class ChallengeFeedController {
     public String showList(@PathVariable(value = "id") long challengeId, Model model) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()){
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
         }
 

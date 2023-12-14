@@ -33,19 +33,19 @@ public class NotProd {
             ImageDataService imageDataService,
             ProductInfoService productInfoService,
             LabelConfig labelConfig
-    ){
+    ) {
         return new CommandLineRunner() {
             @Override
             @Transactional
-            public void run (String... args) throws Exception {
+            public void run(String... args) throws Exception {
 
                 labelConfig.setLabels();
 
-                if(memberService.getByLoginId("TEST_USER_1").isPresent()) {
+                if (memberService.getByLoginId("TEST_USER_1").isPresent()) {
                     return;
                 }
 
-                for(int i=1; i<=3; i++) {
+                for (int i = 1; i <= 3; i++) {
 
                     LocalDate date = LocalDate.now().plusDays(30);
                     ChallengeCreateDTO createDto = ChallengeCreateDTO.builder()
@@ -79,10 +79,10 @@ public class NotProd {
 
                 publicRewardService.create(3, 1, "COIN", "100");
 
-                for(int j=1; j<=3; j++) {
-                    productInfoService.create("샘플 상품" + j, "샘플 브랜드" + j, j*100,
+                for (int j = 1; j <= 3; j++) {
+                    productInfoService.create("샘플 상품" + j, "샘플 브랜드" + j, j * 100,
                             "샘플 상품 내용 입니다.", DEFAULT_IMG_URL, "교환처에 문의하세요."
-                            ,"기간 내에 사용하지 않으면 소멸됩니다.");
+                            , "기간 내에 사용하지 않으면 소멸됩니다.");
                 }
             }
         };

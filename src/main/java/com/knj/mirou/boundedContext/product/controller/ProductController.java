@@ -84,7 +84,7 @@ public class ProductController {
         Member member = rq.getMember();
 
         RsData<String> buyRs = productService.tryBuy(productId, member);
-        if(buyRs.isFail()) {
+        if (buyRs.isFail()) {
             return rq.historyBack(buyRs);
         }
 

@@ -14,7 +14,7 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Long
     List<PointHistory> findAllByLinkedMemberOrderByCreateDateDesc(Member linkedMember);
 
     List<PointHistory> findAllByChangeTypeAndCreateDateBetween(ChangeType changeType,
-                                                              LocalDateTime startOfWeek, LocalDateTime endOfWeek);
+                                                               LocalDateTime startOfWeek, LocalDateTime endOfWeek);
 
     @Query("SELECT DISTINCT p.linkedMember.id FROM PointHistory p")
     List<Long> findDistinctMemberIds();

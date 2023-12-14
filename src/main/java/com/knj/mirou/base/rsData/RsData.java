@@ -32,7 +32,7 @@ public class RsData<T> {
     }
 
     public void printResult() {
-        if(isSuccess()) {
+        if (isSuccess()) {
             log.info(resultCode + ": " + msg);
         } else {
             log.error(resultCode + ": " + msg);

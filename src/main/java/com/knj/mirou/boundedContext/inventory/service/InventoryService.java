@@ -52,7 +52,7 @@ public class InventoryService {
     public RsData<Long> usingProduct(long inventoryId, Member member) {
 
         Optional<Inventory> OInventory = getByIdAndOwner(inventoryId, member);
-        if(OInventory.isEmpty()) {
+        if (OInventory.isEmpty()) {
             return RsData.of("F-1", "보관 정보를 확인할 수 없습니다.");
         }
 
@@ -106,7 +106,7 @@ public class InventoryService {
         int bestProductCount = 0;
         int weeklyUsedCount = 0;
 
-        for(Inventory history : weeklySalesHistories) {
+        for (Inventory history : weeklySalesHistories) {
 
             long infoId = history.getProduct().getInfo().getId();
             InventoryStatus status = history.getStatus();
@@ -115,13 +115,13 @@ public class InventoryService {
 
             int count = weeklySalesMap.get(infoId);
 
-            if(count > bestProductCount) {
+            if (count > bestProductCount) {
                 bestProductId = infoId;
                 bestProductCount = count;
             }
 
             //FIXME
-            if(status.equals(InventoryStatus.AFTER_USED)) {
+            if (status.equals(InventoryStatus.AFTER_USED)) {
                 weeklyUsedCount++;
             }
         }

@@ -13,5 +13,4 @@ public enum ImageTarget {
     MEMBER_IMG("회원 이미지");
 
     private final String imageTarget;
-
 }
