@@ -44,7 +44,8 @@ class ChallengeFeedServiceTest {
     private Member testMember1;
     private Challenge testChallenge1;
 
-    private MultipartFile imgFile;
+    private MultipartFile waterImgFile;
+    private MultipartFile notWaterImgFile;
     private MultipartFile txtFile;
 
     @BeforeEach
@@ -60,10 +61,24 @@ class ChallengeFeedServiceTest {
             testChallenge1 = OChallenge.get();
         }
 
-        Path imgFilePath = Paths.get("src/main/resources/static/img/test_water.png");
+        Path waterImgFilePath = Paths.get("src/main/resources/static/img/test_water.png");
         try {
-            byte[] fileBytes = Files.readAllBytes(imgFilePath);
-            imgFile = new MockMultipartFile(
+            byte[] fileBytes = Files.readAllBytes(waterImgFilePath);
+            waterImgFile = new MockMultipartFile(
+                    "sample.png",
+                    "sample.png",
+                    "image/png",
+                    fileBytes
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Path notWaterImgFilePath = Paths.get("src/main/resources/static/img/not_water.png");
+        try {
+            byte[] fileBytes = Files.readAllBytes(notWaterImgFilePath);
+            notWaterImgFile = new MockMultipartFile(
                     "sample.png",
                     "sample.png",
                     "image/png",
@@ -94,7 +109,7 @@ class ChallengeFeedServiceTest {
     void t001() throws IOException {
 
         RsData<String> writeRs1 =
-                challengeFeedService.write(testChallenge1, testMember1, imgFile, "물 마시기 인증");
+                challengeFeedService.write(testChallenge1, testMember1, waterImgFile, "물 마시기 인증");
 
         assertThat(writeRs1.isFail()).isTrue();
         assertThat(writeRs1.getResultCode()).startsWith("F");
@@ -102,7 +117,7 @@ class ChallengeFeedServiceTest {
         challengeMemberService.join(testChallenge1, testMember1);
 
         RsData<String> writeRs2 =
-                challengeFeedService.write(testChallenge1, testMember1, imgFile, "물 마시기 인증");
+                challengeFeedService.write(testChallenge1, testMember1, waterImgFile, "물 마시기 인증");
 
         assertThat(writeRs2.isSuccess()).isTrue();
         assertThat(writeRs2.getResultCode()).startsWith("S");
@@ -119,5 +134,24 @@ class ChallengeFeedServiceTest {
 
         assertThat(writeRs.isFail()).isTrue();
         assertThat(writeRs.getResultCode()).startsWith("F");
+    }
+
+    @Test
+    @DisplayName("챌린지에 맞는 이미지가 아니라면 인증글 작성 불가")
+    void t003() throws IOException {
+
+        challengeMemberService.join(testChallenge1, testMember1);
+
+        RsData<String> writeRs1 =
+                challengeFeedService.write(testChallenge1, testMember1, notWaterImgFile, "물 마시기 인증");
+
+        assertThat(writeRs1.isFail()).isTrue();
+        assertThat(writeRs1.getResultCode()).startsWith("F");
+
+        RsData<String> writeRs2 =
+                challengeFeedService.write(testChallenge1, testMember1, waterImgFile, "물 마시기 인증");
+
+        assertThat(writeRs2.isSuccess()).isTrue();
+        assertThat(writeRs2.getResultCode()).startsWith("S");
     }
 }
