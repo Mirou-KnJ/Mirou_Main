@@ -8,7 +8,6 @@ import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
-import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
 import com.knj.mirou.boundedContext.product.service.ProductInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
