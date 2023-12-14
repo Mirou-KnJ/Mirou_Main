@@ -214,5 +214,4 @@ class ChallengeFeedServiceTest {
         assertThat(hideRs.isFail()).isTrue();
         assertThat(hideRs.getResultCode()).startsWith("F");
     }
-
 }
