@@ -1,0 +1,36 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}">
+<head>
+    <title>4XX Error</title>
+</head>
+<body>
+<th:block layout:fragment="Content">
+    <main class="flex justify-center w-full">
+
+        <div class="flex flex-grow bg-purple-50"></div>
+
+        <div class="flex flex-col w-[36rem] py-20 bg-base-100 flex-grow-0 mx-10 min-h-screen">
+
+            <div class="contents-wrapper flex justify-center items-center flex-col h-full">
+
+                <div class="error-title flex text-7xl">
+                    X_X [[ ${status} ]]
+                </div>
+
+                <div class="error-msg flex mt-8">
+                    올바르지 않은 접근입니다. 다시 돌아가 시도해 주세요.
+                </div>
+
+                <div class="error-btn mt-12">
+                    <button class="btn btn-active btn-primary" onclick="history.go(-1)">돌아가기</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="flex flex-grow bg-purple-50"></div>
+    </main>
+</th:block>
+</body>
+</html>
