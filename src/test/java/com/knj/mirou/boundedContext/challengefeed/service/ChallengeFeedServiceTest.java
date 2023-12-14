@@ -182,4 +182,18 @@ class ChallengeFeedServiceTest {
         assertThat(beforeCoin2).isEqualTo(afterCoin2);
     }
 
+    @Test
+    @DisplayName("자신의 글에는 좋아요 처리가 불가능")
+    public void t005() throws IOException {
+
+        challengeMemberService.join(testChallenge1, testMember1);
+        challengeFeedService.write(testChallenge1, testMember1, notWaterImgFile, "물 마시기 인증");
+
+        RsData<Integer> likeRs =
+                challengeFeedService.updateLikeCount(1L, testMember1);
+
+        assertThat(likeRs.isFail()).isTrue();
+        assertThat(likeRs.getResultCode()).startsWith("F");
+    }
+
 }
