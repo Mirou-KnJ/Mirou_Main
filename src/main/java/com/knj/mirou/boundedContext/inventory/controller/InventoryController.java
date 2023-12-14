@@ -27,7 +27,7 @@ public class InventoryController {
         Member member = rq.getMember();
 
         RsData<Long> usingRs = inventoryService.usingProduct(inventoryId, member);
-        if(usingRs.isFail()){
+        if (usingRs.isFail()) {
             rq.historyBack(usingRs);
         }
 

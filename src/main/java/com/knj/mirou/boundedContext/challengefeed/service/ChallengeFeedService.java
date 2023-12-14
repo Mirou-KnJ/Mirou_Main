@@ -51,27 +51,27 @@ public class ChallengeFeedService {
                                 String contents) throws IOException {
 
         Optional<ChallengeMember> OChallengeMember = challengeMemberService.getByChallengeAndMember(challenge, member);
-        if(OChallengeMember.isEmpty()) {
+        if (OChallengeMember.isEmpty()) {
             return RsData.of("F-1", "챌린지 참여 정보가 올바르지 않습니다.");
         }
         ChallengeMember challengeMember = OChallengeMember.get();
 
         RsData<String> uploadRsData = imageDataService.tryUploadImg(img, ImageTarget.FEED_IMG);
-        if(uploadRsData.isFail()) {
+        if (uploadRsData.isFail()) {
             return uploadRsData;
         }
 
         String imgUrl = uploadRsData.getData();
 
-        if(challenge.getMethod().equals(AuthenticationMethod.PHOTO)) {
+        if (challenge.getMethod().equals(AuthenticationMethod.PHOTO)) {
             RsData<String> labelRsData = imageDataService.detectLabelsGcs(imgUrl, challenge.getLabels());
-            if(labelRsData.isFail()) {
+            if (labelRsData.isFail()) {
                 return labelRsData;
             }
         }
-        
+
         RsData<String> safeSearchRsData = imageDataService.safeSearchByGcs(imgUrl);
-        if(safeSearchRsData.isFail()) {
+        if (safeSearchRsData.isFail()) {
             return safeSearchRsData;
         }
 
@@ -112,7 +112,7 @@ public class ChallengeFeedService {
         List<ChallengeFeed> myFeeds =
                 challengeFeedRepository.findByLinkedChallengeAndWriter(linkedChallenge, writer);
 
-        for(ChallengeFeed myFeed : myFeeds) {
+        for (ChallengeFeed myFeed : myFeeds) {
             feeds.remove(myFeed);
         }
 
@@ -122,11 +122,11 @@ public class ChallengeFeedService {
         return feedListDto;
     }
 
-    public boolean alreadyPostedToday(Member member, Challenge challenge){
+    public boolean alreadyPostedToday(Member member, Challenge challenge) {
 
         LocalDate today = LocalDate.now();
         LocalTime startTime = LocalTime.of(0, 0);
-        LocalTime endTime = LocalTime.of(23,59);
+        LocalTime endTime = LocalTime.of(23, 59);
 
         LocalDateTime startDate = LocalDateTime.of(today, startTime);
         LocalDateTime endDate = LocalDateTime.of(today, endTime);
@@ -147,12 +147,12 @@ public class ChallengeFeedService {
     public RsData<Integer> updateLikeCount(long feedId, Member member) {
 
         Optional<ChallengeFeed> OFeed = getById(feedId);
-        if(OFeed.isEmpty()) {
+        if (OFeed.isEmpty()) {
             return RsData.of("F-1", "챌린지 정보를 확인할 수 없습니다.");
         }
 
         ChallengeFeed challengeFeed = OFeed.get();
-        if(challengeFeed.getWriter().equals(member)) {
+        if (challengeFeed.getWriter().equals(member)) {
             return RsData.of("F-2", "자신의 글은 좋아요를 누를 수 없습니다.");
         }
 
@@ -178,7 +178,7 @@ public class ChallengeFeedService {
         feed.updateReportCount();
         int reportCount = feed.getReportCount();
 
-        if(reportCount >= 5) {
+        if (reportCount >= 5) {
             feed.updatePrivate();
 
             Member writer = feed.getWriter();
@@ -203,7 +203,7 @@ public class ChallengeFeedService {
 
         int likeCount = 0;
 
-        for(ChallengeFeed feed : weeklyFeeds) {
+        for (ChallengeFeed feed : weeklyFeeds) {
             likeCount += feed.getLikeCount();
         }
 
@@ -219,7 +219,7 @@ public class ChallengeFeedService {
 
         Map<Long, Integer> writeCounts = new HashMap<>();
 
-        for(Challenge challenge : challenges) {
+        for (Challenge challenge : challenges) {
             int count = challengeFeedRepository
                     .countByLinkedChallengeAndCreateDateBetween(challenge, startDayOfWeek, now);
             writeCounts.put(challenge.getId(), count);
@@ -232,16 +232,16 @@ public class ChallengeFeedService {
     public RsData<String> hideFeed(Member member, long feedId) {
 
         Optional<ChallengeFeed> OFeed = getById(feedId);
-        if(OFeed.isEmpty()) {
+        if (OFeed.isEmpty()) {
             return RsData.of("F-1", "피드 정보가 유효하지 않습니다.");
         }
 
         ChallengeFeed challengeFeed = OFeed.get();
-        if(!challengeFeed.getWriter().equals(member)) {
+        if (!challengeFeed.getWriter().equals(member)) {
             return RsData.of("F-2", "내 피드만 숨김처리 할 수 있습니다.");
         }
 
-        if(challengeFeed.getStatus().equals(FeedStatus.PRIVATE)) {
+        if (challengeFeed.getStatus().equals(FeedStatus.PRIVATE)) {
             return RsData.of("F-3", "이미 숨김처리된 피드입니다.");
         }
 

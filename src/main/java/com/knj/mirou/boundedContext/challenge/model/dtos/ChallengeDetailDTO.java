@@ -32,5 +32,4 @@ public class ChallengeDetailDTO {
     private List<PublicReward> publicRewards;
     private List<PrivateReward> privateRewards;
     private List<ChallengeFeed> recently3Feeds;
-
 }

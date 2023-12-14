@@ -38,5 +38,4 @@ public class ProductInfoController {
 
         return rq.redirectWithMsg("/productInfo/infoForm", "등록 되었습니다.");
     }
-
 }

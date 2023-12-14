@@ -19,7 +19,6 @@ import com.knj.mirou.boundedContext.member.config.MemberConfigProperties;
 import com.knj.mirou.boundedContext.member.model.dtos.ChallengeReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.CurrencyReportDTO;
 import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
-import com.knj.mirou.boundedContext.member.model.dtos.ReportManageDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.member.model.enums.MemberRole;
 import com.knj.mirou.boundedContext.member.model.enums.SocialCode;
@@ -27,7 +26,6 @@ import com.knj.mirou.boundedContext.member.repository.MemberRepository;
 import com.knj.mirou.boundedContext.point.config.PointConfigProperties;
 import com.knj.mirou.boundedContext.point.service.PointService;
 import com.knj.mirou.boundedContext.pointhistory.service.PointHistoryService;
-import com.knj.mirou.boundedContext.reportHistory.service.ReportHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -181,7 +179,7 @@ public class MemberService {
     public RsData<String> tryKickUser(long targetFeedId) {
 
         Optional<ChallengeFeed> OFeed = challengeFeedService.getById(targetFeedId);
-        if(OFeed.isEmpty()){
+        if (OFeed.isEmpty()) {
             return RsData.of("F-1", "피드 정보를 확인할 수 없습니다.");
         }
 
@@ -192,7 +190,7 @@ public class MemberService {
 
         Optional<ChallengeMember> OChallengeMember =
                 challengeMemberService.getByChallengeAndMember(linkedChallenge, writer);
-        if(OChallengeMember.isEmpty()){
+        if (OChallengeMember.isEmpty()) {
             return RsData.of("F-2", "대상자의 참여정보를 확인할 수 없습니다.");
         }
 
@@ -211,12 +209,12 @@ public class MemberService {
     public RsData<Long> changeNickname(Member member, String nickname) {
 
         Optional<Member> OMember = getByNickname(nickname);
-        if(OMember.isPresent()) {
+        if (OMember.isPresent()) {
             return RsData.of("F-1", "이미 사용중인 닉네임 입니다.");
         }
 
         //FIXME
-        if(nickname.length() > 20) {
+        if (nickname.length() > 20) {
             return RsData.of("F-2", "닉네임은 20자 이하만 가능합니다.");
         }
 
@@ -229,13 +227,13 @@ public class MemberService {
     public RsData<String> changeProfile(Member member, MultipartFile profileImg) throws IOException {
 
         RsData<String> tryUploadRs = imageDataService.tryUploadImg(profileImg, ImageTarget.MEMBER_IMG);
-        if(tryUploadRs.isFail()){
+        if (tryUploadRs.isFail()) {
             return tryUploadRs;
         }
 
         String imgUrl = tryUploadRs.getData();
         RsData<String> safeSearchRs = imageDataService.safeSearchByGcs(imgUrl);
-        if(safeSearchRs.isFail()) {
+        if (safeSearchRs.isFail()) {
             return safeSearchRs;
         }
 

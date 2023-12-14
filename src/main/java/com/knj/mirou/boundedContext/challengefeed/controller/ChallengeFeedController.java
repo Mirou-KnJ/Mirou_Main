@@ -7,7 +7,6 @@ import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
 import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
 import com.knj.mirou.boundedContext.challenge.service.ChallengeService;
 import com.knj.mirou.boundedContext.challengefeed.model.dtos.FeedListDTO;
-import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
 import com.knj.mirou.boundedContext.imageData.model.enums.OptimizerOption;
 import com.knj.mirou.boundedContext.imageData.service.ImageDataService;
@@ -43,7 +42,7 @@ public class ChallengeFeedController {
     public String writeForm(@PathVariable(value = "id") long challengeId, Model model) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("챌린지 정보를 찾을 수 없습니다.");
         }
 
@@ -53,7 +52,7 @@ public class ChallengeFeedController {
         model.addAttribute("challenge", challenge);
         model.addAttribute("challengeImg", challengeImg);
 
-        if(challenge.getMethod().equals(AuthenticationMethod.LOCATION)) {
+        if (challenge.getMethod().equals(AuthenticationMethod.LOCATION)) {
 
             String mapKey = mapConfigProps.getKey();
             model.addAttribute("mapKey", mapKey);
@@ -72,7 +71,7 @@ public class ChallengeFeedController {
 
         Member member = rq.getMember();
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
         }
 
@@ -92,7 +91,7 @@ public class ChallengeFeedController {
     public String showList(@PathVariable(value = "id") long challengeId, Model model) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()){
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("대상 챌린지를 찾을 수 없습니다.");
         }
 

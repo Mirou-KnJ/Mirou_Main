@@ -60,24 +60,10 @@ public class ChallengeMember extends BaseEntity {
     public int getPrivateRewardSum() {
 
         int sum = 0;
-        for(PrivateReward reward : privateReward) {
+        for (PrivateReward reward : privateReward) {
             sum += Integer.parseInt(reward.getReward());
         }
 
         return sum;
     }
-
-//    public String getDeadLineRemaining() {
-//
-//        LocalDate
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd일 남음");
-//        return formatter.format(deadlineRemaining);
-//
-//    }
-//
-//    public String getJoinDeadLineFormat() {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd(E) 마감");
-//        return formatter.format(joinDeadline);
-//    }
 }

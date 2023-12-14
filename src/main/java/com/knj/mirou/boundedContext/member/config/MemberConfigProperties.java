@@ -17,8 +17,8 @@ public class MemberConfigProperties {
 
     public boolean isAdmin(String loginId) {
 
-        for(String admin : adminIdList) {
-            if(admin.equals(loginId)) {
+        for (String admin : adminIdList) {
+            if (admin.equals(loginId)) {
                 return true;
             }
         }

@@ -32,17 +32,17 @@ public class ReportHistoryService {
     public RsData<Long> tryReport(long feedId, long reporterId, String contents) {
 
         Optional<ReportHistory> OHistory = reportHistoryRepository.findByTargetFeedIdAndReporterId(feedId, reporterId);
-        if(OHistory.isPresent()){
+        if (OHistory.isPresent()) {
             return RsData.of("F-1", "이미 신고한 게시물입니다.");
         }
 
         Optional<ChallengeFeed> OFeed = challengeFeedService.getById(feedId);
-        if(OFeed.isEmpty()) {
+        if (OFeed.isEmpty()) {
             return RsData.of("F-2", "유효하지 않은 피드입니다.");
         }
 
         Optional<Member> OMember = memberService.getById(reporterId);
-        if(OMember.isEmpty()) {
+        if (OMember.isEmpty()) {
             return RsData.of("F-3", "신고자 정보가 유효하지 않습니다.");
         }
 

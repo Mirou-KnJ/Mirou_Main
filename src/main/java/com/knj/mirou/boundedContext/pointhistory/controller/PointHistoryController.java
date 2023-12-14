@@ -26,7 +26,7 @@ public class PointHistoryController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/history")
-    public String showPointHistory(Model model){
+    public String showPointHistory(Model model) {
 
         Member loginedMember = rq.getMember();
         Point point = loginedMember.getPoint();

@@ -31,12 +31,12 @@ public class ChallengeMemberController {
     public String join(@PathVariable(value = "id") long challengeId) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("챌린지 정보가 유효하지 않습니다.");
         }
 
         RsData<Long> joinRs = challengeMemberService.join(OChallenge.get(), rq.getMember());
-        if(joinRs.isFail()) {
+        if (joinRs.isFail()) {
             return rq.historyBack(joinRs);
         }
 

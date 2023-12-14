@@ -23,7 +23,8 @@ public class ProductInfoService {
     private final ProductInfoRepository productInfoRepository;
 
     @Transactional
-    public void create(String name, String brandName, int cost, String content, String imgUrl, String usingWay, String usingCaution) {
+    public void create(String name, String brandName, int cost, String content, String imgUrl,
+                       String usingWay, String usingCaution) {
 
         String processedUsingCaution = ut.strLineProcessing(usingCaution);
 
@@ -49,7 +50,7 @@ public class ProductInfoService {
 
         List<ProductInfo> infos = new ArrayList<>();
 
-        for(Long id : infoIds) {
+        for (Long id : infoIds) {
             infos.add(getById(id).get());
         }
 

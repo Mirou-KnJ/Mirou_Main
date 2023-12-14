@@ -22,8 +22,10 @@
                         <img th:src="${productReportDTO.weeklyBestProduct.imgUrl}" alt="bestProduct">
                     </div>
                     <div class="stat-title sm:text-md md:text-md">가장 많이 팔린 상품</div>
-                    <div class="stat-value sm:text-md md:text-md" th:text="${productReportDTO.weeklyBestProduct.name}"></div>
-                    <div class="stat-desc text-lg" th:text="'총 판매량 : ' + ${productReportDTO.weeklyBestProductSalesCount}"></div>
+                    <div class="stat-value sm:text-md md:text-md"
+                         th:text="${productReportDTO.weeklyBestProduct.name}"></div>
+                    <div class="stat-desc text-lg"
+                         th:text="'총 판매량 : ' + ${productReportDTO.weeklyBestProductSalesCount}"></div>
                 </div>
 
                 <div class="stat mt-10">

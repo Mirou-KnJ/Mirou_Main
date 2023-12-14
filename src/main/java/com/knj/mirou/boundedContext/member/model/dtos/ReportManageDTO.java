@@ -15,5 +15,4 @@ import java.util.List;
 public class ReportManageDTO {
 
     public List<ReportHistory> weeklyReportHistories;
-
 }

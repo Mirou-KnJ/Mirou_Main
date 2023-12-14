@@ -83,7 +83,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="w-full" th:each="reward : ${challenge.publicReward}" >
+                            <tr class="w-full" th:each="reward : ${challenge.publicReward}">
                                 <td><p th:text="${reward.round}"></p></td>
                                 <td><p th:text="${reward.rewardType}"></p></td>
                                 <td><p th:text="${reward.reward}"></p></td>

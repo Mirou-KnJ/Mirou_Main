@@ -54,7 +54,7 @@ public class ImageDataService {
 
         Optional<ImageData> OImageData = imageDataRepository.findByTargetIdAndImageTarget(targetId, target);
 
-        if(OImageData.isEmpty()) {
+        if (OImageData.isEmpty()) {
             return null;
         }
 
@@ -139,13 +139,13 @@ public class ImageDataService {
                     for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
 
                         log.info("검출된 라벨 : " + annotation.getDescription());
-                        if(challengeLabels.contains(annotation.getDescription())) {
+                        if (challengeLabels.contains(annotation.getDescription())) {
                             isValidImg = true;
                             break;
                         }
                     }
                 }
-                if(!isValidImg) {
+                if (!isValidImg) {
                     return RsData.of("F-3", "챌린지에 맞지 않는 이미지 입니다.");
                 }
 
@@ -220,7 +220,7 @@ public class ImageDataService {
 
         Map<Long, String> images = new HashMap<>();
 
-        for(Challenge challenge : challenges) {
+        for (Challenge challenge : challenges) {
             String optimizedUrl = getOptimizingUrl(challenge.getImgUrl(), OptimizerOption.CHALLENGE_LIST);
             images.put(challenge.getId(), optimizedUrl);
         }
@@ -232,7 +232,7 @@ public class ImageDataService {
 
         Map<Long, String> images = new HashMap<>();
 
-        for(ChallengeFeed feed : challengeFeeds) {
+        for (ChallengeFeed feed : challengeFeeds) {
             String optimizedUrl = getOptimizingUrl(feed.getImgUrl(), OptimizerOption.HISTORY);
             images.put(feed.getId(), optimizedUrl);
         }
@@ -244,7 +244,7 @@ public class ImageDataService {
 
         Map<Long, String> images = new HashMap<>();
 
-        for(ChallengeFeed feed : challengeFeeds) {
+        for (ChallengeFeed feed : challengeFeeds) {
             String optimizedUrl = getOptimizingUrl(feed.getImgUrl(), OptimizerOption.FEED_MODAL);
             images.put(feed.getId(), optimizedUrl);
         }

@@ -10,7 +10,4 @@ import java.util.List;
 public interface PrivateRewardRepository extends JpaRepository<PrivateReward, Long> {
 
     List<PrivateReward> findByLinkedChallengeAndLinkedChallengeMember(Challenge challenge, ChallengeMember challengeMember);
-
-
-
 }

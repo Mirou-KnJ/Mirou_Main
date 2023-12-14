@@ -36,11 +36,11 @@
 
     <script th:inline="javascript">
 
-        const status = [[ ${status} ]];
+        const status = [[ ${status}]];
         const errorCode = document.getElementById("errorMsg");
 
         console.log(errorCode);
-        if(status === 500) {
+        if (status === 500) {
             errorCode.innerText = status + "(서버 오류)";
         } else if (status === 503) {
             errorCode.innerText = status + "(액세스 불가)";

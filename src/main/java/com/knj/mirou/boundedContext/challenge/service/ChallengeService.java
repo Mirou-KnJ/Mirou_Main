@@ -5,7 +5,10 @@ import com.knj.mirou.base.util.Ut;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeCreateDTO;
 import com.knj.mirou.boundedContext.challenge.model.dtos.ChallengeDetailDTO;
 import com.knj.mirou.boundedContext.challenge.model.entity.Challenge;
-import com.knj.mirou.boundedContext.challenge.model.enums.*;
+import com.knj.mirou.boundedContext.challenge.model.enums.AuthenticationMethod;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeStatus;
+import com.knj.mirou.boundedContext.challenge.model.enums.ChallengeTag;
+import com.knj.mirou.boundedContext.challenge.model.enums.MapCategory;
 import com.knj.mirou.boundedContext.challenge.repository.ChallengeRepository;
 import com.knj.mirou.boundedContext.challengefeed.model.entity.ChallengeFeed;
 import com.knj.mirou.boundedContext.challengefeed.service.ChallengeFeedService;
@@ -39,16 +42,16 @@ public class ChallengeService {
     @Transactional
     public RsData<Long> create(ChallengeCreateDTO createDTO, String imgUrl) {
 
-        if(!checkDeadLine(createDTO.getJoinDeadLine())) {
+        if (!checkDeadLine(createDTO.getJoinDeadLine())) {
             return RsData.of("F-1", "유효하지 않은 참여 기한 입니다.");
         }
 
-        if(!checkUniqueName(createDTO.getName())) {
+        if (!checkUniqueName(createDTO.getName())) {
             return RsData.of("F-2", "%s는 이미 사용 중인 챌린지 이름 입니다.".formatted(createDTO.getName()));
         }
 
         List<String> labels = new ArrayList<>();
-        if(createDTO.getMethod().equals("PHOTO")) {
+        if (createDTO.getMethod().equals("PHOTO")) {
             labels = labelProcessing(createDTO.getLabelList());
         }
 
@@ -79,7 +82,7 @@ public class ChallengeService {
     public RsData<ChallengeDetailDTO> getDetailDTO(long challengeId, Member member) {
 
         Optional<Challenge> OChallenge = getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return RsData.of("F-1", "챌린지 정보를 찾을 수 없습니다.");
         }
 
@@ -108,11 +111,11 @@ public class ChallengeService {
         return challengeMemberService.getInProgressInfos(member);
     }
 
-    public List<Challenge >getChallengesByInfos(List<ChallengeMember> infos) {
+    public List<Challenge> getChallengesByInfos(List<ChallengeMember> infos) {
 
         List<Challenge> challenges = new ArrayList<>();
 
-        for(ChallengeMember info : infos) {
+        for (ChallengeMember info : infos) {
             challenges.add(info.getLinkedChallenge());
         }
 
@@ -123,7 +126,7 @@ public class ChallengeService {
 
         List<Challenge> openedChallenges;
 
-        if(tag.equals("ALL")) {
+        if (tag.equals("ALL")) {
             openedChallenges = getAllByStatus(ChallengeStatus.OPEN);
         } else {
             openedChallenges = getOpenedChallengeByTag(ChallengeTag.valueOf(tag));
@@ -132,11 +135,11 @@ public class ChallengeService {
         List<Challenge> myChallenges = new ArrayList<>(myProgressChallenges);
 
         List<Challenge> myCompletedChallenges = getMyCompletedChallenges(member);
-        if(!myChallenges.isEmpty()) {
+        if (!myChallenges.isEmpty()) {
             myChallenges.addAll(myCompletedChallenges);
         }
 
-        for(Challenge myChallenge : myChallenges) {
+        for (Challenge myChallenge : myChallenges) {
             openedChallenges.remove(myChallenge);
         }
 
@@ -146,15 +149,15 @@ public class ChallengeService {
     }
 
     @Transactional
-    @Scheduled(cron= "3 0 0 * * ?")
+    @Scheduled(cron = "3 0 0 * * ?")
     public void getEndTargetList() {
 
         LocalDate yesterDay = LocalDate.now().minusDays(1);
         List<Challenge> endTargetChallenges =
                 challengeRepository.findByJoinDeadlineAndStatus(yesterDay, ChallengeStatus.OPEN);
 
-        if(!endTargetChallenges.isEmpty()) {
-            for(Challenge endTarget : endTargetChallenges) {
+        if (!endTargetChallenges.isEmpty()) {
+            for (Challenge endTarget : endTargetChallenges) {
                 endTarget.closingChallenge();
                 log.info(endTarget.getName() + "챌린지가 종료 처리 되었습니다.");
             }
@@ -192,10 +195,10 @@ public class ChallengeService {
 
     public boolean checkUniqueName(String name) {
 
-        if(challengeRepository.findByNameAndStatus(name, ChallengeStatus.OPEN).isPresent()) {
+        if (challengeRepository.findByNameAndStatus(name, ChallengeStatus.OPEN).isPresent()) {
             return false;
         }
-        if(challengeRepository.findByNameAndStatus(name, ChallengeStatus.BEFORE_SETTINGS).isPresent()) {
+        if (challengeRepository.findByNameAndStatus(name, ChallengeStatus.BEFORE_SETTINGS).isPresent()) {
             return false;
         }
         return true;
@@ -212,7 +215,7 @@ public class ChallengeService {
 
         List<String> labelList = new ArrayList<>();
         String[] splitLabels = labels.split(",");
-        for(String label : splitLabels) {
+        for (String label : splitLabels) {
             labelList.add(label);
         }
 
@@ -226,7 +229,7 @@ public class ChallengeService {
         return challenges;
     }
 
-    public List<Challenge> getMyCompletedChallenges(Member member){
+    public List<Challenge> getMyCompletedChallenges(Member member) {
         return challengeMemberService.getMyCompletedChallenges(member);
     }
 

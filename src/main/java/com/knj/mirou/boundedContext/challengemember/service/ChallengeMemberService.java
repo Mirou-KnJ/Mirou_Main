@@ -44,7 +44,7 @@ public class ChallengeMemberService {
     public RsData<Long> join(Challenge challenge, Member member) {
 
         RsData<Long> usingPointRs = pointService.usingJoinPoint(member, challenge);
-        if(usingPointRs.isFail()) {
+        if (usingPointRs.isFail()) {
             return usingPointRs;
         }
 
@@ -170,7 +170,7 @@ public class ChallengeMemberService {
 
         Map<Long, Integer> joinCounts = new HashMap<>();
 
-        for(Challenge challenge : challenges) {
+        for (Challenge challenge : challenges) {
             int count = challengeMemberRepository
                     .countByLinkedChallengeAndCreateDateBetween(challenge, startDayOfWeek, now);
             joinCounts.put(challenge.getId(), count);
@@ -182,7 +182,7 @@ public class ChallengeMemberService {
     @Transactional
     public RsData<String> kickUser(ChallengeMember challengeMember) {
 
-        if(challengeMember.getProgress().equals(Progress.PROGRESS_END)) {
+        if (challengeMember.getProgress().equals(Progress.PROGRESS_END)) {
             return RsData.of("F-3", "이미 참여가 종료된 사용자입니다.");
         }
 

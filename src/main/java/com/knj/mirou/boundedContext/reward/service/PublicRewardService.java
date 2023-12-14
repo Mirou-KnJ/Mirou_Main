@@ -27,13 +27,13 @@ public class PublicRewardService {
     public RsData<Long> create(long challengeId, int round, String rewardType, String reward) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return RsData.of("F-1", "챌린지를 찾을 수 없습니다.");
         }
         Challenge challenge = OChallenge.get();
 
         Optional<PublicReward> OPublicReward = publicRewardRepository.findByLinkedChallengeAndRound(challenge, round);
-        if(OPublicReward.isPresent()) {
+        if (OPublicReward.isPresent()) {
             return update(OPublicReward.get(), reward);
         }
 
@@ -50,18 +50,18 @@ public class PublicRewardService {
     }
 
     @Transactional
-    public RsData<Long> update(PublicReward publicReward, String reward){
+    public RsData<Long> update(PublicReward publicReward, String reward) {
         publicReward.changeReward(reward);
 
         return RsData.of("S-2", "기존 보상이 수정되었습니다.", publicReward.getId());
     }
 
     @Transactional
-    public void deleteReward(long rewardId){
+    public void deleteReward(long rewardId) {
         Optional<PublicReward> rewardToDelete = publicRewardRepository.findById(rewardId);
-        if(rewardToDelete.isPresent()){
+        if (rewardToDelete.isPresent()) {
             publicRewardRepository.delete(rewardToDelete.get());
-        }else{
+        } else {
             log.error("보상을 찾을 수 없습니다.");
         }
     }
@@ -75,5 +75,4 @@ public class PublicRewardService {
 
         return publicRewardRepository.findById(publicRewardId).get();
     }
-
 }

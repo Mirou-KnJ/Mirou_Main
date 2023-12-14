@@ -8,7 +8,6 @@ import com.knj.mirou.boundedContext.member.model.dtos.ProductReportDTO;
 import com.knj.mirou.boundedContext.member.model.entity.Member;
 import com.knj.mirou.boundedContext.product.model.entity.Product;
 import com.knj.mirou.boundedContext.product.model.entity.ProductInfo;
-import com.knj.mirou.boundedContext.product.model.enums.ProductStatus;
 import com.knj.mirou.boundedContext.product.service.ProductInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +52,7 @@ public class InventoryService {
     public RsData<Long> usingProduct(long inventoryId, Member member) {
 
         Optional<Inventory> OInventory = getByIdAndOwner(inventoryId, member);
-        if(OInventory.isEmpty()) {
+        if (OInventory.isEmpty()) {
             return RsData.of("F-1", "보관 정보를 확인할 수 없습니다.");
         }
 
@@ -107,7 +106,7 @@ public class InventoryService {
         int bestProductCount = 0;
         int weeklyUsedCount = 0;
 
-        for(Inventory history : weeklySalesHistories) {
+        for (Inventory history : weeklySalesHistories) {
 
             long infoId = history.getProduct().getInfo().getId();
             InventoryStatus status = history.getStatus();
@@ -116,13 +115,13 @@ public class InventoryService {
 
             int count = weeklySalesMap.get(infoId);
 
-            if(count > bestProductCount) {
+            if (count > bestProductCount) {
                 bestProductId = infoId;
                 bestProductCount = count;
             }
 
             //FIXME
-            if(status.equals(InventoryStatus.AFTER_USED)) {
+            if (status.equals(InventoryStatus.AFTER_USED)) {
                 weeklyUsedCount++;
             }
         }

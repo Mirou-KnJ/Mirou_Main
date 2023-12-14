@@ -37,5 +37,4 @@ public interface ChallengeFeedRepository extends JpaRepository<ChallengeFeed, Lo
 
     List<ChallengeFeed> findAllByWriterAndCreateDateBetween
             (Member writer, LocalDateTime startDayOfWeek, LocalDateTime endDayOfWeek);
-
 }

@@ -68,7 +68,8 @@
 
                             <div class="flex flex-col ml-3">
                                 <p th:if="${myFeed.status.getStatus().equals('공개')}" th:text="${myFeed.contents}"></p>
-                                <p class="text-gray-300 line-through" th:if="${myFeed.status.getStatus().equals('비공개')}" th:text="${myFeed.contents}"></p>
+                                <p class="text-gray-300 line-through" th:if="${myFeed.status.getStatus().equals('비공개')}"
+                                   th:text="${myFeed.contents}"></p>
                                 <p class="text-sm text-gray-500" th:text="${myFeed.getCreateDateShortsStr()}"></p>
                             </div>
                         </div>
@@ -151,7 +152,8 @@
                                 <a th:onclick="|tryLike(${feed.id}, this)|">
                                     <i class="fa-regular fa-heart fa-2xl" style="color: #8041D9;"></i>
                                 </a>
-                                <span th:id="likeCount + ${feed.id}" class="text-xs inline-block" th:text="${feed.likeCount}"
+                                <span th:id="likeCount + ${feed.id}" class="text-xs inline-block"
+                                      th:text="${feed.likeCount}"
                                       style="color: #8041D9;"></span>
                                 <a th:onclick="|tryReport(${feed.id})|" class="ml-6 tooltip"
                                    data-tip="신고하기는 반대하기가 아니에요. 신중하게 눌러주세요.">
@@ -194,7 +196,7 @@
                         toastWarning(msg);
                     } else {
                         toastNotice(msg);
-                        const countElement = document.getElementById("likeCount"+feedId);
+                        const countElement = document.getElementById("likeCount" + feedId);
                         countElement.innerText = count;
                     }
                 }
@@ -242,7 +244,7 @@
             console.log(feedId);
             var confirmRs = confirm("숨기기를 하면 다른 회원들에게서 게시글이 숨겨지고, \n불이익이 발생할 수 있어요, 정말로 숨길까요?");
 
-            if(confirmRs) {
+            if (confirmRs) {
                 const csrfToken = /*[[${_csrf.token}]]*/'';
 
                 const requestData = {

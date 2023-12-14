@@ -29,5 +29,4 @@ public class ImageData {
     private ImageTarget imageTarget;
 
     private String imageUrl;
-
 }

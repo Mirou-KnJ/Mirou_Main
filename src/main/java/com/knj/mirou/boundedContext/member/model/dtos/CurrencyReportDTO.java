@@ -10,9 +10,9 @@ import lombok.Setter;
 @Getter
 @RequiredArgsConstructor
 public class CurrencyReportDTO {
+
     public int weeklyGivenCurrencySum;
     public int weeklyUsedCurrencySum;
-
     public long weeklyGivenCurrencyAverage;
     public long weeklyUsedCurrencyAverage;
 }

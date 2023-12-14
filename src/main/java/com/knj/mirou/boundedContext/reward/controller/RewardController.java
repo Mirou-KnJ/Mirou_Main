@@ -8,7 +8,6 @@ import com.knj.mirou.boundedContext.reward.model.entity.PublicReward;
 import com.knj.mirou.boundedContext.reward.service.PublicRewardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,7 @@ public class RewardController {
     public String settingForm(@PathVariable(value = "challengeId") long challengeId, Model model) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             log.error("세팅 대상 챌린지를 찾을 수 없습니다.");
             return "redirect:/";        //FIXME
         }
@@ -48,7 +47,7 @@ public class RewardController {
     public String createReward(long id, int round, String rewardType, String reward) {
 
         RsData<Long> createRs = publicRewardService.create(id, round, rewardType, reward);
-        if(createRs.isFail()) {
+        if (createRs.isFail()) {
             return rq.historyBack(createRs);
         }
 
@@ -60,7 +59,7 @@ public class RewardController {
     public String getConfirmForm(@PathVariable(value = "id") long challengeId, Model model) {
 
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             log.error("세팅 대상 챌린지를 찾을 수 없습니다");
             return "redirect:/";        //FIXME
         }
@@ -75,7 +74,7 @@ public class RewardController {
 
         //TODO: 유효성 검사 (진행 일수에 적절한 보상 설정인지 등)
         Optional<Challenge> OChallenge = challengeService.getById(challengeId);
-        if(OChallenge.isEmpty()) {
+        if (OChallenge.isEmpty()) {
             return rq.historyBack("세팅 대상 챌린지를 찾을 수 없습니다.");
         }
 
@@ -85,7 +84,7 @@ public class RewardController {
     }
 
     @PostMapping("/deleteReward/{rewardId}")
-    public String deleteReward(@PathVariable(value = "rewardId") long rewardId){
+    public String deleteReward(@PathVariable(value = "rewardId") long rewardId) {
 
         PublicReward publicReward = publicRewardService.getById(rewardId);
         Long challengeId = publicReward.getLinkedChallenge().getId();

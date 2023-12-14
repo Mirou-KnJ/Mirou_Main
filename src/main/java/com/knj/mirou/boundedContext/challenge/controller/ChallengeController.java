@@ -35,7 +35,6 @@ import java.util.Map;
 public class ChallengeController {
 
     private final Rq rq;
-
     private final ChallengeService challengeService;
     private final ImageDataService imageDataService;
 
@@ -59,7 +58,7 @@ public class ChallengeController {
     public String create(@Valid ChallengeCreateDTO createDTO, BindingResult bindingResult,
                          MultipartFile img) throws IOException {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return rq.historyBack(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
@@ -142,5 +141,4 @@ public class ChallengeController {
 
         return ResponseEntity.ok(result);
     }
-
 }
