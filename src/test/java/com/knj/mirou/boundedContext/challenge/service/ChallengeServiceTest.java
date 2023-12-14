@@ -24,18 +24,48 @@ public class ChallengeServiceTest {
 
     private static final String TEST_CHALLENGE_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/system_noti.png";
 
+    @BeforeEach
+    void setUp() {
+
+        ChallengeCreateDTO creteDTO = ChallengeCreateDTO.builder()
+                .name("테스트 챌린지 1")
+                .contents("테스트 챌린지 내용 1")
+                .joinCost(1000)
+                .joinDeadLine(LocalDate.now().plusDays(7))
+                .period(7)
+                .tag("ETC")
+                .method("PHOTO")
+                .level(3)
+                .precaution("테스트 주의사항 1")
+                .build();
+
+        challengeService.create(creteDTO, TEST_CHALLENGE_IMG);
+    }
+
     @Test
     @DisplayName("챌린지 생성시 종료 기한이 적합하지 않으면 생성 불가")
     void t001() {
-
         ChallengeCreateDTO testCreateDTO = new ChallengeCreateDTO();
         testCreateDTO.setJoinDeadLine(LocalDate.now().minusDays(1));
 
         RsData<Long> createRs = challengeService.create(testCreateDTO, TEST_CHALLENGE_IMG);
 
-        assertThat(createRs.isFail()).isFalse();
+        assertThat(createRs.isFail()).isTrue();
+        assertThat(createRs.getResultCode()).isEqualTo("F-1");
     }
 
+    @Test
+    @DisplayName("챌린지 생성시 중복된 이름의 챌린지가 있다면 생성 불가")
+    void t002() {
+        ChallengeCreateDTO testCreateDTO = new ChallengeCreateDTO();
+        testCreateDTO.setJoinDeadLine(LocalDate.now().plusDays(10));
+        testCreateDTO.setName("테스트 챌린지 1");
+
+        RsData<Long> createRs = challengeService.create(testCreateDTO, TEST_CHALLENGE_IMG);
+
+        assertThat(createRs.isFail()).isTrue();
+        assertThat(createRs.getResultCode()).isEqualTo("F-2");
+    }
 
 
 }
