@@ -43,6 +43,7 @@ class ChallengeFeedServiceTest {
 
     private Member testMember1;
     private Challenge testChallenge1;
+    private Challenge testChallenge2;
 
     private MultipartFile waterImgFile;
     private MultipartFile notWaterImgFile;
@@ -56,9 +57,14 @@ class ChallengeFeedServiceTest {
             testMember1 = OMember.get();
         }
 
-        Optional<Challenge> OChallenge = challengeService.getById(1L);
-        if(OChallenge.isPresent()) {
-            testChallenge1 = OChallenge.get();
+        Optional<Challenge> OChallenge1 = challengeService.getById(3L);
+        if(OChallenge1.isPresent()) {
+            testChallenge1 = OChallenge1.get();
+        }
+
+        Optional<Challenge> OChallenge2 = challengeService.getById(2L);
+        if(OChallenge2.isPresent()) {
+            testChallenge2 = OChallenge2.get();
         }
 
         Path waterImgFilePath = Paths.get("src/main/resources/static/img/test_water.png");
@@ -154,4 +160,26 @@ class ChallengeFeedServiceTest {
         assertThat(writeRs2.isSuccess()).isTrue();
         assertThat(writeRs2.getResultCode()).startsWith("S");
     }
+
+    @Test
+    @DisplayName("해당 회차에 맞는 보상이 존재한다면 보상 지급")
+    void t004() throws IOException {
+
+        int beforeCoin = testMember1.getCoin().getCurrentCoin();
+        challengeMemberService.join(testChallenge1, testMember1);
+        challengeFeedService.write(testChallenge1, testMember1, waterImgFile, "물 마시기 인증");
+        int afterCoin = testMember1.getCoin().getCurrentCoin();
+
+        //testChallenge1에는 1회차 보상이 존재
+        assertThat(beforeCoin).isLessThan(afterCoin);
+
+        int beforeCoin2 = testMember1.getCoin().getCurrentCoin();
+        challengeMemberService.join(testChallenge2, testMember1);
+        challengeFeedService.write(testChallenge2, testMember1, waterImgFile, "물 마시기 인증");
+        int afterCoin2 = testMember1.getCoin().getCurrentCoin();
+
+        //testChallenge2 에는 1회차 보상이 없음
+        assertThat(beforeCoin2).isEqualTo(afterCoin2);
+    }
+
 }
