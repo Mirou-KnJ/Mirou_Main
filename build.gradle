@@ -37,7 +37,6 @@ dependencies {
 
 	//테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework:spring-test:6.0.13'
 	testImplementation 'org.springframework.security:spring-security-test'
 	runtimeOnly 'com.h2database:h2'
 
