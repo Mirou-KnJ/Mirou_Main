@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class NotificationService {
 
-    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/system_noti.png";
+    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/notification.png";
 
     private final MemberService memberService;
     private final ImageDataService imageDataService;

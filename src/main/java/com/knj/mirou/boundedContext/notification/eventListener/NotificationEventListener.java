@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationEventListener {
 
     private final NotificationService notificationService;
-    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/system_noti.png";
+    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/notification.png";
 
     @EventListener
     @Transactional

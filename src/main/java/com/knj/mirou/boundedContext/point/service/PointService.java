@@ -28,7 +28,7 @@ public class PointService {
 
     private final PointRepository pointRepository;
 
-    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/system_noti.png";
+    private static final String SYSTEM_IMG = "https://kr.object.ncloudstorage.com/mirou/etc/notification.png";
 
     @Transactional
     public Point create() {
