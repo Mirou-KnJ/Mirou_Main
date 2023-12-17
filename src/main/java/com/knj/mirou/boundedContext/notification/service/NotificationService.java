@@ -74,7 +74,7 @@ public class NotificationService {
     }
 
     @Transactional
-    @Scheduled(cron = "3 0 0 * * ?")
+    @Scheduled(cron = "3 0 0 * * 1")
     public void sendWeeklyNotification() {
 
         List<Member> members = memberService.getAll();
