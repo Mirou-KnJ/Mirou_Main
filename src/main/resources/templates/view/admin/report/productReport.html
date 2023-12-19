@@ -16,9 +16,9 @@
                 <h1>아직 이번 주 판매 기록이 존재하지 않아요!</h1>
             </div>
 
-            <div class="bg-base-300 rounded-lg" th:if="${productReportDTO.weeklyBestProduct}">
+            <div class="bg-purple-200 rounded-lg" th:if="${productReportDTO.weeklyBestProduct}">
                 <div class="stat">
-                    <div class="stat-figure">
+                    <div class="stat-figure w-48 h-48">
                         <img th:src="${productReportDTO.weeklyBestProduct.imgUrl}" alt="bestProduct">
                     </div>
                     <div class="stat-title sm:text-md md:text-md">가장 많이 팔린 상품</div>
