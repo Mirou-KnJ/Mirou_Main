@@ -6,6 +6,13 @@
 
 ### 팀원 : 김성훈, 장정우
 
+### 배포 주소
+[Mirou 바로가기](https://mirou.site)
+
+### 시연 영상
+[시연 영상](https://kr.object.ncloudstorage.com/mirou/etc/Mirou%20%EB%B0%9C%ED%91%9C%20%EB%B0%B0%EC%86%8D%20-%20Clipchamp%EB%A1%9C%20%EC%A0%9C%EC%9E%91.mp4)
+
+
 ### 개요
 우리는 매일 아침 침대에서 일어나 양치하고, 출근길을 걸어 나서는
 반복적으고 평범한 일상을 살고 있습니다.
@@ -31,8 +38,10 @@ Mirou(Miracle Routine) 입니다.
 - 상품 및 상점 등록 및 관리
 
 <img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/9ba6868b-3834-4c33-a792-f3163e562041" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/83be8fb7-5739-4689-a4e3-1b782dc59b2f" width="400" height="600"/>
+<br />
 <img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/9aa354aa-10c8-4afb-b538-a0d608594742" width="400" height="350"/>
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/83be8fb7-5739-4689-a4e3-1b782dc59b2f" width="300" height="500"/>
+
 
 
 
@@ -40,7 +49,8 @@ Mirou(Miracle Routine) 입니다.
 - 챌린지 태그 필터링 조회
 - 챌린지 보상 사용자 개별 관리
 
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/bb7cd3ba-383c-4b04-b696-6eb907cc2209" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/bb7cd3ba-383c-4b04-b696-6eb907cc2209" width="450" height="600"/>
+<br/>
 <img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/7663878b-eb23-405c-8a0e-d0aa6452e50f" width="350" height="600"/>
 <img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/9505da9e-2f6d-4715-9dbc-2cba249c5d02" width="350" height="600"/>
 
@@ -61,7 +71,7 @@ Mirou(Miracle Routine) 입니다.
 - 챌린지 인증 시 내부 알고리즘에 따라 코인 지급(평균 기대치 : 0.5375N)
 - 코인/포인트 히스토리 확인 가능
 
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/84988e89-fcd6-420a-906a-32e4c2903343" width="350" height="600"/>
+![image](https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/84988e89-fcd6-420a-906a-32e4c2903343)
 <img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/a7b8f050-347d-4c61-932a-b472a1d8bab4" width="350" height="600"/>
 
 
@@ -80,8 +90,8 @@ Mirou(Miracle Routine) 입니다.
 - 이미지 라벨 데이터 검출
 - 이미지 유효성, 유해성 검사
 
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/82a35e06-b9b0-4569-bfe7-4b7fdfee1c89" width="350" height="600"/>
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ac715dd4-b53f-4220-8053-ca5a8e6979a5" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/82a35e06-b9b0-4569-bfe7-4b7fdfee1c89" width="300" height="200"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ac715dd4-b53f-4220-8053-ca5a8e6979a5" width="300" height="200"/>
 
 
 
@@ -99,7 +109,7 @@ Mirou(Miracle Routine) 입니다.
 - 매주 월요일 사용자에게 포인트 지급
 - 매주 월요일 주간 리포트 알림 제공
 
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/2c475cff-5b02-4a7f-93aa-1dcc3fef35d6" width="350" height="600"/>
+![image](https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/753f3868-55bb-47e0-b288-437e5b208a94)
 
 
 
@@ -107,24 +117,20 @@ Mirou(Miracle Routine) 입니다.
 ## 프로젝트 산출물
 
 ### 요구사항 명세서
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/3e4204e5-f4b7-4c2f-a1a4-b35283fbc865" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/3e4204e5-f4b7-4c2f-a1a4-b35283fbc865" width="600" height="400"/>
 
 
 ### 사용 기술
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/0d250d55-9b00-4ad4-a272-6b1c15432fde" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/0d250d55-9b00-4ad4-a272-6b1c15432fde" width="600" height="400"/>
 
 
 ### 시스템 아키텍처
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="600" height="400"/>
 
 
 ### ERD 다이어그램
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ccd6298c-e4ec-4686-8664-377c9659967f" width="350" height="600"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ccd6298c-e4ec-4686-8664-377c9659967f" width="600" height="400"/>
 
 
 ### Database
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/eab36e24-befa-48e6-959a-5d88f292dc5c" width="350" height="600"/>
-
-
-### 배포 주소
-Mirou.site
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/eab36e24-befa-48e6-959a-5d88f292dc5c" width="600" height="400"/>
