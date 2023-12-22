@@ -121,11 +121,11 @@ Mirou(Miracle Routine) 입니다.
 
 
 ### 사용 기술
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/0d250d55-9b00-4ad4-a272-6b1c15432fde" width="600" height="400"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/0d250d55-9b00-4ad4-a272-6b1c15432fde" width="600" height="300"/>
 
 
 ### 시스템 아키텍처
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="600" height="400"/>
+<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="600" height="300"/>
 
 
 ### ERD 다이어그램
