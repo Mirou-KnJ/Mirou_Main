@@ -89,21 +89,48 @@
 
 ## 📘 프로젝트 산출물
 
-### 요구사항 명세서
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/3e4204e5-f4b7-4c2f-a1a4-b35283fbc865" width="600" height="400"/>
+<table align="center">
+  <tr>
+    <th><code>요구사항 명세서</code></th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/3e4204e5-f4b7-4c2f-a1a4-b35283fbc865" width="540" alt="요구사항 명세서"/></td>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <th><code>사용 기술</code></th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/0d250d55-9b00-4ad4-a272-6b1c15432fde" width="540" alt="사용 기술"/></td>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <th><code>시스템 아키텍처</code></th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="540" alt="시스템 아키텍처"/></td>
+  </tr>
+</table>
 
 
-### 사용 기술
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/0d250d55-9b00-4ad4-a272-6b1c15432fde" width="600" height="300"/>
+<table align="center">
+  <tr>
+    <th><code>ERD 다이어그램</code></th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ccd6298c-e4ec-4686-8664-377c9659967f" width="540" alt="ERD 다이어그램"/></td>
+  </tr>
+</table>
 
-
-### 시스템 아키텍처
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="600" height="300"/>
-
-
-### ERD 다이어그램
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ccd6298c-e4ec-4686-8664-377c9659967f" width="600" height="400"/>
-
-
-### Database
-<img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/eab36e24-befa-48e6-959a-5d88f292dc5c" width="600" height="400"/>
+<table align="center">
+  <tr>
+    <th><code>Database</code></th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/eab36e24-befa-48e6-959a-5d88f292dc5c" width="540" alt="데이터베이스"/></td>
+  </tr>
+</table>
