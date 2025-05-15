@@ -109,25 +109,6 @@
 
 <table align="center">
   <tr>
-    <th><code>시스템 아키텍처</code></th>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/d9b5e36b-f884-4df4-8a04-0cf9fe3ed4a8" width="540" alt="시스템 아키텍처"/></td>
-  </tr>
-</table>
-
-
-<table align="center">
-  <tr>
-    <th><code>ERD 다이어그램</code></th>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/Mirou-KnJ/Mirou_Main/assets/39723465/ccd6298c-e4ec-4686-8664-377c9659967f" width="540" alt="ERD 다이어그램"/></td>
-  </tr>
-</table>
-
-<table align="center">
-  <tr>
     <th><code>Database</code></th>
   </tr>
   <tr>
